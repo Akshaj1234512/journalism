@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  /* Sans for UI: system stack, very readable, neutral. */
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+  /* Warmer serif for the article surface and the masthead. Georgia is on
+     every machine and reads beautifully at 18px+. Charter and Iowan Old
+     Style are nicer if they happen to be installed. */
+  --font-serif:
+    "Iowan Old Style", "Charter", "Lora", Georgia, "Times New Roman", serif;
+}
+
+html, body {
+  @apply bg-stone-50 text-neutral-900;
+  font-family: var(--font-sans);
+  font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* The editor surface reads as a draft, not a form. */
+textarea {
+  font-family: var(--font-serif);
+}
+
+/* Article-style serif on any element with this class. */
+.prose-article {
+  font-family: var(--font-serif);
+}
+
+/* Use serif on the masthead title too, for warmth. */
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+/* Smoother default focus that does not break the rounded aesthetic. */
+:focus-visible {
+  outline: 2px solid rgba(244, 63, 94, 0.6);
+  outline-offset: 2px;
+  border-radius: inherit;
+}
+
+/* Slimmer, friendlier scrollbars on the long sidebars. */
+.scroll-friendly::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-friendly::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+}
+.scroll-friendly::-webkit-scrollbar-track {
+  background: transparent;
+}

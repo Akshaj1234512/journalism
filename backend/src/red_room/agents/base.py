@@ -1,0 +1,241 @@
+from __future__ import annotations
+
+import json
+import os
+from abc import ABC, abstractmethod
+from pathlib import Path
+
+from anthropic import AsyncAnthropic
+from anthropic.types import Message
+
+from red_room.schemas import AgentName, Critique
+
+
+PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
+EXEMPLARS_DIR = Path(__file__).resolve().parent.parent / "exemplars"
+
+
+# Sonnet 4.6 pricing per million tokens (verify at anthropic.com/pricing).
+# Cached reads are billed at ~10% of input rate; cache writes at ~125%.
+_PRICING_USD_PER_MTOK = {
+    "claude-sonnet-4-6": {
+        "input": 3.0,
+        "output": 15.0,
+        "cache_write": 3.75,
+        "cache_read": 0.30,
+    },
+    "claude-opus-4-7": {
+        "input": 15.0,
+        "output": 75.0,
+        "cache_write": 18.75,
+        "cache_read": 1.50,
+    },
+    "claude-haiku-4-5-20251001": {
+        "input": 1.0,
+        "output": 5.0,
+        "cache_write": 1.25,
+        "cache_read": 0.10,
+    },
+}
+
+
+def estimate_cost_usd(model: str, usage) -> float:
+    rates = _PRICING_USD_PER_MTOK.get(model, _PRICING_USD_PER_MTOK["claude-sonnet-4-6"])
+    input_tokens = getattr(usage, "input_tokens", 0) or 0
+    output_tokens = getattr(usage, "output_tokens", 0) or 0
+    cache_write = getattr(usage, "cache_creation_input_tokens", 0) or 0
+    cache_read = getattr(usage, "cache_read_input_tokens", 0) or 0
+    cost = (
+        input_tokens * rates["input"]
+        + output_tokens * rates["output"]
+        + cache_write * rates["cache_write"]
+        + cache_read * rates["cache_read"]
+    ) / 1_000_000
+    return round(cost, 6)
+
+
+def _format_exemplars(path: Path) -> str:
+    """Render JSONL exemplars as a compact prompt block.
+
+    Each line is one paragraph->critique pair. We keep the JSON intact so the
+    model sees the exact output schema applied to real cases. A missing file
+    is tolerated (the agent runs on its prompt alone) so a new persona can be
+    wired in before its exemplars are finalized.
+    """
+    if not path.exists():
+        return ("# EXEMPLARS\n\nNo exemplars on file yet for this agent. "
+                "Follow the OUTPUT CONTRACT in the system prompt exactly.\n")
+    parts = [
+        "# EXEMPLARS\n",
+        "Each example below is grounded in a real, documented journalism case: "
+        "a press-regulator ruling, a published correction, a recognised review "
+        "standard, or an editorial-craft source. The `source` line names where "
+        "the case or standard comes from. Study the voice and the structure, "
+        "and match them. Do not copy the `source` line into your own output; "
+        "the article you are reviewing is not a documented case.\n",
+    ]
+    for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        line = line.strip()
+        if not line:
+            continue
+        ex = json.loads(line)
+        parts.append(f"\n## Example {i}\n")
+        if ex.get("source"):
+            parts.append(f"GROUNDED IN: {ex['source']}\n")
+        parts.append("ARTICLE:\n")
+        parts.append(ex["article"])
+        parts.append("\n\nCRITIQUES:\n")
+        parts.append(json.dumps(ex["critiques"], indent=2))
+        parts.append("\n")
+    return "".join(parts)
+
+
+class BaseAgent(ABC):
+    """Shared logic for every persona agent.
+
+    Subclasses set `name` (the AgentName literal) and rely on the
+    `prompts/<name>.md` and `exemplars/<name>.jsonl` files existing.
+    """
+
+    name: AgentName
+
+    def __init__(
+        self,
+        client: AsyncAnthropic | None = None,
+        model: str | None = None,
+        thinking_budget: int | None = None,
+    ) -> None:
+        self.client = client or AsyncAnthropic()
+        self.model = model or os.getenv("RED_ROOM_MODEL", "claude-sonnet-4-6")
+        self.thinking_budget = thinking_budget or int(
+            os.getenv("RED_ROOM_MAX_THINKING_TOKENS", "2000")
+        )
+
+    @property
+    def prompt_path(self) -> Path:
+        return PROMPTS_DIR / f"{self.name}.md"
+
+    @property
+    def exemplars_path(self) -> Path:
+        return EXEMPLARS_DIR / f"{self.name}.jsonl"
+
+    def load_prompt(self) -> str:
+        """Read the persona prompt fresh from disk so in-browser edits take
+        effect on the next call without restarting uvicorn."""
+        return self.prompt_path.read_text(encoding="utf-8")
+
+    @property
+    def system_blocks(self) -> list[dict]:
+        """Two cache breakpoints: persona prompt, then exemplars.
+
+        Both are reused across articles. Anthropic caches by content hash,
+        so editing a prompt invalidates the cache for that agent only.
+        """
+        return [
+            {
+                "type": "text",
+                "text": self.load_prompt(),
+                "cache_control": {"type": "ephemeral"},
+            },
+            {
+                "type": "text",
+                "text": _format_exemplars(self.exemplars_path),
+                "cache_control": {"type": "ephemeral"},
+            },
+        ]
+
+    @abstractmethod
+    def tools(self) -> list[dict]:
+        ...
+
+    async def critique(self, article: str) -> tuple[list[Critique], Message]:
+        response = await self.client.messages.create(
+            model=self.model,
+            max_tokens=4096,
+            thinking={"type": "enabled", "budget_tokens": self.thinking_budget},
+            system=self.system_blocks,
+            tools=self.tools(),
+            messages=[
+                {
+                    "role": "user",
+                    "content": (
+                        "Review this draft article. Return a JSON array of "
+                        "critique objects per the OUTPUT CONTRACT in your "
+                        "system prompt. Return [] if there are no issues.\n\n"
+                        "ARTICLE:\n"
+                        f"{article}"
+                    ),
+                }
+            ],
+        )
+        critiques = self._parse_response(response, article)
+        return critiques, response
+
+    def _parse_response(self, response: Message, article: str) -> list[Critique]:
+        """Extract the JSON array from the model's text output and validate
+        each critique. Drops critiques whose `text_quote` is not a literal
+        substring of the article — that catches hallucinated quotes before
+        the frontend tries to highlight nothing."""
+        text = ""
+        for block in response.content:
+            if block.type == "text":
+                text += block.text
+
+        payload = _extract_json_array(text)
+        if payload is None:
+            return []
+
+        results: list[Critique] = []
+        for raw in payload:
+            try:
+                critique = Critique.model_validate(raw)
+            except Exception:
+                continue
+            if critique.text_quote not in article:
+                continue
+            # Recompute span from article to be safe — the model's offsets
+            # are often off-by-one. We trust text_quote and find it ourselves.
+            start = article.find(critique.text_quote)
+            critique = critique.model_copy(
+                update={"span": (start, start + len(critique.text_quote))}
+            )
+            results.append(critique)
+        return results
+
+
+def _extract_json_array(text: str) -> list | None:
+    """Find the first top-level JSON array in the text.
+
+    The model is instructed to return a bare array, but extended thinking can
+    occasionally produce stray prose around it. This pulls the first '[' to
+    its matching ']' and parses that.
+    """
+    start = text.find("[")
+    if start == -1:
+        return None
+    depth = 0
+    in_string = False
+    escape = False
+    for i in range(start, len(text)):
+        ch = text[i]
+        if escape:
+            escape = False
+            continue
+        if ch == "\\":
+            escape = True
+            continue
+        if ch == '"':
+            in_string = not in_string
+            continue
+        if in_string:
+            continue
+        if ch == "[":
+            depth += 1
+        elif ch == "]":
+            depth -= 1
+            if depth == 0:
+                try:
+                    return json.loads(text[start : i + 1])
+                except json.JSONDecodeError:
+                    return None
+    return None
