@@ -29,6 +29,15 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+# Include the prompt and exemplar files in the installed package. Without
+# this, pip install . only copies .py files, and the agent crashes at
+# runtime when it tries to read prompts/legal_skeptic.md.
+[tool.setuptools.package-data]
+"red_room" = [
+    "prompts/*.md",
+    "exemplars/*.jsonl",
+]
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
