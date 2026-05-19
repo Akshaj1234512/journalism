@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { AGENTS, AgentName } from "@/lib/types";
 import { Avatar } from "./Avatar";
 
@@ -9,7 +10,6 @@ interface Props {
   doneAgents: Set<AgentName>;
   disabledAgents: Set<AgentName>;
   onToggleDisabled: (agent: AgentName) => void;
-  onOpenPrompt: (agent: AgentName) => void;
 }
 
 const ORDER: AgentName[] = [
@@ -21,48 +21,89 @@ const ORDER: AgentName[] = [
   "question_master",
 ];
 
+const POPOVER_WIDTH = 320;
+const POPOVER_GAP = 12;
+const POPOVER_EST_HEIGHT = 440;
+
 /**
  * Vertical agent rail on the left edge of the app.
  *
- * Each entry: avatar, first name, role. Click expands an info card that
- * floats out to the right of the rail with the agent's bio, what they
- * look for, an on/off switch for this review, and a link into the prompt
- * editor. Click outside or hit Escape to close.
+ * The rail is scrollable. To prevent the rail's overflow from clipping the
+ * popover that opens to its right, the popover is portaled to document.body
+ * and positioned with fixed coordinates derived from the clicked button's
+ * bounding rect. The popover closes if the user scrolls the rail, scrolls
+ * the page, or resizes the window, so its anchor never drifts.
  */
 export function AgentRoster({
   runningAgents,
   doneAgents,
   disabledAgents,
   onToggleDisabled,
-  onOpenPrompt,
 }: Props) {
   const [openAgent, setOpenAgent] = useState<AgentName | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [popoverPos, setPopoverPos] = useState<{ top: number; left: number } | null>(null);
+  const railRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
+  // Anchor the popover near the clicked button. If the button is near the
+  // bottom of the viewport, shift the popover up so it does not run off.
+  const openFor = (name: AgentName) => {
+    if (openAgent === name) {
+      setOpenAgent(null);
+      return;
+    }
+    const btn = buttonRefs.current[name];
+    if (!btn) return;
+    const rect = btn.getBoundingClientRect();
+    const top = Math.max(
+      8,
+      Math.min(rect.top, window.innerHeight - POPOVER_EST_HEIGHT - 8),
+    );
+    const left = rect.right + POPOVER_GAP;
+    setPopoverPos({ top, left });
+    setOpenAgent(name);
+  };
+
+  // Close the popover the moment anything its anchor depends on moves.
   useEffect(() => {
     if (!openAgent) return;
-    const onMouse = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      if (!containerRef.current.contains(e.target as Node)) setOpenAgent(null);
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpenAgent(null);
-    };
-    document.addEventListener("mousedown", onMouse);
+    const close = () => setOpenAgent(null);
+    const rail = railRef.current;
+    rail?.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("scroll", close, { passive: true });
+    window.addEventListener("resize", close);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", onMouse);
+      rail?.removeEventListener("scroll", close);
+      window.removeEventListener("scroll", close);
+      window.removeEventListener("resize", close);
       document.removeEventListener("keydown", onKey);
     };
   }, [openAgent]);
 
+  // Outside-click close. The popover lives in a portal so we need to allow
+  // clicks inside it (it has a data attribute we look for) and inside the
+  // rail itself.
+  useEffect(() => {
+    if (!openAgent) return;
+    const onMouse = (e: MouseEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (!t) return setOpenAgent(null);
+      if (t.closest("[data-redroom-popover]")) return;
+      if (railRef.current?.contains(t)) return;
+      setOpenAgent(null);
+    };
+    document.addEventListener("mousedown", onMouse);
+    return () => document.removeEventListener("mousedown", onMouse);
+  }, [openAgent]);
+
   return (
     <div
-      ref={containerRef}
-      // overflow-visible is critical here: the popover sits at left-full of
-      // each agent button and would be clipped by any overflow-y rule on
-      // this rail. Six agents fit any normal viewport without scrolling.
-      className="relative flex h-full w-[104px] shrink-0 flex-col items-center gap-2 overflow-visible border-r border-neutral-200 bg-white py-5"
+      ref={railRef}
+      // overflow-y-auto for vertical scrolling. We portal the popover so this
+      // doesn't clip it. scroll-friendly slims the scrollbar.
+      className="relative flex h-full w-[104px] shrink-0 flex-col items-center gap-2 overflow-y-auto scroll-friendly border-r border-neutral-200 bg-white py-5"
     >
       <div className="mb-2 text-[9px] font-bold uppercase tracking-[0.18em] text-neutral-400">
         Editors
@@ -78,67 +119,82 @@ export function AgentRoster({
         const off = disabledAgents.has(name);
         const isOpen = openAgent === name;
         return (
-          <div key={name} className="relative">
-            <button
-              type="button"
-              onClick={() => setOpenAgent((p) => (p === name ? null : name))}
-              className={[
-                "group flex w-[80px] flex-col items-center gap-1.5 rounded-2xl px-2 py-2.5 transition",
-                isOpen
-                  ? "bg-neutral-100 ring-1 ring-neutral-300"
-                  : "hover:bg-neutral-50",
-                off ? "opacity-90" : "",
-              ].join(" ")}
-              title={`${meta.label}${off ? " (off)" : ""}`}
-            >
-              <Avatar agent={name} size={44} active={running && !off} muted={off} />
-              <div className="text-center leading-tight">
-                <div className="flex items-center justify-center gap-0.5 text-[12px] font-semibold text-neutral-900">
-                  {meta.firstName}
-                  <span
-                    className={[
-                      "text-[10px] text-neutral-400 transition-transform",
-                      isOpen ? "translate-x-0" : "group-hover:translate-x-0.5",
-                    ].join(" ")}
-                  >
-                    ›
-                  </span>
-                </div>
-                <div className="text-[9px] uppercase tracking-wider text-neutral-500">
-                  {meta.shortLabel}
-                </div>
+          <button
+            key={name}
+            ref={(el) => {
+              buttonRefs.current[name] = el;
+            }}
+            type="button"
+            onClick={() => openFor(name)}
+            className={[
+              "group flex w-[80px] flex-col items-center gap-1.5 rounded-2xl px-2 py-2.5 transition",
+              isOpen ? "bg-neutral-100 ring-1 ring-neutral-300" : "hover:bg-neutral-50",
+              off ? "opacity-90" : "",
+            ].join(" ")}
+            title={`${meta.label}${off ? " (off)" : ""}`}
+          >
+            <Avatar agent={name} size={44} active={running && !off} muted={off} />
+            <div className="text-center leading-tight">
+              <div className="flex items-center justify-center gap-0.5 text-[12px] font-semibold text-neutral-900">
+                {meta.firstName}
+                <span
+                  className={[
+                    "text-[10px] text-neutral-400 transition-transform",
+                    isOpen ? "translate-x-0" : "group-hover:translate-x-0.5",
+                  ].join(" ")}
+                >
+                  ›
+                </span>
               </div>
-              {/* status badge underneath */}
-              {off ? (
-                <span className="rounded-full bg-neutral-200 px-1.5 text-[8.5px] font-bold uppercase tracking-wider text-neutral-600">
-                  Off
-                </span>
-              ) : done && !running ? (
-                <span className="text-emerald-600 text-[12px] leading-none" aria-label="done">
-                  ✓
-                </span>
-              ) : running ? (
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rose-500" />
-              ) : (
-                <span className="h-1.5 w-1.5 rounded-full bg-transparent" />
-              )}
-            </button>
-
-            {isOpen && (
-              <AgentInfoCard
-                agent={name}
-                off={off}
-                onClose={() => setOpenAgent(null)}
-                onToggleDisabled={() => onToggleDisabled(name)}
-                onOpenPrompt={() => {
-                  setOpenAgent(null);
-                  onOpenPrompt(name);
-                }}
-              />
+              <div className="text-[9px] uppercase tracking-wider text-neutral-500">
+                {meta.shortLabel}
+              </div>
+            </div>
+            {off ? (
+              <span className="rounded-full bg-neutral-200 px-1.5 text-[8.5px] font-bold uppercase tracking-wider text-neutral-600">
+                Off
+              </span>
+            ) : done && !running ? (
+              <span className="text-emerald-600 text-[12px] leading-none" aria-label="done">
+                ✓
+              </span>
+            ) : running ? (
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-rose-500" />
+            ) : (
+              <span className="h-1.5 w-1.5 rounded-full bg-transparent" />
             )}
-          </div>
+          </button>
         );
       })}
+
+      {/* Portaled popover: lives at document.body so the rail's overflow
+          can't clip it. Position is fixed relative to viewport. */}
+      {openAgent &&
+        popoverPos &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            data-redroom-popover
+            style={{
+              position: "fixed",
+              top: popoverPos.top,
+              left: popoverPos.left,
+              width: POPOVER_WIDTH,
+              // Above the tutorial overlay (z-200) so that when a user
+              // opens this popover during the tour, it lands on top of the
+              // dim background instead of being hidden behind it.
+              zIndex: 300,
+            }}
+          >
+            <AgentInfoCard
+              agent={openAgent}
+              off={disabledAgents.has(openAgent)}
+              onClose={() => setOpenAgent(null)}
+              onToggleDisabled={() => onToggleDisabled(openAgent)}
+            />
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
@@ -149,19 +205,17 @@ function AgentInfoCard({
   off,
   onClose,
   onToggleDisabled,
-  onOpenPrompt,
 }: {
   agent: AgentName;
   off: boolean;
   onClose: () => void;
   onToggleDisabled: () => void;
-  onOpenPrompt: () => void;
 }) {
   const meta = AGENTS[agent];
   return (
     <div
       role="dialog"
-      className="absolute left-full top-0 z-40 ml-3 w-[320px] rounded-2xl border border-neutral-200 bg-white p-5 shadow-xl"
+      className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-xl"
       style={{ borderTop: `4px solid ${meta.brandHex}` }}
     >
       <header className="flex items-start gap-3">
@@ -194,7 +248,10 @@ function AgentInfoCard({
         </div>
         <ul className="space-y-1.5">
           {meta.lookFor.map((item) => (
-            <li key={item} className="relative pl-3.5 text-[12px] leading-snug text-neutral-700">
+            <li
+              key={item}
+              className="relative pl-3.5 text-[12px] leading-snug text-neutral-700"
+            >
               <span
                 className="absolute left-0 top-[7px] h-1.5 w-1.5 rounded-full"
                 style={{ backgroundColor: meta.brandHex }}
@@ -212,18 +269,6 @@ function AgentInfoCard({
           firstName={meta.firstName}
           onToggle={onToggleDisabled}
         />
-      </div>
-
-      <div className="mt-4 flex items-center justify-between border-t border-neutral-100 pt-3">
-        <span className="font-mono text-[10px] text-neutral-400">
-          prompts/{agent}.md
-        </span>
-        <button
-          onClick={onOpenPrompt}
-          className="rounded-lg border border-neutral-200 bg-white px-2.5 py-1.5 text-[11px] font-semibold text-neutral-700 transition hover:bg-neutral-50"
-        >
-          View / edit prompt
-        </button>
       </div>
     </div>
   );

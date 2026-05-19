@@ -5,16 +5,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { AgentRoster } from "@/components/AgentRoster";
 import { CritiqueSidebar } from "@/components/CritiqueSidebar";
 import { Editor, critiqueId } from "@/components/Editor";
-import { PromptEditor } from "@/components/PromptEditor";
-import { ReviewModeSelector } from "@/components/ReviewModeSelector";
+import { PrintView } from "@/components/PrintView";
+import { SampleDraftsButton } from "@/components/SampleDrafts";
+import { Tutorial } from "@/components/Tutorial";
 import { streamCritique } from "@/lib/stream";
-import {
-  AgentName,
-  Critique,
-  ReviewMode,
-  REVIEW_MODES,
-  ALL_AGENT_NAMES,
-} from "@/lib/types";
+import { AgentName, Critique } from "@/lib/types";
+import { extractTextFromFile } from "@/lib/upload";
 
 const SAMPLE_DRAFT =
   "City councilman Mark Reyes stole more than $400,000 from a youth sports nonprofit he chaired, " +
@@ -22,62 +18,51 @@ const SAMPLE_DRAFT =
   "Reyes did not respond to a request for comment.";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
-const COST_KEY = "redroom:session-cost";
 const DISABLED_KEY = "redroom:disabled-agents";
-const MODE_KEY = "redroom:review-mode";
+const ARTICLE_KEY = "redroom:article";
+const TUTORIAL_SEEN_KEY = "redroom:tutorial-seen";
 
 export default function Page() {
   const [article, setArticle] = useState(SAMPLE_DRAFT);
   const [critiques, setCritiques] = useState<Critique[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "running" | "done" | "error">("idle");
-  const [lastRunCostUsd, setLastRunCostUsd] = useState(0);
-  const [sessionCostUsd, setSessionCostUsd] = useState(0);
-  const [runCount, setRunCount] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [runningAgents, setRunningAgents] = useState<Set<AgentName>>(new Set());
   const [doneAgents, setDoneAgents] = useState<Set<AgentName>>(new Set());
   const [disabledAgents, setDisabledAgents] = useState<Set<AgentName>>(new Set());
-  const [reviewMode, setReviewMode] = useState<ReviewMode>("standard");
-  const [promptEditorOpen, setPromptEditorOpen] = useState(false);
-  const [promptEditorAgent, setPromptEditorAgent] = useState<AgentName | undefined>(undefined);
   const [resolvedIds, setResolvedIds] = useState<Set<string>>(new Set());
+  const [isDragging, setIsDragging] = useState(false);
+  const [uploadInfo, setUploadInfo] = useState<{ name: string; bytes: number } | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const editorRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  // Track nested dragenter/dragleave on child elements so the overlay does
+  // not flicker as the cursor crosses between the textarea and its wrapper.
+  const dragDepthRef = useRef(0);
 
-  // Hydrate session totals and disabled agents from localStorage on mount.
+  const [tutorialOpen, setTutorialOpen] = useState(false);
+
+  // Restore on mount: agent roster, draft article, and whether the user has
+  // seen the tour. Tutorial auto-opens for first-time visitors.
   useEffect(() => {
     try {
-      const cRaw = localStorage.getItem(COST_KEY);
-      if (cRaw) {
-        const { cost, runs } = JSON.parse(cRaw);
-        if (typeof cost === "number") setSessionCostUsd(cost);
-        if (typeof runs === "number") setRunCount(runs);
-      }
-    } catch {}
-    try {
-      const dRaw = localStorage.getItem(DISABLED_KEY);
-      if (dRaw) {
-        const arr = JSON.parse(dRaw);
+      const raw = localStorage.getItem(DISABLED_KEY);
+      if (raw) {
+        const arr = JSON.parse(raw);
         if (Array.isArray(arr)) setDisabledAgents(new Set(arr as AgentName[]));
       }
     } catch {}
     try {
-      const mRaw = localStorage.getItem(MODE_KEY) as ReviewMode | null;
-      if (mRaw && REVIEW_MODES.some((m) => m.id === mRaw)) {
-        setReviewMode(mRaw);
-      }
+      const saved = localStorage.getItem(ARTICLE_KEY);
+      if (saved && saved.trim()) setArticle(saved);
+    } catch {}
+    try {
+      const seen = localStorage.getItem(TUTORIAL_SEEN_KEY);
+      if (!seen) setTutorialOpen(true);
     } catch {}
   }, []);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(
-        COST_KEY,
-        JSON.stringify({ cost: sessionCostUsd, runs: runCount }),
-      );
-    } catch {}
-  }, [sessionCostUsd, runCount]);
 
   useEffect(() => {
     try {
@@ -85,29 +70,16 @@ export default function Page() {
     } catch {}
   }, [disabledAgents]);
 
+  // Save the article on every change (small enough that we do not bother
+  // debouncing). Skip the very first identical value to avoid wiping a
+  // hydrated value with the SAMPLE_DRAFT default before the load effect runs.
   useEffect(() => {
-    try { localStorage.setItem(MODE_KEY, reviewMode); } catch {}
-  }, [reviewMode]);
+    try { localStorage.setItem(ARTICLE_KEY, article); } catch {}
+  }, [article]);
 
-  // Switching to a non-custom mode rewrites the disabled set from the preset.
-  // Manual toggles in the rail then flip mode to "custom" automatically.
-  const onSelectMode = useCallback((mode: ReviewMode) => {
-    setReviewMode(mode);
-    if (mode === "custom") return;
-    const preset = REVIEW_MODES.find((m) => m.id === mode);
-    if (!preset) return;
-    const enabled = new Set(preset.agents);
-    const nextDisabled = new Set<AgentName>(
-      ALL_AGENT_NAMES.filter((n) => !enabled.has(n)),
-    );
-    setDisabledAgents(nextDisabled);
-  }, []);
-
-  const onResetSession = useCallback(() => {
-    if (!confirm("Reset session cost counter to $0?")) return;
-    setSessionCostUsd(0);
-    setRunCount(0);
-    setLastRunCostUsd(0);
+  const onCompleteTutorial = useCallback(() => {
+    setTutorialOpen(false);
+    try { localStorage.setItem(TUTORIAL_SEEN_KEY, "1"); } catch {}
   }, []);
 
   const onToggleDisabled = useCallback((agent: AgentName) => {
@@ -117,16 +89,12 @@ export default function Page() {
       else next.add(agent);
       return next;
     });
-    // Hand-editing the roster moves us into custom mode so the segmented
-    // control reflects that the preset is no longer in effect.
-    setReviewMode("custom");
   }, []);
 
   const onRun = useCallback(() => {
     abortRef.current?.abort();
     setCritiques([]);
     setActiveId(null);
-    setLastRunCostUsd(0);
     setErrorMessage(null);
     setRunningAgents(new Set());
     setDoneAgents(new Set());
@@ -149,12 +117,7 @@ export default function Page() {
           });
           setDoneAgents((prev) => new Set(prev).add(agent as AgentName));
         },
-        onDone: (cost) => {
-          setLastRunCostUsd(cost);
-          setSessionCostUsd((prev) => prev + cost);
-          setRunCount((n) => n + 1);
-          setStatus("done");
-        },
+        onDone: () => setStatus("done"),
         onError: (msg) => {
           setErrorMessage(msg);
           setStatus("error");
@@ -186,9 +149,7 @@ export default function Page() {
     setActiveId((cur) => (cur === id ? null : cur));
   }, []);
 
-  const onUnresolveAll = useCallback(() => {
-    setResolvedIds(new Set());
-  }, []);
+  const onUnresolveAll = useCallback(() => setResolvedIds(new Set()), []);
 
   const onAcceptFix = useCallback(
     (id: string) => {
@@ -219,77 +180,146 @@ export default function Page() {
     [critiques, article],
   );
 
+  // Replace the current draft with text extracted from an uploaded file.
+  // Drag-drop and the Upload button both call this. Any in-flight critiques
+  // are cleared since their spans no longer map to the new text.
+  const onUploadFile = useCallback(async (file: File) => {
+    try {
+      const { text, sourceName } = await extractTextFromFile(file);
+      if (!text.trim()) {
+        setUploadError("The file looks empty. Check that it has body text and try again.");
+        return;
+      }
+      setArticle(text);
+      setCritiques([]);
+      setActiveId(null);
+      setResolvedIds(new Set());
+      setRunningAgents(new Set());
+      setDoneAgents(new Set());
+      setStatus("idle");
+      setErrorMessage(null);
+      setUploadInfo({ name: sourceName, bytes: file.size });
+      setUploadError(null);
+    } catch (err) {
+      setUploadError((err as Error).message ?? "Could not read that file.");
+    }
+  }, []);
+
+  const onDragEnter = useCallback((e: React.DragEvent) => {
+    if (!e.dataTransfer?.types?.includes("Files")) return;
+    e.preventDefault();
+    dragDepthRef.current += 1;
+    setIsDragging(true);
+  }, []);
+
+  const onDragOver = useCallback((e: React.DragEvent) => {
+    if (!e.dataTransfer?.types?.includes("Files")) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  }, []);
+
+  const onDragLeave = useCallback((e: React.DragEvent) => {
+    if (!e.dataTransfer?.types?.includes("Files")) return;
+    e.preventDefault();
+    dragDepthRef.current = Math.max(0, dragDepthRef.current - 1);
+    if (dragDepthRef.current === 0) setIsDragging(false);
+  }, []);
+
+  const onDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      dragDepthRef.current = 0;
+      setIsDragging(false);
+      const file = e.dataTransfer?.files?.[0];
+      if (file) void onUploadFile(file);
+    },
+    [onUploadFile],
+  );
+
   const enabledCount = 6 - disabledAgents.size;
 
   return (
     <main className="flex h-screen w-screen flex-col bg-stone-50">
-      <header className="flex items-center justify-between gap-4 border-b border-neutral-200 bg-white px-6 py-3.5">
-        <div className="flex items-center gap-3 min-w-0">
-          <div
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl text-white"
-            style={{
-              background: "linear-gradient(135deg, #EC4899 0%, #F59E0B 100%)",
-            }}
+      <header className="relative flex items-center justify-between gap-4 border-b border-neutral-200 bg-white px-7 py-4">
+        <div className="flex min-w-0 items-center gap-4">
+          {/* Thin red rule. Editorial pull-quote feel, matches the wordmark
+              colour and replaces the heavy gradient tile that read as SaaS. */}
+          <span
             aria-hidden
-          >
-            <span className="font-serif text-lg italic font-bold">R</span>
-          </div>
+            className="hidden sm:block h-12 w-[3px] shrink-0 rounded-full"
+            style={{ backgroundColor: "#DC2626" }}
+          />
           <div className="leading-tight">
-            <h1 className="font-serif text-[17px] tracking-tight text-neutral-900">
-              The Red Room
+            <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-neutral-400">
+              Pre-publication review
+            </div>
+            <h1 className="mt-1 font-serif text-[26px] italic leading-none tracking-tight text-neutral-900">
+              The <span style={{ color: "#DC2626" }}>Red Room</span>
             </h1>
-            <p className="text-[11px] text-neutral-500">
-              A pre-publication review by an independent room of AI editors.
+            <p className="mt-1.5 text-[12px] text-neutral-500">
+              An independent team of AI editors, reviewing your draft before you publish.
             </p>
           </div>
         </div>
+
         <div className="flex shrink-0 items-center gap-3">
-          <ReviewModeSelector mode={reviewMode} onChange={onSelectMode} />
-          <span className="hidden lg:inline text-[10px] uppercase tracking-wider text-neutral-400">
-            {enabledCount} of 6 editors on
+          <span className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            {enabledCount} of 6 editors active
           </span>
-          <CostMeter
-            lastRunUsd={lastRunCostUsd}
-            sessionUsd={sessionCostUsd}
-            runCount={runCount}
-            onReset={onResetSession}
-          />
           <button
-            onClick={() => {
-              setPromptEditorAgent(undefined);
-              setPromptEditorOpen(true);
-            }}
-            className="rounded-xl border border-neutral-200 bg-white px-3.5 py-2 text-xs font-medium text-neutral-700 transition hover:bg-neutral-50"
-            title="View and edit each agent's system prompt"
+            onClick={() => setTutorialOpen(true)}
+            title="Replay the guided tour"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-500 transition hover:bg-neutral-50 hover:text-neutral-800"
+            aria-label="Show tutorial"
           >
-            Edit prompts
+            <HelpGlyph />
           </button>
           <button
+            data-tutorial="run"
             onClick={onRun}
             disabled={status === "running" || article.trim().length === 0 || enabledCount === 0}
-            className="rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
           >
-            {status === "running" ? "Reviewing…" : "Run review"}
+            {status === "running" ? (
+              <>
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
+                Reviewing…
+              </>
+            ) : (
+              <>
+                <PlayGlyph />
+                Run review
+              </>
+            )}
           </button>
         </div>
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Left rail: vertical agent picker with on/off + popover */}
-        <AgentRoster
-          runningAgents={runningAgents}
-          doneAgents={doneAgents}
-          disabledAgents={disabledAgents}
-          onToggleDisabled={onToggleDisabled}
-          onOpenPrompt={(agent) => {
-            setPromptEditorAgent(agent);
-            setPromptEditorOpen(true);
-          }}
-        />
+        <div data-tutorial="rail" className="flex shrink-0">
+          <AgentRoster
+            runningAgents={runningAgents}
+            doneAgents={doneAgents}
+            disabledAgents={disabledAgents}
+            onToggleDisabled={onToggleDisabled}
+          />
+        </div>
 
-        {/* Centre: editor surface inside a softly rounded card */}
         <div className="flex flex-1 items-stretch p-4">
-          <div className="flex flex-1 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+          <div
+            data-tutorial="editor"
+            className={[
+              "relative flex flex-1 overflow-hidden rounded-2xl border bg-white shadow-sm transition-all duration-150",
+              isDragging
+                ? "border-rose-300 ring-4 ring-rose-100"
+                : "border-neutral-200",
+            ].join(" ")}
+            onDragEnter={onDragEnter}
+            onDragOver={onDragOver}
+            onDragLeave={onDragLeave}
+            onDrop={onDrop}
+          >
             <Editor
               ref={editorRef}
               value={article}
@@ -297,73 +327,145 @@ export default function Page() {
               critiques={critiques}
               activeId={activeId}
               resolvedIds={resolvedIds}
+              onCritiqueClick={onSelectCritique}
             />
+
+            {/* Sample drafts + upload, top-right of the card. */}
+            <div data-tutorial="upload" className="pointer-events-none absolute right-3 top-3 flex flex-col items-end gap-1.5">
+              <div className="flex items-center gap-1.5 pointer-events-auto">
+                <SampleDraftsButton
+                  onPick={(text) => {
+                    setArticle(text);
+                    setCritiques([]);
+                    setActiveId(null);
+                    setResolvedIds(new Set());
+                    setStatus("idle");
+                    setErrorMessage(null);
+                    setUploadError(null);
+                    setUploadInfo(null);
+                  }}
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-neutral-200 bg-white/95 px-2.5 py-1.5 text-[11.5px] font-medium text-neutral-700 shadow-sm transition hover:bg-neutral-50"
+                  title="Import a draft from .docx or .txt. For Google Docs, use File then Download then Microsoft Word."
+                >
+                  <UploadGlyph />
+                  Upload draft
+                </button>
+              </div>
+              {uploadInfo && !uploadError && (
+                <span className="pointer-events-auto rounded-lg border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10.5px] text-emerald-800">
+                  Imported {uploadInfo.name}
+                </span>
+              )}
+              {uploadError && (
+                <span className="pointer-events-auto max-w-[260px] rounded-lg border border-rose-200 bg-rose-50 px-2 py-1 text-[10.5px] leading-snug text-rose-800">
+                  {uploadError}
+                </span>
+              )}
+            </div>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".docx,.txt,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void onUploadFile(f);
+                e.target.value = ""; // allow re-uploading the same file
+              }}
+            />
+
+            {/* Drop overlay shown while a file is being dragged over the card. */}
+            {isDragging && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-2 z-20 flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-rose-300 bg-rose-50/85 backdrop-blur-[1px]"
+              >
+                <DropGlyph />
+                <div className="mt-3 font-serif text-lg text-rose-900">
+                  Drop to import this draft
+                </div>
+                <div className="mt-1 text-[12px] text-rose-700/80">
+                  Word .docx or plain .txt. For Google Docs, download as Word first.
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Right: critiques */}
-        <CritiqueSidebar
-          critiques={critiques}
-          activeId={activeId}
-          onSelect={onSelectCritique}
-          status={status}
-          totalCostUsd={lastRunCostUsd}
-          errorMessage={errorMessage}
-          runningAgents={runningAgents}
-          resolvedIds={resolvedIds}
-          onToggleResolved={onToggleResolved}
-          onUnresolveAll={onUnresolveAll}
-          onAcceptFix={onAcceptFix}
-        />
+        <div data-tutorial="sidebar" className="flex shrink-0">
+          <CritiqueSidebar
+            critiques={critiques}
+            activeId={activeId}
+            onSelect={onSelectCritique}
+            status={status}
+            errorMessage={errorMessage}
+            runningAgents={runningAgents}
+            resolvedIds={resolvedIds}
+            onToggleResolved={onToggleResolved}
+            onUnresolveAll={onUnresolveAll}
+            onAcceptFix={onAcceptFix}
+            onDownload={() => window.print()}
+          />
+        </div>
       </div>
 
-      <PromptEditor
-        open={promptEditorOpen}
-        onClose={() => setPromptEditorOpen(false)}
-        backendUrl={BACKEND_URL}
-        initialAgent={promptEditorAgent}
+      {/* Tutorial overlay (portals to body) */}
+      <Tutorial open={tutorialOpen} onClose={onCompleteTutorial} />
+
+      {/* Hidden print view — visible only when window.print() runs */}
+      <PrintView
+        article={article}
+        critiques={critiques}
+        resolvedIds={resolvedIds}
+        idOf={critiqueId}
       />
     </main>
   );
 }
 
 
-function CostMeter({
-  lastRunUsd,
-  sessionUsd,
-  runCount,
-  onReset,
-}: {
-  lastRunUsd: number;
-  sessionUsd: number;
-  runCount: number;
-  onReset: () => void;
-}) {
+function PlayGlyph() {
   return (
-    <div
-      className="flex items-center gap-2 rounded-xl border border-neutral-200 bg-white px-3 py-1.5"
-      title="Anthropic API cost (estimated). Persists across reloads in this browser."
-    >
-      <div className="flex flex-col text-right leading-tight">
-        <span className="text-[9px] uppercase tracking-wider text-neutral-400">
-          Session cost · {runCount} {runCount === 1 ? "run" : "runs"}
-        </span>
-        <span className="font-mono text-sm font-semibold text-neutral-900">
-          ${sessionUsd.toFixed(4)}
-        </span>
-        {lastRunUsd > 0 && (
-          <span className="text-[10px] text-neutral-500">
-            last run ${lastRunUsd.toFixed(4)}
-          </span>
-        )}
-      </div>
-      <button
-        onClick={onReset}
-        title="Reset session counter"
-        className="rounded-md text-neutral-400 transition hover:text-neutral-700"
-      >
-        <span className="text-base leading-none">↺</span>
-      </button>
-    </div>
+    <svg viewBox="0 0 12 12" width="10" height="10" fill="currentColor" aria-hidden>
+      <path d="M3 1.5 L10 6 L3 10.5 Z" />
+    </svg>
+  );
+}
+
+
+function UploadGlyph() {
+  return (
+    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M8 11 V3" />
+      <path d="M4.5 6.5 L8 3 L11.5 6.5" />
+      <path d="M3 12.5 V13 a1 1 0 0 0 1 1 H12 a1 1 0 0 0 1 -1 V12.5" />
+    </svg>
+  );
+}
+
+
+function HelpGlyph() {
+  return (
+    <svg viewBox="0 0 16 16" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="8" cy="8" r="6.5" />
+      <path d="M6.2 6 a1.8 1.8 0 0 1 3.6 0 c0 1.2 -1.8 1.2 -1.8 2.5" />
+      <circle cx="8" cy="11.5" r="0.6" fill="currentColor" />
+    </svg>
+  );
+}
+
+
+function DropGlyph() {
+  return (
+    <svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="#9F1239" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M14 8 H30 L38 16 V40 a2 2 0 0 1 -2 2 H14 a2 2 0 0 1 -2 -2 V10 a2 2 0 0 1 2 -2 Z" />
+      <path d="M30 8 V16 H38" />
+      <path d="M24 22 V34" />
+      <path d="M19 29 L24 34 L29 29" />
+    </svg>
   );
 }

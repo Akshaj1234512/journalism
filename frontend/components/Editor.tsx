@@ -10,6 +10,8 @@ interface Props {
   critiques: Critique[];
   activeId: string | null;
   resolvedIds: Set<string>;
+  /** Click on an underlined highlight: page activates that critique. */
+  onCritiqueClick?: (id: string) => void;
 }
 
 /**
@@ -21,7 +23,7 @@ interface Props {
  * characters the user is editing.
  */
 export const Editor = forwardRef<HTMLTextAreaElement, Props>(function Editor(
-  { value, onChange, critiques, activeId, resolvedIds },
+  { value, onChange, critiques, activeId, resolvedIds, onCritiqueClick },
   ref,
 ) {
   const overlayRef = useRef<HTMLDivElement>(null);
@@ -70,12 +72,29 @@ export const Editor = forwardRef<HTMLTextAreaElement, Props>(function Editor(
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 scroll-friendly overflow-auto whitespace-pre-wrap break-words px-10 py-8 font-serif text-[18px] leading-[1.75] text-transparent"
       >
-        {renderHighlighted(value, critiques, activeId, resolvedIds)}
+        {renderHighlighted(value, critiques, activeId, resolvedIds, onCritiqueClick)}
       </div>
       <textarea
         ref={textareaRef}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        // The textarea sits visually on top of the overlay, so it catches
+        // every mouse click. We look at where the click landed (the new
+        // selectionStart) and if it fell inside a critique's span we
+        // activate that critique in the sidebar. The cursor still moves
+        // normally so the user can keep typing.
+        onClick={(e) => {
+          if (!onCritiqueClick) return;
+          const pos = e.currentTarget.selectionStart;
+          for (const c of critiques) {
+            if (resolvedIds.has(critiqueId(c))) continue;
+            const [s, ed] = c.span;
+            if (pos >= s && pos <= ed) {
+              onCritiqueClick(critiqueId(c));
+              return;
+            }
+          }
+        }}
         spellCheck
         className="relative h-full w-full resize-none scroll-friendly whitespace-pre-wrap break-words bg-transparent px-10 py-8 font-serif text-[18px] leading-[1.75] text-neutral-900 outline-none placeholder:text-neutral-400"
         placeholder="Paste a draft here. The room will read it the moment you click Run review."
@@ -90,6 +109,7 @@ function renderHighlighted(
   critiques: Critique[],
   activeId: string | null,
   resolvedIds: Set<string>,
+  onCritiqueClick: ((id: string) => void) | undefined,
 ) {
   const visible = critiques.filter((c) => !resolvedIds.has(critiqueId(c)));
   if (visible.length === 0) return text;
@@ -118,6 +138,9 @@ function renderHighlighted(
     // differently from the textarea's lines, and the highlights will drift
     // out of alignment with the underlying text. Use box-shadow only — it
     // is rendered outside the layout box and does not affect line breaks.
+    // Click activation lives on the textarea (see its onClick): the textarea
+    // sits on top of this overlay in stacking order, so it catches mouse
+    // events first. We only paint here.
     out.push(
       <mark
         key={`${start}-${end}-${c.agent}`}
@@ -129,7 +152,6 @@ function renderHighlighted(
           textDecorationLine: "underline",
           textDecorationThickness: "2px",
           textUnderlineOffset: "3px",
-          // box-shadow gives the active "ring" without taking layout space.
           boxShadow: isActive ? `0 0 0 2px ${meta.brandHex}` : undefined,
           padding: 0,
           margin: 0,

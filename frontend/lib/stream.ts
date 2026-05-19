@@ -39,7 +39,7 @@ export function streamCritique(
         signal: controller.signal,
       });
       if (!response.ok || !response.body) {
-        handlers.onError?.(`Backend returned ${response.status}`);
+        handlers.onError?.(friendlyHttpError(response.status));
         return;
       }
 
@@ -72,9 +72,9 @@ export function streamCritique(
         }
       }
     } catch (e) {
-      if ((e as Error).name !== "AbortError") {
-        handlers.onError?.((e as Error).message);
-      }
+      const err = e as Error;
+      if (err.name === "AbortError") return;
+      handlers.onError?.(friendlyNetworkError(err));
     }
   })();
 
@@ -96,7 +96,62 @@ function dispatch(ev: StreamEvent, h: Handlers) {
       h.onDone?.(ev.cost_usd, ev.elapsed_ms);
       break;
     case "error":
-      h.onError?.(ev.message);
+      h.onError?.(friendlyApiError(ev.message));
       break;
   }
+}
+
+
+/**
+ * Translate raw browser fetch errors into something a journalist on a flaky
+ * cafe wifi can act on. The default browser text is "Failed to fetch" which
+ * tells them nothing.
+ */
+function friendlyNetworkError(err: Error): string {
+  const msg = (err.message || "").toLowerCase();
+  if (
+    err.name === "TypeError" ||
+    msg.includes("failed to fetch") ||
+    msg.includes("networkerror") ||
+    msg.includes("load failed")
+  ) {
+    return "We can't reach the review service. Check your connection, or try again in a moment.";
+  }
+  return err.message || "Something went wrong. Please try again.";
+}
+
+/** Map common backend HTTP status codes to user-friendly copy. */
+function friendlyHttpError(status: number): string {
+  if (status === 429) return "The room is busy right now. Please try again in a minute.";
+  if (status === 401 || status === 403) {
+    return "The review service is misconfigured. The site owner has been notified.";
+  }
+  if (status === 503) return "The AI service is temporarily overloaded. Please try again in a moment.";
+  if (status >= 500) return "Something went wrong on the review service. Please try again.";
+  if (status >= 400) return `The review couldn't be started (error ${status}).`;
+  return `Unexpected response from the review service (${status}).`;
+}
+
+/**
+ * Translate errors that bubble up from the backend's stream (typically
+ * Anthropic SDK exceptions) into plain language.
+ */
+function friendlyApiError(raw: string): string {
+  const r = (raw || "").toLowerCase();
+  if (r.includes("api key") || r.includes("authentication") || r.includes("api_key")) {
+    return "Authentication failed. The site owner needs to check the API key configuration.";
+  }
+  if (r.includes("rate limit") || r.includes("429")) {
+    return "The AI service is rate-limited right now. Please try again in a minute.";
+  }
+  if (r.includes("overloaded") || r.includes("503")) {
+    return "The AI service is temporarily overloaded. Please try again in a moment.";
+  }
+  if (r.includes("timeout") || r.includes("timed out")) {
+    return "The review took too long. Please try a shorter draft, or run again.";
+  }
+  if (r.includes("connection") && r.includes("reset")) {
+    return "The connection dropped mid-review. Please run it again.";
+  }
+  return raw || "Something went wrong. Please try again.";
 }

@@ -34,62 +34,6 @@ export interface AgentMeta {
   lookFor: string[];
 }
 
-/* ─── Review modes ─────────────────────────────────────────────────────────
-   The Red Room's differentiator vs a generic AI editor is that *different
-   stories deserve different reviews*. Each mode is just a preset of which
-   agents run for this article. Modes are saved in localStorage so the user
-   can keep the one that fits their beat.
-─────────────────────────────────────────────────────────────────────────── */
-
-export type ReviewMode = "brief" | "standard" | "deep" | "custom";
-
-export interface ReviewModeMeta {
-  id: ReviewMode;
-  label: string;
-  description: string;
-  agents: AgentName[];   // empty array signals "user-controlled"
-  estSeconds: string;    // rough wall-clock expectation
-}
-
-export const REVIEW_MODES: ReviewModeMeta[] = [
-  {
-    id: "brief",
-    label: "Brief",
-    description: "Anne and Parker only. The fastest read, for breaking news and short turnarounds.",
-    agents: ["legal_skeptic", "partisan"],
-    estSeconds: "~30s",
-  },
-  {
-    id: "standard",
-    label: "Standard",
-    description: "All five flagging editors. The default newsroom review.",
-    agents: ["legal_skeptic", "data_expert", "human_rights", "clarity", "partisan"],
-    estSeconds: "~60s",
-  },
-  {
-    id: "deep",
-    label: "Deep",
-    description: "The full room, including Sol's generative questions. For investigative drafts and long-form.",
-    agents: ["legal_skeptic", "data_expert", "human_rights", "clarity", "partisan", "question_master"],
-    estSeconds: "~90s",
-  },
-  {
-    id: "custom",
-    label: "Custom",
-    description: "Whatever you have toggled on in the rail.",
-    agents: [],
-    estSeconds: "varies",
-  },
-];
-
-export const ALL_AGENT_NAMES: AgentName[] = [
-  "legal_skeptic",
-  "data_expert",
-  "human_rights",
-  "clarity",
-  "partisan",
-  "question_master",
-];
 
 export const AGENTS: Record<AgentName, AgentMeta> = {
   legal_skeptic: {
@@ -102,7 +46,7 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     available: true,
     kind: "flagger",
     tagline:
-      "Media-libel attorney. Reads every draft assuming the subject will sue.",
+      "Reviews your draft for legal risk. Catches defamation traps, weak sourcing on serious claims, and missing right of reply.",
     lookFor: [
       "Criminal verbs without an indictment, audit, or named second source",
       "Specific allegations resting on a single anonymous source",
@@ -120,7 +64,7 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     available: true,
     kind: "flagger",
     tagline:
-      "Data journalist who deflates editorialized numbers and overstated causation.",
+      "Checks the numbers in your story. Catches misleading statistics, false causation, and figures presented without context.",
     lookFor: [
       "Causation claimed where only correlation is shown",
       "Poll leads or deltas inside the margin of error",
@@ -138,7 +82,7 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     available: true,
     kind: "flagger",
     tagline:
-      "Came up in human rights reporting. Asks what happens to the source six months after publication.",
+      "Protects your sources. Flags privacy risks, exposure of vulnerable people, and trauma framing that can come back to haunt the people in your story.",
     lookFor: [
       "Identifying-detail combinations that build a public dossier",
       "Trauma used as a hook with no consent infrastructure",
@@ -156,7 +100,7 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     available: true,
     kind: "flagger",
     tagline:
-      "Reads drafts as a smart but distracted reader and flags every sentence that loses them.",
+      "Keeps your writing readable. Catches jargon, passive voice, buried ledes, and sentences your reader will not finish.",
     lookFor: [
       "Passive-voice accountability dodges",
       "Acronym pileup that loses the cast of characters",
@@ -174,7 +118,7 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     available: true,
     kind: "flagger",
     tagline:
-      "Reads every draft as the subject's media consultant. Removes unforced errors hostile critics will weaponize.",
+      "Hardens your story against bad-faith attacks. Spots loaded adjectives, buried rebuttals, and smear-by-association before critics do.",
     lookFor: [
       "Subject's rebuttal buried below paragraph five",
       "Smear by proximity without a functional link",
@@ -192,7 +136,7 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     available: true,
     kind: "questioner",
     tagline:
-      "Does not correct anything. Asks the deep question the reporter never thought to ask.",
+      "Asks the deep questions you missed. Does not correct anything; pushes you toward bigger angles, stronger framings, and the story under the story.",
     lookFor: [
       "The unexamined premise the whole story stands on",
       "The follow-up the reporter never asked the source",
