@@ -14,15 +14,17 @@ ENV PORT=7860 \
 
 WORKDIR /app
 
-# Install deps first so the layer caches well between code changes.
+# Copy pyproject AND source together before installing. setuptools' src
+# layout needs to see src/ at install time, so we cannot split this into
+# two layers without breaking editable-mode or find-packages.
 COPY pyproject.toml ./
-RUN pip install --upgrade pip && pip install -e .
-
-# Copy the application source.
 COPY src/ ./src/
 
-# Anthropic key, model, and CORS origins are passed as env vars by the
-# host (Spaces "secrets", Fly secrets, Render environment, etc.).
+# Non-editable install. The container is immutable, so editable mode is
+# unnecessary and was the cause of the original 'src does not exist'
+# build failure on Hugging Face.
+RUN pip install --upgrade pip && pip install .
+
 EXPOSE 7860
 
 # Bind to 0.0.0.0 so the container is reachable; use $PORT for hosts that
