@@ -1,0 +1,33 @@
+name: Sync backend to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"             # only run when the backend changed
+      - ".github/workflows/deploy-hf.yml"
+  workflow_dispatch:              # also allow manual runs from GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the full repo (subtree push needs history)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push the backend subtree to Hugging Face
+        env:
+          HF_USER: akshaj1229
+          HF_SPACE: red-room
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          # Build a temporary branch that contains only the backend/ tree,
+          # then force-push that as `main` on the HF Space. We use
+          # subtree split + force push instead of subtree push so we don't
+          # have to worry about diverging histories on the HF side.
+          git config user.email "deploy-bot@redroom.local"
+          git config user.name "red-room-deploy-bot"
+          BRANCH=$(git subtree split --prefix=backend HEAD)
+          git push --force "https://$HF_USER:$HF_TOKEN@huggingface.co/spaces/$HF_USER/$HF_SPACE" "$BRANCH:main"

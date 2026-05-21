@@ -277,6 +277,11 @@ function CritiqueCard({
   const id = critiqueId(c);
   const isQuestioner = meta.kind === "questioner"; // Sol
   const inHotspot = !!consensus?.groupId;
+  // Word-level before/after, shown only when the fix is a one-span swap.
+  const diff =
+    !isQuestioner && c.fix_suggestion && c.replacement
+      ? diffQuote(c.text_quote, c.replacement)
+      : null;
   const cardRef = useRef<HTMLElement>(null);
 
   // When this card becomes the active one (e.g. user clicked the highlight
@@ -344,26 +349,34 @@ function CritiqueCard({
       <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-neutral-600">
         {c.issue_label}
       </div>
-      <p className="text-[13.5px] leading-snug text-neutral-900">{c.question}</p>
-      <p className="mt-1.5 text-xs italic leading-snug text-neutral-500">
-        {c.why_it_matters}
+      <p className="text-[13px] leading-relaxed text-neutral-800">
+        {c.question}
+        {c.why_it_matters ? ` ${c.why_it_matters}` : ""}
       </p>
 
       {/* Sol never proposes fixes; flaggers do. */}
       {!isQuestioner && c.fix_suggestion && (
-        <div className="mt-2 rounded-xl border border-neutral-200 bg-white px-2.5 py-1.5">
-          <div className="mb-0.5 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+        <div className="mt-2 rounded-xl border border-neutral-200 bg-white px-2.5 py-2">
+          <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
             Suggested fix
           </div>
           <p className="text-xs leading-snug text-neutral-800">
             {c.fix_suggestion}
           </p>
+          {diff && (
+            <div className="mt-2 space-y-1.5">
+              <DiffBubble label="Original" segments={diff.before} tone="before" />
+              <DiffBubble label="Corrected" segments={diff.after} tone="after" />
+            </div>
+          )}
         </div>
       )}
 
-      <p className="mt-2 truncate text-[11px] text-neutral-400">
-        “{c.text_quote}”
-      </p>
+      {!diff && (
+        <p className="mt-2 truncate text-[11px] text-neutral-400">
+          “{c.text_quote}”
+        </p>
+      )}
 
       <div className="mt-2.5 flex items-center justify-end gap-2">
         {!isQuestioner && c.replacement && (
@@ -395,6 +408,105 @@ function CritiqueCard({
         </button>
       </div>
     </article>
+  );
+}
+
+
+type DiffSeg = { text: string; changed: boolean };
+
+// Word-level diff between the original quoted span and its replacement, so
+// the UI can strike the words that were removed and bold the ones that are
+// new. Uses a longest-common-subsequence walk over whitespace-split tokens.
+function diffQuote(
+  original: string,
+  replacement: string,
+): { before: DiffSeg[]; after: DiffSeg[] } {
+  const a = original.split(/(\s+)/);
+  const b = replacement.split(/(\s+)/);
+  const m = a.length;
+  const n = b.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, () =>
+    new Array<number>(n + 1).fill(0),
+  );
+  for (let i = m - 1; i >= 0; i--) {
+    for (let j = n - 1; j >= 0; j--) {
+      dp[i][j] =
+        a[i] === b[j]
+          ? dp[i + 1][j + 1] + 1
+          : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    }
+  }
+  const before: DiffSeg[] = [];
+  const after: DiffSeg[] = [];
+  let i = 0;
+  let j = 0;
+  while (i < m || j < n) {
+    if (i < m && j < n && a[i] === b[j]) {
+      before.push({ text: a[i], changed: false });
+      after.push({ text: b[j], changed: false });
+      i++;
+      j++;
+    } else if (j < n && (i >= m || dp[i][j + 1] >= dp[i + 1][j])) {
+      after.push({ text: b[j], changed: true });
+      j++;
+    } else {
+      before.push({ text: a[i], changed: true });
+      i++;
+    }
+  }
+  return { before, after };
+}
+
+function DiffBubble({
+  label,
+  segments,
+  tone,
+}: {
+  label: string;
+  segments: DiffSeg[];
+  tone: "before" | "after";
+}) {
+  const isAfter = tone === "after";
+  return (
+    <div
+      className={[
+        "rounded-lg border px-2 py-1.5",
+        isAfter
+          ? "border-emerald-200 bg-emerald-50"
+          : "border-neutral-200 bg-neutral-50",
+      ].join(" ")}
+    >
+      <div
+        className={[
+          "text-[9px] font-semibold uppercase tracking-wider",
+          isAfter ? "text-emerald-600" : "text-neutral-400",
+        ].join(" ")}
+      >
+        {label}
+      </div>
+      <p className="mt-0.5 text-[11.5px] leading-snug">
+        {segments.map((seg, idx) =>
+          seg.changed ? (
+            isAfter ? (
+              <strong key={idx} className="font-semibold text-emerald-700">
+                {seg.text}
+              </strong>
+            ) : (
+              <span key={idx} className="text-rose-400 line-through">
+                {seg.text}
+              </span>
+            )
+          ) : (
+            <span
+              key={idx}
+              className={isAfter ? "text-neutral-800" : "text-neutral-400"}
+            >
+              {seg.text}
+            </span>
+          ),
+        )}
+      </p>
+    </div>
   );
 }
 

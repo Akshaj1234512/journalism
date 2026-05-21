@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { AccountMenu } from "@/components/AccountMenu";
 import { AgentRoster } from "@/components/AgentRoster";
 import { CritiqueSidebar } from "@/components/CritiqueSidebar";
 import { Editor, critiqueId } from "@/components/Editor";
@@ -293,6 +294,7 @@ export default function Page() {
               </>
             )}
           </button>
+          <AccountMenu />
         </div>
       </header>
 

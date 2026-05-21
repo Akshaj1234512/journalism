@@ -74,12 +74,17 @@ def _format_exemplars(path: Path) -> str:
         "and match them. Do not copy the `source` line into your own output; "
         "the article you are reviewing is not a documented case.\n",
     ]
-    for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+    example_num = 0
+    for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
-        if not line:
+        # Skip blank lines and lines commented out with a leading '#'. JSONL
+        # has no native comment syntax, so we treat '#' as one — it lets
+        # trimmed-but-kept exemplars sit in the file, ready to restore.
+        if not line or line.startswith("#"):
             continue
         ex = json.loads(line)
-        parts.append(f"\n## Example {i}\n")
+        example_num += 1
+        parts.append(f"\n## Example {example_num}\n")
         if ex.get("source"):
             parts.append(f"GROUNDED IN: {ex['source']}\n")
         parts.append("ARTICLE:\n")
