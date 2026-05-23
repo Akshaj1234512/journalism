@@ -95,6 +95,25 @@ export const Editor = forwardRef<HTMLTextAreaElement, Props>(function Editor(
             }
           }
         }}
+        // A plain textarea drops hyperlinks on paste, keeping only the
+        // anchor text. We intercept pastes that carry real links and rewrite
+        // each as "anchor text (https://url)" so the URL survives into the
+        // draft and the Data agent can read it later.
+        onPaste={(e) => {
+          const html = e.clipboardData.getData("text/html");
+          if (!html || !/<a\s[^>]*href=["']https?:/i.test(html)) return;
+          const converted = pasteHtmlToText(html);
+          if (!converted) return;
+          e.preventDefault();
+          const ta = e.currentTarget;
+          const start = ta.selectionStart;
+          const end = ta.selectionEnd;
+          onChange(value.slice(0, start) + converted + value.slice(end));
+          const caret = start + converted.length;
+          requestAnimationFrame(() => {
+            ta.selectionStart = ta.selectionEnd = caret;
+          });
+        }}
         spellCheck
         className="relative h-full w-full resize-none scroll-friendly whitespace-pre-wrap break-words bg-transparent px-10 py-8 font-serif text-[18px] leading-[1.75] text-neutral-900 outline-none placeholder:text-neutral-400"
         placeholder="Paste a draft here. The room will read it the moment you click Run review."
@@ -181,4 +200,62 @@ export function critiqueId(c: Critique) {
 /** Conservative CSS attribute-selector escaping for our generated ids. */
 function cssEscape(s: string) {
   return s.replace(/[^a-zA-Z0-9_-]/g, "\\$&");
+}
+
+
+const BLOCK_TAGS = new Set([
+  "P", "DIV", "LI", "UL", "OL", "H1", "H2", "H3", "H4", "H5", "H6",
+  "TR", "SECTION", "ARTICLE", "BLOCKQUOTE", "PRE", "TABLE",
+]);
+
+/** Unwrap a Google Docs /url?q= redirect to the real destination. */
+function cleanUrl(href: string): string {
+  try {
+    const u = new URL(href);
+    if (u.hostname === "www.google.com" && u.pathname === "/url") {
+      const q = u.searchParams.get("q");
+      if (q) return q;
+    }
+  } catch {
+    // not a valid absolute URL; fall through
+  }
+  return href;
+}
+
+/**
+ * Convert pasted clipboard HTML to plain text while preserving hyperlinks.
+ * An <a href> becomes "anchor text (https://url)" so the URL survives into
+ * the plain-text editor, where the Data agent can later fetch and read it.
+ */
+function pasteHtmlToText(html: string): string {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  let out = "";
+  const walk = (node: Node) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      out += node.textContent ?? "";
+      return;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const el = node as HTMLElement;
+    const tag = el.tagName;
+    if (tag === "A") {
+      const raw = el.getAttribute("href") ?? "";
+      const text = (el.textContent ?? "").trim();
+      if (/^https?:\/\//i.test(raw)) {
+        const url = cleanUrl(raw);
+        out += !text || text === url ? url : `${text} (${url})`;
+      } else {
+        out += el.textContent ?? "";
+      }
+      return;
+    }
+    if (tag === "BR") {
+      out += "\n";
+      return;
+    }
+    for (const child of Array.from(el.childNodes)) walk(child);
+    if (BLOCK_TAGS.has(tag)) out += "\n";
+  };
+  walk(doc.body);
+  return out.replace(/\n{3,}/g, "\n\n").trim();
 }

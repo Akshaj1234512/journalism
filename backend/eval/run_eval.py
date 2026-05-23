@@ -1,83 +1,168 @@
-"""Run the Legal Skeptic against golden.jsonl and report recall / FP rate.
+"""Held-out evaluation harness for the Red Room agents — a dev tool.
 
-Usage (from backend/):
-    python -m eval.run_eval
+The exemplar trim left each agent with ~12 ACTIVE exemplars (shown to the
+model as few-shot examples) and ~12 commented-out ones. The commented-out
+exemplars are not in the prompt, so they are genuine held-out test cases:
+real article -> expected-critique pairs the model was never shown.
 
-Each row in golden.jsonl looks like:
-    {"id": ..., "expected": "high"|"medium"|"clean", "article": ...}
+For each held-out exemplar this runs the agent on the article and checks:
+  * flawed exemplar (expected critiques non-empty): did the agent flag the
+    same passage?  -> recall
+  * clean exemplar  (expected critiques empty): did the agent stay silent?
+    -> false-positive rate
 
-A recall hit = the agent flagged at least one critique with severity at least
-the expected severity. A false positive = the agent raised any high-severity
-flag on an article labeled "clean".
+It lets you measure whether a prompt change actually helped, instead of
+guessing. It does NOT prove production quality: the exemplars are curated
+cases, not a random sample of real drafts.
+
+(Supersedes the old single-agent golden.jsonl eval; golden.jsonl is kept
+for reference but no longer used here.)
+
+Run from the backend/ directory, with ANTHROPIC_API_KEY available (a
+backend/.env is picked up automatically):
+
+  python eval/run_eval.py                 # every agent, every held-out case
+  python eval/run_eval.py --agent legal_skeptic
+  python eval/run_eval.py --limit 4       # 4 cases per agent (cheaper)
+
+Each case is one agent call (~$0.05). A full run is roughly $3-4.
 """
 from __future__ import annotations
 
+import argparse
 import asyncio
 import json
-import sys
-from pathlib import Path
 
 from dotenv import load_dotenv
 
+from red_room.agents.base import EXEMPLARS_DIR, estimate_cost_usd
+from red_room.agents.clarity import ClarityCritique
+from red_room.agents.data_expert import DataExpert
+from red_room.agents.human_rights import HumanRightsAdvocate
 from red_room.agents.legal_skeptic import LegalSkeptic
-from red_room.schemas import Critique
+from red_room.agents.partisan import PartisanChecker
+from red_room.agents.question_master import QuestionMaster
+
+load_dotenv()
+
+AGENTS = {
+    "legal_skeptic": LegalSkeptic,
+    "data_expert": DataExpert,
+    "human_rights": HumanRightsAdvocate,
+    "clarity": ClarityCritique,
+    "partisan": PartisanChecker,
+    "question_master": QuestionMaster,
+}
 
 
-SEVERITY_RANK = {"low": 1, "medium": 2, "high": 3}
+def held_out_cases(agent_name: str) -> list[dict]:
+    """The commented-out exemplars — held out from the prompt, so a fair test."""
+    path = EXEMPLARS_DIR / f"{agent_name}.jsonl"
+    if not path.exists():
+        return []
+    cases: list[dict] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line.startswith("#"):
+            continue  # active exemplar — it is in the prompt, skip it
+        body = line.lstrip("#").strip()
+        if not body:
+            continue
+        try:
+            cases.append(json.loads(body))
+        except json.JSONDecodeError:
+            continue
+    return cases
 
 
-def _meets(expected: str, critiques: list[Critique]) -> bool:
-    target = SEVERITY_RANK.get(expected, 0)
-    return any(SEVERITY_RANK.get(c.severity, 0) >= target for c in critiques)
+def span_of(article: str, quote: str) -> tuple[int, int] | None:
+    idx = article.find(quote)
+    return None if idx == -1 else (idx, idx + len(quote))
 
 
-async def main() -> int:
-    load_dotenv()
-    here = Path(__file__).resolve().parent
-    rows = [json.loads(l) for l in (here / "golden.jsonl").read_text().splitlines() if l.strip()]
-    agent = LegalSkeptic()
+def overlaps(a: tuple[int, int], b: tuple[int, int]) -> bool:
+    return max(a[0], b[0]) < min(a[1], b[1])
 
-    recall_hits = recall_total = 0
-    fp_articles = 0
-    clean_total = 0
-    rows_out: list[dict] = []
 
-    for row in rows:
-        critiques, _ = await agent.critique(row["article"])
-        labels = [c.issue_label for c in critiques]
-        passed: bool
+async def eval_agent(agent_name: str, limit: int | None) -> dict:
+    agent = AGENTS[agent_name]()
+    cases = held_out_cases(agent_name)
+    if limit is not None:
+        cases = cases[:limit]
 
-        if row["expected"] == "clean":
-            clean_total += 1
-            high = [c for c in critiques if c.severity == "high"]
-            if high:
-                fp_articles += 1
-            passed = not high
+    flawed = caught = clean = false_pos = 0
+    cost = 0.0
+
+    for ex in cases:
+        article = ex["article"]
+        expected = ex.get("critiques") or []
+        try:
+            produced, response = await agent.critique(article)
+        except Exception as exc:
+            print(f"  [{agent_name}] skipped a case after an error: {exc}")
+            continue
+        cost += estimate_cost_usd(agent.model, response.usage)
+
+        if not expected:
+            clean += 1
+            if produced:
+                false_pos += 1
         else:
-            recall_total += 1
-            hit = _meets(row["expected"], critiques)
-            if hit:
-                recall_hits += 1
-            passed = hit
+            flawed += 1
+            exp_spans = [
+                s
+                for c in expected
+                if (s := span_of(article, c.get("text_quote", ""))) is not None
+            ]
+            prod_spans = [
+                s
+                for c in produced
+                if (s := span_of(article, c.text_quote)) is not None
+            ]
+            if any(overlaps(e, p) for e in exp_spans for p in prod_spans):
+                caught += 1
 
-        rows_out.append({
-            "id": row["id"],
-            "expected": row["expected"],
-            "passed": passed,
-            "labels": labels,
-            "n_critiques": len(critiques),
-        })
+    return {
+        "agent": agent_name,
+        "flawed": flawed,
+        "caught": caught,
+        "clean": clean,
+        "false_pos": false_pos,
+        "cost": cost,
+    }
 
-    recall = (recall_hits / recall_total) if recall_total else 1.0
-    fp_rate = (fp_articles / clean_total) if clean_total else 0.0
 
-    print(json.dumps({
-        "recall": round(recall, 3),
-        "false_positive_rate": round(fp_rate, 3),
-        "rows": rows_out,
-    }, indent=2))
-    return 0 if recall >= 0.8 and fp_rate <= 0.5 else 1
+async def main() -> None:
+    parser = argparse.ArgumentParser(description="Red Room held-out eval.")
+    parser.add_argument(
+        "--agent", choices=sorted(AGENTS), help="evaluate one agent only"
+    )
+    parser.add_argument(
+        "--limit", type=int, help="max held-out cases per agent (lowers cost)"
+    )
+    args = parser.parse_args()
+
+    names = [args.agent] if args.agent else list(AGENTS)
+    results = []
+    for name in names:
+        print(f"Evaluating {name} ...")
+        results.append(await eval_agent(name, args.limit))
+
+    print()
+    print(f"{'agent':16}  {'recall':>9}  {'false-pos':>10}  {'cost':>8}")
+    print("-" * 51)
+    total_cost = 0.0
+    for r in results:
+        recall = f"{r['caught']}/{r['flawed']}" if r["flawed"] else "n/a"
+        fp = f"{r['false_pos']}/{r['clean']}" if r["clean"] else "n/a"
+        print(f"{r['agent']:16}  {recall:>9}  {fp:>10}  ${r['cost']:>6.3f}")
+        total_cost += r["cost"]
+    print("-" * 51)
+    print(f"{'total':16}  {'':>9}  {'':>10}  ${total_cost:>6.3f}")
+    print()
+    print("recall    = flawed exemplars where the agent flagged the right passage")
+    print("false-pos = clean exemplars the agent wrongly flagged")
 
 
 if __name__ == "__main__":
-    sys.exit(asyncio.run(main()))
+    asyncio.run(main())

@@ -110,7 +110,10 @@ class BaseAgent(ABC):
         model: str | None = None,
         thinking_budget: int | None = None,
     ) -> None:
-        self.client = client or AsyncAnthropic()
+        # Anthropic returns transient 529 "overloaded" errors under load. The
+        # SDK retries 429/529 with exponential backoff; give it more headroom
+        # than the default 2 so a brief overload spike does not fail a review.
+        self.client = client or AsyncAnthropic(max_retries=6)
         self.model = model or os.getenv("RED_ROOM_MODEL", "claude-sonnet-4-6")
         self.thinking_budget = thinking_budget or int(
             os.getenv("RED_ROOM_MAX_THINKING_TOKENS", "2000")

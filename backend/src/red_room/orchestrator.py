@@ -45,7 +45,8 @@ class AgentEvent:
 def default_agents(client: AsyncAnthropic | None = None) -> list[BaseAgent]:
     """The full agent roster. Each persona is one Anthropic call dispatched
     in parallel by `run` / `stream`."""
-    client = client or AsyncAnthropic()
+    # More retry headroom for transient 529s (see BaseAgent.__init__).
+    client = client or AsyncAnthropic(max_retries=6)
     return [
         LegalSkeptic(client=client),
         DataExpert(client=client),

@@ -26,6 +26,10 @@ const SEVERITY_BADGE: Record<Critique["severity"], string> = {
   low: "bg-sky-50 text-sky-800 border-sky-200",
 };
 
+type RenderItem =
+  | { type: "single"; critique: Critique }
+  | { type: "group"; groupId: string; critiques: Critique[] };
+
 export function CritiqueSidebar({
   critiques,
   activeId,
@@ -74,6 +78,29 @@ export function CritiqueSidebar({
 
   const counts = new Map<AgentName, number>();
   for (const c of open) counts.set(c.agent, (counts.get(c.agent) ?? 0) + 1);
+
+  // Group open critiques for rendering: a hotspot (2+ agents on one
+  // overlapping span) becomes ONE consolidated card; everything else stays
+  // a normal card. `open` is already in document order, so emitting a group
+  // when its first member is seen keeps everything positionally ordered.
+  const renderItems: RenderItem[] = [];
+  const seenGroups = new Set<string>();
+  for (const c of open) {
+    const gid = consensus.get(critiqueId(c))?.groupId;
+    if (gid) {
+      if (seenGroups.has(gid)) continue;
+      seenGroups.add(gid);
+      renderItems.push({
+        type: "group",
+        groupId: gid,
+        critiques: open.filter(
+          (x) => consensus.get(critiqueId(x))?.groupId === gid,
+        ),
+      });
+    } else {
+      renderItems.push({ type: "single", critique: c });
+    }
+  }
 
   return (
     <aside className="flex h-full w-[440px] flex-col border-l border-neutral-200 bg-white">
@@ -195,18 +222,29 @@ export function CritiqueSidebar({
           </div>
         )}
 
-        {open.map((c) => (
-          <CritiqueCard
-            key={critiqueId(c)}
-            critique={c}
-            active={activeId === critiqueId(c)}
-            running={runningAgents.has(c.agent)}
-            consensus={consensus.get(critiqueId(c))}
-            onSelect={onSelect}
-            onToggleResolved={onToggleResolved}
-            onAcceptFix={onAcceptFix}
-          />
-        ))}
+        {renderItems.map((item) =>
+          item.type === "group" ? (
+            <HotspotCard
+              key={item.groupId}
+              critiques={item.critiques}
+              activeId={activeId}
+              onSelect={onSelect}
+              onToggleResolved={onToggleResolved}
+              onAcceptFix={onAcceptFix}
+            />
+          ) : (
+            <CritiqueCard
+              key={critiqueId(item.critique)}
+              critique={item.critique}
+              active={activeId === critiqueId(item.critique)}
+              running={runningAgents.has(item.critique.agent)}
+              consensus={consensus.get(critiqueId(item.critique))}
+              onSelect={onSelect}
+              onToggleResolved={onToggleResolved}
+              onAcceptFix={onAcceptFix}
+            />
+          ),
+        )}
 
         {resolved.length > 0 && (
           <details className="mt-3 rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2">
@@ -406,6 +444,154 @@ function CritiqueCard({
         >
           {isQuestioner ? "Considered" : "✓ Resolve"}
         </button>
+      </div>
+    </article>
+  );
+}
+
+
+// Consolidated card for a hotspot: one passage that 2+ editors flagged.
+// Shows the line once, then each editor's distinct note, instead of
+// repeating the same passage across several near-identical cards.
+function HotspotCard({
+  critiques,
+  activeId,
+  onSelect,
+  onToggleResolved,
+  onAcceptFix,
+}: {
+  critiques: Critique[];
+  activeId: string | null;
+  onSelect: (id: string | null) => void;
+  onToggleResolved: (id: string) => void;
+  onAcceptFix: (id: string) => void;
+}) {
+  const cardRef = useRef<HTMLElement>(null);
+  const ids = critiques.map((c) => critiqueId(c));
+  const anyActive = activeId !== null && ids.includes(activeId);
+
+  useEffect(() => {
+    if (anyActive && cardRef.current) {
+      cardRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [anyActive]);
+
+  const agents = Array.from(new Set(critiques.map((c) => c.agent)));
+  // Representative passage: the widest quoted span in the cluster.
+  const quote = critiques.reduce((a, b) =>
+    b.text_quote.length > a.text_quote.length ? b : a,
+  ).text_quote;
+
+  return (
+    <article
+      ref={cardRef}
+      className="rounded-2xl border border-rose-200 bg-rose-50/50 px-3.5 py-3"
+    >
+      <header className="mb-2 flex items-center justify-between gap-2">
+        <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wide text-rose-700">
+          <span aria-hidden>🔥</span>
+          {agents.length} editors flagged this line
+        </span>
+        <div className="flex -space-x-1">
+          {agents.map((a) => (
+            <span key={a} className="rounded-full ring-2 ring-rose-50">
+              <Avatar agent={a} size={20} />
+            </span>
+          ))}
+        </div>
+      </header>
+
+      <p className="mb-2 rounded-lg border border-neutral-200 bg-white px-2 py-1 text-[11px] italic leading-snug text-neutral-500">
+        “{quote}”
+      </p>
+
+      <div>
+        {critiques.map((c, idx) => {
+          const id = critiqueId(c);
+          const meta = AGENTS[c.agent];
+          const isActive = activeId === id;
+          const isQuestioner = meta.kind === "questioner";
+          const diff =
+            !isQuestioner && c.fix_suggestion && c.replacement
+              ? diffQuote(c.text_quote, c.replacement)
+              : null;
+          return (
+            <div
+              key={id}
+              onClick={() => onSelect(isActive ? null : id)}
+              className={[
+                "cursor-pointer rounded-lg px-2 py-2 transition",
+                idx > 0 ? "mt-1 border-t border-rose-100 pt-2.5" : "",
+                isActive ? "bg-white shadow-sm" : "hover:bg-white/70",
+              ].join(" ")}
+            >
+              <div className="flex items-center gap-1.5">
+                <Avatar agent={c.agent} size={18} active={isActive} />
+                <span className="text-[11.5px] font-semibold text-neutral-900">
+                  {meta.firstName}
+                </span>
+                <span className="text-[9px] uppercase tracking-wider text-neutral-400">
+                  {meta.shortLabel}
+                </span>
+              </div>
+              <p className="mt-1 text-[12.5px] leading-relaxed text-neutral-800">
+                {c.question}
+                {c.why_it_matters ? ` ${c.why_it_matters}` : ""}
+              </p>
+
+              {/* Each editor's fix shown in full, same as a single card, so
+                  the reader can scroll the hotspot and pick which to accept. */}
+              {!isQuestioner && c.fix_suggestion && (
+                <div className="mt-2 rounded-xl border border-neutral-200 bg-white px-2.5 py-2">
+                  <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">
+                    Suggested fix
+                  </div>
+                  <p className="text-xs leading-snug text-neutral-800">
+                    {c.fix_suggestion}
+                  </p>
+                  {diff && (
+                    <div className="mt-2 space-y-1.5">
+                      <DiffBubble
+                        label="Original"
+                        segments={diff.before}
+                        tone="before"
+                      />
+                      <DiffBubble
+                        label="Corrected"
+                        segments={diff.after}
+                        tone="after"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="mt-1.5 flex items-center justify-end gap-2">
+                {!isQuestioner && c.replacement && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onAcceptFix(id);
+                    }}
+                    className="rounded-md px-2 py-0.5 text-[10.5px] font-semibold text-white transition"
+                    style={{ backgroundColor: meta.brandHex }}
+                  >
+                    Accept fix
+                  </button>
+                )}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleResolved(id);
+                  }}
+                  className="rounded-md border border-neutral-200 bg-white px-2 py-0.5 text-[10.5px] font-medium text-neutral-600 transition hover:bg-neutral-50"
+                >
+                  {isQuestioner ? "Considered" : "✓ Resolve"}
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </article>
   );

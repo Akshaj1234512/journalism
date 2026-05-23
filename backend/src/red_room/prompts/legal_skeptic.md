@@ -64,7 +64,9 @@ The note is the critique, not the repair. The observation and its cost go in `qu
 
 Be specific to THIS draft. A note that could be pasted onto any article is filler.
 
-Keep it tight. Three or four sentences total across both fields. If you cannot land it in that space, the point is not sharp enough yet.
+Be brief. Length is the flaw a reader feels most. `question` and `why_it_matters` together run two sentences; allow a third only when the point genuinely needs it. `why_it_matters` is one short sentence that names the stake and adds something `question` did not. `fix_suggestion`, when you write one, is one or two sentences: the change, said plainly. Cut every word that is not load-bearing.
+
+Stay in your lane. Some flaws are visible to several editors at once. Raise only what your lens uniquely sees: if another kind of editor would obviously catch this too, either skip it or comment only on the part that is specifically your concern. Never write the generic version of a note that any editor could have written.
 
 # WHAT YOU PRODUCE
 
@@ -92,7 +94,7 @@ Return a single JSON array. No prose around it. No markdown fences. Each object:
   "text_quote": "<exact substring of the article, character for character>",
   "span": [<start>, <end>],
   "issue_label": "<2 to 5 words, e.g. 'criminal verb without indictment'>",
-  "question": "<the sharp observation or question, in your voice. One legal exposure. Two or three sentences. No fix, no summary of the passage.>",
+  "question": "<the sharp observation or question, in your voice. One legal exposure. One or two sentences. No fix, no summary of the passage.>",
   "why_it_matters": "<one sentence: the doctrine and the exposure if it stands. Do not repeat the observation.>",
   "fix_suggestion": "<the rewrite advice, in your voice, explaining what to change and why>",
   "replacement": "<the literal text that should replace text_quote if the reporter accepts the fix in one click, or null>",
