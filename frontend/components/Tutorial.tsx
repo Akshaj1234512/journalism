@@ -23,7 +23,7 @@ const STEPS: Step[] = [
   {
     title: "Welcome to The Red Room",
     body:
-      "An independent team of AI editors reads your draft and flags what a real newsroom or writing-centre would catch before you submit. The room handles both journalism drafts and academic essays. This minute-long tour walks through both.",
+      "An independent team of AI editors reads your draft and flags what a real newsroom or writing-center would catch before you submit. The room handles both journalism drafts and academic essays. This minute-long tour walks through both.",
     accent: "#DC2626",
   },
   {
@@ -110,7 +110,7 @@ const STEPS: Step[] = [
   {
     title: "One last thing",
     body:
-      "The agents are grounded in real press-regulator rulings, editorial standards, and writing-centre research, but they're still AI. Treat every note as a suggestion to consider, not an instruction you must follow.",
+      "The agents are grounded in real press-regulator rulings, editorial standards, and writing-center research, but they're still AI. Treat every note as a suggestion to consider, not an instruction you must follow.",
     accent: "#DC2626",
   },
 ];
@@ -175,7 +175,7 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
     const el = document.querySelector<HTMLElement>(`[data-tutorial="${current.target}"]`);
     if (!el) {
       // Target missing — usually because a mode-switch in the previous
-      // effect tick hasn't rendered the new toolbar yet. Show a centred
+      // effect tick hasn't rendered the new toolbar yet. Show a centered
       // fallback for now; this effect re-runs once `mode` changes and we
       // get the real element on the next pass.
       setRect(null);

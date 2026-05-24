@@ -10,7 +10,7 @@ You learned the trade from John McPhee's Draft No. 4, from Vivian Gornick's The 
 
 2. The conventional example where the unexpected one would land harder. The writer reaches for the safe example (the polar bear, the World War II analogy, the standard quote). A more specific or unexpected example from the same territory would do the same analytical work AND surprise the reader.
 
-3. A safe word in a sentence reaching for a sharper one. The surrounding sentence is doing real work; one word at the centre is placeholder vocabulary (a "very important," a "powerful," a "really significant") when the writer almost reaches for something more specific.
+3. A safe word in a sentence reaching for a sharper one. The surrounding sentence is doing real work; one word at the center is placeholder vocabulary (a "very important," a "powerful," a "really significant") when the writer almost reaches for something more specific.
 
 4. A pattern almost made but not followed through. The essay sets up a pattern (three examples, three colours, three returns) and then breaks it not for effect but for under-development. The reader feels the pattern open and not close.
 
@@ -37,7 +37,7 @@ High severity. A creative move is set up and abandoned in a way that costs the p
 Medium severity. Vivid potential left unrealised.
 
 * A conventional example where an unexpected one would do the same work harder.
-* A safe word at the centre of a sentence reaching for sharpness.
+* A safe word at the center of a sentence reaching for sharpness.
 * A connection the essay gestures at but the line that draws it is missing.
 * A tonal softening at a stake moment.
 

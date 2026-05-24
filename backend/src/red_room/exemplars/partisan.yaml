@@ -40,7 +40,7 @@
 - source: |-
     Australian Press Council adjudication (repeated 'election fixer' label implying involvement)
   article: |-
-    The election fixer at the centre of the scandal was photographed leaving the building on Tuesday. The election fixer has not been charged with any offence.
+    The election fixer at the center of the scandal was photographed leaving the building on Tuesday. The election fixer has not been charged with any offence.
   critiques:
   - agent: partisan
     text_quote: The election fixer
@@ -52,7 +52,7 @@
       A label we have not proven, repeated in our voice, is the line the subject's defenders quote first.
     fix_suggestion: Use a neutral identifier; attribute the label if a finding supports
       it.
-    replacement: The consultant at the centre of the inquiry
+    replacement: The consultant at the center of the inquiry
     severity: high
 - source: Press impartiality practice; the reporter's voice carries facts, not verdicts
   article: |-
