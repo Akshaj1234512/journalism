@@ -10,16 +10,8 @@ interface Props {
   doneAgents: Set<AgentName>;
   disabledAgents: Set<AgentName>;
   onToggleDisabled: (agent: AgentName) => void;
+  order: AgentName[];   // mode-driven roster, supplied by the page
 }
-
-const ORDER: AgentName[] = [
-  "legal_skeptic",
-  "data_expert",
-  "human_rights",
-  "clarity",
-  "partisan",
-  "question_master",
-];
 
 const POPOVER_WIDTH = 320;
 const POPOVER_GAP = 12;
@@ -39,6 +31,7 @@ export function AgentRoster({
   doneAgents,
   disabledAgents,
   onToggleDisabled,
+  order,
 }: Props) {
   const [openAgent, setOpenAgent] = useState<AgentName | null>(null);
   const [popoverPos, setPopoverPos] = useState<{ top: number; left: number } | null>(null);
@@ -112,7 +105,7 @@ export function AgentRoster({
         Click any editor to read more or turn them off.
       </p>
 
-      {ORDER.map((name) => {
+      {order.map((name) => {
         const meta = AGENTS[name];
         const running = runningAgents.has(name);
         const done = doneAgents.has(name);

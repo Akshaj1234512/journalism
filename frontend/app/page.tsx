@@ -10,7 +10,7 @@ import { PrintView } from "@/components/PrintView";
 import { SampleDraftsButton } from "@/components/SampleDrafts";
 import { Tutorial } from "@/components/Tutorial";
 import { streamCritique } from "@/lib/stream";
-import { AgentName, Critique } from "@/lib/types";
+import { AgentName, CitationStyle, Critique, MODE_AGENTS, Mode } from "@/lib/types";
 import { extractTextFromFile } from "@/lib/upload";
 
 const SAMPLE_DRAFT =
@@ -22,9 +22,13 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:800
 const DISABLED_KEY = "redroom:disabled-agents";
 const ARTICLE_KEY = "redroom:article";
 const TUTORIAL_SEEN_KEY = "redroom:tutorial-seen";
+const MODE_KEY = "redroom:mode";
+const CITATION_KEY = "redroom:citation-style";
 
 export default function Page() {
   const [article, setArticle] = useState(SAMPLE_DRAFT);
+  const [mode, setMode] = useState<Mode>("journalism");
+  const [citationStyle, setCitationStyle] = useState<CitationStyle>("none");
   const [critiques, setCritiques] = useState<Critique[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "running" | "done" | "error">("idle");
@@ -45,8 +49,8 @@ export default function Page() {
 
   const [tutorialOpen, setTutorialOpen] = useState(false);
 
-  // Restore on mount: agent roster, draft article, and whether the user has
-  // seen the tour. Tutorial auto-opens for first-time visitors.
+  // Restore on mount: agent roster, draft article, mode, and whether the
+  // user has seen the tour. Tutorial auto-opens for first-time visitors.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(DISABLED_KEY);
@@ -60,10 +64,28 @@ export default function Page() {
       if (saved && saved.trim()) setArticle(saved);
     } catch {}
     try {
+      const m = localStorage.getItem(MODE_KEY);
+      if (m === "essays" || m === "journalism") setMode(m);
+    } catch {}
+    try {
+      const cs = localStorage.getItem(CITATION_KEY);
+      if (cs && ["mla", "apa", "chicago", "turabian", "none"].includes(cs)) {
+        setCitationStyle(cs as CitationStyle);
+      }
+    } catch {}
+    try {
       const seen = localStorage.getItem(TUTORIAL_SEEN_KEY);
       if (!seen) setTutorialOpen(true);
     } catch {}
   }, []);
+
+  useEffect(() => {
+    try { localStorage.setItem(MODE_KEY, mode); } catch {}
+  }, [mode]);
+
+  useEffect(() => {
+    try { localStorage.setItem(CITATION_KEY, citationStyle); } catch {}
+  }, [citationStyle]);
 
   useEffect(() => {
     try {
@@ -124,9 +146,13 @@ export default function Page() {
           setStatus("error");
         },
       },
-      Array.from(disabledAgents),
+      {
+        disabledAgents: Array.from(disabledAgents),
+        mode,
+        citationStyle,
+      },
     );
-  }, [article, disabledAgents]);
+  }, [article, disabledAgents, mode, citationStyle]);
 
   const onSelectCritique = useCallback(
     (id: string | null) => {
@@ -237,7 +263,9 @@ export default function Page() {
     [onUploadFile],
   );
 
-  const enabledCount = 6 - disabledAgents.size;
+  const modeRoster = MODE_AGENTS[mode];
+  const totalAgents = modeRoster.length;
+  const enabledCount = modeRoster.filter((a) => !disabledAgents.has(a)).length;
 
   return (
     <main className="flex h-screen w-screen flex-col bg-stone-50">
@@ -264,9 +292,13 @@ export default function Page() {
         </div>
 
         <div className="flex shrink-0 items-center gap-3">
+          <ModeSwitcher mode={mode} onChange={setMode} />
+          {mode === "essays" && (
+            <CitationStylePicker value={citationStyle} onChange={setCitationStyle} />
+          )}
           <span className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            {enabledCount} of 6 editors active
+            {enabledCount} of {totalAgents} editors active
           </span>
           <button
             onClick={() => setTutorialOpen(true)}
@@ -305,6 +337,7 @@ export default function Page() {
             doneAgents={doneAgents}
             disabledAgents={disabledAgents}
             onToggleDisabled={onToggleDisabled}
+            order={modeRoster}
           />
         </div>
 
@@ -426,6 +459,77 @@ export default function Page() {
         idOf={critiqueId}
       />
     </main>
+  );
+}
+
+
+function ModeSwitcher({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
+  return (
+    <div
+      role="tablist"
+      aria-label="Reviewer mode"
+      className="hidden sm:inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white p-1 text-[11.5px] font-medium"
+    >
+      <ModeChip active={mode === "journalism"} onClick={() => onChange("journalism")}>
+        Journalism
+      </ModeChip>
+      <ModeChip active={mode === "essays"} onClick={() => onChange("essays")}>
+        Essays
+      </ModeChip>
+    </div>
+  );
+}
+
+function ModeChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      role="tab"
+      aria-selected={active}
+      onClick={onClick}
+      className={[
+        "rounded-full px-3 py-1 transition",
+        active
+          ? "bg-neutral-900 text-white"
+          : "text-neutral-600 hover:bg-neutral-100",
+      ].join(" ")}
+    >
+      {children}
+    </button>
+  );
+}
+
+function CitationStylePicker({
+  value,
+  onChange,
+}: {
+  value: CitationStyle;
+  onChange: (v: CitationStyle) => void;
+}) {
+  return (
+    <label className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
+      <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
+        Style
+      </span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value as CitationStyle)}
+        className="cursor-pointer border-0 bg-transparent text-[11.5px] font-medium text-neutral-800 focus:outline-none focus:ring-0"
+      >
+        <option value="none">Not specified</option>
+        <option value="mla">MLA</option>
+        <option value="apa">APA</option>
+        <option value="chicago">Chicago</option>
+        <option value="turabian">Turabian</option>
+      </select>
+    </label>
   );
 }
 

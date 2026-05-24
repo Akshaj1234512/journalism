@@ -15,7 +15,14 @@ from red_room.agents.human_rights import HumanRightsAdvocate
 from red_room.agents.legal_skeptic import LegalSkeptic
 from red_room.agents.partisan import PartisanChecker
 from red_room.agents.question_master import QuestionMaster
-from red_room.schemas import Critique, RedRoomResult
+from red_room.agents.thesis_editor import ThesisEditor
+from red_room.agents.evidence_quotation import EvidenceQuotation
+from red_room.agents.prose_style import ProseStyle
+from red_room.agents.structure_editor import StructureEditor
+from red_room.agents.logic_auditor import LogicAuditor
+from red_room.agents.counterargument import Counterargument
+from red_room.agents.citation_editor import CitationEditor
+from red_room.schemas import CitationStyle, Critique, Mode, RedRoomResult
 
 
 @dataclass
@@ -42,11 +49,29 @@ class AgentEvent:
         return d
 
 
-def default_agents(client: AsyncAnthropic | None = None) -> list[BaseAgent]:
-    """The full agent roster. Each persona is one Anthropic call dispatched
-    in parallel by `run` / `stream`."""
+def default_agents(
+    client: AsyncAnthropic | None = None,
+    mode: Mode = "journalism",
+    citation_style: CitationStyle = "none",
+) -> list[BaseAgent]:
+    """Return the roster for the requested mode.
+
+    `journalism` returns the six press editors. `essays` returns the seven
+    English/history editors. Each persona is one Anthropic call dispatched in
+    parallel by `run` / `stream`.
+    """
     # More retry headroom for transient 529s (see BaseAgent.__init__).
     client = client or AsyncAnthropic(max_retries=6)
+    if mode == "essays":
+        return [
+            ThesisEditor(client=client),
+            EvidenceQuotation(client=client),
+            ProseStyle(client=client),
+            StructureEditor(client=client),
+            LogicAuditor(client=client),
+            Counterargument(client=client),
+            CitationEditor(client=client, citation_style=citation_style),
+        ]
     return [
         LegalSkeptic(client=client),
         DataExpert(client=client),

@@ -2,13 +2,25 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 AgentName = Literal[
+    # Journalism mode
     "legal_skeptic",
     "data_expert",
     "human_rights",
     "clarity",
     "partisan",
     "question_master",
+    # Essays mode (English + History — core argumentative roster).
+    "thesis_editor",
+    "evidence_quotation",
+    "prose_style",
+    "structure_editor",
+    "logic_auditor",
+    "counterargument",
+    "citation_editor",
 ]
+
+Mode = Literal["journalism", "essays"]
+CitationStyle = Literal["mla", "apa", "chicago", "turabian", "none"]
 
 Severity = Literal["high", "medium", "low"]
 
@@ -44,6 +56,16 @@ class RedRoomResult(BaseModel):
 class CritiqueRequest(BaseModel):
     article: str
     article_id: str | None = None
+    mode: Mode = Field(
+        default="journalism",
+        description="Which editor roster to run. 'journalism' = the six press "
+        "editors. 'essays' = the seven English / history editors.",
+    )
+    citation_style: CitationStyle = Field(
+        default="none",
+        description="Citation format the essay is written in (MLA, APA, Chicago, "
+        "Turabian). Used only by the citation_editor in essays mode.",
+    )
     disabled_agents: list[str] | None = Field(
         default=None,
         description="Names of agents the user has turned off for this review. "

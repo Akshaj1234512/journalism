@@ -1,4 +1,4 @@
-import { Critique, AgentName } from "./types";
+import { Critique, AgentName, CitationStyle, Mode } from "./types";
 
 type StreamEvent =
   | { kind: "agent_start"; agent: string }
@@ -22,20 +22,32 @@ interface Handlers {
  * Returns an AbortController so the caller can cancel an in-flight critique
  * (e.g. when the user edits the draft mid-stream).
  */
+interface StreamOptions {
+  disabledAgents?: AgentName[];
+  mode?: Mode;
+  citationStyle?: CitationStyle;
+}
+
 export function streamCritique(
   backendUrl: string,
   article: string,
   handlers: Handlers,
-  disabledAgents: AgentName[] = [],
+  options: StreamOptions = {},
 ): AbortController {
   const controller = new AbortController();
+  const { disabledAgents = [], mode = "journalism", citationStyle = "none" } = options;
 
   (async () => {
     try {
       const response = await fetch(`${backendUrl}/critique/stream`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ article, disabled_agents: disabledAgents }),
+        body: JSON.stringify({
+          article,
+          disabled_agents: disabledAgents,
+          mode,
+          citation_style: citationStyle,
+        }),
         signal: controller.signal,
       });
       if (!response.ok || !response.body) {

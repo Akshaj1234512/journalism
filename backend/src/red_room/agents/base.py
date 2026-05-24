@@ -156,7 +156,14 @@ class BaseAgent(ABC):
     def tools(self) -> list[dict]:
         ...
 
+    def extra_user_context(self) -> str:
+        """Optional one-line context prepended to the user message. Override on
+        a subclass that needs per-request state (e.g. citation style)."""
+        return ""
+
     async def critique(self, article: str) -> tuple[list[Critique], Message]:
+        prefix = self.extra_user_context()
+        prefix_block = f"{prefix}\n\n" if prefix else ""
         response = await self.client.messages.create(
             model=self.model,
             max_tokens=4096,
@@ -167,10 +174,11 @@ class BaseAgent(ABC):
                 {
                     "role": "user",
                     "content": (
-                        "Review this draft article. Return a JSON array of "
-                        "critique objects per the OUTPUT CONTRACT in your "
-                        "system prompt. Return [] if there are no issues.\n\n"
-                        "ARTICLE:\n"
+                        f"{prefix_block}"
+                        "Review this draft. Return a JSON array of critique "
+                        "objects per the OUTPUT CONTRACT in your system "
+                        "prompt. Return [] if there are no issues.\n\n"
+                        "DRAFT:\n"
                         f"{article}"
                     ),
                 }
