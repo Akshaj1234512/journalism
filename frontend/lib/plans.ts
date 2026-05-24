@@ -54,7 +54,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
     reviewsPerWeek: 3,
     reviewsPerMonth: 12,
     overagePerReview: 0,                   // hard cap
-    maxArticleWords: 1200,                 // typical short essay, news brief, Common App essay
+    maxArticleWords: 1400,                 // covers Common App essay, op-eds, short features
     seats: 1,
     extraSeatPriceMonthly: 0,
     unlocksAllEditors: false,
