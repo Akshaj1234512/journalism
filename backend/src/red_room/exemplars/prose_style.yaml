@@ -1,0 +1,169 @@
+# Exemplars for prose_style
+# Human-editable. Each list item below is one exemplar.
+# To disable an exemplar without deleting it, comment out its lines with #.
+# Field order: source, article, critiques (and per critique: agent, text_quote,
+# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+#
+- source: 'Williams, Style, Lesson 2: ''Actions in verbs, not nouns'''
+  article: |-
+    After three months of review, the committee made the determination that the proposal was unworkable and recommended it be sent back for redrafting.
+  critiques:
+  - agent: prose_style
+    text_quote: made the determination
+    span: [44, 66]
+    issue_label: nominalization
+    question: |-
+      The verb is hiding inside the noun 'made the determination.' The working form is 'determined.'
+    why_it_matters: |-
+      Three words doing one word's work, and the reader has to assemble the action from the abstraction.
+    fix_suggestion: Swap the nominalization for its verb form.
+    replacement: determined
+    severity: medium
+- source: 'Williams, Style, Lesson 2: ''Actions in verbs, not nouns'''
+  article: |-
+    The new tariff policy had an impact on small manufacturers who source their components from overseas suppliers.
+  critiques:
+  - agent: prose_style
+    text_quote: had an impact on
+    span: [22, 38]
+    issue_label: nominalization
+    question: |-
+      'Had an impact on' is the verb 'affect' or 'hit' is buried inside the noun 'impact.' Pick the verb that says what the policy actually did.
+    why_it_matters: |-
+      Four words for one, and 'impact' is so generic the reader still does not know what happened to the manufacturers.
+    fix_suggestion: |-
+      Replace with a verb that names the effect: 'hurt,' 'raised costs for,' 'squeezed.'
+    replacement: squeezed
+    severity: medium
+- source: 'Williams, Style, Lesson 3: ''Characters as subjects'''
+  article: |-
+    It is the belief of many historians of the antebellum period that the economic incentives of cotton drove the political logic of secession.
+  critiques:
+  - agent: prose_style
+    text_quote: It is the belief of many historians of the antebellum period that
+    span: [0, 65]
+    issue_label: buried subject
+    question: |-
+      The real actors, the historians, are stuffed into a prepositional phrase while 'it' takes the subject slot. Put the people back in front of their verb.
+    why_it_matters: |-
+      The reader spends the opening clause finding out who is doing what; by the time the cotton arrives the sentence has lost its spine.
+    fix_suggestion: |-
+      Start with the actor and the verb: 'Many historians of the antebellum period believe.'
+    replacement: Many historians of the antebellum period believe that
+    severity: high
+- source: 'Williams, Style, Lesson 9: ''Concision'' (on hedges)'
+  article: |-
+    It could perhaps be argued that, in some sense, the data might possibly suggest a relationship between screen time and adolescent attention.
+  critiques:
+  - agent: prose_style
+    text_quote: It could perhaps be argued that, in some sense, the data might possibly
+      suggest
+    span: [0, 79]
+    issue_label: hedge stack
+    question: |-
+      Five hedges in one clause: 'could,' 'perhaps,' 'be argued,' 'in some sense,' 'might possibly.' Each hedge alone is fine. Stacked, they confess no confidence in the claim that follows.
+    why_it_matters: |-
+      By the time the reader reaches 'a relationship,' the writer has disowned the sentence in advance.
+    fix_suggestion: |-
+      Pick one hedge and commit. If the data show a relationship, say so; if they only suggest one, 'the data suggest' is enough.
+    replacement: The data suggest
+    severity: high
+- source: |-
+    Orwell, Politics and the English Language, Rule 5: 'Never use a long word where a short one will do'; Strunk and White, Rule 17: 'Omit needless words'
+  article: |-
+    In today's society, the question of how we treat strangers has become a defining moral problem for democratic citizens.
+  critiques:
+  - agent: prose_style
+    text_quote: In today's society,
+    span: [0, 19]
+    issue_label: throat-clearing opener
+    question: |-
+      'In today's society' is throat-clearing. Never use a phrase whose meaning you cannot pin down. Cut and the sentence starts working immediately.
+    why_it_matters: |-
+      Three wasted words at the front of the essay before the reader gets to a single specific claim.
+    fix_suggestion: Delete the opener. Start with 'The question.'
+    replacement: ''
+    severity: medium
+- source: 'Williams, Style, Lesson 7: ''The active and passive voice'''
+  article: |-
+    In the months leading up to the collapse of the fund, mistakes were made and warning signs were ignored.
+  critiques:
+  - agent: prose_style
+    text_quote: mistakes were made and warning signs were ignored
+    span: [54, 103]
+    issue_label: accountability-dodging passive
+    question: |-
+      Williams's test: name the actor. Two passives in a row, neither one tells the reader who made the mistakes or who ignored the warnings. If the essay's argument depends on responsibility, the passives are hiding it.
+    why_it_matters: |-
+      Passive voice in this register reads as evasion; the reader cannot assign blame, which is usually the point of the paragraph.
+    fix_suggestion: |-
+      Name the actors. 'The fund managers made the mistakes; the board ignored the warnings.'
+    replacement: the fund managers made mistakes and the board ignored warning signs
+    severity: high
+- source: |-
+    Williams, Style, Lesson 5: 'Cohesion and coherence'; Strunk and White, Rule 13: 'Make the paragraph the unit of composition'
+  article: |-
+    The novel begins in a small coastal town and follows a young woman who has just lost her father and who decides to leave the family business and travel inland to find her estranged brother, and along the way she meets a former priest who is also looking for someone, and the two of them end up at a farmhouse where a stranger is waiting.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      The novel begins in a small coastal town and follows a young woman who has just lost her father and who decides to leave the family business and travel inland to find her estranged brother, and along the way she meets a former priest who is also looking for someone, and the two of them end up at a farmhouse where a stranger is waiting.
+    span: [0, 337]
+    issue_label: long shapeless sentence
+    question: |-
+      One sentence, seven 'and's, no main spine. By the farmhouse the reader has lost which character lost which parent. What is the version that breaks at the natural beats?
+    why_it_matters: |-
+      Strung-together clauses with no shape force the reader to back-track; the plot summary should not feel like a chase.
+    fix_suggestion: Three sentences, each ending on a turn. The loss, the journey,
+      the arrival.
+    replacement: |-
+      The novel begins in a small coastal town. A young woman, having just lost her father, leaves the family business and travels inland to find her estranged brother. Along the way she meets a former priest, and the two arrive at a farmhouse where a stranger is waiting.
+    severity: high
+- source: |-
+    Strunk and White, Rule 17: 'Omit needless words'; specifically the entry on 'rather, very, little, pretty'
+  article: |-
+    The court's ruling was very surprising, really unprecedented, and extremely consequential for future First Amendment cases.
+  critiques:
+  - agent: prose_style
+    text_quote: very surprising, really unprecedented, and extremely consequential
+    span: [23, 89]
+    issue_label: empty intensifier stack
+    question: |-
+      Strunk: 'very' is the leech that infects the pond. Three intensifiers on three adjectives that already do the work. 'Unprecedented' cannot be more unprecedented.
+    why_it_matters: |-
+      The intensifiers add length and subtract force; the reader registers hedging where the writer meant emphasis.
+    fix_suggestion: Strip the intensifiers. Let the adjectives carry their own weight.
+    replacement: surprising, unprecedented, and consequential
+    severity: medium
+- source: |-
+    Orwell, Politics and the English Language, Rule 2: 'Never use a long word where a short one will do'
+  article: |-
+    Due to the fact that the laboratory was unable to utilize the new equipment, the researchers had to postpone the experiment.
+  critiques:
+  - agent: prose_style
+    text_quote: Due to the fact that the laboratory was unable to utilize
+    span: [0, 57]
+    issue_label: pretentious diction
+    question: |-
+      Two of Orwell's classic offenders in one clause: 'due to the fact that' is 'because,' and 'utilize' is 'use.' Neither long form means anything more than its short one.
+    why_it_matters: |-
+      Eight words doing the work of four; the reader senses the writer reaching for officialese.
+    fix_suggestion: '''Because the laboratory could not use.'''
+    replacement: Because the laboratory could not use
+    severity: medium
+- source: |-
+    Orwell, Politics and the English Language, Rule 1: 'Never use a metaphor you are used to seeing in print'
+  article: |-
+    The recent congressional report sheds light on the lobbying practices that, at the end of the day, shape who actually writes federal regulations.
+  critiques:
+  - agent: prose_style
+    text_quote: sheds light on
+    span: [32, 46]
+    issue_label: dead metaphor
+    question: |-
+      'Sheds light on' is Orwell's first rule made literal: a metaphor so worn it no longer means anything. What does the report actually do, document, name, expose?
+    why_it_matters: |-
+      The cliché tells the reader the writer stopped thinking at the exact moment the verb was due to do real work.
+    fix_suggestion: Replace with the specific verb. 'Documents,' 'names,' 'traces.'
+    replacement: documents
+    severity: medium

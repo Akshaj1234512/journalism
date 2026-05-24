@@ -1,0 +1,184 @@
+# Exemplars for clarity
+# Human-editable. Each list item below is one exemplar.
+# To disable an exemplar without deleting it, comment out its lines with #.
+# Field order: source, article, critiques (and per critique: agent, text_quote,
+# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+#
+- source: Plain-language practice; the passive that hides who is accountable
+  article: |-
+    An internal review found that mistakes were made in the accounting of the housing voucher program, leading to about 4 million dollars in payments that should not have been authorised.
+  critiques:
+  - agent: clarity
+    text_quote: mistakes were made in the accounting
+    span: [30, 66]
+    issue_label: accountability dodge
+    question: |-
+      Reagan made 'mistakes were made' the canonical non-apology in his 1987 Iran-Contra statement. Who, here, made them?
+    why_it_matters: |-
+      On a $4 million error, that passive hides whether this is one clerk or a system, which is the story.
+    fix_suggestion: Name the official the review identifies; if it names none, say
+      so.
+    replacement: |-
+      the review found that the program's accounting was mishandled, though it has not yet identified who approved the payments
+    severity: high
+- source: Plain-language practice; acronym density that loses the reader
+  article: |-
+    HUD wrote to NYSHCR this week over how HCR has overseen NYCHA's federal funding, citing a backlog of audit findings.
+  critiques:
+  - agent: clarity
+    text_quote: HUD wrote to NYSHCR this week over how HCR has overseen NYCHA's federal
+      funding
+    span: [0, 79]
+    issue_label: acronym pileup
+    question: |-
+      Four agency acronyms in one clause (HUD, NYSHCR, HCR, NYCHA), and by the end the reader has lost who is writing to whom.
+    why_it_matters: |-
+      A story about public housing oversight has to be readable by public housing tenants.
+    fix_suggestion: |-
+      Keep one acronym per paragraph; replace the rest with descriptive titles like 'the state housing agency'.
+    replacement: |-
+      The federal housing department wrote to the state housing agency this week over its oversight of the city's public housing authority, citing a backlog of audit findings
+    severity: medium
+- source: Plain-language practice; technical units that hide the scale of the story
+  article: |-
+    The Federal Reserve cut its benchmark rate by 25 basis points on Wednesday, the first reduction in 18 months.
+  critiques:
+  - agent: clarity
+    text_quote: cut its benchmark rate by 25 basis points
+    span: [20, 61]
+    issue_label: unexplained unit
+    question: |-
+      'Basis points' is invisible outside Bloomberg. To a reader with a mortgage, the size of the cut hides inside a term they will skip.
+    why_it_matters: |-
+      Outside a specialist section, a unit the lay reader cannot decode makes the news invisible.
+    fix_suggestion: |-
+      Translate in line: 25 basis points is a quarter of a percentage point. Better, say what that does to a typical mortgage.
+    replacement: cut its benchmark rate by 25 basis points, a quarter of a percentage
+      point,
+    severity: medium
+- source: Plain-language practice; the news buried beneath the procedure
+  article: |-
+    The city council met for four hours on Tuesday to discuss a range of municipal matters, including parking, signage, and committee appointments. In the final vote of the night, the council approved a 12 percent increase in water rates.
+  critiques:
+  - agent: clarity
+    text_quote: |-
+      In the final vote of the night, the council approved a 12 percent increase in water rates
+    span: [144, 233]
+    issue_label: the news is buried at the bottom
+    question: |-
+      The thing that touches every household, a 12 percent rise in their water bill, is the last sentence, after parking and signage.
+    why_it_matters: |-
+      If the lede misses the news, most readers never reach it; the four-hour meeting is the setting, the rate rise is the story.
+    fix_suggestion: |-
+      Lead with the rate increase and what it costs a household; the procedural detail can follow.
+    replacement: null
+    severity: high
+- source: Plain-language practice; the ambiguous pronoun between two named people
+  article: |-
+    Senator Calhoun met the governor at the state capitol on Friday, where he urged him to call a special session.
+  critiques:
+  - agent: clarity
+    text_quote: he urged him to call a special session
+    span: [71, 109]
+    issue_label: ambiguous pronouns
+    question: |-
+      'He urged him' — two men, both 'he', and the reader cannot tell which one wants the special session.
+    why_it_matters: |-
+      Same-gender pronoun with no antecedent: about half your readers will pin it on the wrong man, and the factual meaning is up for grabs.
+    fix_suggestion: Replace at least one pronoun with the name or title.
+    replacement: where the senator urged the governor to call a special session
+    severity: medium
+- source: Plain-language practice; context a beat reporter forgets the reader needs
+  article: |-
+    After last week's indictment, the company's shares fell sharply and three executives resigned, the biggest upheaval in the firm's 40-year history.
+  critiques:
+  - agent: clarity
+    text_quote: After last week's indictment
+    span: [0, 28]
+    issue_label: missing context
+    question: |-
+      Whose indictment, on what charges? A reader who has not been tracking the case is dropped into the middle of it, the beat reporter's standard blind spot.
+    why_it_matters: |-
+      Without the who and the charge, the rest of the sentence does not land for a first-time reader.
+    fix_suggestion: Add the who and the charge so the sentence stands on its own.
+    replacement: After the company's chief executive was indicted last week on fraud
+      charges
+    severity: medium
+- source: |-
+    Orwell's rule against jargon where an everyday word exists; plain-language practice
+  article: |-
+    The agency said it would utilise additional resources to facilitate the remediation of the affected sites.
+  critiques:
+  - agent: clarity
+    text_quote: utilise additional resources to facilitate the remediation of the
+      affected sites
+    span: [25, 105]
+    issue_label: bureaucratic language with plain equivalents
+    question: |-
+      Orwell's rule: never use a long word where a short one will do. 'Utilise', 'facilitate', 'remediation' — every one has a plain-English word that means the same thing.
+    why_it_matters: |-
+      Jargon is not more precise, just harder; each word is a small toll, and enough tolls and the reader stops.
+    fix_suggestion: 'Translate: ''use'', ''help'', ''cleanup''. Say what the agency
+      will actually do.'
+    replacement: the agency said it would spend more to help clean up the affected
+      sites
+    severity: medium
+- source: |-
+    Australian Press Council adjudication, Australian Financial Review (headline misrepresenting workers' salaries)
+  article: |-
+    390,000 DOLLAR TUGBOAT WORKERS TO STRIKE FOR 40 PERCENT RISE. The deckhands, whose base pay is far lower, are seeking a phased increase, with the 390,000 figure reflecting only a handful of the most senior masters working maximum overtime.
+  critiques:
+  - agent: clarity
+    text_quote: 390,000 DOLLAR TUGBOAT WORKERS TO STRIKE FOR 40 PERCENT RISE
+    span: [0, 60]
+    issue_label: headline misrepresents the typical figure
+    question: |-
+      The Australian Press Council upheld a complaint over an AFR headline that did exactly this: built '390,000 dollar workers' on a handful of senior masters on maximum overtime, while the deckhands earn far less.
+    why_it_matters: |-
+      A headline anchored to the outlier number leaves every reader with the wrong picture of the strike.
+    fix_suggestion: |-
+      Headline the typical pay, not the maximum; if the high figure is newsworthy, the text can say who actually earns it.
+    replacement: TUGBOAT CREWS TO STRIKE OVER PAY, SENIOR MASTERS CAN EARN UP TO 390,000
+      DOLLARS
+    severity: high
+- source: Plain-language practice; quote without attribution
+  article: '''The administration has clearly chosen to ignore the science.'''
+  critiques:
+  - agent: clarity
+    text_quote: '''The administration has clearly chosen to ignore the science.'''
+    span: [0, 62]
+    issue_label: free-floating quote
+    question: |-
+      An unattributed quote on its own is the most basic accountability gap in news writing; style guides treat it as a hard fail.
+    why_it_matters: The reader cannot weigh a claim if they do not know who is making
+      it.
+    fix_suggestion: |-
+      Attribute the quote. If the source needs anonymity, attribute to a category, like 'a senior scientist at the agency'.
+    replacement: |-
+      'The administration has clearly chosen to ignore the science,' said Dr Eleanor Park, the agency's former chief scientist.
+    severity: high
+- source: Plain-language practice; headline-deck misalignment
+  article: |-
+    Headline: COUNCIL VOTES TO BAN PLASTIC BAGS. Deck: The 4-3 vote came after lobbying from environmental groups, though enforcement details have not been finalised and the ban will not take effect for at least 18 months.
+  critiques:
+  - agent: clarity
+    text_quote: |-
+      Headline: COUNCIL VOTES TO BAN PLASTIC BAGS. Deck: The 4-3 vote came after lobbying from environmental groups, though enforcement details have not been finalised and the ban will not take effect for at least 18 months.
+    span: [0, 218]
+    issue_label: headline simpler than the actual news
+    question: |-
+      The headline says the ban is in. The deck adds: a 4-3 vote, no enforcement plan, 18 months from taking effect — and a reader who sees only the headline thinks the bags are already gone.
+    why_it_matters: |-
+      Overstated headlines are the most-screenshotted, most-corrected element in a paper, exactly because they outpace what the body supports.
+    fix_suggestion: |-
+      Move the qualifier into the headline: 'Council votes 4-3 for plastic bag ban that takes effect in 2027'.
+    replacement: COUNCIL VOTES 4-3 FOR PLASTIC BAG BAN THAT TAKES EFFECT IN 2027
+    severity: high
+- source: Example of a clear lede that leads with the news and its cost to the reader
+  article: |-
+    The city will raise water rates by 12 percent in July, adding about 90 dollars to the average annual household bill, the utility said.
+  critiques: []
+- source: Example of a sourced, neutral, well-quantified passage
+  article: |-
+    Sales of electric vehicles rose 14 percent in the year to June, to 1.2 million units, accounting for about 9 percent of new-car sales nationwide, the industry association said.
+  critiques: []

@@ -1,0 +1,183 @@
+# Exemplars for human_rights
+# Human-editable. Each list item below is one exemplar.
+# To disable an exemplar without deleting it, comment out its lines with #.
+# Field order: source, article, critiques (and per critique: agent, text_quote,
+# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+#
+- source: |-
+    Australian Press Council adjudication (privacy breach, domestic violence complainant named and pictured)
+  article: |-
+    The woman, Sarah Bennett of Maple Street, told the court her former partner had threatened her for months. A photograph of Bennett outside the courthouse accompanies this article.
+  critiques:
+  - agent: human_rights
+    text_quote: Sarah Bennett of Maple Street
+    span: [11, 40]
+    issue_label: domestic violence complainant named and located
+    question: |-
+      The Australian Press Council upheld a privacy breach on this exact pattern: complainant named, street given, courthouse photograph run. Her former partner now has all three.
+    why_it_matters: |-
+      We just rebuilt her threat model for the person she sought a restraining order against.
+    fix_suggestion: |-
+      Withhold her name and street, and do not run an identifying photograph. The story works without putting her in danger.
+    replacement: The woman, who asked not to be identified for her safety,
+    severity: high
+- source: |-
+    Source-protection practice; the combination of details builds a searchable dossier
+  article: |-
+    Maria Lopez, 34, an undocumented housekeeper who lives in the Sunset Park neighbourhood, said her employer has not paid her for six weeks.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      Maria Lopez, 34, an undocumented housekeeper who lives in the Sunset Park neighbourhood
+    span: [0, 87]
+    issue_label: complete dossier on an undocumented source
+    question: |-
+      Full name, age, immigration status, occupation, neighbourhood, all in one sentence. ICE has subpoenaed newsrooms on less. Did Maria understand we would narrow her this far?
+    why_it_matters: |-
+      Each detail is harmless alone; together they are a searchable file with a deportation pathway at the end of it.
+    fix_suggestion: |-
+      Use a first-name pseudonym, broaden the neighbourhood to the borough, and keep the immigration status only if it is essential and she agreed to it being public.
+    replacement: |-
+      Maria, a housekeeper in Brooklyn who asked that her full name not be used because of her immigration status,
+    severity: high
+- source: Ethics practice on using trauma as a hook without follow-up infrastructure
+  article: |-
+    She still flinches at loud noises. In her first interview since the attack, the survivor described the night in detail, her voice breaking as she spoke.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      In her first interview since the attack, the survivor described the night in detail, her voice breaking as she spoke
+    span: [35, 151]
+    issue_label: trauma used as a hook with no infrastructure
+    question: |-
+      Dart Center guidance is explicit: do not open on the worst night without consent on the framing and a contact channel afterwards. We opened on her worst night. Did she sign off on which line we used?
+    why_it_matters: |-
+      Without consent on the framing and a way to reach us afterward, the story extracts from her and gives nothing back.
+    fix_suggestion: |-
+      Confirm she understood how the account would be used and how prominently, and add a way for her to reach the newsroom after publication.
+    replacement: null
+    severity: medium
+- source: Ethics practice on a source losing control of the framing
+  article: |-
+    Asked about the hardest part, she said quietly, 'Some days I just don't know how I'll make rent.' The quote will run as the article's pull text and social card.
+  critiques:
+  - agent: human_rights
+    text_quote: The quote will run as the article's pull text and social card
+    span: [98, 159]
+    issue_label: source loses control of the framing
+    question: |-
+      She consented to the interview, not the pull quote. A line about not making rent becoming her social card is a separate decision, and we made it, not her.
+    why_it_matters: |-
+      The line she will be known for on the internet is now the most exposing line in the piece, chosen without her.
+    fix_suggestion: |-
+      Pick a pull quote that does not reduce her to her hardest moment, or check with her on which line she is comfortable being known by.
+    replacement: null
+    severity: medium
+- source: Ethics practice on identity details that are not load-bearing
+  article: |-
+    The suspect, an immigrant from Eastern Europe who speaks limited English, was arrested on Tuesday.
+  critiques:
+  - agent: human_rights
+    text_quote: an immigrant from Eastern Europe who speaks limited English
+    span: [13, 72]
+    issue_label: identity detail that is not load-bearing
+    question: |-
+      Does Eastern Europe or limited English have anything to do with the alleged crime? If not, the AP Stylebook calls this exactly the line that invites the reader to do the stereotyping for us.
+    why_it_matters: |-
+      When origin or language are not load-bearing, repeating them is the writer's choice to link the trait to the conduct.
+    fix_suggestion: |-
+      Cut the origin and language detail unless it is directly relevant. If it is, make the relevance explicit.
+    replacement: The suspect was arrested on Tuesday
+    severity: medium
+- source: WHO and Samaritans media guidelines on reporting suicide
+  article: |-
+    Mark Davies, a 24-year-old graphic designer, died by suicide on Tuesday at his apartment on Wilson Avenue. He hanged himself with a tie, police said. Friends said he had been struggling with depression.
+  critiques:
+  - agent: human_rights
+    text_quote: He hanged himself with a tie, police said
+    span: [107, 148]
+    issue_label: method of suicide described in detail
+    question: |-
+      WHO and Samaritans suicide-reporting guidelines are explicit: detailed method increases imitation, particularly in younger readers. We have published method and location. Does the public interest in either outweigh the documented copycat risk?
+    why_it_matters: |-
+      Detailed suicide method in print is the line research has tied directly to copycat behaviour.
+    fix_suggestion: Strike the method and the location. Lead with his life, end with
+      the 988 line.
+    replacement: |-
+      Mark Davies, 24, died by suicide on Tuesday. Friends said he had been struggling with depression. (Resources: if you are in distress, call or text 988.)
+    severity: high
+- source: Ethics practice on identifying juvenile suspects
+  article: |-
+    Two boys, aged 14 and 15, were charged Tuesday with the burglary at the Ridgemont Mall. They are Tyler Mason, of Westgate Drive, and Daniel Kim of Maple Court.
+  critiques:
+  - agent: human_rights
+    text_quote: They are Tyler Mason, of Westgate Drive, and Daniel Kim of Maple Court
+    span: [88, 158]
+    issue_label: juveniles named in a charge
+    question: |-
+      Both boys are minors. Juvenile records are sealed because we recognise the disproportion between a 14-year-old and a name that will follow him to every future job. What public interest names them on a mall burglary?
+    why_it_matters: |-
+      Naming them forecloses the rehabilitation the sealed-record system exists to allow.
+    fix_suggestion: |-
+      Withhold names and streets. Report the charges, the ages, and the school district at most.
+    replacement: |-
+      Two boys, aged 14 and 15, were charged Tuesday with the burglary at the Ridgemont Mall
+    severity: high
+- source: Source-protection practice on inconsistent pseudonyms
+  article: |-
+    Aisha, who asked that her real name not be used, said she had been hiding from her ex-husband for two years. Aisha said the police had been slow to respond. 'I work at the Greenstone Salon on Mercer Street,' Aisha said. 'He knows where I work.'
+  critiques:
+  - agent: human_rights
+    text_quote: I work at the Greenstone Salon on Mercer Street
+    span: [158, 205]
+    issue_label: pseudonym contradicted by an identifying detail
+    question: |-
+      We gave Aisha a pseudonym to hide her from her ex-husband, then quoted her naming her workplace and the street. The pseudonym is undone by the quote we left in. Was this checked with her before publication?
+    why_it_matters: |-
+      An inconsistent pseudonym is worse than no pseudonym: it gives her a false sense of protection while still pointing him at her.
+    fix_suggestion: |-
+      Generalise the workplace and street, or, with her consent, drop the pseudonym and explain it. Do not leave the half-protection.
+    replacement: I work at a salon in the city. He knows where I work.
+    severity: high
+- source: Ethics practice on photographing children at protests and rallies
+  article: |-
+    Above the article: a photograph of an 8-year-old child holding a sign and shouting at counter-protesters at Saturday's rally.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      Above the article: a photograph of an 8-year-old child holding a sign and shouting at counter-protesters at Saturday's rally.
+    span: [0, 125]
+    issue_label: child identifiable in a polarised public event
+    question: |-
+      An 8-year-old, identifiable face, at a polarised political rally. That image will follow them through school admissions, future job interviews, and the rest of their life. Did the parents consent to that, knowing how the image travels?
+    why_it_matters: |-
+      Children's images at political events persist indefinitely; the child's adult privacy outweighs the news value of one dramatic frame.
+    fix_suggestion: |-
+      Crop or blur the face, choose a wide-shot frame, or use a different image. If the parents have given informed consent for full identification, document it.
+    replacement: null
+    severity: medium
+- source: Ethics practice on deception in newsgathering
+  article: |-
+    Our reporter posed as a potential investor and recorded the meeting without disclosing her affiliation.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      Our reporter posed as a potential investor and recorded the meeting without disclosing her affiliation
+    span: [0, 102]
+    issue_label: undisclosed deception in newsgathering
+    question: |-
+      Posing as someone else and secretly recording is the line Editors' Code Clause 10 (SPJ and BBC Editorial Guidelines say the same thing) puts a specific public-interest test on. Was that test applied? Did the editor sign off?
+    why_it_matters: |-
+      Misrepresentation and secret recording without documented justification is the move that has cost reporters and outlets badly when challenged in court.
+    fix_suggestion: |-
+      Document the public-interest justification, alternatives considered, and editor sign-off. If those were not in place, do not publish the recorded material.
+    replacement: null
+    severity: high
+- source: Example of a public figure speaking within their public role
+  article: |-
+    The police commissioner, speaking at a news conference, said the department would review its use-of-force policy after the incident.
+  critiques: []
+- source: Example of careful identification of a survivor with full documented consent
+  article: |-
+    Maria, who agreed to be identified by her first name only after a counsellor walked her through the long-term implications, said the assault changed how she moved through public spaces.
+  critiques: []

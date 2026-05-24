@@ -372,7 +372,7 @@ function CritiqueCard({
                 color: "#78350F",
               }}
             >
-              Deep question
+              Creative spark
             </span>
           ) : (
             <span

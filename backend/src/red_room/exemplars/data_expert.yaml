@@ -1,0 +1,247 @@
+# Exemplars for data_expert
+# Human-editable. Each list item below is one exemplar.
+# To disable an exemplar without deleting it, comment out its lines with #.
+# Field order: source, article, critiques (and per critique: agent, text_quote,
+# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+#
+- source: |-
+    Documented example: monthly payroll change of 270,000 against a margin of error near 263,000
+  article: |-
+    The economy added jobs at a slower pace last month, with payrolls falling by 270,000, a clear sign the labour market is cooling.
+  critiques:
+  - agent: data_expert
+    text_quote: payrolls falling by 270,000, a clear sign the labour market is cooling
+    span: [57, 127]
+    issue_label: a change reported inside its margin of error
+    question: |-
+      BLS publishes payrolls with a 90 percent confidence interval near plus or minus 130,000, so a 270,000 monthly change sits inside its own noise floor. Signal, or rounding error dressed as a trend?
+    why_it_matters: |-
+      Calling a figure inside its uncertainty 'a clear sign' tells the reader we know something we do not.
+    fix_suggestion: |-
+      Put the MOE next to the figure. Only call it a trend if the change clears it; otherwise say the move is within statistical noise.
+    replacement: |-
+      payrolls falling by 270,000, a figure within the survey's margin of error of about 260,000
+    severity: high
+- source: 'HealthNewsReview standard: do not treat animal research as a human result'
+  article: |-
+    Scientists have found a compound that reverses memory loss, raising hopes of a breakthrough treatment for Alzheimer's patients.
+  critiques:
+  - agent: data_expert
+    text_quote: raising hopes of a breakthrough treatment for Alzheimer's patients
+    span: [60, 126]
+    issue_label: animal result framed as a human treatment
+    question: |-
+      Was this a mouse or a human? On HealthNewsReview's tally, roughly 90 percent of compounds that work in mice die in human trials, and the gap between 'reverses memory loss in mice' and 'treatment for Alzheimer's patients' is most of a decade and several hundred million dollars.
+    why_it_matters: Readers and patients hear 'breakthrough treatment' and do not
+      hear 'in mice'.
+    fix_suggestion: |-
+      Put the model in the sentence, not three paragraphs down. If trials in people exist, name the phase; if not, say so.
+    replacement: raising early hopes, though the compound has so far only been tested
+      in mice
+    severity: high
+- source: Correlation vs causation; standard policy-evaluation critique
+  article: |-
+    Violent crime fell 12 percent in the year after the new policing law took effect, evidence that the law is working.
+  critiques:
+  - agent: data_expert
+    text_quote: evidence that the law is working
+    span: [82, 114]
+    issue_label: causation claimed from a single before-and-after
+    question: |-
+      A one-year before-and-after is the textbook causation overclaim, the same shape Levitt and Donohue had to defend for years on crime and abortion. Was crime already falling before the law?
+    why_it_matters: |-
+      If a critic shows the prior trend, the 'evidence that the law is working' framing collapses.
+    fix_suggestion: |-
+      Run the drop and the prior trend side by side. If you want the causal claim, attribute it to a researcher whose analysis controls for the pre-trend.
+    replacement: |-
+      the same year that violent crime fell 12 percent, though crime had been declining before the law as well
+    severity: high
+- source: Editorialised magnitude; a comparison word with no denominator
+  article: |-
+    The city poured a massive 1 million dollars into the youth jobs program this year.
+  critiques:
+  - agent: data_expert
+    text_quote: a massive 1 million dollars
+    span: [16, 43]
+    issue_label: magnitude adjective with no denominator
+    question: |-
+      Massive against what? 1 million on a 2 billion dollar budget is 0.05 percent, about what the city spends on office supplies.
+    why_it_matters: |-
+      A magnitude adjective with no denominator is editorialising, and partisan readers will read 'massive' as a tell.
+    fix_suggestion: |-
+      Drop the adjective. Anchor the figure to the budget share or to last year's number.
+    replacement: 1 million dollars, about 0.05 percent of the city budget,
+    severity: medium
+- source: Mean vs median; right-skewed distributions
+  article: |-
+    The average household income in the neighbourhood is 98,000 dollars, well above the city as a whole.
+  critiques:
+  - agent: data_expert
+    text_quote: The average household income in the neighbourhood is 98,000 dollars
+    span: [0, 67]
+    issue_label: mean used where median belongs
+    question: |-
+      Mean or median? Income is the canonical right-skewed distribution, which is why the Census Bureau publishes median household income, not the mean. A handful of high earners can drag the average up by twenty thousand dollars.
+    why_it_matters: |-
+      Choosing the mean over the median for income systematically overstates what a typical household earns.
+    fix_suggestion: |-
+      Use the median for income. If you keep the mean, report both and explain the gap.
+    replacement: The median household income in the neighbourhood is 71,000 dollars
+    severity: medium
+- source: 'HealthNewsReview criterion: conflicts of interest in expert sources'
+  article: |-
+    'These results are a game-changer for the field,' said Dr Hollister, who led the trial.
+  critiques:
+  - agent: data_expert
+    text_quote: said Dr Hollister, who led the trial
+    span: [50, 86]
+    issue_label: sole quoted expert is the study's author
+    question: |-
+      Our only quoted expert is the principal investigator. ICMJE disclosure rules exist because the field learned the hard way, from Vioxx through the SSRI trials, that authors paid by sponsors describe their own results differently than outsiders do. Who would say something else?
+    why_it_matters: |-
+      One stakeholder voice without disclosure is not an independent assessment, and the reader is owed both.
+    fix_suggestion: |-
+      Quote a researcher unaffiliated with the trial. Disclose Hollister's funding and any equity alongside the quote.
+    replacement: null
+    severity: high
+- source: Statistical-significance reporting; effect size matters more than the p-value
+  article: |-
+    Researchers found a statistically significant link between coffee consumption and reduced cognitive decline.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      a statistically significant link between coffee consumption and reduced cognitive decline
+    span: [18, 107]
+    issue_label: significance without effect size
+    question: |-
+      Significant at what effect size? In an n of 50,000 a clinically meaningless effect clears p less than 0.05, which is exactly how Daryl Bem's 2011 precognition paper got into JPSP. How many test points, how many years?
+    why_it_matters: |-
+      P-values tell you a result is unlikely to be chance, not whether it is big enough to matter.
+    fix_suggestion: |-
+      Lead with the effect size in human terms (points, minutes, years). Then say it was statistically significant.
+    replacement: |-
+      researchers found that coffee drinkers scored on average 0.4 points higher on the cognitive test, a small but statistically significant difference
+    severity: high
+- source: Self-selected samples in survey reporting
+  article: |-
+    An online survey of 2,000 readers found that 78 percent oppose the proposed development.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      An online survey of 2,000 readers found that 78 percent oppose the proposed development
+    span: [0, 87]
+    issue_label: self-selected sample reported as opinion
+    question: |-
+      Who answered? An opt-in click-through is the textbook self-selected sample, the same design flaw that made the 1936 Literary Digest poll famously call the election for Landon. Is 78 percent an opinion poll, or a measure of who showed up?
+    why_it_matters: |-
+      Opt-in surveys overweight the most motivated audience, and reporting them as opinion polls is one of the most common framing errors in local news.
+    fix_suggestion: |-
+      Label it for what it is: an opt-in reader survey, not a representative poll. Drop 'oppose' as if it stood for the public.
+    replacement: |-
+      Of the 2,000 readers who responded to an opt-in online survey, 78 percent said they opposed the development; the survey was not a representative poll
+    severity: high
+- source: Nominal versus real dollars in long time-series
+  article: |-
+    Federal education spending has tripled since 1980, rising from 14 billion dollars to 45 billion dollars.
+  critiques:
+  - agent: data_expert
+    text_quote: has tripled since 1980, rising from 14 billion dollars to 45 billion
+      dollars
+    span: [27, 103]
+    issue_label: nominal dollars across decades
+    question: |-
+      Those are nominal dollars across 45 years. Run through the BLS CPI calculator, 14 billion in 1980 is roughly 53 billion today, so real spending has fallen, not tripled.
+    why_it_matters: |-
+      Nominal-dollar comparisons across decades routinely flip the direction of a trend the reader thinks they understood.
+    fix_suggestion: |-
+      Use real dollars indexed to a single base year for any comparison spanning more than five years. State the base year.
+    replacement: |-
+      Federal education spending has fallen in real terms since 1980 once adjusted for inflation, from the equivalent of 53 billion dollars in today's money to 45 billion
+    severity: high
+- source: Confidence interval not reported
+  article: |-
+    The new vaccine is 94 percent effective at preventing severe disease, the company said.
+  critiques:
+  - agent: data_expert
+    text_quote: 94 percent effective at preventing severe disease
+    span: [19, 68]
+    issue_label: point estimate without confidence interval
+    question: |-
+      94 percent is a point estimate. The Pfizer Phase 3 efficacy reading on COVID came in at 95 percent with a CI of 90.3 to 97.6; small trials routinely produce headline numbers that shrink in larger ones. What is the interval here?
+    why_it_matters: |-
+      Without the CI the reader cannot tell whether the figure is precise or could move ten points in the next trial.
+    fix_suggestion: |-
+      Quote the 95 percent confidence interval next to the point estimate, and give the sample size.
+    replacement: |-
+      94 percent effective at preventing severe disease, with a 95 percent confidence interval of 87 to 97 percent, based on the company's trial of 12,000 participants
+    severity: medium
+- source: Example of a number reported correctly with its uncertainty
+  article: |-
+    The unemployment rate was 4.1 percent in March, unchanged from February and within the survey's margin of error, the bureau said.
+  critiques: []
+- source: Example of a properly reported trial result with effect size and uncertainty
+  article: |-
+    In a randomized trial of 8,500 patients, the drug reduced hospitalisations by 4.2 percentage points, from 11.8 percent to 7.6 percent, with a 95 percent confidence interval of 2.9 to 5.5 points. Two of the principal investigators disclosed consulting payments from the drug's manufacturer.
+  critiques: []
+- source: AP Stylebook 'titles' entry; common newsroom correction pattern
+  article: |-
+    Senator Mark Calhoun (D-MI) introduced the bill on Tuesday, calling for federal action on rural broadband.
+  critiques:
+  - agent: data_expert
+    text_quote: Senator Mark Calhoun
+    span: [0, 20]
+    issue_label: wrong title
+    question: |-
+      AP Stylebook 'titles' entry, first rule: verify the office before the name. Mark Calhoun has been a representative, not a senator, since 2018. Either he just won a Senate seat I missed, or the title is wrong.
+    why_it_matters: |-
+      Wrong office in the lede is the single most common newsroom correction, and the most likely thing a hostile clipper will screenshot.
+    fix_suggestion: |-
+      Verify against the House clerk's roster or his official site, then correct to 'Representative.'
+    replacement: Representative Mark Calhoun (D-MI)
+    severity: high
+- source: Stephen Glass retraction patterns; standard newsroom quote-accuracy practice
+  article: |-
+    'We made a mistake,' said CEO Sarah Vance in her resignation statement on Monday, 'and I take full responsibility for the consequences.'
+  critiques:
+  - agent: data_expert
+    text_quote: '''and I take full responsibility for the consequences.'''
+    span: [80, 134]
+    issue_label: compound quote with hidden ellipsis
+    question: |-
+      The two clauses sit inside one quoted breath, but the filed statement has 'We made a mistake in our communications' in paragraph one and 'I take full responsibility' from a separate paragraph about the board's decision. That stitching is the move tracked across the Stephen Glass retractions.
+    why_it_matters: |-
+      A compound quote that did not happen in one breath misleads on what the source actually committed to.
+    fix_suggestion: |-
+      Run the two clauses as separate quotes attributed to the parts of the statement they came from, or use only the clause that genuinely refers to the action being reported.
+    replacement: null
+    severity: high
+- source: Standard newsroom copy-desk practice on internal consistency
+  article: |-
+    The council voted Tuesday, March 12, to approve the budget after a marathon debate. The vote, on Wednesday, March 12, came after lobbyists from both sides packed the chamber.
+  critiques:
+  - agent: data_expert
+    text_quote: Wednesday, March 12
+    span: [99, 118]
+    issue_label: internal day-of-week inconsistency
+    question: |-
+      Same date, two days: Tuesday in your lede, Wednesday in the next graf. A calendar check settles it in ten seconds. Newsroom copy desks log this internal-consistency error more than almost anything else.
+    why_it_matters: |-
+      When the date contradicts itself, the reader has no way to know which day the event actually happened.
+    fix_suggestion: Anchor to the date, then look up the day. Reconcile both references.
+    replacement: null
+    severity: medium
+- source: USAspending.gov as the contract-of-record verification source
+  article: |-
+    The defense contract is worth $1.4 million, the largest in the agency's history, awarded to Lockheed Martin last week.
+  critiques:
+  - agent: data_expert
+    text_quote: $1.4 million, the largest in the agency's history
+    span: [22, 71]
+    issue_label: order-of-magnitude error
+    question: |-
+      $1.4 million as 'the largest in the agency's history' is implausible on its face: defense contracts of that size are eight-figure routine. USAspending.gov shows this award at $1.4 billion. The 'M' for 'B' mistype is the magnitude error that lives in correction archives forever.
+    why_it_matters: Mistyping the unit changes the story by three orders of magnitude.
+    fix_suggestion: |-
+      Verify against the contract filing or press release, fix the unit, and sanity-check: does this number make sense given everything else in the paragraph?
+    replacement: $1.4 billion, the largest in the agency's history
+    severity: high

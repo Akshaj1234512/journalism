@@ -5,6 +5,7 @@ import os
 from abc import ABC, abstractmethod
 from pathlib import Path
 
+import yaml
 from anthropic import AsyncAnthropic
 from anthropic.types import Message
 
@@ -54,37 +55,29 @@ def estimate_cost_usd(model: str, usage) -> float:
     return round(cost, 6)
 
 
-def _format_exemplars(path: Path) -> str:
-    """Render JSONL exemplars as a compact prompt block.
+_MISSING_BLOCK = (
+    "# EXEMPLARS\n\nNo exemplars on file yet for this agent. "
+    "Follow the OUTPUT CONTRACT in the system prompt exactly.\n"
+)
 
-    Each line is one paragraph->critique pair. We keep the JSON intact so the
-    model sees the exact output schema applied to real cases. A missing file
-    is tolerated (the agent runs on its prompt alone) so a new persona can be
-    wired in before its exemplars are finalized.
-    """
-    if not path.exists():
-        return ("# EXEMPLARS\n\nNo exemplars on file yet for this agent. "
-                "Follow the OUTPUT CONTRACT in the system prompt exactly.\n")
-    parts = [
-        "# EXEMPLARS\n",
-        "Each example below is grounded in a real, documented journalism case: "
-        "a press-regulator ruling, a published correction, a recognised review "
-        "standard, or an editorial-craft source. The `source` line names where "
-        "the case or standard comes from. Study the voice and the structure, "
-        "and match them. Do not copy the `source` line into your own output; "
-        "the article you are reviewing is not a documented case.\n",
-    ]
-    example_num = 0
-    for line in path.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        # Skip blank lines and lines commented out with a leading '#'. JSONL
-        # has no native comment syntax, so we treat '#' as one — it lets
-        # trimmed-but-kept exemplars sit in the file, ready to restore.
-        if not line or line.startswith("#"):
-            continue
-        ex = json.loads(line)
-        example_num += 1
-        parts.append(f"\n## Example {example_num}\n")
+_HEADER = (
+    "# EXEMPLARS\n"
+    "Each example below is grounded in a real, documented journalism case: "
+    "a press-regulator ruling, a published correction, a recognised review "
+    "standard, or an editorial-craft source. The `source` line names where "
+    "the case or standard comes from. Study the voice and the structure, "
+    "and match them. Do not copy the `source` line into your own output; "
+    "the article you are reviewing is not a documented case.\n"
+)
+
+
+def _exemplars_to_block(records: list[dict]) -> str:
+    """Render a list of exemplar dicts as the system-prompt exemplars block."""
+    if not records:
+        return _MISSING_BLOCK
+    parts = [_HEADER]
+    for i, ex in enumerate(records, 1):
+        parts.append(f"\n## Example {i}\n")
         if ex.get("source"):
             parts.append(f"GROUNDED IN: {ex['source']}\n")
         parts.append("ARTICLE:\n")
@@ -93,6 +86,41 @@ def _format_exemplars(path: Path) -> str:
         parts.append(json.dumps(ex["critiques"], indent=2))
         parts.append("\n")
     return "".join(parts)
+
+
+def _load_yaml(path: Path) -> list[dict]:
+    """Load exemplars from a YAML file (human-editable canonical format)."""
+    raw = yaml.safe_load(path.read_text(encoding="utf-8")) or []
+    if not isinstance(raw, list):
+        raise ValueError(f"{path}: top-level YAML must be a list of exemplars")
+    return raw
+
+
+def _load_jsonl(path: Path) -> list[dict]:
+    """Legacy loader: read one JSON object per line, skip '#' comments."""
+    records = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#"):
+            continue
+        records.append(json.loads(line))
+    return records
+
+
+def _format_exemplars(path: Path) -> str:
+    """Render exemplars as a compact prompt block.
+
+    Prefers a .yaml file at the same stem (human-editable canonical format);
+    falls back to .jsonl for legacy storage. A missing file is tolerated so
+    a new persona can be wired in before its exemplars are finalized.
+    """
+    yaml_path = path.with_suffix(".yaml")
+    jsonl_path = path.with_suffix(".jsonl")
+    if yaml_path.exists():
+        return _exemplars_to_block(_load_yaml(yaml_path))
+    if jsonl_path.exists():
+        return _exemplars_to_block(_load_jsonl(jsonl_path))
+    return _MISSING_BLOCK
 
 
 class BaseAgent(ABC):
@@ -125,7 +153,9 @@ class BaseAgent(ABC):
 
     @property
     def exemplars_path(self) -> Path:
-        return EXEMPLARS_DIR / f"{self.name}.jsonl"
+        # YAML is the canonical format (human-editable). _format_exemplars
+        # transparently falls back to .jsonl if the .yaml is missing.
+        return EXEMPLARS_DIR / f"{self.name}.yaml"
 
     def load_prompt(self) -> str:
         """Read the persona prompt fresh from disk so in-browser edits take

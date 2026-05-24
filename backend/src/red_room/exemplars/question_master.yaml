@@ -1,0 +1,200 @@
+# Exemplars for question_master
+# Human-editable. Each list item below is one exemplar.
+# To disable an exemplar without deleting it, comment out its lines with #.
+# Field order: source, article, critiques (and per critique: agent, text_quote,
+# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+#
+- source: 'creative-editing pattern: metaphor not extended'
+  article: |-
+    The Senate floor that afternoon felt like a courtroom. The two leaders argued past each other, each addressing the country instead of the chamber, while the gallery sat in silence.
+  critiques:
+  - agent: question_master
+    text_quote: felt like a courtroom
+    span: [32, 53]
+    issue_label: metaphor not extended
+    question: |-
+      The courtroom image is strong and then disappears. Nothing in the next sentence is jury, judge, evidence, or verdict.
+    why_it_matters: Without follow-through, the metaphor is decoration rather than
+      structure.
+    fix_suggestion: |-
+      Consider letting the courtroom imagery carry through one more sentence (the gallery as jury, the press as witnesses, the procedural objections).
+    replacement: null
+    severity: medium
+- source: 'creative-editing pattern: the conventional example'
+  article: |-
+    The dangers of climate change are everywhere. Polar bears are losing their habitat. Wildfires are growing more intense. Coastlines are being eroded.
+  critiques:
+  - agent: question_master
+    text_quote: Polar bears are losing their habitat.
+    span: [46, 83]
+    issue_label: conventional example
+    question: |-
+      Polar bears are the default image and the reader has seen them in fifty other pieces. There is a more specific example from your local region or last year's news that would do the same analytical work and surprise.
+    why_it_matters: |-
+      The conventional example lets the reader read past the paragraph; the unexpected one makes them stop.
+    fix_suggestion: |-
+      Consider replacing the polar bears with a more specific or local instance the reader would not predict.
+    replacement: null
+    severity: medium
+- source: 'creative-editing pattern: the placeholder word'
+  article: |-
+    The judge's opinion in this case is very important for the future of First Amendment jurisprudence.
+  critiques:
+  - agent: question_master
+    text_quote: very important
+    span: [36, 50]
+    issue_label: safe word
+    question: |-
+      The sentence around 'very important' is reaching for something specific. The placeholder is doing none of the work the surrounding clause wants done.
+    why_it_matters: |-
+      A reader stops at 'very important' the way they stop at 'good': the writer hasn't named what kind of importance.
+    fix_suggestion: |-
+      Consider replacing 'very important' with the specific consequence the opinion produces (a doctrinal shift, a precedent, a re-reading).
+    replacement: doctrine-shifting
+    severity: medium
+- source: 'creative-editing pattern: pattern opened not closed'
+  article: |-
+    I lost three things that year. I lost my grandfather, who died in February. I lost the apartment my parents had owned since I was born, which the city took for back taxes.
+  critiques:
+  - agent: question_master
+    text_quote: I lost three things that year.
+    span: [0, 30]
+    issue_label: pattern opened not closed
+    question: |-
+      The paragraph sets up a list of three and only delivers two. The third loss is what the rhythm of the opening is pointing at.
+    why_it_matters: |-
+      An opened pattern that doesn't close leaves the reader expecting a beat that never lands.
+    fix_suggestion: |-
+      Consider adding the third loss in the same shape as the first two (object, when, what happened).
+    replacement: null
+    severity: high
+- source: 'creative-editing pattern: summary where scene would land'
+  article: |-
+    My father and I argued about the move for most of that summer. He felt the city was no place for a child; I felt my whole life was already there.
+  critiques:
+  - agent: question_master
+    text_quote: argued about the move for most of that summer
+    span: [16, 61]
+    issue_label: summary where scene would land
+    question: |-
+      The sentence summarises a whole season. One specific small moment from inside one specific argument would do more than the summary does.
+    why_it_matters: |-
+      Summary tells the reader the argument happened; scene lets them feel the argument the writer felt.
+    fix_suggestion: |-
+      Consider replacing the summary with one specific scene (a place, a sentence one of you said, a thing the other did with their hands).
+    replacement: null
+    severity: high
+- source: 'creative-editing pattern: dead delivery on a vivid setup'
+  article: |-
+    She walked into the room like she had been rehearsing it her whole life. She seemed really confident.
+  critiques:
+  - agent: question_master
+    text_quote: She seemed really confident.
+    span: [73, 101]
+    issue_label: dead delivery on a vivid setup
+    question: |-
+      The first sentence is vivid and specific. The second sentence is a description that any of fifty thousand sentences could close with.
+    why_it_matters: |-
+      The setup promised a payoff the delivery doesn't honour; the reader feels the let-down.
+    fix_suggestion: |-
+      Consider replacing 'seemed really confident' with the specific physical detail the rehearsal metaphor implies (a half-smile she had practised, a hand on the doorframe she didn't need).
+    replacement: null
+    severity: medium
+- source: 'creative-editing pattern: connection gestured but not drawn'
+  article: |-
+    The protest at Columbia in 1968 occupied buildings, paralysed administration, and lasted seven days. In 1969, Harvard, Cornell, and Berkeley followed almost exactly the same script. There are echoes of all this in the 2024 campus encampments.
+  critiques:
+  - agent: question_master
+    text_quote: There are echoes of all this in the 2024 campus encampments.
+    span: [182, 242]
+    issue_label: connection gestured but not drawn
+    question: |-
+      You raise the 1968-to-2024 link and stop. One more sentence drawing the specific echo (the building takeover at Columbia, the same script of administration paralysis) would land what the paragraph is reaching for.
+    why_it_matters: |-
+      A gestured connection is the writer's intention; a drawn one is the reader's experience.
+    fix_suggestion: |-
+      Consider adding one sentence that names the specific echo the 2024 encampments perform.
+    replacement: null
+    severity: high
+- source: 'creative-editing pattern: third item weaker than first two'
+  article: |-
+    Coltrane's solo on 'Giant Steps' moves through the chord changes with surgical precision, with a mathematician's relentless logic, and with energy.
+  critiques:
+  - agent: question_master
+    text_quote: |-
+      with surgical precision, with a mathematician's relentless logic, and with energy
+    span: [65, 146]
+    issue_label: weak third in list of three
+    question: |-
+      The first two items are sharp ('surgical precision,' 'a mathematician's relentless logic'). The third ('energy') is a generic placeholder that drops the rhythm.
+    why_it_matters: |-
+      A list of three is a wave; a weak final item flattens it and the line stops short.
+    fix_suggestion: |-
+      Consider replacing 'energy' with a third image at the specificity of the first two.
+    replacement: |-
+      with surgical precision, with a mathematician's relentless logic, and with the urgency of someone running out of room
+    severity: low
+- source: 'creative-editing pattern: voice flattens at the stake moment'
+  article: |-
+    I have spent the last three years figuring out how to live without my mother. People say it gets easier. The grieving process is something that takes time and patience.
+  critiques:
+  - agent: question_master
+    text_quote: The grieving process is something that takes time and patience.
+    span: [105, 168]
+    issue_label: voice flattens at the stake moment
+    question: |-
+      Your voice through the first two sentences is yours. The third drops into the language of grief handbooks. The piece's most exposed moment is the one where the writing becomes generic.
+    why_it_matters: |-
+      The reader can feel the writer pull back into safety at the moment they most needed the writer not to.
+    fix_suggestion: |-
+      Consider rewriting the third sentence in the voice the first two are written in (specific, yours, unfinished if needed).
+    replacement: null
+    severity: high
+- source: 'creative-editing pattern: hedge at the stake moment'
+  article: |-
+    After all the data, the comparisons, the policy review, perhaps it could be argued that the program may have been somewhat effective.
+  critiques:
+  - agent: question_master
+    text_quote: perhaps it could be argued that the program may have been somewhat
+      effective
+    span: [56, 132]
+    issue_label: hedge at the stake moment
+    question: |-
+      The essay built toward this sentence with data, comparisons, and a policy review. The conclusion meets that build with four stacked hedges.
+    why_it_matters: |-
+      Hedging at the place the essay's stake is highest tells the reader the writer doesn't trust their own case.
+    fix_suggestion: |-
+      Consider replacing the hedges with the specific claim the body of the essay actually earns.
+    replacement: the program was effective on its core measures and worth extending
+    severity: high
+- source: 'creative-editing pattern: the missing photographable detail'
+  article: |-
+    The shelter has taken in 240 displaced residents since the storm, most of them sleeping on cots in the high school gym.
+  critiques:
+  - agent: question_master
+    text_quote: most of them sleeping on cots in the high school gym
+    span: [66, 118]
+    issue_label: the missing photographable detail
+    question: |-
+      The number lands. The gym lands. One small image from inside the gym (the gym lights, the smell of disinfectant, the line at the coffee urn) would let the paragraph carry the weight the number is asking for.
+    why_it_matters: |-
+      Reporting that stays at the level of the count reads as briefing; one concrete detail makes it a story.
+    fix_suggestion: Consider adding one such image to the sentence about the cots.
+    replacement: null
+    severity: low
+- source: 'creative-editing pattern: the second pattern the reading is one beat from'
+  article: |-
+    Browning's anaphora in 'How Do I Love Thee' builds an effect of accumulation and sincerity, each repetition pressing the speaker's claim further.
+  critiques:
+  - agent: question_master
+    text_quote: each repetition pressing the speaker's claim further
+    span: [92, 144]
+    issue_label: the second pattern not reached for
+    question: |-
+      The reading of the anaphora is solid. The sonnet also has a second pattern (a slow widening of the metaphysical scale: depth, breadth, height, soul) that your reading is one beat from naming.
+    why_it_matters: |-
+      The reading is competent at one pattern; naming the second is where the reading becomes the writer's own.
+    fix_suggestion: |-
+      Consider extending the analysis to that widening scale in the sentence after this one.
+    replacement: null
+    severity: medium

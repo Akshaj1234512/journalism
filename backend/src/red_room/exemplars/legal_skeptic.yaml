@@ -1,0 +1,183 @@
+# Exemplars for legal_skeptic
+# Human-editable. Each list item below is one exemplar.
+# To disable an exemplar without deleting it, comment out its lines with #.
+# Field order: source, article, critiques (and per critique: agent, text_quote,
+# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+#
+- source: |-
+    IPSO rulings on anonymous single-source claims presented as fact; Editors' Code Clause 1
+  article: |-
+    The council's finance director took payments from a contractor in exchange for steering a 2 million pound waste contract, sources said.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      took payments from a contractor in exchange for steering a 2 million pound waste contract
+    span: [31, 120]
+    issue_label: bribery alleged as fact
+    question: |-
+      'Took payments in exchange for steering a contract' is bribery, a specific crime, and we are pinning it on a named official with nothing visible but 'sources said'. Where are the payment records?
+    why_it_matters: |-
+      IPSO has repeatedly upheld breaches where an anonymous source's allegation was presented as fact; on a criminal verb against a named official, it is also the core defamation per se pattern.
+    fix_suggestion: |-
+      Attribute it plainly and soften the verb to what the evidence supports until intent is provable. Keep the documents in the file in case we defend it.
+    replacement: |-
+      is alleged by sources to have accepted payments from a contractor that later won a 2 million pound waste contract
+    severity: high
+- source: Editors' Code Clause 1 and right-of-reply practice
+  article: |-
+    The investigation found that Detective James Cole pressured at least three witnesses to change their statements. Cole could not be reached for comment.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: Cole could not be reached for comment
+    span: [113, 150]
+    issue_label: thin right of reply on a serious allegation
+    question: |-
+      'Could not be reached' is the line plaintiff's counsel highlights first. On a witness-tampering allegation against a named detective, five words is not a right of reply.
+    why_it_matters: |-
+      Editors' Code Clause 1 requires a fair opportunity to respond to significant allegations; bare 'could not be reached' is what a regulator reads as the minimum.
+    fix_suggestion: |-
+      Document the outreach inside the piece: the channels and the window. If we truly could not reach him, put exactly what we tried on the record.
+    replacement: |-
+      Cole did not respond to messages left with his lawyer and at two phone numbers over eight days
+    severity: medium
+- source: Editors' Code Clause 1; defamation review on opinion stated as fact
+  article: |-
+    Internal emails show the chief executive ordered staff to delete the test records, a clear cover-up of the safety failures.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: a clear cover-up of the safety failures
+    span: [83, 122]
+    issue_label: our characterization stated as fact
+    question: |-
+      'A clear cover-up' is a conclusion no regulator has reached. The emails show deletion; we are the ones calling it a cover-up.
+    why_it_matters: |-
+      Calling a named executive's conduct a cover-up in our own voice turns description into a legal conclusion we then have to prove.
+    fix_suggestion: |-
+      Describe what the emails show and let the reader infer, or attribute 'cover-up' to a named source who will stand behind it.
+    replacement: which former staff describe as an attempt to bury the safety failures
+    severity: medium
+- source: Editors' Code Clause 1; defamation review on paraphrase escalation
+  article: |-
+    The whistleblower said the agency 'wasn't careful' with the figures. In other words, the agency falsified its budget reports.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: In other words, the agency falsified its budget reports
+    span: [69, 124]
+    issue_label: paraphrase escalates the source's claim
+    question: |-
+      The source said 'wasn't careful'. We translated that into 'falsified', an intent verb. Did she say falsification, or did we upgrade her?
+    why_it_matters: |-
+      Turning a hedged claim into a definite accusation is a libel exposure we manufactured; if sued, we cannot fall back on the source because the source never said it.
+    fix_suggestion: |-
+      Quote the source's actual words, or go back and get her on the record as to whether she means deliberate falsification.
+    replacement: The whistleblower said the agency 'wasn't careful' with the figures
+    severity: high
+- source: IPSO guidance on anonymous sourcing; defamation review on source independence
+  article: |-
+    According to two people with knowledge of the matter, the director knew about the defect, hid it from regulators, and lied to the board.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      the director knew about the defect, hid it from regulators, and lied to the board
+    span: [54, 135]
+    issue_label: one sourcing line carrying three allegations
+    question: |-
+      Knew, hid, and lied are three distinct allegations all riding on the same 'two people with knowledge'. If those two are the same circle, the paragraph is single-sourced.
+    why_it_matters: |-
+      Stacking distinct allegations behind one anonymous attribution means one recantation collapses everything; for libel purposes, two sources from the same room are close to one.
+    fix_suggestion: |-
+      Separate the claims and show what supports each. Keep the best-sourced one now and hold the rest until they are independently confirmed.
+    replacement: null
+    severity: high
+- source: Defamation by implication / juxtaposition; standard pre-publication review
+  article: |-
+    City Hall awarded the contract to Walsh Construction. The firm is owned by Frank Walsh, who lives three doors down from the mayor's mother.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: lives three doors down from the mayor's mother
+    span: [92, 138]
+    issue_label: innuendo by juxtaposition
+    question: |-
+      After Charleston v Sunday Mail (1995), juxtaposition is its own defamation theory. We have set the contract award next to the owner's address and trusted the reader to draw the line.
+    why_it_matters: |-
+      Defamation by implication does not require a direct claim; placing two facts side by side so the reader infers wrongdoing is enough to sustain a suit.
+    fix_suggestion: |-
+      Either prove the connection (donations, calls, meetings on this contract) and report it directly, or strike the geography line.
+    replacement: null
+    severity: high
+- source: UK Contempt of Court Act 1981 and US guidance on pre-trial publicity
+  article: |-
+    Robert Lane, who is awaiting trial next month on murder charges, has a long history of violent outbursts, three former colleagues said.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: has a long history of violent outbursts
+    span: [65, 104]
+    issue_label: prejudicial material on an awaiting-trial defendant
+    question: |-
+      Mr Lane is awaiting trial. Publishing colleagues' 'history of violent outbursts' next to murder charges is exactly the material the Contempt of Court Act 1981 is designed to keep out of public view during active proceedings.
+    why_it_matters: |-
+      Character-evidence reporting on an active defendant risks contempt in the UK and a venue-change or jury-strike motion in the US; it can collapse the trial.
+    fix_suggestion: |-
+      Hold the colleague accounts until the verdict. Report the charges and the next court date now, save the background for after.
+    replacement: null
+    severity: high
+- source: 'Defamation review: ''lied'' as a state-of-mind verb requiring proof of
+    intent'
+  article: |-
+    Senator Voss lied about his military service in last week's debate, records show.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: Senator Voss lied about his military service
+    span: [0, 44]
+    issue_label: intent verb without proof of intent
+    question: |-
+      'Lied' is the verb Sullivan plaintiffs use to argue actual malice against us. The records show his statement was inaccurate. Do they show he knew it was?
+    why_it_matters: |-
+      'Lied' is a state-of-mind verb requiring proof of intent, which a paper trail of statements rarely supplies by itself.
+    fix_suggestion: |-
+      Report what the records show and what he said and let the gap be visible. If we have evidence he knew, lead with it.
+    replacement: |-
+      Senator Voss's account of his military service was contradicted by records released last week
+    severity: high
+- source: 'Defamation review: ''allegedly'' used everywhere as a legal fig leaf'
+  article: |-
+    Brewer allegedly stole from the trust, allegedly hid the funds in offshore accounts, and allegedly threatened his secretary into silence.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      Brewer allegedly stole from the trust, allegedly hid the funds in offshore accounts, and allegedly threatened his secretary into silence
+    span: [0, 136]
+    issue_label: '''allegedly'' as a blanket shield'
+    question: |-
+      Three serious allegations chained on three 'allegedly's. The word is doing structural work it cannot do; the reader still walks away believing he did all three.
+    why_it_matters: |-
+      Courts have held that 'allegedly' does not by itself defeat defamation where the surrounding text treats the claims as established; we need attributed allegations, not a sprinkling.
+    fix_suggestion: |-
+      Attribute each claim to its source, ideally the lawsuit or filing, so the allegation rides on a privileged document and not on our voice.
+    replacement: null
+    severity: high
+- source: 'Privacy and defamation overlap: identifying suspects pre-charge'
+  article: |-
+    Police searched the home of David Mercer, a 38-year-old accountant, on Tuesday as part of the fraud investigation. No charges have been filed.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: David Mercer, a 38-year-old accountant
+    span: [28, 66]
+    issue_label: naming a pre-charge suspect
+    question: |-
+      BBC v Cliff Richard (2018, 210,000 pound award) is the ruling that says identifying a suspect pre-charge is itself the harm. Mercer has not been charged. What public interest requires his name now?
+    why_it_matters: |-
+      Pre-charge naming carries both privacy and defamation exposure if the investigation closes without action; the Cliff Richard award is the going rate.
+    fix_suggestion: |-
+      Hold the name until charge unless there is a clear public interest in naming him now. Report the search and the investigation without the identifier.
+    replacement: |-
+      Police searched the home of a 38-year-old accountant on Tuesday as part of the fraud investigation
+    severity: high
+- source: Editors' Code Clause 1; example of a properly sourced and balanced passage
+  article: |-
+    Senator Linda Hart voted against the housing bill on Tuesday after receiving more than 200,000 dollars in donations from the real estate lobby over two years, federal disclosure filings show. Hart's office said the vote reflected concerns about zoning preemption.
+  critiques: []
+- source: Example of an allegation attributed to a court filing, fully sourced
+  article: |-
+    Brewer is accused in a lawsuit filed Tuesday in Cook County of diverting more than 400,000 dollars from the trust, hiding the funds in offshore accounts, and threatening his former secretary into silence. Brewer's lawyer said the claims were 'a fiction' and would be contested at trial.
+  critiques: []

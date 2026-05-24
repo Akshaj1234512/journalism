@@ -92,7 +92,7 @@ def default_agents(
             StructureEditor(client=client),
             LogicAuditor(client=client),
             CitationEditor(client=client, citation_style=citation_style),
-            QuestionMaster(client=client),
+            QuestionMaster(client=client, mode="essays", essay_type=essay_type),
         ]
         # Add the Purpose Editor that matches the writer's chosen essay type.
         # `none` skips it. Only one runs per review.
@@ -106,7 +106,7 @@ def default_agents(
         HumanRightsAdvocate(client=client),
         ClarityCritique(client=client),
         PartisanChecker(client=client),
-        QuestionMaster(client=client),
+        QuestionMaster(client=client, mode="journalism"),
     ]
 
 

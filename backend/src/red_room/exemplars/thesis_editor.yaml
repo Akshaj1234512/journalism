@@ -1,0 +1,141 @@
+# Exemplars for thesis_editor
+# Human-editable. Each list item below is one exemplar.
+# To disable an exemplar without deleting it, comment out its lines with #.
+# Field order: source, article, critiques (and per critique: agent, text_quote,
+# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+#
+- source: 'They Say / I Say, Chapter 1: announcing a topic vs. making a claim'
+  article: |-
+    This essay will examine the role of Lady Macbeth in Shakespeare's play. It will look at her relationship with Macbeth, her famous sleepwalking scene, and her eventual death.
+  critiques:
+  - agent: thesis_editor
+    text_quote: This essay will examine the role of Lady Macbeth in Shakespeare's
+      play.
+    span: [0, 71]
+    issue_label: topic not thesis
+    question: |-
+      Your opening announces a topic ('the role of Lady Macbeth') rather than taking a position. Name what 'they say,' then plant your stake. Right now there is no stake a reader could push back on.
+    why_it_matters: |-
+      Without a position, the rest of the essay can describe Lady Macbeth, but it cannot argue anything about her.
+    fix_suggestion: |-
+      Rewrite to take an interpretive position. For example: 'Lady Macbeth's ambition is a masculine performance the play punishes more harshly than her husband's.' Pick whichever reading the body of your essay actually supports.
+    replacement: null
+    severity: high
+- source: 'They Say / I Say, Chapter 1: a thesis must invite disagreement'
+  article: |-
+    The Civil War had many causes, including economic differences, political tensions, and the question of slavery.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      The Civil War had many causes, including economic differences, political tensions, and the question of slavery.
+    span: [0, 111]
+    issue_label: fact statement not thesis
+    question: |-
+      Every historian agrees the war had multiple causes. They Say / I Say's test for a thesis: who could disagree? If no reasonable reader would push back, the sentence is a fact, not a claim.
+    why_it_matters: |-
+      A reader cannot tell what argument the essay will defend, only what subject it will discuss.
+    fix_suggestion: |-
+      Take a position on the relative weight of the causes, or on which conventional account you intend to challenge. 'The economic interpretation, dominant since Beard, underestimates how decisively the slavery question reframed the political coalitions' is a claim someone could push back on.
+    replacement: null
+    severity: high
+- source: 'Booth, The Craft of Argument: the thesis must promise a defensible claim'
+  article: |-
+    Toni Morrison's Beloved is a powerful novel. It deals with memory, motherhood, and the legacy of slavery in ways that have moved many readers and won the Pulitzer Prize.
+  critiques:
+  - agent: thesis_editor
+    text_quote: Toni Morrison's Beloved is a powerful novel.
+    span: [0, 44]
+    issue_label: evaluative blur not thesis
+    question: |-
+      'Powerful' is praise without a position. A thesis names what is at stake and how the essay will argue it. 'Powerful' does neither, and the sentence around it is a publisher blurb.
+    why_it_matters: |-
+      The reader knows you admire the novel; they do not know what interpretive argument you will make.
+    fix_suggestion: |-
+      Replace with a claim about how the novel works, e.g. 'Beloved refuses the conventional grammar of trauma narrative by making Sethe's memory bodily, not psychological.'
+    replacement: null
+    severity: high
+- source: 'Standard writing-center diagnostic: thesis-body drift'
+  article: |-
+    This paper argues that the New Deal saved American capitalism by stabilising the banking system in 1933 and 1934. The first body section examines the cultural impact of WPA arts programs on rural communities. The second turns to the long-term legacy of Social Security on American family structure.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      This paper argues that the New Deal saved American capitalism by stabilising the banking system in 1933 and 1934.
+    span: [0, 113]
+    issue_label: thesis-body drift
+    question: |-
+      Your thesis is about banking stabilisation. Your body sections are about WPA arts and Social Security family effects. Neither body section is engaged with the banking claim.
+    why_it_matters: |-
+      When the body argues a different claim than the thesis names, the reader cannot tell which argument the essay actually defends.
+    fix_suggestion: |-
+      Either rewrite the thesis to match what the body actually argues (likely something about the New Deal's cultural and social-policy legacy), or rewrite the body to defend the banking claim.
+    replacement: null
+    severity: high
+- source: 'Standard writing-center diagnostic: hidden thesis'
+  article: |-
+    Hamlet's behaviour after his father's death has puzzled critics for centuries. He delays his revenge, speaks in riddles, treats Ophelia cruelly, and stages a play within the play. There are many ways to read these choices, and scholars have offered competing accounts.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      There are many ways to read these choices, and scholars have offered competing accounts.
+    span: [180, 268]
+    issue_label: no thesis in intro
+    question: |-
+      Your introduction surveys what other people think about Hamlet's behaviour and stops. The essay's own position is nowhere on the page. After the 'they say,' the writer's stake has to land.
+    why_it_matters: |-
+      Without a stake by the end of the intro, the reader does not know what the essay is for.
+    fix_suggestion: |-
+      Add a sentence that takes a side, e.g. 'I argue that Hamlet's apparent indecision is a deliberate moral position, not a flaw of character.'
+    replacement: null
+    severity: high
+- source: 'Booth, The Craft of Argument: scope vs. essay length'
+  article: |-
+    This five-page paper will explore the role of religion in shaping Western civilisation from the fall of Rome to the Reformation.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      This five-page paper will explore the role of religion in shaping Western civilisation from the fall of Rome to the Reformation.
+    span: [0, 128]
+    issue_label: thesis too broad for length
+    question: |-
+      A thousand-year span across an entire civilisation is a book, not five pages. Booth's principle: the thesis has to promise something the essay can actually deliver.
+    why_it_matters: An impossible scope guarantees the body will be a summary tour,
+      not an argument.
+    fix_suggestion: |-
+      Narrow to one specific case, one specific century, or one specific institution. 'The Cluniac reforms of the tenth century reorganised the political economy of Western Europe' is a five-page claim.
+    replacement: null
+    severity: medium
+- source: 'They Say / I Say: ''so what'' and ''who cares'' (Chapter 7)'
+  article: |-
+    The Great Gatsby uses green light imagery in connection with Daisy throughout the novel. This paper argues that the green light is symbolic of Gatsby's longing for her.
+  critiques:
+  - agent: thesis_editor
+    text_quote: This paper argues that the green light is symbolic of Gatsby's longing
+      for her.
+    span: [89, 168]
+    issue_label: missing stakes
+    question: |-
+      Defensible, but who would push back? Graff and Birkenstein's 'so what' test: a thesis has to do more than name a symbol. What is at stake in reading the light this way rather than as something else?
+    why_it_matters: A thesis nobody would disagree with leaves the essay nowhere to
+      go.
+    fix_suggestion: |-
+      Sharpen the claim so it has a stake. 'The green light is not a symbol of Gatsby's hope but of the failure of American self-invention itself' takes a position other readers would contest.
+    replacement: null
+    severity: medium
+- source: 'Standard writing-center diagnostic: hedge stack erases the thesis'
+  article: |-
+    It could perhaps be argued that, in some sense, the French Revolution might possibly be understood as having had a partial influence on subsequent European political development.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      It could perhaps be argued that, in some sense, the French Revolution might possibly be understood as having had a partial influence on subsequent European political development.
+    span: [0, 178]
+    issue_label: thesis hedged into invisibility
+    question: |-
+      Five hedges in one sentence ('could,' 'perhaps,' 'in some sense,' 'might possibly,' 'partial'). Stacked this hard, they confess no position the essay is willing to defend.
+    why_it_matters: If the writer will not commit, the reader has no thesis to engage
+      with.
+    fix_suggestion: |-
+      Pick the strongest, most specific claim you actually believe and write it without the qualifiers. 'The French Revolution permanently reshaped the European political vocabulary, especially the language of rights and the nation-state' is a thesis someone could push back on.
+    replacement: null
+    severity: medium

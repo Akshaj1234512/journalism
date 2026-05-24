@@ -1,0 +1,181 @@
+# Exemplars for partisan
+# Human-editable. Each list item below is one exemplar.
+# To disable an exemplar without deleting it, comment out its lines with #.
+# Field order: source, article, critiques (and per critique: agent, text_quote,
+# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+#
+- source: IPSO ruling 06628-24, Moore v Daily Mail (headline not supported by text)
+  article: |-
+    LABOUR'S 400 POUND TAX HIT TO YOUR FAMILY HOLIDAY. Families flying abroad next year face higher costs under the government's plans, which will push Air Passenger Duty for a family of four travelling to the United States to 408 pounds, up from 352 pounds.
+  critiques:
+  - agent: partisan
+    text_quote: LABOUR'S 400 POUND TAX HIT TO YOUR FAMILY HOLIDAY
+    span: [0, 49]
+    issue_label: headline not supported by the text
+    question: |-
+      IPSO upheld 06628-24 on this exact Daily Mail front: a 56 pound rise headlined as a 400 pound hit, contradicted by your own body text. What headline can the article actually defend?
+    why_it_matters: |-
+      When the contradiction is internal, the screenshot of the lede is the rebuttal, and we wrote it.
+    fix_suggestion: Headline only the increase Labour is responsible for, not the
+      cumulative total.
+    replacement: LABOUR'S 56 POUND RISE ON YOUR FAMILY HOLIDAY TAX
+    severity: high
+- source: IPSO ruling 01710-24, Full Fact v Daily Express (estimate presented as fact)
+  article: |-
+    The party's policy would see Britain take in 100,000 extra illegal migrants, already in Europe, every year.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      would see Britain take in 100,000 extra illegal migrants, already in Europe, every year
+    span: [19, 106]
+    issue_label: an estimate presented as established fact
+    question: |-
+      IPSO 01710-24 hit the Express for exactly this move: a party projection rendered as plain fact, no 'the opposition estimates' anywhere near it. Whose number is 100,000?
+    why_it_matters: |-
+      A figure with a hidden author and a hidden assumption is the first thing the other side pulls apart.
+    fix_suggestion: Attribute the figure and state the assumption it rests on.
+    replacement: |-
+      would, the opposition estimates, see Britain take in 100,000 extra migrants a year, a figure that assumes Britain joins an EU relocation scheme
+    severity: high
+- source: |-
+    Australian Press Council adjudication (repeated 'election fixer' label implying involvement)
+  article: |-
+    The election fixer at the centre of the scandal was photographed leaving the building on Tuesday. The election fixer has not been charged with any offence.
+  critiques:
+  - agent: partisan
+    text_quote: The election fixer
+    span: [0, 18]
+    issue_label: a loaded label repeated as proven
+    question: |-
+      The Australian Press Council upheld a complaint for repeating 'election fixer' as identifier when no body had found election fixing. We use it twice, then say he has not been charged. Has any inquiry actually established the label?
+    why_it_matters: |-
+      A label we have not proven, repeated in our voice, is the line the subject's defenders quote first.
+    fix_suggestion: Use a neutral identifier; attribute the label if a finding supports
+      it.
+    replacement: The consultant at the centre of the inquiry
+    severity: high
+- source: Press impartiality practice; the reporter's voice carries facts, not verdicts
+  article: |-
+    The administration unveiled an aggressive new immigration enforcement policy on Wednesday that lets federal agents detain people at courthouses and hospitals.
+  critiques:
+  - agent: partisan
+    text_quote: an aggressive new immigration enforcement policy
+    span: [28, 76]
+    issue_label: loaded adjective in our voice
+    question: |-
+      'Aggressive' is the AP and Reuters stylebook example of a loaded adjective in the reporter's voice. To a hostile reader, that one word is proof we picked a side.
+    why_it_matters: |-
+      It lets defenders wave away every accurate fact that follows as the work of a biased newsroom.
+    fix_suggestion: |-
+      Use a neutral descriptor for the same scope, or attribute 'aggressive' to a named critic.
+    replacement: an expansive new immigration enforcement policy
+    severity: medium
+- source: Fairness practice on placement of the subject's response
+  article: |-
+    The mayor accepted more than 40,000 dollars in travel and lodging from a developer who held a major city contract, records show. (Twelve paragraphs later.) In a statement, the mayor's office said the gifts were fully disclosed and the contract was awarded by competitive bid years before any of the trips.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      (Twelve paragraphs later.) In a statement, the mayor's office said the gifts were fully disclosed and the contract was awarded by competitive bid years before any of the trips.
+    span: [129, 305]
+    issue_label: rebuttal buried below the fold
+    question: |-
+      Hunter Biden laptop coverage taught this lesson the hard way: when the qualification sits twelve paragraphs down, the qualification becomes the story. The mayor's disclosure and the timeline live below the fold.
+    why_it_matters: By paragraph twelve most readers are gone and every share is just
+      the lede.
+    fix_suggestion: |-
+      Move one sentence of the response into the top five paragraphs, then continue the reporting.
+    replacement: null
+    severity: high
+- source: Fairness practice on guilt by association
+  article: |-
+    Senator Hayes voted against the consumer bill on Tuesday. Last month he was seen at a Washington steakhouse with industrialist Roy Marsh, who has lobbied against the bill.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      Last month he was seen at a Washington steakhouse with industrialist Roy Marsh, who has lobbied against the bill.
+    span: [58, 171]
+    issue_label: guilt by association without a link
+    question: |-
+      Karl Rove's playbook calls this smear by proximity: a steakhouse photo, no established link, reader left to draw the line. Did they discuss the bill, did Marsh fund Hayes, or do we just have a dinner?
+    why_it_matters: |-
+      A proximity detail with no link is the weakest brick, and right now it is load-bearing.
+    fix_suggestion: |-
+      Establish a functional connection (donations, lobbying contact, the bill itself) or cut the steakhouse line.
+    replacement: null
+    severity: high
+- source: Fairness practice on symmetrical treatment of named parties
+  article: |-
+    The soft-spoken teacher, who has devoted twenty years to the district, filed the complaint. The administrator she accused, a former corporate lawyer, declined to comment.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      The soft-spoken teacher, who has devoted twenty years to the district, filed the complaint. The administrator she accused, a former corporate lawyer, declined to comment.
+    span: [0, 170]
+    issue_label: asymmetric character framing
+    question: |-
+      'Soft-spoken' and 'devoted twenty years' on one party; 'former corporate lawyer' on the other. This is the asymmetry the IPSO Lily Allen ruling flagged: every phrase accurate, the pattern not.
+    why_it_matters: |-
+      Readers register the asymmetry even when each phrase checks out, and so do critics looking for it.
+    fix_suggestion: |-
+      Describe both parties at the same depth and register, or drop the colour from both.
+    replacement: null
+    severity: medium
+- source: |-
+    Fairness practice on question-mark headlines (Betteridge's law and the Daily Express tradition)
+  article: |-
+    DID THE MAYOR KNOWINGLY MISLEAD THE COUNCIL ABOUT THE BUDGET? Hours after an internal review found accounting errors, sources say...
+  critiques:
+  - agent: partisan
+    text_quote: DID THE MAYOR KNOWINGLY MISLEAD THE COUNCIL ABOUT THE BUDGET?
+    span: [0, 61]
+    issue_label: question-mark headline pinning an unproven claim
+    question: |-
+      Betteridge's law and the standing IPSO line on question-headlines: the question mark does not neutralise the accusation, it smuggles it. The reader sees 'mayor knowingly misled' before they see 'maybe not'.
+    why_it_matters: |-
+      Regulators have repeatedly upheld complaints on exactly this construction; in court it is treated as an assertion.
+    fix_suggestion: |-
+      If the claim is proven, headline it as a statement; if not, rewrite so the question does not embed the accusation.
+    replacement: MAYOR FACES QUESTIONS AFTER COUNCIL BUDGET REVIEW
+    severity: high
+- source: Fairness practice on stacking past-conduct labels
+  article: The controversial, embattled, scandal-hit mayor faces another inquiry this
+    week.
+  critiques:
+  - agent: partisan
+    text_quote: The controversial, embattled, scandal-hit mayor
+    span: [0, 47]
+    issue_label: adjective ladder doing the accusing
+    question: |-
+      Three loaded adjectives stacked in one phrase is the move Bret Stephens caught the Atlantic on: cumulative weight standing in for a specific finding. Has anything been established, or are we running the accusation three times?
+    why_it_matters: |-
+      Stacked, they tell the reader to assume the worst; separately, none of them survives a fact-check.
+    fix_suggestion: |-
+      Use the specific record instead, or drop the adjectives if the record will not carry them.
+    replacement: The mayor, who has been the subject of two prior ethics findings,
+    severity: high
+- source: Fairness practice on selective quoting of an opposing voice
+  article: |-
+    Asked about the funding cut, Councilwoman Reyes said, 'You can't possibly justify spending more right now. I mean, look at the deficit. We have no choice.' We have no choice, Reyes told the council.
+  critiques:
+  - agent: partisan
+    text_quote: We have no choice, Reyes told the council.
+    span: [156, 198]
+    issue_label: selective quoting reverses the meaning
+    question: |-
+      IPSO's Mail Online ruling on Lily Allen turned on exactly this: a partial quote that reverses the speaker's meaning. The four-word lift makes her sound forced into the cut; her full sentence says she chose it.
+    why_it_matters: |-
+      Press councils worldwide have upheld complaints on this move; it is the textbook fairness failure.
+    fix_suggestion: |-
+      Quote the full clause, or anchor the four-word lift to the sentence it came from.
+    replacement: '''We have no choice but to cut,'' Reyes told the council, citing
+      the deficit'
+    severity: high
+- source: Example of a neutral, well-balanced passage
+  article: |-
+    The county will raise the property tax rate by 4 percent next year, the commission said Tuesday. The increase, the first since 2019, will add about 120 dollars to the annual bill on a median-priced home.
+  critiques: []
+- source: Example of a routine procedure described neutrally
+  article: |-
+    The senate health committee voted 7 to 4 on Tuesday to advance the bill to the floor, after a one-hour markup. Two committee members said they would file dissenting reports.
+  critiques: []
