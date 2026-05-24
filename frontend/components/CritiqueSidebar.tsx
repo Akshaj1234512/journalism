@@ -68,13 +68,9 @@ export function CritiqueSidebar({
   const resolved = ordered.filter((c) => resolvedIds.has(critiqueId(c)));
 
   // Cross-agent consensus: which open critiques cluster on overlapping spans
-  // with at least one other agent. Multi-agent agreement on the same passage
-  // is the strongest signal a multi-persona room can produce.
+  // with at least one other agent. The consolidated HotspotCard still uses
+  // this; the header indicator was removed for clutter.
   const consensus = computeConsensus(open);
-  const hotspotGroups = new Set<string>();
-  for (const info of consensus.values()) {
-    if (info.groupId) hotspotGroups.add(info.groupId);
-  }
 
   const counts = new Map<AgentName, number>();
   for (const c of open) counts.set(c.agent, (counts.get(c.agent) ?? 0) + 1);
@@ -143,24 +139,6 @@ export function CritiqueSidebar({
           </button>
         )}
 
-        {hotspotGroups.size > 0 && (
-          <div
-            className="mt-2 flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5"
-            style={{
-              borderColor: "#FECACA",
-              backgroundColor: "#FFF1F2",
-            }}
-            title="A hotspot is a passage where two or more editors independently flagged the same line. The strongest editorial signal the room produces."
-          >
-            <span className="text-[14px]" aria-hidden>🔥</span>
-            <span className="text-[11px] font-semibold text-rose-800">
-              {hotspotGroups.size} hotspot{hotspotGroups.size === 1 ? "" : "s"}
-            </span>
-            <span className="text-[10px] text-rose-700/70">
-              passages multiple editors flagged
-            </span>
-          </div>
-        )}
         {counts.size > 0 && (
           <div className="mt-2 flex flex-wrap items-center gap-1.5">
             {Array.from(counts.entries()).map(([agent, n]) => {

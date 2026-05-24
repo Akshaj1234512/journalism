@@ -1,6 +1,6 @@
 import { AgentName } from "./types";
 
-export type Plan = "free" | "basic" | "pro" | "team";
+export type Plan = "free" | "basic" | "pro";
 
 // Editors included on the free tier — the shared craft layer that runs in
 // both modes (Theo, Will, Stella, Logan, Evan, Sol) plus Kate. Locked behind
@@ -19,10 +19,11 @@ export const FREE_AGENTS: AgentName[] = [
   "citation_editor",
 ];
 
-// New accounts get a 14-day trial of the Basic tier. Long enough to use the
-// specialist editors on a few real drafts; short enough to maintain urgency.
-export const TRIAL_DAYS = 14;
-export const TRIAL_PLAN: Plan = "basic";
+// New accounts get a 7-day trial of the Pro tier — the full roster with
+// the highest weekly quota, so writers can feel what the room produces at
+// full power before they pick a plan.
+export const TRIAL_DAYS = 7;
+export const TRIAL_PLAN: Plan = "pro";
 
 export interface PlanInfo {
   id: Plan;
@@ -53,7 +54,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
     reviewsPerWeek: 3,
     reviewsPerMonth: 12,
     overagePerReview: 0,                   // hard cap
-    maxArticleWords: 1500,                 // typical short essay / news brief / Common App essay
+    maxArticleWords: 1200,                 // typical short essay, news brief, Common App essay
     seats: 1,
     extraSeatPriceMonthly: 0,
     unlocksAllEditors: false,
@@ -73,7 +74,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
     reviewsPerWeek: 10,
     reviewsPerMonth: 40,
     overagePerReview: 0.69,
-    maxArticleWords: 2000,                 // covers most college essays + journalism
+    maxArticleWords: 1800,                 // covers standard college essays + journalism
     seats: 1,
     extraSeatPriceMonthly: 0,
     unlocksAllEditors: true,
@@ -89,11 +90,11 @@ export const PLANS: Record<Plan, PlanInfo> = {
   pro: {
     id: "pro",
     label: "Pro",
-    priceMonthly: 25,
+    priceMonthly: 28,
     reviewsPerWeek: 20,
     reviewsPerMonth: 80,
     overagePerReview: 0.59,
-    maxArticleWords: 2500,                 // longer essays, longer features
+    maxArticleWords: 2500,                 // longer essays, feature articles
     seats: 1,
     extraSeatPriceMonthly: 0,
     unlocksAllEditors: true,
@@ -106,30 +107,13 @@ export const PLANS: Record<Plan, PlanInfo> = {
     unlocksBrandedPdf: false,
     popular: false,
   },
-  team: {
-    id: "team",
-    label: "Team",
-    priceMonthly: 59,
-    reviewsPerWeek: 50,                    // shared across the team
-    reviewsPerMonth: 200,
-    overagePerReview: 0.49,
-    maxArticleWords: 3000,                 // term papers, research-paper sections
-    seats: 5,
-    extraSeatPriceMonthly: 9,              // each extra seat adds 10 reviews/week
-    unlocksAllEditors: true,
-    unlocksPurposeEditor: true,
-    unlocksJournalismSpecialists: true,
-    unlocksCitationStyle: true,
-    unlocksAssignmentPrompt: true,
-    unlocksDraftHistory: true,
-    unlocksPriorityQueue: true,
-    unlocksBrandedPdf: true,
-    popular: false,
-  },
 };
 
-// Display order, cheapest first.
-export const PLAN_ORDER: Plan[] = ["free", "basic", "pro", "team"];
+// Display order, cheapest first. Teams / newsrooms / classes are handled
+// via the "For organizations" contact path, not a self-serve plan, because
+// each user reviews their own drafts — there's no shared-workspace value
+// that would justify a self-serve Team tier.
+export const PLAN_ORDER: Plan[] = ["free", "basic", "pro"];
 
 // True when the writer's plan grants access to a given editor.
 export function planIncludesAgent(plan: Plan, agent: AgentName): boolean {

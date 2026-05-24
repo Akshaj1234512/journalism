@@ -31,7 +31,6 @@ export default async function AccountPage() {
       email={user.email ?? ""}
       plan={(profile?.plan as Plan) ?? "free"}
       reviewsUsed={profile?.reviews_used ?? 0}
-      quotaResetAt={profile?.quota_reset_at ?? null}
       memberSince={profile?.created_at ?? user.created_at ?? null}
     />
   );

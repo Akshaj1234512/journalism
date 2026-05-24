@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="7" fill="#FFFFFF"/>
-  <text x="16" y="23"
+  <circle cx="16" cy="16" r="16" fill="#FFFFFF"/>
+  <text x="16" y="22.5"
         text-anchor="middle"
-        font-family="Georgia, 'Times New Roman', serif"
+        font-family="'Iowan Old Style', Charter, Lora, Georgia, 'Times New Roman', serif"
         font-style="italic"
         font-weight="700"
-        font-size="22"
+        font-size="20"
         fill="#DC2626">R</text>
 </svg>

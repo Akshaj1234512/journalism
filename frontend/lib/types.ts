@@ -119,8 +119,8 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     ],
   },
   partisan: {
-    label: "Parker — Partisan Checker",
-    shortLabel: "Partisan",
+    label: "Parker — Fairness",
+    shortLabel: "Fairness",
     firstName: "Parker",
     brandHex: "#EF4444",
     highlightHex: "#FECACA",
@@ -197,8 +197,8 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     ],
   },
   prose_style: {
-    label: "Will — Prose & Style",
-    shortLabel: "Prose & Style",
+    label: "Will — Prose",
+    shortLabel: "Prose",
     firstName: "Will",
     brandHex: "#14B8A6",
     highlightHex: "#99F6E4",

@@ -26,7 +26,6 @@ interface Props {
   email: string;
   plan: Plan;
   reviewsUsed: number;
-  quotaResetAt: string | null;
   memberSince: string | null;
 }
 
@@ -34,7 +33,6 @@ export function AccountView({
   email,
   plan,
   reviewsUsed,
-  quotaResetAt,
   memberSince,
 }: Props) {
   const [signingOut, setSigningOut] = useState(false);
@@ -147,7 +145,7 @@ export function AccountView({
               />
             </div>
             <div className="mt-1.5 text-[11.5px] text-neutral-400">
-              Resets {fmtDate(quotaResetAt)} · {current.reviewsPerMonth} reviews per month total
+              Resets {fmtNextWeeklyReset()} · {current.reviewsPerMonth} reviews per month total
             </div>
           </div>
         </section>
@@ -175,7 +173,7 @@ export function AccountView({
                       Try every editor free for {TRIAL_DAYS} days
                     </div>
                     <div className="mt-0.5 text-[12.5px] leading-relaxed text-neutral-600">
-                      A two-week trial of the Basic plan — all editors
+                      A one-week trial of the Pro plan — all editors
                       unlocked, no credit card required.
                     </div>
                   </div>
@@ -191,7 +189,7 @@ export function AccountView({
           )}
 
           {/* Plan grid */}
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {PLAN_ORDER.map((id) => (
               <PlanCard
                 key={id}
@@ -201,6 +199,19 @@ export function AccountView({
               />
             ))}
           </div>
+
+          {/* Organizations footer — for newsrooms, classes, MFA programs,
+              university departments, anyone who wants 10+ seats or a custom
+              setup. Goes through a sales conversation rather than self-serve. */}
+          <p className="mt-5 text-center text-[12.5px] text-neutral-500">
+            For newsrooms, classes, and writing programs:{" "}
+            <a
+              href="mailto:hello@redroom.com?subject=Red%20Room%20for%20organizations"
+              className="font-medium text-neutral-700 underline decoration-neutral-300 underline-offset-2 transition hover:text-neutral-900 hover:decoration-neutral-600"
+            >
+              talk to us about a custom plan →
+            </a>
+          </p>
 
           {note && (
             <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] text-amber-800">
@@ -402,12 +413,18 @@ function PlanCard({
   );
 }
 
-function fmtDate(iso: string | null): string {
-  if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en-US", {
-    month: "long",
+// "Monday, Jun 22" — the next weekly reset (computed locally). Quota
+// resets every Monday at midnight regardless of what `quotaResetAt` says,
+// because quota tracking is per-week, not per-month.
+function fmtNextWeeklyReset(): string {
+  const d = new Date();
+  const dayOfWeek = d.getDay();                  // 0 = Sun, 1 = Mon, ...
+  const daysUntilMonday = (8 - dayOfWeek) % 7 || 7;
+  d.setDate(d.getDate() + daysUntilMonday);
+  return d.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "short",
     day: "numeric",
-    year: "numeric",
   });
 }
 
