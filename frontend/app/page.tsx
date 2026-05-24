@@ -10,7 +10,16 @@ import { PrintView } from "@/components/PrintView";
 import { SampleDraftsButton } from "@/components/SampleDrafts";
 import { Tutorial } from "@/components/Tutorial";
 import { streamCritique } from "@/lib/stream";
-import { AgentName, CitationStyle, Critique, MODE_AGENTS, Mode } from "@/lib/types";
+import {
+  AgentName,
+  CitationStyle,
+  Critique,
+  ESSAY_TYPE_CHOICES,
+  EssayType,
+  MODE_AGENTS,
+  Mode,
+  getEssaysRoster,
+} from "@/lib/types";
 import { extractTextFromFile } from "@/lib/upload";
 
 const SAMPLE_DRAFT =
@@ -24,11 +33,15 @@ const ARTICLE_KEY = "redroom:article";
 const TUTORIAL_SEEN_KEY = "redroom:tutorial-seen";
 const MODE_KEY = "redroom:mode";
 const CITATION_KEY = "redroom:citation-style";
+const ESSAY_TYPE_KEY = "redroom:essay-type";
+const ESSAY_PROMPT_KEY = "redroom:essay-prompt";
 
 export default function Page() {
   const [article, setArticle] = useState(SAMPLE_DRAFT);
   const [mode, setMode] = useState<Mode>("journalism");
   const [citationStyle, setCitationStyle] = useState<CitationStyle>("none");
+  const [essayType, setEssayType] = useState<EssayType>("none");
+  const [essayPrompt, setEssayPrompt] = useState<string>("");
   const [critiques, setCritiques] = useState<Critique[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "running" | "done" | "error">("idle");
@@ -74,6 +87,19 @@ export default function Page() {
       }
     } catch {}
     try {
+      const et = localStorage.getItem(ESSAY_TYPE_KEY);
+      if (
+        et &&
+        ["argumentative", "analytical", "narrative", "research", "rhetorical", "none"].includes(et)
+      ) {
+        setEssayType(et as EssayType);
+      }
+    } catch {}
+    try {
+      const ep = localStorage.getItem(ESSAY_PROMPT_KEY);
+      if (ep) setEssayPrompt(ep);
+    } catch {}
+    try {
       const seen = localStorage.getItem(TUTORIAL_SEEN_KEY);
       if (!seen) setTutorialOpen(true);
     } catch {}
@@ -86,6 +112,14 @@ export default function Page() {
   useEffect(() => {
     try { localStorage.setItem(CITATION_KEY, citationStyle); } catch {}
   }, [citationStyle]);
+
+  useEffect(() => {
+    try { localStorage.setItem(ESSAY_TYPE_KEY, essayType); } catch {}
+  }, [essayType]);
+
+  useEffect(() => {
+    try { localStorage.setItem(ESSAY_PROMPT_KEY, essayPrompt); } catch {}
+  }, [essayPrompt]);
 
   useEffect(() => {
     try {
@@ -150,9 +184,11 @@ export default function Page() {
         disabledAgents: Array.from(disabledAgents),
         mode,
         citationStyle,
+        essayType,
+        essayPrompt: essayPrompt.trim(),
       },
     );
-  }, [article, disabledAgents, mode, citationStyle]);
+  }, [article, disabledAgents, mode, citationStyle, essayType, essayPrompt]);
 
   const onSelectCritique = useCallback(
     (id: string | null) => {
@@ -263,7 +299,10 @@ export default function Page() {
     [onUploadFile],
   );
 
-  const modeRoster = MODE_AGENTS[mode];
+  // The essays rail grows when an essay type is picked (Sol + the matching
+  // Purpose Editor are appended). Journalism rail is fixed.
+  const modeRoster =
+    mode === "essays" ? getEssaysRoster(essayType) : MODE_AGENTS.journalism;
   const totalAgents = modeRoster.length;
   const enabledCount = modeRoster.filter((a) => !disabledAgents.has(a)).length;
 
@@ -292,13 +331,12 @@ export default function Page() {
         </div>
 
         <div className="flex shrink-0 items-center gap-3">
-          <ModeSwitcher mode={mode} onChange={setMode} />
-          {mode === "essays" && (
-            <CitationStylePicker value={citationStyle} onChange={setCitationStyle} />
-          )}
-          <span className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
+          <div data-tutorial="mode">
+            <ModeSwitcher mode={mode} onChange={setMode} />
+          </div>
+          <span className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            {enabledCount} of {totalAgents} editors active
+            {enabledCount} of {totalAgents} active
           </span>
           <button
             onClick={() => setTutorialOpen(true)}
@@ -329,6 +367,31 @@ export default function Page() {
           <AccountMenu />
         </div>
       </header>
+
+      {/* Essay-mode sub-toolbar. Quieter than the header; only appears when
+          the writer is in essays mode. Groups the three essay-shaped
+          controls so they don't crowd the brand row. */}
+      {mode === "essays" && (
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-neutral-200 bg-stone-50 px-7 py-2">
+          <div data-tutorial="essay-type">
+            <EssayTypePicker value={essayType} onChange={setEssayType} />
+          </div>
+          <div data-tutorial="essay-prompt">
+            <PromptBoxButton
+              value={essayPrompt}
+              onChange={setEssayPrompt}
+              disabled={essayType === "none"}
+            />
+          </div>
+          <div data-tutorial="citation">
+            <CitationStylePicker value={citationStyle} onChange={setCitationStyle} />
+          </div>
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] text-neutral-500 lg:hidden">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            {enabledCount} of {totalAgents} editors active
+          </span>
+        </div>
+      )}
 
       <div className="flex flex-1 overflow-hidden">
         <div data-tutorial="rail" className="flex shrink-0">
@@ -449,7 +512,12 @@ export default function Page() {
       </div>
 
       {/* Tutorial overlay (portals to body) */}
-      <Tutorial open={tutorialOpen} onClose={onCompleteTutorial} />
+      <Tutorial
+        open={tutorialOpen}
+        onClose={onCompleteTutorial}
+        mode={mode}
+        onSetMode={setMode}
+      />
 
       {/* Hidden print view — visible only when window.print() runs */}
       <PrintView
@@ -506,6 +574,164 @@ function ModeChip({
   );
 }
 
+function EssayTypePicker({
+  value,
+  onChange,
+}: {
+  value: EssayType;
+  onChange: (v: EssayType) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const choice = ESSAY_TYPE_CHOICES.find((c) => c.value === value) ?? ESSAY_TYPE_CHOICES[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const onMouse = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", onMouse);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onMouse);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative inline-flex">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800 transition hover:bg-neutral-50"
+      >
+        <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
+          Essay
+        </span>
+        <span className="font-medium">{choice.label}</span>
+        <span aria-hidden className="text-neutral-400">▾</span>
+      </button>
+      {open && (
+        <div
+          role="listbox"
+          className="absolute left-0 top-[calc(100%+6px)] z-40 w-[320px] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-xl"
+        >
+          {ESSAY_TYPE_CHOICES.map((c) => {
+            const active = c.value === value;
+            return (
+              <button
+                key={c.value}
+                role="option"
+                aria-selected={active}
+                onClick={() => { onChange(c.value); setOpen(false); }}
+                className={[
+                  "block w-full px-3 py-2 text-left transition",
+                  active ? "bg-neutral-100" : "hover:bg-neutral-50",
+                ].join(" ")}
+              >
+                <div className="text-[12.5px] font-semibold text-neutral-900">
+                  {c.label}
+                  {active && <span className="ml-1.5 text-emerald-600">✓</span>}
+                </div>
+                <div className="mt-0.5 text-[11px] leading-snug text-neutral-500">
+                  {c.examples}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PromptBoxButton({
+  value,
+  onChange,
+  disabled,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  disabled: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const has = value.trim().length > 0;
+  return (
+    <div className="relative inline-flex">
+      <button
+        type="button"
+        onClick={() => !disabled && setOpen((o) => !o)}
+        disabled={disabled}
+        title={
+          disabled
+            ? "Pick an essay type first; the prompt goes to the matching purpose editor."
+            : has
+              ? "Edit the assignment prompt the purpose editor sees."
+              : "Paste the assignment prompt or rubric so the purpose editor tailors its feedback."
+        }
+        className={[
+          "inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11.5px] font-medium transition",
+          disabled
+            ? "cursor-not-allowed border-neutral-200 bg-neutral-50 text-neutral-300"
+            : has
+              ? "border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+              : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
+        ].join(" ")}
+      >
+        <span aria-hidden>{has ? "✓" : "+"}</span>
+        {has ? "Prompt added" : "Add prompt"}
+      </button>
+      {open && (
+        <div
+          role="dialog"
+          className="absolute left-0 top-[calc(100%+6px)] z-50 w-[360px] max-w-[calc(100vw-32px)] rounded-2xl border border-neutral-200 bg-white p-4 shadow-xl"
+        >
+          <div className="mb-1.5 flex items-start justify-between">
+            <div className="leading-tight">
+              <div className="text-[12px] font-semibold text-neutral-900">
+                Assignment prompt or context
+              </div>
+              <div className="text-[10.5px] text-neutral-500">
+                Optional. The purpose editor will tailor feedback to what the rubric asks for.
+              </div>
+            </div>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Close"
+              className="-mr-1 -mt-1 rounded-full p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700"
+            >
+              ✕
+            </button>
+          </div>
+          <textarea
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Paste the assignment prompt, rubric, or any context the editor should know about this essay."
+            className="mt-1 h-40 w-full resize-none rounded-lg border border-neutral-200 bg-stone-50 p-2 text-[12px] leading-snug text-neutral-800 focus:border-neutral-400 focus:outline-none"
+          />
+          <div className="mt-2 flex items-center justify-between">
+            <button
+              onClick={() => {
+                onChange("");
+              }}
+              className="text-[11px] font-medium text-neutral-500 hover:text-neutral-800 hover:underline"
+            >
+              Clear
+            </button>
+            <button
+              onClick={() => setOpen(false)}
+              className="rounded-lg bg-neutral-900 px-3 py-1.5 text-[11.5px] font-semibold text-white hover:bg-neutral-700"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CitationStylePicker({
   value,
   onChange,
@@ -513,8 +739,15 @@ function CitationStylePicker({
   value: CitationStyle;
   onChange: (v: CitationStyle) => void;
 }) {
+  const labels: Record<CitationStyle, string> = {
+    none: "Not specified",
+    mla: "MLA",
+    apa: "APA",
+    chicago: "Chicago",
+    turabian: "Turabian",
+  };
   return (
-    <label className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
+    <label className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800">
       <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
         Style
       </span>
@@ -522,6 +755,7 @@ function CitationStylePicker({
         value={value}
         onChange={(e) => onChange(e.target.value as CitationStyle)}
         className="cursor-pointer border-0 bg-transparent text-[11.5px] font-medium text-neutral-800 focus:outline-none focus:ring-0"
+        title={labels[value]}
       >
         <option value="none">Not specified</option>
         <option value="mla">MLA</option>

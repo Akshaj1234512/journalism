@@ -20,9 +20,28 @@ from red_room.agents.evidence_quotation import EvidenceQuotation
 from red_room.agents.prose_style import ProseStyle
 from red_room.agents.structure_editor import StructureEditor
 from red_room.agents.logic_auditor import LogicAuditor
-from red_room.agents.counterargument import Counterargument
 from red_room.agents.citation_editor import CitationEditor
-from red_room.schemas import CitationStyle, Critique, Mode, RedRoomResult
+from red_room.agents.argumentative_editor import ArgumentativeEditor
+from red_room.agents.analytical_editor import AnalyticalEditor
+from red_room.agents.narrative_editor import NarrativeEditor
+from red_room.agents.research_editor import ResearchEditor
+from red_room.agents.rhetorical_editor import RhetoricalEditor
+from red_room.schemas import (
+    CitationStyle,
+    Critique,
+    EssayType,
+    Mode,
+    RedRoomResult,
+)
+
+
+_PURPOSE_EDITORS = {
+    "argumentative": ArgumentativeEditor,
+    "analytical": AnalyticalEditor,
+    "narrative": NarrativeEditor,
+    "research": ResearchEditor,
+    "rhetorical": RhetoricalEditor,
+}
 
 
 @dataclass
@@ -53,25 +72,34 @@ def default_agents(
     client: AsyncAnthropic | None = None,
     mode: Mode = "journalism",
     citation_style: CitationStyle = "none",
+    essay_type: EssayType = "none",
+    essay_prompt: str | None = None,
 ) -> list[BaseAgent]:
     """Return the roster for the requested mode.
 
     `journalism` returns the six press editors. `essays` returns the seven
-    English/history editors. Each persona is one Anthropic call dispatched in
-    parallel by `run` / `stream`.
+    craft editors + Sol + (when `essay_type` is set) the matching Purpose
+    Editor. Each persona is one Anthropic call dispatched in parallel by
+    `run` / `stream`.
     """
     # More retry headroom for transient 529s (see BaseAgent.__init__).
     client = client or AsyncAnthropic(max_retries=6)
     if mode == "essays":
-        return [
+        roster: list[BaseAgent] = [
             ThesisEditor(client=client),
             EvidenceQuotation(client=client),
             ProseStyle(client=client),
             StructureEditor(client=client),
             LogicAuditor(client=client),
-            Counterargument(client=client),
             CitationEditor(client=client, citation_style=citation_style),
+            QuestionMaster(client=client),
         ]
+        # Add the Purpose Editor that matches the writer's chosen essay type.
+        # `none` skips it. Only one runs per review.
+        purpose_cls = _PURPOSE_EDITORS.get(essay_type)
+        if purpose_cls is not None:
+            roster.append(purpose_cls(client=client, essay_prompt=essay_prompt))
+        return roster
     return [
         LegalSkeptic(client=client),
         DataExpert(client=client),

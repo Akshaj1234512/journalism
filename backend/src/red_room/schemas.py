@@ -9,18 +9,31 @@ AgentName = Literal[
     "clarity",
     "partisan",
     "question_master",
-    # Essays mode (English + History — core argumentative roster).
+    # Essays mode (core craft roster — runs on every essay).
     "thesis_editor",
     "evidence_quotation",
     "prose_style",
     "structure_editor",
     "logic_auditor",
-    "counterargument",
     "citation_editor",
+    # Purpose editors — exactly one runs per essay, picked by essay_type.
+    "argumentative_editor",
+    "analytical_editor",
+    "narrative_editor",
+    "research_editor",
+    "rhetorical_editor",
 ]
 
 Mode = Literal["journalism", "essays"]
 CitationStyle = Literal["mla", "apa", "chicago", "turabian", "none"]
+EssayType = Literal[
+    "argumentative",
+    "analytical",
+    "narrative",
+    "research",
+    "rhetorical",
+    "none",
+]
 
 Severity = Literal["high", "medium", "low"]
 
@@ -65,6 +78,19 @@ class CritiqueRequest(BaseModel):
         default="none",
         description="Citation format the essay is written in (MLA, APA, Chicago, "
         "Turabian). Used only by the citation_editor in essays mode.",
+    )
+    essay_type: EssayType = Field(
+        default="none",
+        description="Which kind of essay this is. Routes to the matching "
+        "Purpose Editor: 'argumentative' -> Ari, 'analytical' -> Anya, "
+        "'narrative' -> Nora, 'research' -> Reese, 'rhetorical' -> Rhea. "
+        "'none' runs no purpose editor.",
+    )
+    essay_prompt: str | None = Field(
+        default=None,
+        description="Optional assignment prompt or context the writer pastes in. "
+        "Only the matching Purpose Editor sees it; core craft editors ignore it. "
+        "Lets the purpose editor tailor feedback to what the rubric asked for.",
     )
     disabled_agents: list[str] | None = Field(
         default=None,

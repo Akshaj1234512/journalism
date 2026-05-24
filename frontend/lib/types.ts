@@ -6,19 +6,31 @@ export type AgentName =
   | "clarity"
   | "partisan"
   | "question_master"
-  // Essays mode
+  // Essays core (always runs)
   | "thesis_editor"
   | "evidence_quotation"
   | "prose_style"
   | "structure_editor"
   | "logic_auditor"
-  | "counterargument"
-  | "citation_editor";
+  | "citation_editor"
+  // Purpose editors — exactly one runs per essay, picked by essay_type
+  | "argumentative_editor"
+  | "analytical_editor"
+  | "narrative_editor"
+  | "research_editor"
+  | "rhetorical_editor";
 
 export type Severity = "high" | "medium" | "low";
 
 export type Mode = "journalism" | "essays";
 export type CitationStyle = "mla" | "apa" | "chicago" | "turabian" | "none";
+export type EssayType =
+  | "argumentative"
+  | "analytical"
+  | "narrative"
+  | "research"
+  | "rhetorical"
+  | "none";
 
 export interface Critique {
   agent: AgentName;
@@ -242,7 +254,7 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     ],
   },
   logic_auditor: {
-    label: "Logan — Logic Auditor",
+    label: "Logan — Logic & Counter-argument",
     shortLabel: "Logic",
     firstName: "Logan",
     brandHex: "#0891B2",
@@ -252,31 +264,12 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     kind: "flagger",
     mode: "essays",
     tagline:
-      "Audits the reasoning. Catches sequence-mistaken-for-cause, key terms that shift meaning, and conclusions that do not follow.",
+      "Audits the reasoning and the engagement with opposing views. Catches sequence-as-cause, shifted key terms, missing counter-arguments, hand-wave rebuttals, and concessions that should have changed the claim.",
     lookFor: [
-      "Sequence read as causation (post hoc)",
-      "Key term shifts meaning across the essay",
-      "Generalization at a scope the evidence does not support",
-      "Conclusion that does not follow from the cited passage",
-    ],
-  },
-  counterargument: {
-    label: "Cass — Counter-argument",
-    shortLabel: "Counter",
-    firstName: "Cass",
-    brandHex: "#C026D3",
-    highlightHex: "#F5D0FE",
-    borderClass: "border-fuchsia-600",
-    available: true,
-    kind: "flagger",
-    mode: "essays",
-    tagline:
-      "Brings in the strongest version of the other side. Flags missing naysayers, straw counters, and hand-wave rebuttals.",
-    lookFor: [
+      "Sequence read as causation, or correlation asserted as mechanism",
+      "Key term that shifts meaning across the essay",
       "No counter-argument anywhere in a contested thesis",
-      "Straw counter the strongest critic would not hold",
-      "\"Some argue X\" with no actual engagement",
-      "Concession that, taken seriously, would undermine the thesis",
+      "Hand-wave rebuttal or concession that doesn't modify the claim",
     ],
   },
   citation_editor: {
@@ -298,8 +291,109 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
       "Body citation with no matching back-matter entry",
     ],
   },
+
+  // Purpose editors — exactly one runs per essay, picked by essay_type.
+  argumentative_editor: {
+    label: "Ari — Argumentative Editor",
+    shortLabel: "Argument",
+    firstName: "Ari",
+    brandHex: "#EA580C",
+    highlightHex: "#FED7AA",
+    borderClass: "border-orange-600",
+    available: true,
+    kind: "flagger",
+    mode: "essays",
+    tagline:
+      "Reads your essay as an argument. Catches claims that list rather than compound, hidden warrants, wrong audience, and conclusions that overreach or underreach what the body actually built.",
+    lookFor: [
+      "Points listed in parallel that never compound into a case",
+      "Hidden warrant: the assumption linking evidence to claim",
+      "Concession that does not modify the claim",
+      "Conclusion that overreaches or underreaches the body",
+    ],
+  },
+  analytical_editor: {
+    label: "Anya — Analytical Editor",
+    shortLabel: "Analysis",
+    firstName: "Anya",
+    brandHex: "#9333EA",
+    highlightHex: "#E9D5FF",
+    borderClass: "border-purple-600",
+    available: true,
+    kind: "flagger",
+    mode: "essays",
+    tagline:
+      "Reads your essay as analysis. Catches summary masquerading as analysis, missing close-reading, sweeping claims without pattern, and interpretations the text could not actually push back on.",
+    lookFor: [
+      "Summary or paraphrase where analysis was required",
+      "Generalization without close attention to the text",
+      "One moment over-extracted with no supporting pattern",
+      "Reading so safe it carries no interpretive risk",
+    ],
+  },
+  narrative_editor: {
+    label: "Nora — Personal-Essay Editor",
+    shortLabel: "Narrative",
+    firstName: "Nora",
+    brandHex: "#DB2777",
+    highlightHex: "#FBCFE8",
+    borderClass: "border-pink-600",
+    available: true,
+    kind: "flagger",
+    mode: "essays",
+    tagline:
+      "Reads your essay as personal narrative. Catches summary instead of scene, lessons stated rather than earned, false vulnerability, and the generic voice that buries what only you could write.",
+    lookFor: [
+      "Telling the reader what to feel instead of showing the moment",
+      "Lesson handed to the reader rather than earned by the writing",
+      "Voice flattened into the generic college-essay register",
+      "The 'everyone essay': could be written by any applicant",
+    ],
+  },
+  research_editor: {
+    label: "Reese — Research Editor",
+    shortLabel: "Research",
+    firstName: "Reese",
+    brandHex: "#0F766E",
+    highlightHex: "#CCFBF1",
+    borderClass: "border-teal-700",
+    available: true,
+    kind: "flagger",
+    mode: "essays",
+    tagline:
+      "Reads your essay as a research contribution. Catches source-by-source summary, sources that do not talk to each other, citation thickets, and an essay that reports the field without entering it.",
+    lookFor: [
+      "Sources summarized one after another with no synthesis",
+      "Writer's voice missing; the paragraph is ventriloquism",
+      "Wrong source type for the weight of the claim",
+      "Reports that scholars disagree without entering the disagreement",
+    ],
+  },
+  rhetorical_editor: {
+    label: "Rhea — Rhetorical-Analysis Editor",
+    shortLabel: "Rhetoric",
+    firstName: "Rhea",
+    brandHex: "#B91C1C",
+    highlightHex: "#FECACA",
+    borderClass: "border-red-700",
+    available: true,
+    kind: "flagger",
+    mode: "essays",
+    tagline:
+      "Reads your essay as rhetorical analysis. Catches device-spotting without effect, missing audience or moment (kairos), and 'ethos / pathos / logos' used as labels instead of analyzed work.",
+    lookFor: [
+      "Devices named without analysis of what they do",
+      "Audience or moment (kairos) missing from the reading",
+      "Greek-term inflation: ethos / pathos / logos as labels, not analysis",
+      "Conclusion that restates instead of landing a claim",
+    ],
+  },
 };
 
+// Base roster per mode. For essays, the matching purpose editor (and Sol)
+// are appended at runtime by getEssaysRoster() based on the writer's chosen
+// essay_type. Sol is always part of the essays rail; the purpose editor only
+// appears when a type is picked.
 export const MODE_AGENTS: Record<Mode, AgentName[]> = {
   journalism: [
     "legal_skeptic",
@@ -315,7 +409,64 @@ export const MODE_AGENTS: Record<Mode, AgentName[]> = {
     "prose_style",
     "structure_editor",
     "logic_auditor",
-    "counterargument",
     "citation_editor",
   ],
 };
+
+export const PURPOSE_EDITOR_BY_TYPE: Record<
+  Exclude<EssayType, "none">,
+  AgentName
+> = {
+  argumentative: "argumentative_editor",
+  analytical: "analytical_editor",
+  narrative: "narrative_editor",
+  research: "research_editor",
+  rhetorical: "rhetorical_editor",
+};
+
+export function getEssaysRoster(essayType: EssayType): AgentName[] {
+  const roster: AgentName[] = [...MODE_AGENTS.essays, "question_master"];
+  if (essayType !== "none") {
+    roster.push(PURPOSE_EDITOR_BY_TYPE[essayType]);
+  }
+  return roster;
+}
+
+export interface EssayTypeChoice {
+  value: EssayType;
+  label: string;       // short pill label
+  examples: string;    // examples shown in the dropdown
+}
+
+export const ESSAY_TYPE_CHOICES: EssayTypeChoice[] = [
+  {
+    value: "none",
+    label: "Not sure / skip",
+    examples: "no purpose editor will run",
+  },
+  {
+    value: "argumentative",
+    label: "Argumentative",
+    examples: "op-ed, policy paper, persuasive essay, debate brief",
+  },
+  {
+    value: "analytical",
+    label: "Analytical",
+    examples: "literary analysis, history paper, film essay, art critique",
+  },
+  {
+    value: "narrative",
+    label: "Personal",
+    examples: "college admissions essay, memoir, reflective writing",
+  },
+  {
+    value: "research",
+    label: "Research",
+    examples: "research paper, AP synthesis essay, source-based paper",
+  },
+  {
+    value: "rhetorical",
+    label: "Rhetorical",
+    examples: "speech / ad / text breakdown, AP English Lang prompt",
+  },
+];

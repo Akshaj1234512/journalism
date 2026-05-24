@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
 
 from red_room import orchestrator
-from red_room.schemas import CitationStyle, CritiqueRequest, Mode
+from red_room.schemas import CitationStyle, CritiqueRequest, EssayType, Mode
 
 
 load_dotenv()
@@ -35,6 +35,8 @@ def _filtered_agents(
     disabled: list[str] | None,
     mode: Mode,
     citation_style: CitationStyle,
+    essay_type: EssayType,
+    essay_prompt: str | None,
 ):
     """Build the roster for this request, skipping any agent the user has
     turned off in the UI. Disabled agents are dropped here so they never
@@ -42,7 +44,12 @@ def _filtered_agents(
     disabled_set = set(disabled or [])
     return [
         a
-        for a in orchestrator.default_agents(mode=mode, citation_style=citation_style)
+        for a in orchestrator.default_agents(
+            mode=mode,
+            citation_style=citation_style,
+            essay_type=essay_type,
+            essay_prompt=essay_prompt,
+        )
         if a.name not in disabled_set
     ]
 
@@ -54,7 +61,13 @@ async def critique(req: CritiqueRequest) -> dict:
     result = await orchestrator.run(
         req.article,
         article_id=req.article_id,
-        agents=_filtered_agents(req.disabled_agents, req.mode, req.citation_style),
+        agents=_filtered_agents(
+            req.disabled_agents,
+            req.mode,
+            req.citation_style,
+            req.essay_type,
+            req.essay_prompt,
+        ),
     )
     return result.model_dump()
 
@@ -63,7 +76,13 @@ async def critique(req: CritiqueRequest) -> dict:
 async def critique_stream(req: CritiqueRequest) -> EventSourceResponse:
     """SSE endpoint consumed by the frontend. Emits one event per agent
     state change so critiques pop into the sidebar as they are produced."""
-    agents = _filtered_agents(req.disabled_agents, req.mode, req.citation_style)
+    agents = _filtered_agents(
+        req.disabled_agents,
+        req.mode,
+        req.citation_style,
+        req.essay_type,
+        req.essay_prompt,
+    )
 
     async def event_iter():
         async for event in orchestrator.stream(

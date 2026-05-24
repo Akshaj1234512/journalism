@@ -3,38 +3,73 @@
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { Mode } from "@/lib/types";
+
 interface Step {
   /** data-tutorial attribute value to anchor the spotlight to. Omit for centered cards. */
   target?: string;
   /** Side of the target to place the card on. Defaults to a sensible auto pick. */
   side?: "top" | "bottom" | "left" | "right";
-  /** Small eyebrow above the title, e.g. "Step 1 of 8". Filled automatically. */
   title: string;
   body: string;
   /** Optional accent colour for the card top border. */
   accent?: string;
+  /** If set, the tutorial switches the app into this mode before showing
+   *  the step (so the targeted control is actually rendered). */
+  requireMode?: Mode;
 }
 
 const STEPS: Step[] = [
   {
     title: "Welcome to The Red Room",
     body:
-      "An independent team of AI editors reads your draft and flags what a real newsroom would catch in a pre-publication review. This thirty-second tour walks through everything.",
+      "An independent team of AI editors reads your draft and flags what a real newsroom or writing-centre would catch before you submit. The room handles both journalism drafts and high-school / college essays. This minute-long tour walks through both.",
     accent: "#DC2626",
+  },
+  {
+    target: "mode",
+    side: "bottom",
+    title: "Two modes: journalism and essays",
+    body:
+      "Switch at the top between Journalism (six press editors: legal, data, source-protection, clarity, fairness, deep questions) and Essays (seven craft editors for thesis, evidence, prose, structure, logic, counter-argument, and citations, plus a specialised purpose editor and Sol the question master). Switching swaps the entire editor roster on the left rail.",
   },
   {
     target: "rail",
     side: "right",
-    title: "Meet the six editors",
+    title: "Meet the editors",
     body:
-      "Each editor specialises in one kind of journalistic risk: legal, statistical, source protection, clarity, fairness, and deep questions. Click any of them to read what they look for, or to turn them off for this review. You can scroll down the list to see each editor.",
+      "Each editor specialises in one lane. Click any of them to read what they look for, or to turn them off for this review. The list updates whenever you switch modes; scroll to see all of them.",
+  },
+  {
+    target: "essay-type",
+    side: "bottom",
+    requireMode: "essays",
+    title: "Pick your essay type",
+    body:
+      "When you switch to essays mode, this dropdown appears. Pick the kind of essay you're writing (argumentative, analytical, personal, research, or rhetorical) and a specialised Purpose Editor is added to the roster who reads against THAT genre's standards. Each option shows examples so you know which one fits.",
+  },
+  {
+    target: "essay-prompt",
+    side: "bottom",
+    requireMode: "essays",
+    title: "Paste the assignment prompt",
+    body:
+      "Click + Add prompt to paste the actual rubric or assignment your teacher gave you. Only the matching Purpose Editor sees it, and it uses the prompt to give feedback specifically aimed at what was asked. Optional, but it sharpens the review significantly.",
+  },
+  {
+    target: "citation",
+    side: "bottom",
+    requireMode: "essays",
+    title: "Set your citation style",
+    body:
+      "If you're using MLA, APA, Chicago, or Turabian, pick it here. Kate the Citation Editor will check your in-text citations and works-cited entries against that style's rules. Leave it on Not specified if your essay isn't using a formal style.",
   },
   {
     target: "editor",
     side: "left",
     title: "Your draft goes here",
     body:
-      "Paste an article, drag in a Word .docx or .txt file, or just type. The room reads up to about fifteen hundred words at a time. Your draft is saved in this browser so a refresh won't lose it.",
+      "Paste an article or essay, drag in a Word .docx or .txt file, or just type. The room reads up to about fifteen hundred words at a time. Your draft is saved in this browser so a refresh won't lose it.",
   },
   {
     target: "upload",
@@ -67,7 +102,7 @@ const STEPS: Step[] = [
   {
     title: "One last thing",
     body:
-      "The agents can be wrong. They're grounded in real press-regulator rulings and editorial standards, but they're still AI. Treat every note as a question to consider, not an instruction you must follow.",
+      "The agents can be wrong. They're grounded in real press-regulator rulings, editorial standards, and writing-centre research, but they're still AI. Treat every note as a question to consider, not an instruction you must follow.",
     accent: "#DC2626",
   },
 ];
@@ -79,9 +114,11 @@ const VIEWPORT_PADDING = 16;
 interface Props {
   open: boolean;
   onClose: () => void;
+  mode: Mode;
+  onSetMode: (m: Mode) => void;
 }
 
-export function Tutorial({ open, onClose }: Props) {
+export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [cardPos, setCardPos] = useState<{ top: number; left: number; arrow?: "top" | "bottom" | "left" | "right"; centered?: boolean } | null>(null);
@@ -101,6 +138,15 @@ export function Tutorial({ open, onClose }: Props) {
   useEffect(() => {
     if (open) setStep(0);
   }, [open]);
+
+  // If the active step requires a specific mode (e.g. essay-toolbar steps
+  // need essays mode), switch the app into it before measuring so the
+  // targeted control is actually rendered.
+  useEffect(() => {
+    if (!open) return;
+    const need = STEPS[step].requireMode;
+    if (need && need !== mode) onSetMode(need);
+  }, [open, step, mode, onSetMode]);
 
   // Compute spotlight + card position whenever the active step changes.
   useLayoutEffect(() => {

@@ -1,4 +1,4 @@
-import { Critique, AgentName, CitationStyle, Mode } from "./types";
+import { Critique, AgentName, CitationStyle, EssayType, Mode } from "./types";
 
 type StreamEvent =
   | { kind: "agent_start"; agent: string }
@@ -26,6 +26,8 @@ interface StreamOptions {
   disabledAgents?: AgentName[];
   mode?: Mode;
   citationStyle?: CitationStyle;
+  essayType?: EssayType;
+  essayPrompt?: string;
 }
 
 export function streamCritique(
@@ -35,7 +37,13 @@ export function streamCritique(
   options: StreamOptions = {},
 ): AbortController {
   const controller = new AbortController();
-  const { disabledAgents = [], mode = "journalism", citationStyle = "none" } = options;
+  const {
+    disabledAgents = [],
+    mode = "journalism",
+    citationStyle = "none",
+    essayType = "none",
+    essayPrompt = "",
+  } = options;
 
   (async () => {
     try {
@@ -47,6 +55,8 @@ export function streamCritique(
           disabled_agents: disabledAgents,
           mode,
           citation_style: citationStyle,
+          essay_type: essayType,
+          essay_prompt: essayPrompt || null,
         }),
         signal: controller.signal,
       });

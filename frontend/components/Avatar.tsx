@@ -61,8 +61,12 @@ const AVATARS: Record<AgentName, () => React.ReactNode> = {
   prose_style: WillAvatar,
   structure_editor: StellaAvatar,
   logic_auditor: LoganAvatar,
-  counterargument: CassAvatar,
   citation_editor: KateAvatar,
+  argumentative_editor: AriAvatar,
+  analytical_editor: AnyaAvatar,
+  narrative_editor: NoraAvatar,
+  research_editor: ReeseAvatar,
+  rhetorical_editor: RheaAvatar,
 };
 
 /* Anne — Legal Skeptic. Pink background, sharp dark bob, slight angle. */
@@ -266,25 +270,100 @@ function LoganAvatar() {
   );
 }
 
-/* Cass — Counter-argument. Fuchsia, expressive eyebrow, half-smile. */
-function CassAvatar() {
+/* Ari — Argumentative Editor. Orange, intense, sharp jaw, debater. */
+function AriAvatar() {
   return (
     <>
-      <circle cx="40" cy="40" r="40" fill="#F5D0FE" />
-      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#86198F" />
-      <rect x="34" y="42" width="12" height="10" fill="#F9A8D4" />
-      <circle cx="40" cy="34" r="14" fill="#FBCFE8" />
-      {/* hair — shoulder-length wavy */}
-      <path d="M24 30 Q 22 16, 40 14 Q 58 16, 56 30 Q 56 42, 54 46 L 50 28 Q 40 22, 30 28 L 26 46 Q 24 42, 24 30 Z" fill="#3F2E1A" />
+      <circle cx="40" cy="40" r="40" fill="#FED7AA" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#9A3412" />
+      <rect x="34" y="42" width="12" height="10" fill="#A78B6E" />
+      <circle cx="40" cy="34" r="14" fill="#C39A75" />
+      {/* hair — short, parted, intense */}
+      <path d="M27 28 Q 28 17, 40 15 Q 52 17, 53 28 L 50 26 Q 40 22, 30 26 Z" fill="#1F2937" />
       <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
       <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
-      {/* raised eyebrow on the left — the naysayer */}
-      <path d="M32 30 Q 35 27, 38 30" stroke="#1F2937" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-      <path d="M42 30 L 48 30" stroke="#1F2937" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M36 42 Q 40 44, 45 41" stroke="#86198F" strokeWidth="1.3" fill="none" strokeLinecap="round" />
+      <path d="M32 30 L 38 30" stroke="#1F2937" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M42 30 L 48 30" stroke="#1F2937" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M36 42 L 44 42" stroke="#9A3412" strokeWidth="1.4" strokeLinecap="round" />
     </>
   );
 }
+
+/* Anya — Analytical Editor. Purple, sharp eyes, attentive reader. */
+function AnyaAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#E9D5FF" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#6B21A8" />
+      <rect x="34" y="42" width="12" height="10" fill="#F9A8D4" />
+      <circle cx="40" cy="34" r="14" fill="#FBCFE8" />
+      {/* hair — long, parted middle */}
+      <path d="M24 30 Q 22 16, 40 14 Q 58 16, 56 30 Q 56 44, 54 48 L 50 28 Q 40 22, 30 28 L 26 48 Q 24 44, 24 30 Z" fill="#1F2937" />
+      {/* part */}
+      <line x1="40" y1="16" x2="40" y2="22" stroke="#0F0F0F" strokeWidth="0.8" />
+      <circle cx="35" cy="34" r="1.6" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.6" fill="#1F2937" />
+      <path d="M36 41 Q 40 42, 44 41" stroke="#6B21A8" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Nora — Personal-Essay Editor. Warm pink, soft, generous expression. */
+function NoraAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#FBCFE8" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#9D174D" />
+      <rect x="34" y="42" width="12" height="10" fill="#E8C9A0" />
+      <circle cx="40" cy="34" r="14" fill="#F3D9B8" />
+      {/* hair — soft wavy shoulder-length */}
+      <path d="M24 28 Q 22 14, 40 13 Q 58 14, 56 28 Q 58 38, 54 46 L 50 26 Q 40 22, 30 26 L 26 46 Q 22 38, 24 28 Z" fill="#7C2D12" />
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      {/* warm smile */}
+      <path d="M35 41 Q 40 45, 45 41" stroke="#9D174D" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Reese — Research Editor. Teal, big round glasses, librarian energy. */
+function ReeseAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#CCFBF1" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#115E59" />
+      <rect x="34" y="42" width="12" height="10" fill="#D6B59A" />
+      <circle cx="40" cy="34" r="14" fill="#EFD3B2" />
+      {/* hair — short bob */}
+      <path d="M24 30 Q 22 18, 40 16 Q 58 18, 56 30 Q 56 34, 54 36 L 50 26 Q 40 22, 30 26 L 26 36 Q 24 34, 24 30 Z" fill="#1F2937" />
+      {/* big round glasses */}
+      <circle cx="34" cy="34" r="4.5" stroke="#0F172A" strokeWidth="1.3" fill="none" />
+      <circle cx="46" cy="34" r="4.5" stroke="#0F172A" strokeWidth="1.3" fill="none" />
+      <line x1="38.5" y1="34" x2="41.5" y2="34" stroke="#0F172A" strokeWidth="1.3" />
+      <path d="M36 42 Q 40 43, 44 42" stroke="#115E59" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Rhea — Rhetorical-Analysis Editor. Red, expressive, orator's energy. */
+function RheaAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#FECACA" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#7F1D1D" />
+      <rect x="34" y="42" width="12" height="10" fill="#F9A8D4" />
+      <circle cx="40" cy="34" r="14" fill="#FBCFE8" />
+      {/* hair — high updo with curl */}
+      <path d="M26 30 Q 22 16, 32 14 Q 36 10, 40 12 Q 44 10, 48 14 Q 58 16, 54 30 Q 50 24, 44 24 Q 40 20, 36 24 Q 30 24, 26 30 Z" fill="#3F2E1A" />
+      <ellipse cx="40" cy="11" rx="5" ry="3.5" fill="#3F2E1A" />
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      {/* expressive open-ish mouth (the speaker) */}
+      <ellipse cx="40" cy="42" rx="3" ry="1.6" fill="#7F1D1D" />
+    </>
+  );
+}
+
 
 /* Kate — Citation Editor. Stone background, scholarly, glasses on chain. */
 function KateAvatar() {
