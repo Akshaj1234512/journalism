@@ -14,7 +14,7 @@
     span: [40, 84]
     issue_label: dropped quotation
     question: |-
-      The Hamlet line lands cold between two of your sentences with no signal phrase, no act and scene, no speaker. Graff and Birkenstein call this the 'hit and run' quotation: the writer drops the words and runs. Who is speaking, where, and why is it in your paragraph?
+      The Hamlet line lands cold between two of your sentences with no signal phrase, no act and scene, no speaker. The writer drops the words and runs. Who is speaking, where, and why is it in your paragraph?
     why_it_matters: |-
       A reader who does not already know the soliloquy has no idea whose voice this is or what work it is doing in your argument, and the claim about paralysis floats free of the text.
     fix_suggestion: |-
@@ -103,7 +103,7 @@
     span: [80, 173]
     issue_label: quotation without analysis
     question: |-
-      You drop one of the most analyzed lines in American fiction and then pivot to the green light in the next sentence. The quote-sandwich pattern asks for the third slice: how does Nick's self-declaration of honesty undercut him? Without that unpacking, the quote is decorative.
+      You drop one of the most analyzed lines in American fiction and then pivot to the green light in the next sentence. Asks for the third slice: how does Nick's self-declaration of honesty undercut him? Without that unpacking, the quote is decorative.
     why_it_matters: |-
       A quotation that is not analyzed cannot do argumentative work, and your reader is left to perform the interpretation you promised to perform.
     fix_suggestion: |-
@@ -157,7 +157,7 @@
     span: [144, 411]
     issue_label: overquotation
     question: |-
-      Three Madison quotes in four sentences, stitched together with one-line bridges. The paragraph is doing what Graff and Birkenstein call building an anthology: the source's voice has crowded out yours. Whose argument is this paragraph making, Madison's or yours?
+      Three Madison quotes in four sentences, stitched together with one-line bridges. The paragraph stitched together into an anthology: the source's voice has crowded out yours. Whose argument is this paragraph making, Madison's or yours?
     why_it_matters: |-
       When the writer's voice disappears between block quotes the essay stops being analysis and becomes curation, and the reader cannot tell what you think Madison's argument adds up to.
     fix_suggestion: |-

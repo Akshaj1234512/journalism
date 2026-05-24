@@ -72,14 +72,19 @@ _HEADER = (
 
 
 def _exemplars_to_block(records: list[dict]) -> str:
-    """Render a list of exemplar dicts as the system-prompt exemplars block."""
+    """Render a list of exemplar dicts as the system-prompt exemplars block.
+
+    The `source` field in each YAML record is intentionally NOT included in
+    the prompt sent to the model. It's kept in the file for human readers
+    maintaining the exemplars, but exposing it to the agent encouraged
+    name-dropping in the agent's own output ("Williams's test:",
+    "Aristotle is explicit:") which reads as AI-written.
+    """
     if not records:
         return _MISSING_BLOCK
     parts = [_HEADER]
     for i, ex in enumerate(records, 1):
         parts.append(f"\n## Example {i}\n")
-        if ex.get("source"):
-            parts.append(f"GROUNDED IN: {ex['source']}\n")
         parts.append("ARTICLE:\n")
         parts.append(ex["article"])
         parts.append("\n\nCRITIQUES:\n")

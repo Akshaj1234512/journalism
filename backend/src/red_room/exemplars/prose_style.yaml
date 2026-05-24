@@ -93,7 +93,7 @@
     span: [54, 103]
     issue_label: accountability-dodging passive
     question: |-
-      Williams's test: name the actor. Two passives in a row, neither one tells the reader who made the mistakes or who ignored the warnings. If the essay's argument depends on responsibility, the passives are hiding it.
+      Name the actor. Two passives in a row, neither one tells the reader who made the mistakes or who ignored the warnings. If the essay's argument depends on responsibility, the passives are hiding it.
     why_it_matters: |-
       Passive voice in this register reads as evasion; the reader cannot assign blame, which is usually the point of the paragraph.
     fix_suggestion: |-
@@ -129,7 +129,7 @@
     span: [23, 89]
     issue_label: empty intensifier stack
     question: |-
-      Strunk: 'very' is the leech that infects the pond. Three intensifiers on three adjectives that already do the work. 'Unprecedented' cannot be more unprecedented.
+      'Very'' is the leech that infects the pond. Three intensifiers on three adjectives that already do the work. 'Unprecedented' cannot be more unprecedented.
     why_it_matters: |-
       The intensifiers add length and subtract force; the reader registers hedging where the writer meant emphasis.
     fix_suggestion: Strip the intensifiers. Let the adjectives carry their own weight.
@@ -145,7 +145,7 @@
     span: [0, 57]
     issue_label: pretentious diction
     question: |-
-      Two of Orwell's classic offenders in one clause: 'due to the fact that' is 'because,' and 'utilize' is 'use.' Neither long form means anything more than its short one.
+      Two of classic offenders in one clause: 'due to the fact that' is 'because,' and 'utilize' is 'use.' Neither long form means anything more than its short one.
     why_it_matters: |-
       Eight words doing the work of four; the reader senses the writer reaching for officialese.
     fix_suggestion: '''Because the laboratory could not use.'''
@@ -161,7 +161,7 @@
     span: [32, 46]
     issue_label: dead metaphor
     question: |-
-      'Sheds light on' is Orwell's first rule made literal: a metaphor so worn it no longer means anything. What does the report actually do, document, name, expose?
+      'Sheds light on' is made literal: a metaphor so worn it no longer means anything. What does the report actually do, document, name, expose?
     why_it_matters: |-
       The cliché tells the reader the writer stopped thinking at the exact moment the verb was due to do real work.
     fix_suggestion: Replace with the specific verb. 'Documents,' 'names,' 'traces.'

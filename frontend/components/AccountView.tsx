@@ -41,8 +41,10 @@ export function AccountView({
   const [note, setNote] = useState<string | null>(null);
 
   const current = PLANS[plan];
-  const used = Math.min(reviewsUsed, current.reviewsPerMonth);
-  const pct = Math.min(100, Math.round((used / current.reviewsPerMonth) * 100));
+  // Quota is enforced weekly: usage and reset cadence are per-week, not
+  // per-month. The monthly equivalent is shown elsewhere for context.
+  const used = Math.min(reviewsUsed, current.reviewsPerWeek);
+  const pct = Math.min(100, Math.round((used / current.reviewsPerWeek) * 100));
   const initial = email[0]?.toUpperCase() ?? "?";
 
   async function onSignOut() {
@@ -112,7 +114,7 @@ export function AccountView({
                 </span>
                 <span className="text-[13px] text-neutral-500">
                   {current.priceMonthly === 0
-                    ? "Free"
+                    ? "plan"
                     : `$${current.priceMonthly} / month`}
                 </span>
               </div>
@@ -132,10 +134,10 @@ export function AccountView({
           <div className="mt-5">
             <div className="flex items-center justify-between text-[12.5px]">
               <span className="font-medium text-neutral-700">
-                Reviews this month
+                Reviews this week
               </span>
               <span className="text-neutral-500">
-                {used} of {current.reviewsPerMonth}
+                {used} of {current.reviewsPerWeek}
               </span>
             </div>
             <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-neutral-100">
@@ -145,15 +147,74 @@ export function AccountView({
               />
             </div>
             <div className="mt-1.5 text-[11.5px] text-neutral-400">
-              Resets {fmtDate(quotaResetAt)}
+              Resets {fmtDate(quotaResetAt)} · {current.reviewsPerMonth} reviews per month total
             </div>
           </div>
         </section>
 
+        {/* Plans */}
+        <section className="mt-8">
+          <h2 className="font-serif text-2xl text-neutral-900">Plans</h2>
+          <p className="mt-1 text-[13px] text-neutral-500">
+            Every paid plan unlocks all editors across journalism and essays,
+            including the journalism specialists (legal, data, source privacy,
+            partisan) and the per-genre purpose editors. Higher tiers add more
+            reviews each week.
+          </p>
+
+          {/* Free trial callout */}
+          {plan === "free" && (
+            <div className="mt-4 overflow-hidden rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-stone-50">
+              <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-start gap-3">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white">
+                    <SparkGlyph />
+                  </span>
+                  <div>
+                    <div className="text-[14.5px] font-semibold text-neutral-900">
+                      Try every editor free for {TRIAL_DAYS} days
+                    </div>
+                    <div className="mt-0.5 text-[12.5px] leading-relaxed text-neutral-600">
+                      A two-week trial of the Basic plan — all editors
+                      unlocked, no credit card required.
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={comingSoon}
+                  className="shrink-0 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700"
+                >
+                  Start free trial
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Plan grid */}
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {PLAN_ORDER.map((id) => (
+              <PlanCard
+                key={id}
+                planId={id}
+                isCurrent={id === plan}
+                onChoose={comingSoon}
+              />
+            ))}
+          </div>
+
+          {note && (
+            <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] text-amber-800">
+              {note}
+            </p>
+          )}
+        </section>
+
         {/* Editor access */}
-        <section className="mt-5 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
+        <section className="mt-8 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
           <div className="text-[11px] font-semibold uppercase tracking-wide text-neutral-400">
-            Editor access — {current.agentCount} of 6
+            Editor access — {current.unlocksAllEditors
+              ? `all ${Object.keys(AGENTS).length} editors`
+              : `${FREE_AGENTS.length} of ${Object.keys(AGENTS).length} editors`}
           </div>
           <ul className="mt-3 divide-y divide-neutral-100">
             {AGENT_ORDER.map((name) => {
@@ -194,62 +255,6 @@ export function AccountView({
               );
             })}
           </ul>
-        </section>
-
-        {/* Plans */}
-        <section className="mt-8">
-          <h2 className="font-serif text-2xl text-neutral-900">Plans</h2>
-          <p className="mt-1 text-[13px] text-neutral-500">
-            Every paid plan unlocks all six editors — including Anne&apos;s
-            legal review and Sol&apos;s deep questions. Higher tiers add more
-            reviews each month.
-          </p>
-
-          {/* Free trial callout */}
-          {plan === "free" && (
-            <div className="mt-4 overflow-hidden rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-stone-50">
-              <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-start gap-3">
-                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white">
-                    <SparkGlyph />
-                  </span>
-                  <div>
-                    <div className="text-[14.5px] font-semibold text-neutral-900">
-                      Try every editor free for {TRIAL_DAYS} days
-                    </div>
-                    <div className="mt-0.5 text-[12.5px] leading-relaxed text-neutral-600">
-                      A one-week trial of the Writer plan — all six editors
-                      unlocked, no credit card required.
-                    </div>
-                  </div>
-                </div>
-                <button
-                  onClick={comingSoon}
-                  className="shrink-0 rounded-xl bg-rose-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700"
-                >
-                  Start free trial
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Plan grid */}
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {PLAN_ORDER.map((id) => (
-              <PlanCard
-                key={id}
-                planId={id}
-                isCurrent={id === plan}
-                onChoose={comingSoon}
-              />
-            ))}
-          </div>
-
-          {note && (
-            <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] text-amber-800">
-              {note}
-            </p>
-          )}
         </section>
 
         {/* Sign out */}
@@ -311,18 +316,28 @@ function PlanCard({
           <CheckGlyph />
           <span>
             <span className="font-medium text-neutral-800">
-              {p.reviewsPerMonth}
+              {p.reviewsPerWeek}
             </span>{" "}
-            reviews / month
+            reviews / week
+            <span className="text-neutral-400">
+              {" "}({p.reviewsPerMonth}/mo)
+            </span>
           </span>
         </div>
         <div>
           <div className="flex items-center gap-1.5">
             <CheckGlyph />
             <span>
-              {p.agentCount === 6
-                ? "All 6 editors"
-                : `${p.agentCount} of 6 editors`}
+              {p.unlocksAllEditors ? (
+                <>
+                  All {Object.keys(AGENTS).length} editors
+                  <span className="text-neutral-400">
+                    {" "}({FREE_AGENTS.length} core + {Object.keys(AGENTS).length - FREE_AGENTS.length} specialists)
+                  </span>
+                </>
+              ) : (
+                `${FREE_AGENTS.length} core editors`
+              )}
             </span>
           </div>
           {/* Soft-tint chips, greyed when the plan excludes that editor */}
@@ -352,12 +367,17 @@ function PlanCard({
             })}
           </div>
         </div>
+        <div className="flex items-center gap-1.5">
+          <CheckGlyph />
+          <span>
+            Up to{" "}
+            <span className="font-medium text-neutral-800">
+              {p.maxArticleWords.toLocaleString()}
+            </span>{" "}
+            words per draft
+          </span>
+        </div>
       </div>
-
-      {/* Tagline */}
-      <p className="mt-3 text-[12px] leading-relaxed text-neutral-500">
-        {p.tagline}
-      </p>
 
       <div className="mt-4 flex-1" />
 

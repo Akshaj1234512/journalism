@@ -98,7 +98,7 @@
     span: [0, 128]
     issue_label: thesis too broad for length
     question: |-
-      A thousand-year span across an entire civilisation is a book, not five pages. Booth's principle: the thesis has to promise something the essay can actually deliver.
+      A thousand-year span across an entire civilisation is a book, not five pages. The thesis has to promise something the essay can actually deliver.
     why_it_matters: An impossible scope guarantees the body will be a summary tour,
       not an argument.
     fix_suggestion: |-
@@ -115,7 +115,7 @@
     span: [89, 168]
     issue_label: missing stakes
     question: |-
-      Defensible, but who would push back? Graff and Birkenstein's 'so what' test: a thesis has to do more than name a symbol. What is at stake in reading the light this way rather than as something else?
+      Defensible, but who would push back? A thesis has to do more than name a symbol. What is at stake in reading the light this way rather than as something else?
     why_it_matters: A thesis nobody would disagree with leaves the essay nowhere to
       go.
     fix_suggestion: |-

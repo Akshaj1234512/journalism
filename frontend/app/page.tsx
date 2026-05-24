@@ -10,6 +10,7 @@ import { PrintView } from "@/components/PrintView";
 import { SampleDraftsButton } from "@/components/SampleDrafts";
 import { Tutorial } from "@/components/Tutorial";
 import { streamCritique } from "@/lib/stream";
+import { PLANS, countWords } from "@/lib/plans";
 import {
   AgentName,
   CitationStyle,
@@ -306,6 +307,12 @@ export default function Page() {
   const totalAgents = modeRoster.length;
   const enabledCount = modeRoster.filter((a) => !disabledAgents.has(a)).length;
 
+  // Word cap: Free tier ceiling until we wire per-user plan into the editor.
+  // The counter turns amber at 90% and red over the cap; Run is blocked over.
+  const wordCount = countWords(article);
+  const wordCap = PLANS.free.maxArticleWords;
+  const overCap = wordCount > wordCap;
+
   return (
     <main className="flex h-screen w-screen flex-col bg-stone-50">
       <header className="relative flex items-center justify-between gap-4 border-b border-neutral-200 bg-white px-7 py-4">
@@ -349,7 +356,7 @@ export default function Page() {
           <button
             data-tutorial="run"
             onClick={onRun}
-            disabled={status === "running" || article.trim().length === 0 || enabledCount === 0}
+            disabled={status === "running" || article.trim().length === 0 || enabledCount === 0 || overCap}
             className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
           >
             {status === "running" ? (
@@ -427,6 +434,28 @@ export default function Page() {
               resolvedIds={resolvedIds}
               onCritiqueClick={onSelectCritique}
             />
+
+            {/* Word counter, bottom-right of the editor card. Amber as the
+                user approaches the cap, red when over. Run is blocked over. */}
+            <div className="pointer-events-none absolute bottom-3 right-3">
+              <span
+                className={[
+                  "rounded-full border px-2.5 py-1 text-[11px] font-medium tabular-nums shadow-sm",
+                  overCap
+                    ? "border-rose-300 bg-rose-50 text-rose-800"
+                    : wordCount >= wordCap * 0.9
+                      ? "border-amber-300 bg-amber-50 text-amber-800"
+                      : "border-neutral-200 bg-white/90 text-neutral-500",
+                ].join(" ")}
+                title={
+                  overCap
+                    ? `Over the ${wordCap.toLocaleString()}-word cap. Trim the draft or upgrade for a higher cap.`
+                    : `${wordCount.toLocaleString()} of ${wordCap.toLocaleString()} words used`
+                }
+              >
+                {wordCount.toLocaleString()} / {wordCap.toLocaleString()} words
+              </span>
+            </div>
 
             {/* Sample drafts + upload, top-right of the card. */}
             <div data-tutorial="upload" className="pointer-events-none absolute right-3 top-3 flex flex-col items-end gap-1.5">
