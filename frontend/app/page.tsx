@@ -371,7 +371,9 @@ export default function Page() {
               </>
             )}
           </button>
-          <AccountMenu />
+          <div data-tutorial="signin">
+            <AccountMenu />
+          </div>
         </div>
       </header>
 

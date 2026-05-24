@@ -23,7 +23,7 @@ const STEPS: Step[] = [
   {
     title: "Welcome to The Red Room",
     body:
-      "An independent team of AI editors reads your draft and flags what a real newsroom or writing-centre would catch before you submit. The room handles both journalism drafts and high-school / college essays. This minute-long tour walks through both.",
+      "An independent team of AI editors reads your draft and flags what a real newsroom or writing-centre would catch before you submit. The room handles both journalism drafts and academic essays. This minute-long tour walks through both.",
     accent: "#DC2626",
   },
   {
@@ -31,7 +31,7 @@ const STEPS: Step[] = [
     side: "bottom",
     title: "Two modes: journalism and essays",
     body:
-      "Switch at the top between Journalism (six press editors: legal, data, source-protection, clarity, fairness, deep questions) and Essays (seven craft editors for thesis, evidence, prose, structure, logic, counter-argument, and citations, plus a specialised purpose editor and Sol the question master). Switching swaps the entire editor roster on the left rail.",
+      "Switch at the top between Journalism mode and academic Essays mode. Switching swaps the  editor roster on the left rail.",
   },
   {
     target: "rail",
@@ -69,7 +69,7 @@ const STEPS: Step[] = [
     side: "left",
     title: "Your draft goes here",
     body:
-      "Paste an article or essay, drag in a Word .docx or .txt file, or just type. The room reads up to about fifteen hundred words at a time. Your draft is saved in this browser so a refresh won't lose it.",
+      "Paste an article or essay, drag in a Word .docx or .txt file, or just type. Your draft is saved in this browser so a refresh won't lose it. Any hyperlins are automatically copied over.",
   },
   {
     target: "upload",
@@ -83,7 +83,7 @@ const STEPS: Step[] = [
     side: "bottom",
     title: "Run the review",
     body:
-      "When you're ready, click here. The editors who are turned on read in parallel; the first notes start landing in about ten seconds.",
+      "When you're ready, click here. The editors who are turned on read in parallel; the first notes start landing in about twenty seconds.",
   },
   {
     target: "sidebar",
@@ -100,14 +100,22 @@ const STEPS: Step[] = [
       "When two or more editors flag the same passage, a 🔥 Hotspot badge appears. Multiple specialists arriving at the same line is the strongest editorial signal a multi-editor room produces.",
   },
   {
+    target: "signin",
+    side: "bottom",
+    title: "Save your work and try Pro free",
+    body:
+      "Create a free account to save your drafts and track your reviews and get access to a 7-day free trial of the Pro plan — all 16 editors, 20 reviews per week, no credit card required. Create an account and sign in from the top right when you're ready.",
+    accent: "#DC2626",
+  },
+  {
     title: "One last thing",
     body:
-      "The agents can be wrong. They're grounded in real press-regulator rulings, editorial standards, and writing-centre research, but they're still AI. Treat every note as a question to consider, not an instruction you must follow.",
+      "The agents are grounded in real press-regulator rulings, editorial standards, and writing-centre research, but they're still AI. Treat every note as a suggestion to consider, not an instruction you must follow.",
     accent: "#DC2626",
   },
 ];
 
-const CARD_WIDTH = 340;
+const CARD_WIDTH = 380;
 const CARD_GAP = 16;
 const VIEWPORT_PADDING = 16;
 
@@ -166,7 +174,10 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
 
     const el = document.querySelector<HTMLElement>(`[data-tutorial="${current.target}"]`);
     if (!el) {
-      // Target missing (component not yet mounted, or hidden). Fall back to centre.
+      // Target missing — usually because a mode-switch in the previous
+      // effect tick hasn't rendered the new toolbar yet. Show a centred
+      // fallback for now; this effect re-runs once `mode` changes and we
+      // get the real element on the next pass.
       setRect(null);
       setCardPos({
         top: window.innerHeight / 2 - 130,
@@ -191,7 +202,7 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [open, step]);
+  }, [open, step, mode]);
 
   // ESC closes the tour.
   useEffect(() => {
