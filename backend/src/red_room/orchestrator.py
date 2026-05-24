@@ -9,7 +9,6 @@ from typing import AsyncIterator
 from anthropic import AsyncAnthropic
 
 from red_room.agents.base import BaseAgent, estimate_cost_usd
-from red_room.agents.clarity import ClarityCritique
 from red_room.agents.data_expert import DataExpert
 from red_room.agents.human_rights import HumanRightsAdvocate
 from red_room.agents.legal_skeptic import LegalSkeptic
@@ -68,6 +67,20 @@ class AgentEvent:
         return d
 
 
+def _shared_craft_roster(client: AsyncAnthropic, mode: Mode, essay_type: EssayType) -> list[BaseAgent]:
+    """The six craft editors that run in BOTH journalism and essays mode.
+    Sol receives mode + essay_type so his creative-angle questions adapt to
+    whichever genre the writer is in."""
+    return [
+        ThesisEditor(client=client),
+        ProseStyle(client=client),
+        StructureEditor(client=client),
+        LogicAuditor(client=client),
+        EvidenceQuotation(client=client),
+        QuestionMaster(client=client, mode=mode, essay_type=essay_type),
+    ]
+
+
 def default_agents(
     client: AsyncAnthropic | None = None,
     mode: Mode = "journalism",
@@ -77,22 +90,20 @@ def default_agents(
 ) -> list[BaseAgent]:
     """Return the roster for the requested mode.
 
-    `journalism` returns the six press editors. `essays` returns the seven
-    craft editors + Sol + (when `essay_type` is set) the matching Purpose
-    Editor. Each persona is one Anthropic call dispatched in parallel by
-    `run` / `stream`.
+    Both modes share the six craft editors (Theo, Will, Stella, Logan, Evan,
+    Sol). On top of that, journalism mode adds four press specialists
+    (Anne legal, Peter data, Joe human rights, Parker partisan) and essays
+    mode adds Kate the citation editor plus, when essay_type is set, the
+    matching Purpose Editor. Each persona is one Anthropic call dispatched
+    in parallel by `run` / `stream`.
     """
     # More retry headroom for transient 529s (see BaseAgent.__init__).
     client = client or AsyncAnthropic(max_retries=6)
+    shared = _shared_craft_roster(client, mode, essay_type)
     if mode == "essays":
         roster: list[BaseAgent] = [
-            ThesisEditor(client=client),
-            EvidenceQuotation(client=client),
-            ProseStyle(client=client),
-            StructureEditor(client=client),
-            LogicAuditor(client=client),
+            *shared,
             CitationEditor(client=client, citation_style=citation_style),
-            QuestionMaster(client=client, mode="essays", essay_type=essay_type),
         ]
         # Add the Purpose Editor that matches the writer's chosen essay type.
         # `none` skips it. Only one runs per review.
@@ -100,13 +111,13 @@ def default_agents(
         if purpose_cls is not None:
             roster.append(purpose_cls(client=client, essay_prompt=essay_prompt))
         return roster
+    # Journalism mode: shared craft layer + 4 journalism specialists.
     return [
+        *shared,
         LegalSkeptic(client=client),
         DataExpert(client=client),
         HumanRightsAdvocate(client=client),
-        ClarityCritique(client=client),
         PartisanChecker(client=client),
-        QuestionMaster(client=client, mode="journalism"),
     ]
 
 

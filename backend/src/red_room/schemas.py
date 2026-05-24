@@ -2,19 +2,19 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 AgentName = Literal[
-    # Journalism mode
+    # Journalism specialists (run only in journalism mode).
     "legal_skeptic",
     "data_expert",
     "human_rights",
-    "clarity",
     "partisan",
-    "question_master",
-    # Essays mode (core craft roster — runs on every essay).
+    # Shared craft editors (run in BOTH modes).
     "thesis_editor",
-    "evidence_quotation",
     "prose_style",
     "structure_editor",
     "logic_auditor",
+    "evidence_quotation",
+    "question_master",
+    # Essays specialist.
     "citation_editor",
     # Purpose editors — exactly one runs per essay, picked by essay_type.
     "argumentative_editor",

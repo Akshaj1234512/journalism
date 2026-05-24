@@ -1,17 +1,17 @@
 export type AgentName =
-  // Journalism mode
+  // Journalism specialists (only in journalism mode)
   | "legal_skeptic"
   | "data_expert"
   | "human_rights"
-  | "clarity"
   | "partisan"
-  | "question_master"
-  // Essays core (always runs)
+  // Shared craft layer (runs in BOTH modes)
   | "thesis_editor"
-  | "evidence_quotation"
   | "prose_style"
   | "structure_editor"
   | "logic_auditor"
+  | "evidence_quotation"
+  | "question_master"
+  // Essays specialist
   | "citation_editor"
   // Purpose editors — exactly one runs per essay, picked by essay_type
   | "argumentative_editor"
@@ -62,8 +62,8 @@ export interface AgentMeta {
 
 export const AGENTS: Record<AgentName, AgentMeta> = {
   legal_skeptic: {
-    label: "Anne — Legal Skeptic",
-    shortLabel: "Legal Skeptic",
+    label: "Anne — Legal",
+    shortLabel: "Legal",
     firstName: "Anne",
     brandHex: "#EC4899",
     highlightHex: "#FBCFE8",
@@ -81,8 +81,8 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     ],
   },
   data_expert: {
-    label: "Peter — Data Expert",
-    shortLabel: "Data Expert",
+    label: "Peter — Data",
+    shortLabel: "Data",
     firstName: "Peter",
     brandHex: "#0F172A",
     highlightHex: "#CBD5E1",
@@ -100,8 +100,8 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
     ],
   },
   human_rights: {
-    label: "Joe — Human Rights Advocate",
-    shortLabel: "Human Rights",
+    label: "Joe — Source Privacy",
+    shortLabel: "Source Privacy",
     firstName: "Joe",
     brandHex: "#6366F1",
     highlightHex: "#C7D2FE",
@@ -116,25 +116,6 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
       "Trauma used as a hook with no consent infrastructure",
       "Loss of agency over headlines, pull quotes, social cards",
       "Predictable locations of vulnerable sources",
-    ],
-  },
-  clarity: {
-    label: "Clara — Clarity Critique",
-    shortLabel: "Clarity",
-    firstName: "Clara",
-    brandHex: "#10B981",
-    highlightHex: "#A7F3D0",
-    borderClass: "border-agent-clarity",
-    available: true,
-    kind: "flagger",
-    mode: "journalism",
-    tagline:
-      "Keeps your writing readable. Catches jargon, passive voice, buried ledes, and sentences your reader will not finish.",
-    lookFor: [
-      "Passive-voice accountability dodges",
-      "Acronym pileup that loses the cast of characters",
-      "Unexplained units without a comparison",
-      "Ambiguous pronouns and missing context",
     ],
   },
   partisan: {
@@ -394,21 +375,29 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
 // are appended at runtime by getEssaysRoster() based on the writer's chosen
 // essay_type. Sol is always part of the essays rail; the purpose editor only
 // appears when a type is picked.
+//
+// Both modes share the 6 craft editors (Theo, Will, Stella, Logan, Evan,
+// Sol). Journalism mode adds its 4 press specialists. Essays mode adds
+// Kate + a purpose editor (added at runtime).
+const SHARED_CRAFT: AgentName[] = [
+  "thesis_editor",
+  "prose_style",
+  "structure_editor",
+  "logic_auditor",
+  "evidence_quotation",
+  "question_master",
+];
+
 export const MODE_AGENTS: Record<Mode, AgentName[]> = {
   journalism: [
+    ...SHARED_CRAFT,
     "legal_skeptic",
     "data_expert",
     "human_rights",
-    "clarity",
     "partisan",
-    "question_master",
   ],
   essays: [
-    "thesis_editor",
-    "evidence_quotation",
-    "prose_style",
-    "structure_editor",
-    "logic_auditor",
+    ...SHARED_CRAFT,
     "citation_editor",
   ],
 };
@@ -425,7 +414,9 @@ export const PURPOSE_EDITOR_BY_TYPE: Record<
 };
 
 export function getEssaysRoster(essayType: EssayType): AgentName[] {
-  const roster: AgentName[] = [...MODE_AGENTS.essays, "question_master"];
+  // Sol is already in MODE_AGENTS.essays via SHARED_CRAFT. The purpose
+  // editor is the only conditional addition (none -> skip).
+  const roster: AgentName[] = [...MODE_AGENTS.essays];
   if (essayType !== "none") {
     roster.push(PURPOSE_EDITOR_BY_TYPE[essayType]);
   }

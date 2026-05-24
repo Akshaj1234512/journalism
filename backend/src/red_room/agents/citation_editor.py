@@ -5,6 +5,14 @@ from red_room.schemas import CitationStyle
 
 
 class CitationEditor(BaseAgent):
+    """Kate. Citation format enforcement (MLA / APA / Chicago / Turabian).
+
+    Runs on Haiku 4.5 by default. Citation rules are explicit and rule-based
+    (MLA 9th ed. section 6.42, APA section 8.13, etc.), which Haiku handles
+    reliably at ~1/3 the cost of Sonnet. Override the model in the
+    constructor if you need Sonnet's deeper judgment on a specific run.
+    """
+
     name = "citation_editor"
 
     def __init__(
@@ -14,7 +22,11 @@ class CitationEditor(BaseAgent):
         thinking_budget: int | None = None,
         citation_style: CitationStyle = "none",
     ) -> None:
-        super().__init__(client=client, model=model, thinking_budget=thinking_budget)
+        super().__init__(
+            client=client,
+            model=model or "claude-haiku-4-5-20251001",
+            thinking_budget=thinking_budget,
+        )
         self.citation_style = citation_style
 
     def tools(self) -> list[dict]:

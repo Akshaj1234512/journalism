@@ -5,7 +5,9 @@ export type Plan = "free" | "writer" | "pro" | "team";
 // Editors included on the free tier. Paid tiers unlock all six. The three
 // gated editors (Anne/legal, Joe/human-rights, Sol/questions) are the
 // distinctive ones — that gap is the upgrade pull.
-export const FREE_AGENTS: AgentName[] = ["clarity", "data_expert", "partisan"];
+// Free tier roster: 3 of the cheaper agents that still demonstrate the
+// multi-editor concept. Paid tiers unlock all editors across both modes.
+export const FREE_AGENTS: AgentName[] = ["data_expert", "partisan", "prose_style"];
 
 // A new account may take one 7-day trial. It unlocks the Writer tier — the
 // most basic paid plan, which still includes all six editors.

@@ -53,7 +53,6 @@ const AVATARS: Record<AgentName, () => React.ReactNode> = {
   legal_skeptic: AnneAvatar,
   data_expert: PeterAvatar,
   human_rights: JoeAvatar,
-  clarity: ClaraAvatar,
   partisan: ParkerAvatar,
   question_master: SolAvatar,
   thesis_editor: TheoAvatar,
@@ -136,22 +135,6 @@ function JoeAvatar() {
   );
 }
 
-/* Clara — Clarity Critique. Green, cropped curly hair. */
-function ClaraAvatar() {
-  return (
-    <>
-      <circle cx="40" cy="40" r="40" fill="#D1FAE5" />
-      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#065F46" />
-      <rect x="34" y="42" width="12" height="10" fill="#D6B59A" />
-      <circle cx="40" cy="34" r="14" fill="#EFD3B2" />
-      {/* curly hair — three bumps */}
-      <path d="M26 28 Q 24 18, 32 18 Q 36 14, 40 16 Q 44 14, 48 18 Q 56 18, 54 28 Q 52 24, 46 24 Q 40 20, 34 24 Q 28 24, 26 28 Z" fill="#7C2D12" />
-      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
-      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
-      <path d="M36 41 Q 40 42, 44 41" stroke="#7C2D12" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-    </>
-  );
-}
 
 /* Sol — Question Master. Amber, older, swept-back silver hair, glasses.
    The genius of the room: looks like he is mid-thought. */
