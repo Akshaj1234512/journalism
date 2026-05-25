@@ -10,7 +10,7 @@ import { Editor, critiqueId } from "@/components/Editor";
 import { PrintView } from "@/components/PrintView";
 import { ResearchPrintView } from "@/components/ResearchPrintView";
 import { SampleDraftsButton } from "@/components/SampleDrafts";
-import { Tutorial } from "@/components/Tutorial";
+import { Tutorial, TutorialTrack } from "@/components/Tutorial";
 import { streamCritique } from "@/lib/stream";
 import { PLANS, countWords } from "@/lib/plans";
 import { streamResearchCritique } from "@/lib/stream";
@@ -46,6 +46,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:800
 const DISABLED_KEY = "redroom:disabled-agents";
 const ARTICLE_KEY = "redroom:article";
 const TUTORIAL_SEEN_KEY = "redroom:tutorial-seen";
+const TUTORIAL_MODE_SEEN_KEY = (m: Mode | "main") => `redroom:tutorial-seen:${m}`;
 const MODE_KEY = "redroom:mode";
 const CITATION_KEY = "redroom:citation-style";
 const ESSAY_TYPE_KEY = "redroom:essay-type";
@@ -99,7 +100,15 @@ export default function Page() {
   // not flicker as the cursor crosses between the textarea and its wrapper.
   const dragDepthRef = useRef(0);
 
-  const [tutorialOpen, setTutorialOpen] = useState(false);
+  // Tutorial state. `tutorialTrack` is the currently-displayed track, or null
+  // when no tour is open. The main tour fires once on the user's very first
+  // visit; each mode's mini-tour fires the first time that user enters that
+  // mode (after the main tour, or independently if they skip it).
+  const [tutorialTrack, setTutorialTrack] = useState<TutorialTrack | null>(null);
+  // Snapshot of which tracks the current user has seen. Hydrated from
+  // localStorage on mount; updated when a track completes so we don't
+  // re-prompt on the same browser session.
+  const [tutorialsSeen, setTutorialsSeen] = useState<Set<TutorialTrack>>(new Set());
 
   // Restore on mount: agent roster, draft article, mode, and whether the
   // user has seen the tour. Tutorial auto-opens for first-time visitors.
@@ -185,9 +194,25 @@ export default function Page() {
       const sc = localStorage.getItem(SUBJECT_CONTEXT_KEY);
       if (sc) setSubjectContext(sc);
     } catch {}
+    // Hydrate which tutorial tracks the user has seen, then decide whether
+    // to auto-fire one. Order of priority: if they've never seen the main
+    // tour, fire it. Otherwise, if they haven't seen the current mode's
+    // mini-tour, fire that.
     try {
-      const seen = localStorage.getItem(TUTORIAL_SEEN_KEY);
-      if (!seen) setTutorialOpen(true);
+      const seen = new Set<TutorialTrack>();
+      // Legacy single-flag key counts as having seen the main tour.
+      if (localStorage.getItem(TUTORIAL_SEEN_KEY)) seen.add("main");
+      for (const t of ["main", "journalism", "essays", "research"] as TutorialTrack[]) {
+        if (localStorage.getItem(TUTORIAL_MODE_SEEN_KEY(t))) seen.add(t);
+      }
+      setTutorialsSeen(seen);
+      // Defer one tick so the page's initial render lands before the
+      // tutorial overlay measures targets.
+      setTimeout(() => {
+        if (!seen.has("main")) {
+          setTutorialTrack("main");
+        }
+      }, 50);
     } catch {}
   }, []);
 
@@ -245,9 +270,41 @@ export default function Page() {
   }, [article]);
 
   const onCompleteTutorial = useCallback(() => {
-    setTutorialOpen(false);
-    try { localStorage.setItem(TUTORIAL_SEEN_KEY, "1"); } catch {}
-  }, []);
+    const finished = tutorialTrack;
+    setTutorialTrack(null);
+    if (!finished) return;
+    try {
+      localStorage.setItem(TUTORIAL_MODE_SEEN_KEY(finished), "1");
+      if (finished === "main") {
+        // Keep the legacy flag in sync so existing users aren't re-prompted.
+        localStorage.setItem(TUTORIAL_SEEN_KEY, "1");
+      }
+    } catch {}
+    setTutorialsSeen((prev) => {
+      const next = new Set(prev);
+      next.add(finished);
+      // If the user just finished the main tour and they're in a mode they
+      // haven't toured yet, chain into that mode's mini-tour.
+      if (finished === "main" && !next.has(mode as TutorialTrack)) {
+        setTimeout(() => setTutorialTrack(mode as TutorialTrack), 200);
+      }
+      return next;
+    });
+  }, [tutorialTrack, mode]);
+
+  // When the user changes modes, fire that mode's mini-tour if they haven't
+  // seen it (and the main tour is done — we don't want to interrupt it).
+  useEffect(() => {
+    if (tutorialTrack) return; // a tour is already running; don't stack
+    if (!tutorialsSeen.has("main")) return; // main hasn't finished yet
+    const modeTrack = mode as TutorialTrack;
+    if (modeTrack !== "journalism" && modeTrack !== "essays" && modeTrack !== "research") return;
+    if (tutorialsSeen.has(modeTrack)) return;
+    // Defer a tick so the toolbar for the new mode has rendered before the
+    // tutorial measures its targets.
+    const t = setTimeout(() => setTutorialTrack(modeTrack), 120);
+    return () => clearTimeout(t);
+  }, [mode, tutorialsSeen, tutorialTrack]);
 
   const onToggleDisabled = useCallback((agent: AgentName) => {
     setDisabledAgents((prev) => {
@@ -488,7 +545,7 @@ export default function Page() {
               The <span style={{ color: "#DC2626" }}>Red Room</span>
             </h1>
             <p className="mt-1.5 text-[12px] text-neutral-500">
-              An independent team of AI editors, reviewing your draft before you publish.
+              An independent team of AI editors.
             </p>
           </div>
         </div>
@@ -502,7 +559,7 @@ export default function Page() {
             {enabledCount} of {totalAgents} active
           </span>
           <button
-            onClick={() => setTutorialOpen(true)}
+            onClick={() => setTutorialTrack("main")}
             title="Replay the guided tour"
             className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-500 transition hover:bg-neutral-50 hover:text-neutral-800"
             aria-label="Show tutorial"
@@ -621,9 +678,16 @@ export default function Page() {
           The PDF is uploaded inside the main pane below. */}
       {mode === "research" && (
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-neutral-200 bg-stone-50 px-7 py-2">
-          <ResearchSectionPicker value={researchSection} onChange={setResearchSection} />
-          <ResearchSubjectPicker value={researchSubject} onChange={setResearchSubject} />
-          <ResearchVenueInput value={researchVenue} onChange={setResearchVenue} />
+          <div data-tutorial="research-section">
+            <ResearchSectionPicker value={researchSection} onChange={setResearchSection} />
+          </div>
+          {/* Subject + venue are spotlighted together by the research tour;
+              the step body explains how they pair (subject picks the
+              specialist, venue tunes that specialist to a target outlet). */}
+          <div data-tutorial="research-subject" className="inline-flex items-center gap-x-5">
+            <ResearchSubjectPicker value={researchSubject} onChange={setResearchSubject} />
+            <ResearchVenueInput value={researchVenue} onChange={setResearchVenue} />
+          </div>
           <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] text-neutral-500">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             {enabledCount} of {totalAgents} editors active
@@ -644,20 +708,22 @@ export default function Page() {
 
         <div className="flex flex-1 min-w-0 items-stretch p-4">
           {mode === "research" ? (
-            <ResearchUploadPane
-              pdf={researchPdf}
-              onSelectPdf={(f) => {
-                setResearchPdf(f);
-                setCritiques([]);
-                setActiveId(null);
-                setResolvedIds(new Set());
-                setStatus("idle");
-                setErrorMessage(null);
-              }}
-              fileInputRef={researchFileInputRef}
-              section={researchSection}
-              subject={researchSubject}
-            />
+            <div data-tutorial="research-upload" className="flex flex-1 min-w-0">
+              <ResearchUploadPane
+                pdf={researchPdf}
+                onSelectPdf={(f) => {
+                  setResearchPdf(f);
+                  setCritiques([]);
+                  setActiveId(null);
+                  setResolvedIds(new Set());
+                  setStatus("idle");
+                  setErrorMessage(null);
+                }}
+                fileInputRef={researchFileInputRef}
+                section={researchSection}
+                subject={researchSubject}
+              />
+            </div>
           ) : (
           <div
             data-tutorial="editor"
@@ -788,9 +854,13 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Tutorial overlay (portals to body) */}
+      {/* Tutorial overlay (portals to body). Tracks: main fires on the
+          very first visit; each mode's mini-tour fires the first time the
+          user lands on that tab afterward. The help button in the header
+          re-opens the main track. */}
       <Tutorial
-        open={tutorialOpen}
+        open={tutorialTrack !== null}
+        track={tutorialTrack ?? "main"}
         onClose={onCompleteTutorial}
         mode={mode}
         onSetMode={setMode}

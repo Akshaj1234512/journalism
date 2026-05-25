@@ -86,7 +86,7 @@ export default async function Image() {
               lineHeight: 1.3,
             }}
           >
-            An independent team of AI editors, reviewing your draft before you publish.
+            An independent team of AI editors.
           </div>
 
           <div

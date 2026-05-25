@@ -5,40 +5,100 @@ import { createPortal } from "react-dom";
 
 import { Mode } from "@/lib/types";
 
+export type TutorialTrack = "main" | "journalism" | "essays" | "research";
+
 interface Step {
-  /** data-tutorial attribute value to anchor the spotlight to. Omit for centered cards. */
+  /** data-tutorial attribute value to anchor the spotlight to.
+   *  Omit for centered "intro" cards. */
   target?: string;
   /** Side of the target to place the card on. Defaults to a sensible auto pick. */
   side?: "top" | "bottom" | "left" | "right";
   title: string;
   body: string;
-  /** Optional accent colour for the card top border. */
+  /** Optional accent colour for the card's top border. */
   accent?: string;
   /** If set, the tutorial switches the app into this mode before showing
    *  the step (so the targeted control is actually rendered). */
   requireMode?: Mode;
 }
 
-const STEPS: Step[] = [
+// ────────────────────────────────────────────────────────────────────────────
+// Track 1: MAIN — the universal first-visit tour. Covers concepts that apply
+// across every mode: what the room is, how to switch modes, the editor rail,
+// the draft pane, the run button, the sidebar, and the sign-in card. Each
+// mode's specifics are intentionally NOT here — they live in the mode-mini
+// tutorials below, which fire on first entry to each mode.
+// ────────────────────────────────────────────────────────────────────────────
+const MAIN_STEPS: Step[] = [
   {
     title: "Welcome to The Red Room",
     body:
-      "An independent team of AI editors reads your draft and flags what a real newsroom or writing-center would catch before you submit. The room handles both journalism drafts and academic essays. This minute-long tour walks through both.",
+      "An independent team of AI editors reads your draft and flags what a real newsroom or writing center would catch before you publish or submit. This minute walks through the universals. Each tab has its own quick tour the first time you open it.",
     accent: "#DC2626",
   },
   {
     target: "mode",
     side: "bottom",
-    title: "Two modes: journalism and essays",
+    title: "Three modes",
     body:
-      "Switch at the top between Journalism mode and academic Essays mode. Switching swaps the  editor roster on the left rail.",
+      "Journalism for news, opinion, features, profiles, reviews, and explainers. Essays for academic writing across five genres. Research for full-paper review of an uploaded PDF. The editor lineup on the left rail swaps when you change modes.",
   },
   {
     target: "rail",
     side: "right",
     title: "Meet the editors",
     body:
-      "Each editor specialises in one lane. Click any of them to read what they look for, or to turn them off for this review. The list updates whenever you switch modes; scroll to see all of them.",
+      "Each editor specialises in one lane. Click any of them to read what they look for and to turn them off if a lane doesn't apply to your draft. The list updates whenever you switch modes; scroll if you don't see all of them.",
+  },
+  {
+    target: "editor",
+    side: "left",
+    title: "Your draft goes here",
+    body:
+      "Type or paste your draft, or drop in a Word / .txt file. Your draft is saved in this browser, so a refresh won't lose it. (Research mode is different — you upload a PDF instead, and the tour for that tab will cover it.)",
+  },
+  {
+    target: "run",
+    side: "bottom",
+    title: "Run the review",
+    body:
+      "When you're ready, click here. The editors who are turned on read in parallel; the first notes start landing in about twenty seconds. The button shows a count of how many editors will run.",
+  },
+  {
+    target: "sidebar",
+    side: "left",
+    title: "Read the notes",
+    body:
+      "Notes appear here in document order. Click any feedback card to jump to that line in the editor. Click an underlined phrase in the editor to jump back to its card. When two or more editors flag the same passage, a Hotspot badge appears — that's the strongest signal the room produces.",
+  },
+  {
+    target: "signin",
+    side: "bottom",
+    title: "Save your work and try Pro free",
+    body:
+      "Create a free account to save your drafts and track your reviews. New accounts get a 7-day free trial of the Pro plan — all 16 editors, 20 reviews per week, no credit card required.",
+    accent: "#DC2626",
+  },
+  {
+    title: "One last thing",
+    body:
+      "The agents are grounded in real press-regulator rulings, editorial standards, and writing-center research, but they're still AI. Treat every note as a suggestion to consider, not an instruction you must follow. When you open a tab for the first time, a quick tour of THAT tab's specific controls will pop up.",
+    accent: "#DC2626",
+  },
+];
+
+// ────────────────────────────────────────────────────────────────────────────
+// Track 2: JOURNALISM mini-tutorial. Fires the first time the user is in
+// journalism mode (typically right after the main tour, since journalism is
+// the default mode). 3 steps + an intro.
+// ────────────────────────────────────────────────────────────────────────────
+const JOURNALISM_STEPS: Step[] = [
+  {
+    title: "Journalism mode",
+    body:
+      "The room is set up for press work. Some editors always run (Anne for legal risk, plus the six craft editors). A handful more are added based on context you set here. Quick tour of the controls.",
+    accent: "#DC2626",
+    requireMode: "journalism",
   },
   {
     target: "article-type",
@@ -46,7 +106,7 @@ const STEPS: Step[] = [
     requireMode: "journalism",
     title: "Pick your article type",
     body:
-      "In journalism mode, pick the kind of piece you're writing (news, investigative, opinion, feature, profile, review, or analysis). A specialised type editor is added to the roster who reads against THAT genre's standards — Cole for news, Iris for investigations, Otto for opinion, Faye for features, Pia for profiles, Remy for reviews, Eli for explainers.",
+      "Tell the room what kind of piece you're writing. A matching type specialist joins the lineup: Cole for news, Iris for investigations, Otto for opinion, Faye for features, Pia for profiles, Remy for reviews, Eli for explainers. The rail will update as you pick.",
   },
   {
     target: "journalism-toggles",
@@ -54,7 +114,7 @@ const STEPS: Step[] = [
     requireMode: "journalism",
     title: "Add specialists for your story",
     body:
-      "These chips activate three additional editors when your story calls for them. Click Partisan to add Parker (catches loaded framing on political stories). Click Data claims to add Peter (stress-tests statistics). Click Anonymous sources to add Joe (privacy + source-protection). The chips pre-fill sensible defaults when you change article type — toggle them off if a default doesn't fit.",
+      "These chips activate three more editors when your story calls for them. Partisan adds Parker (loaded framing, asymmetric treatment). Data claims adds Peter (statistics and quantitative claims). Anonymous sources adds Joe (source protection and privacy). Sensible defaults pre-fill when you change article type — toggle anything that doesn't fit.",
   },
   {
     target: "subject-context",
@@ -62,7 +122,20 @@ const STEPS: Step[] = [
     requireMode: "journalism",
     title: "Add story context (optional)",
     body:
-      "Paste a short note about who the story is about, the angle, or the publication venue. Only the matching type editor sees it, and it uses the note to sharpen the read. Optional but it helps when the draft alone doesn't tell the editor everything they need.",
+      "Paste a short note about who the story is about, the angle, or the publication venue. Only the type specialist sees it, and uses it to sharpen the read. Optional, but worth it when the draft alone doesn't carry everything the editor needs.",
+  },
+];
+
+// ────────────────────────────────────────────────────────────────────────────
+// Track 3: ESSAYS mini-tutorial. Fires on first entry to essays mode.
+// ────────────────────────────────────────────────────────────────────────────
+const ESSAYS_STEPS: Step[] = [
+  {
+    title: "Essays mode",
+    body:
+      "The room is set up for academic writing. The six craft editors run on every essay; a Purpose Editor specific to your essay's genre is added when you pick a type. Three controls tailor the review.",
+    accent: "#DC2626",
+    requireMode: "essays",
   },
   {
     target: "essay-type",
@@ -70,7 +143,7 @@ const STEPS: Step[] = [
     requireMode: "essays",
     title: "Pick your essay type",
     body:
-      "When you switch to essays mode, this dropdown appears. Pick the kind of essay you're writing (argumentative, analytical, personal, research, or rhetorical) and a specialised Purpose Editor is added to the roster who reads against THAT genre's standards. Each option shows examples so you know which one fits.",
+      "Choose what kind of essay you're writing: argumentative, analytical, personal / narrative, research, or rhetorical analysis. A matching Purpose Editor (Ari, Anya, Nora, Reese, or Rhea) joins the rail and reads against THAT genre's standards. Each option in the dropdown shows examples so you know which one fits.",
   },
   {
     target: "essay-prompt",
@@ -78,7 +151,7 @@ const STEPS: Step[] = [
     requireMode: "essays",
     title: "Paste the assignment prompt",
     body:
-      "Click + Add prompt to paste the actual rubric or assignment your teacher gave you. Only the matching Purpose Editor sees it, and it uses the prompt to give feedback specifically aimed at what was asked. Optional, but it sharpens the review significantly.",
+      "Click Add prompt to paste the actual rubric or instructions your teacher gave you. Only the Purpose Editor sees it, and it uses the prompt to focus feedback on what was assigned. Optional but it sharpens the review significantly.",
   },
   {
     target: "citation",
@@ -86,71 +159,71 @@ const STEPS: Step[] = [
     requireMode: "essays",
     title: "Set your citation style",
     body:
-      "If you're using MLA, APA, Chicago, or Turabian, pick it here. Kate the Citation Editor will check your in-text citations and works-cited entries against that style's rules. Leave it on Not specified if your essay isn't using a formal style.",
-  },
-  {
-    target: "editor",
-    side: "left",
-    title: "Your draft goes here",
-    body:
-      "Paste an article or essay, drag in a Word .docx or .txt file, or just type. Your draft is saved in this browser so a refresh won't lose it. Any hyperlins are automatically copied over.",
-  },
-  {
-    target: "upload",
-    side: "left",
-    title: "Or import a file",
-    body:
-      "Drag a Word doc onto the editor, or click Upload draft. For Google Docs choose File, then Download, then Microsoft Word, and drag the result in.",
-  },
-  {
-    target: "run",
-    side: "bottom",
-    title: "Run the review",
-    body:
-      "When you're ready, click here. The editors who are turned on read in parallel; the first notes start landing in about twenty seconds.",
-  },
-  {
-    target: "sidebar",
-    side: "left",
-    title: "Read the notes",
-    body:
-      "Notes appear here in document order. Click any feedback card to jump to that line in the editor. Click an underlined phrase in the editor to jump back to its card. The room talks to itself across both panes.",
-  },
-  {
-    target: "sidebar",
-    side: "left",
-    title: "Watch for hotspots",
-    body:
-      "When two or more editors flag the same passage, a 🔥 Hotspot badge appears. Multiple specialists arriving at the same line is the strongest editorial signal a multi-editor room produces.",
-  },
-  {
-    target: "signin",
-    side: "bottom",
-    title: "Save your work and try Pro free",
-    body:
-      "Create a free account to save your drafts and track your reviews and get access to a 7-day free trial of the Pro plan — all 16 editors, 20 reviews per week, no credit card required. Create an account and sign in from the top right when you're ready.",
-    accent: "#DC2626",
-  },
-  {
-    title: "One last thing",
-    body:
-      "The agents are grounded in real press-regulator rulings, editorial standards, and writing-center research, but they're still AI. Treat every note as a suggestion to consider, not an instruction you must follow.",
-    accent: "#DC2626",
+      "If you're using MLA, APA, Chicago, or Turabian, pick it here. Kate the Citation Editor checks your in-text citations and references against that style's rules. Leave it on None if your essay isn't using a formal citation style.",
   },
 ];
+
+// ────────────────────────────────────────────────────────────────────────────
+// Track 4: RESEARCH mini-tutorial. Fires on first entry to research mode.
+// Different from journalism / essays because the input is a PDF.
+// ────────────────────────────────────────────────────────────────────────────
+const RESEARCH_STEPS: Step[] = [
+  {
+    title: "Research mode",
+    body:
+      "The room reviews a full research paper as a PDF. Seven editors run by default — five core (methodology, related work, limitations, figures + tables, structure) plus a math editor for theory papers, plus a subject specialist tuned to your field. The pane in the center is where you drop the paper.",
+    accent: "#DC2626",
+    requireMode: "research",
+  },
+  {
+    target: "research-section",
+    side: "bottom",
+    requireMode: "research",
+    title: "Pick a section to focus on",
+    body:
+      "Narrow the review to one section (Methods, Results, Discussion, etc.) or leave it on Full paper for a full read. The editors see the whole PDF either way; this just tells them where to anchor their critique.",
+  },
+  {
+    target: "research-subject",
+    side: "bottom",
+    requireMode: "research",
+    title: "Pick your subject area",
+    body:
+      "Picks a subject specialist who reviews against that field's conventions. CS / ML is wired up now; engineering, biology, and medicine are coming. Pair this with the venue field next to it (e.g. 'ICML 2026' or 'Nature Methods') and the specialist tunes to that venue's bar — novelty, evaluation scope, required sections.",
+  },
+  {
+    target: "research-upload",
+    side: "left",
+    requireMode: "research",
+    title: "Drop in your PDF",
+    body:
+      "Drag your paper here or click to browse. The room reads the PDF natively (figures, tables, and all). Cap is 25 MB. Once it's in, hit Run review — the first notes land in about a minute on a typical 10-page paper.",
+  },
+];
+
+const TRACKS: Record<TutorialTrack, Step[]> = {
+  main: MAIN_STEPS,
+  journalism: JOURNALISM_STEPS,
+  essays: ESSAYS_STEPS,
+  research: RESEARCH_STEPS,
+};
 
 const CARD_WIDTH = 380;
 const CARD_GAP = 16;
 const VIEWPORT_PADDING = 16;
 
+
 interface Props {
   open: boolean;
+  /** Which track to run. Defaults to "main". */
+  track?: TutorialTrack;
   onClose: () => void;
   mode: Mode;
   onSetMode: (m: Mode) => void;
 }
 
-export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
+export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Props) {
+  const STEPS = TRACKS[track];
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [cardPos, setCardPos] = useState<{ top: number; left: number; arrow?: "top" | "bottom" | "left" | "right"; centered?: boolean } | null>(null);
@@ -166,24 +239,25 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
     };
   }, [open]);
 
-  // Reset to the first step every time the tour opens.
+  // Reset to the first step every time the tour opens OR the track changes.
   useEffect(() => {
     if (open) setStep(0);
-  }, [open]);
+  }, [open, track]);
 
-  // If the active step requires a specific mode (e.g. essay-toolbar steps
-  // need essays mode), switch the app into it before measuring so the
+  // If the active step requires a specific mode (e.g. journalism-toolbar steps
+  // need journalism mode), switch the app into it before measuring so the
   // targeted control is actually rendered.
   useEffect(() => {
     if (!open) return;
-    const need = STEPS[step].requireMode;
+    const need = STEPS[step]?.requireMode;
     if (need && need !== mode) onSetMode(need);
-  }, [open, step, mode, onSetMode]);
+  }, [open, step, mode, onSetMode, STEPS]);
 
   // Compute spotlight + card position whenever the active step changes.
   useLayoutEffect(() => {
     if (!open) return;
     const current = STEPS[step];
+    if (!current) return;
 
     // Centered cards (welcome / final): no target, no spotlight.
     if (!current.target) {
@@ -215,10 +289,8 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
     setRect(r);
     setCardPos(positionCard(r, current.side));
 
-    // Scroll the target into view if needed.
     el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
 
-    // Re-measure on resize.
     const onResize = () => {
       const rr = el.getBoundingClientRect();
       setRect(rr);
@@ -226,9 +298,9 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
-  }, [open, step, mode]);
+  }, [open, step, mode, STEPS]);
 
-  // ESC closes the tour.
+  // ESC closes the tour, arrows navigate.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -243,23 +315,33 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
 
   const next = useCallback(() => {
     setStep((s) => Math.min(STEPS.length - 1, s + 1));
-  }, []);
+  }, [STEPS]);
 
   const back = useCallback(() => setStep((s) => Math.max(0, s - 1)), []);
   const finish = useCallback(() => onClose(), [onClose]);
 
   if (!open || typeof document === "undefined") return null;
+  if (!STEPS || STEPS.length === 0) return null;
+
+  // When the track changes (e.g. main tour chains into a mode-mini tour),
+  // there is one render between the new track being applied and the
+  // step-reset useEffect firing. During that render `step` may be out of
+  // bounds for the new STEPS array, which would crash `current.target`
+  // below. Skip rendering until the reset effect catches up.
+  if (step >= STEPS.length) return null;
 
   const current = STEPS[step];
+  if (!current) return null;
   const isLast = step === STEPS.length - 1;
   const isFirst = step === 0;
-  // On targeted steps, the user should be free to actually click the thing
-  // we are highlighting (the rail, the run button, etc.) so the tour
-  // teaches them by letting them try. The outer container becomes click-
-  // through; only the tutorial card itself catches pointer events. On
-  // centered "welcome" / "final" steps we keep the overlay blocking so the
-  // user is pinned to the card.
   const passThrough = !!current.target;
+
+  const trackLabel: Record<TutorialTrack, string> = {
+    main: "Quick tour",
+    journalism: "Journalism mode",
+    essays: "Essays mode",
+    research: "Research mode",
+  };
 
   return createPortal(
     <div
@@ -270,10 +352,6 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
       aria-modal
       role="dialog"
     >
-      {/* Spotlight cutout: a small div positioned over the target, with a
-          giant box-shadow that darkens everything outside it. The cutout
-          itself is transparent so the target stays visible and interactive
-          underneath. pointer-events-none so clicks fall through. */}
       {rect ? (
         <div
           className="pointer-events-none absolute rounded-2xl transition-all duration-300 ease-out"
@@ -294,10 +372,9 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
         />
       )}
 
-      {/* The explainer card. Animates in on each step change. */}
       {cardPos && (
         <div
-          key={step}
+          key={`${track}-${step}`}
           className="pointer-events-auto absolute rounded-2xl bg-white shadow-2xl"
           style={{
             top: cardPos.top,
@@ -310,7 +387,7 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
           <div className="p-5">
             <div className="mb-1 flex items-center justify-between">
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-neutral-400">
-                Step {step + 1} of {STEPS.length}
+                {trackLabel[track]} · Step {step + 1} of {STEPS.length}
               </span>
               <button
                 onClick={onClose}
@@ -353,7 +430,7 @@ export function Tutorial({ open, onClose, mode, onSetMode }: Props) {
                     onClick={onClose}
                     className="rounded-lg px-2.5 py-1.5 text-[12px] font-medium text-neutral-500 hover:text-neutral-800"
                   >
-                    Skip tour
+                    Skip
                   </button>
                 )}
                 {isLast ? (
@@ -397,9 +474,8 @@ function positionCard(
   const vw = window.innerWidth;
   const vh = window.innerHeight;
   const cardW = CARD_WIDTH;
-  const cardH = 260; // approximate; overflows are clamped below
+  const cardH = 260;
 
-  // Auto pick when not specified: largest open side.
   let side = preferred;
   if (!side) {
     const space = {
@@ -433,7 +509,6 @@ function positionCard(
       break;
   }
 
-  // Clamp to viewport with a small padding.
   top = Math.max(VIEWPORT_PADDING, Math.min(vh - cardH - VIEWPORT_PADDING, top));
   left = Math.max(VIEWPORT_PADDING, Math.min(vw - cardW - VIEWPORT_PADDING, left));
 

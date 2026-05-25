@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "The Red Room",
     description:
-      "An independent team of AI editors, reviewing your draft before you publish.",
+      "An independent team of AI editors.",
     type: "website",
     siteName: "The Red Room",
     locale: "en_US",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "The Red Room",
     description:
-      "An independent team of AI editors, reviewing your draft before you publish.",
+      "An independent team of AI editors.",
   },
   robots: {
     index: true,
