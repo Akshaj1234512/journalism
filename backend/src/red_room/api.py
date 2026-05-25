@@ -1,15 +1,24 @@
 from __future__ import annotations
 
+import base64
 import json
 import os
+from typing import Optional
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from sse_starlette.sse import EventSourceResponse
 
 from red_room import orchestrator
-from red_room.schemas import CitationStyle, CritiqueRequest, EssayType, Mode
+from red_room.schemas import (
+    CitationStyle,
+    CritiqueRequest,
+    EssayType,
+    Mode,
+    ResearchSection,
+    ResearchSubject,
+)
 
 
 load_dotenv()
@@ -26,6 +35,12 @@ app.add_middleware(
 )
 
 
+# Hard cap on uploaded PDF size. Anthropic accepts up to 32MB; we cap a bit
+# below to leave room for the encoded payload and to avoid runaway costs on
+# accidentally-huge uploads.
+MAX_PDF_BYTES = 25 * 1024 * 1024  # 25MB
+
+
 @app.get("/health")
 async def health() -> dict:
     return {"status": "ok"}
@@ -37,6 +52,9 @@ def _filtered_agents(
     citation_style: CitationStyle,
     essay_type: EssayType,
     essay_prompt: str | None,
+    research_section: ResearchSection = "full_paper",
+    research_subject: ResearchSubject = "none",
+    research_venue: str | None = None,
 ):
     """Build the roster for this request, skipping any agent the user has
     turned off in the UI. Disabled agents are dropped here so they never
@@ -49,6 +67,9 @@ def _filtered_agents(
             citation_style=citation_style,
             essay_type=essay_type,
             essay_prompt=essay_prompt,
+            research_section=research_section,
+            research_subject=research_subject,
+            research_venue=research_venue,
         )
         if a.name not in disabled_set
     ]
@@ -67,6 +88,9 @@ async def critique(req: CritiqueRequest) -> dict:
             req.citation_style,
             req.essay_type,
             req.essay_prompt,
+            req.research_section,
+            req.research_subject,
+            req.research_venue,
         ),
     )
     return result.model_dump()
@@ -74,8 +98,9 @@ async def critique(req: CritiqueRequest) -> dict:
 
 @app.post("/critique/stream")
 async def critique_stream(req: CritiqueRequest) -> EventSourceResponse:
-    """SSE endpoint consumed by the frontend. Emits one event per agent
-    state change so critiques pop into the sidebar as they are produced."""
+    """SSE endpoint consumed by the frontend (journalism / essays modes).
+    Emits one event per agent state change so critiques pop into the
+    sidebar as they are produced."""
     agents = _filtered_agents(
         req.disabled_agents,
         req.mode,
@@ -87,6 +112,74 @@ async def critique_stream(req: CritiqueRequest) -> EventSourceResponse:
     async def event_iter():
         async for event in orchestrator.stream(
             req.article, article_id=req.article_id, agents=agents,
+        ):
+            yield {"event": event.kind, "data": json.dumps(event.to_dict())}
+
+    return EventSourceResponse(event_iter())
+
+
+@app.post("/critique/stream-pdf")
+async def critique_stream_pdf(
+    pdf: UploadFile = File(...),
+    mode: Mode = Form("research"),
+    research_section: ResearchSection = Form("full_paper"),
+    research_subject: ResearchSubject = Form("none"),
+    research_venue: Optional[str] = Form(None),
+    disabled_agents: Optional[str] = Form(None),     # JSON-encoded list
+    article_id: Optional[str] = Form(None),
+) -> EventSourceResponse:
+    """Streaming endpoint for research mode. Accepts a PDF upload + the
+    research-specific routing fields. Each agent receives the PDF as a
+    cached document input plus a section-focus instruction."""
+    if mode != "research":
+        raise HTTPException(
+            status_code=400,
+            detail="This endpoint is for research mode only. Use /critique/stream for journalism / essays.",
+        )
+
+    # Read + size-check the upload, then base64-encode for Anthropic.
+    pdf_bytes = await pdf.read()
+    if len(pdf_bytes) > MAX_PDF_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"PDF too large ({len(pdf_bytes)} bytes). Cap is {MAX_PDF_BYTES} bytes.",
+        )
+    if not pdf_bytes.startswith(b"%PDF"):
+        raise HTTPException(
+            status_code=400,
+            detail="Uploaded file does not appear to be a PDF.",
+        )
+    pdf_b64 = base64.standard_b64encode(pdf_bytes).decode("ascii")
+
+    disabled: list[str] | None = None
+    if disabled_agents:
+        try:
+            parsed = json.loads(disabled_agents)
+            if isinstance(parsed, list):
+                disabled = [str(x) for x in parsed]
+        except json.JSONDecodeError:
+            pass
+
+    agents = _filtered_agents(
+        disabled,
+        mode,
+        "none",          # citation_style — unused in research mode
+        "none",          # essay_type — unused
+        None,            # essay_prompt — unused
+        research_section,
+        research_subject,
+        research_venue,
+    )
+
+    # Article string is a short focus label; real content is the PDF.
+    article_label = f"Research paper review (section: {research_section})"
+
+    async def event_iter():
+        async for event in orchestrator.stream(
+            article_label,
+            article_id=article_id,
+            agents=agents,
+            pdf_b64=pdf_b64,
         ):
             yield {"event": event.kind, "data": json.dumps(event.to_dict())}
 

@@ -7,7 +7,7 @@ AgentName = Literal[
     "data_expert",
     "human_rights",
     "partisan",
-    # Shared craft editors (run in BOTH modes).
+    # Shared craft editors (run in BOTH journalism + essays).
     "thesis_editor",
     "prose_style",
     "structure_editor",
@@ -22,9 +22,35 @@ AgentName = Literal[
     "narrative_editor",
     "research_editor",
     "rhetorical_editor",
+    # Research-paper editors (run in research mode).
+    "methodology_editor",
+    "cs_ml_specialist",
 ]
 
-Mode = Literal["journalism", "essays"]
+Mode = Literal["journalism", "essays", "research"]
+
+# Which section of the paper the user wants reviewed. Agents focus on this
+# section but have access to the full PDF for cross-section context.
+ResearchSection = Literal[
+    "abstract",
+    "introduction",
+    "related_work",
+    "methods",
+    "results",
+    "discussion",
+    "conclusion",
+    "full_paper",
+]
+
+# Subject area picks the specialist editor that runs alongside the core
+# research editors. Each area has its own conference conventions.
+ResearchSubject = Literal[
+    "cs_ml",          # CS / ML (ICML, NeurIPS, ICLR, AAAI)
+    "engineering",    # IEEE conventions (ICRA, IROS)
+    "biology",        # Nature / Cell / PLOS / eLife
+    "medicine",       # NEJM / Lancet / JAMA
+    "none",
+]
 CitationStyle = Literal["mla", "apa", "chicago", "turabian", "none"]
 EssayType = Literal[
     "argumentative",
@@ -91,6 +117,21 @@ class CritiqueRequest(BaseModel):
         description="Optional assignment prompt or context the writer pastes in. "
         "Only the matching Purpose Editor sees it; core craft editors ignore it. "
         "Lets the purpose editor tailor feedback to what the rubric asked for.",
+    )
+    research_section: ResearchSection = Field(
+        default="full_paper",
+        description="Which section of the research paper the agents should focus on. "
+        "They get the full PDF for context but write feedback against the chosen section.",
+    )
+    research_subject: ResearchSubject = Field(
+        default="none",
+        description="Subject-area specialist to run alongside the core research editors. "
+        "Each area knows its venues' conventions (CS: ICML/NeurIPS, Bio: Nature/Cell, etc.).",
+    )
+    research_venue: str | None = Field(
+        default=None,
+        description="Optional target venue name (e.g. 'ICML 2026', 'Nature Methods'). "
+        "Threaded into the subject specialist's user context so it tunes to that venue's bar.",
     )
     disabled_agents: list[str] | None = Field(
         default=None,

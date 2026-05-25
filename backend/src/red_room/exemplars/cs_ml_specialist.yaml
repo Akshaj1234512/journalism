@@ -1,0 +1,165 @@
+# Exemplars for cs_ml_specialist (Cyril)
+# Anchored on ICML/NeurIPS/ICLR reviewer-feedback patterns and the public
+# NeurIPS reproducibility checklist. Cyril's voice is a working CS / ML
+# conference reviewer's voice.
+#
+- source: 'NeurIPS reviewer concern: novelty bar for main track'
+  article: |-
+    In this paper, we benchmark eight existing fine-tuning methods on the new MERIDIAN-Bench evaluation suite and provide a comprehensive analysis of their relative strengths.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: we benchmark eight existing fine-tuning methods
+    span: [0, 47]
+    issue_label: novelty bar (main track)
+    question: |-
+      A benchmark study comparing existing methods is a useful contribution, but the NeurIPS main track typically requires a new method, insight, or theoretical result. Without a novel contribution beyond the benchmark itself, the appropriate venue is a workshop track or the Datasets and Benchmarks track. The current framing positions this as a main-conference submission.
+    why_it_matters: |-
+      An Area Chair reading this for the main track will likely route it to the D&B track or recommend rejection on novelty grounds.
+    fix_suggestion: |-
+      If the contribution is the benchmark itself, retarget to the NeurIPS Datasets & Benchmarks track or ICLR's similar venue. If the contribution is an empirical insight from the benchmarking, sharpen the Abstract and Intro to name that insight explicitly and show how it changes practice.
+    replacement: null
+    severity: high
+- source: 'standard scale-confound concern in LLM papers'
+  article: |-
+    Our 70B-parameter model fine-tuned with our proposed method outperforms a 13B baseline by 8.4 points on MMLU.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: outperforms a 13B baseline by 8.4 points on MMLU
+    span: [54, 100]
+    issue_label: scale confound (70B vs 13B)
+    question: |-
+      Comparing a 70B model to a 13B baseline does not isolate the contribution of your fine-tuning method: most of the 8.4-point gain may come from the 5.4x parameter scale, which any fine-tuning method (or none) would benefit from. The fair comparison is at matched parameter count, ideally with the same base model family.
+    why_it_matters: |-
+      Reviewers familiar with the LLM-scaling literature will discount this comparison entirely; the result needs to be redone at matched scale.
+    fix_suggestion: |-
+      Add a 70B-vs-70B comparison (apply your method to the 70B and compare to a strong 70B baseline of the same family) or a 13B-vs-13B comparison. If compute is the constraint, run the smaller comparison and frame the larger result as a scaling validation, not the main claim.
+    replacement: null
+    severity: high
+- source: 'NeurIPS / ICLR: reproducibility checklist required'
+  article: |-
+    All experiments were conducted on a single workstation with consumer-grade GPUs. We release training code and trained checkpoints on GitHub.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: All experiments were conducted on a single workstation with consumer-grade GPUs.
+    span: [0, 81]
+    issue_label: compute budget not specified
+    question: |-
+      "Consumer-grade GPUs" is not a specification. The NeurIPS reproducibility checklist requires GPU type, training time per experiment, and total compute. A reader cannot estimate the cost of reproducing your results, and reviewers cannot compare your method's efficiency claims against alternatives.
+    why_it_matters: |-
+      Reviewers flag missing compute information consistently; it's an easy "incomplete" mark on the reproducibility checklist.
+    fix_suggestion: |-
+      Add a table or paragraph listing: GPU model (e.g., RTX 4090, A6000), number of GPUs used, training time per main experiment, and total compute in GPU-hours. Include this in the Methods section, not buried in the appendix.
+    replacement: null
+    severity: medium
+- source: 'LLM-eval-specific concern: prompt sensitivity'
+  article: |-
+    We evaluate the model on GSM8K and MATH using few-shot chain-of-thought prompting and report accuracy. Our method improves accuracy by 3.2 points on average.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: few-shot chain-of-thought prompting and report accuracy
+    span: [40, 95]
+    issue_label: prompt sensitivity not addressed
+    question: |-
+      LLM evaluation results on GSM8K and MATH are well-documented to be highly prompt-sensitive: changing the few-shot examples, the prompt wording, or the answer extraction regex can swing results by 3+ points. The paper does not report which prompts were used, whether multiple prompts were tried, or how answer extraction was implemented.
+    why_it_matters: |-
+      Reviewers familiar with LLM evaluation will read a 3.2-point gain without prompt-sensitivity analysis as potentially noise.
+    fix_suggestion: |-
+      Add an appendix section with the exact prompts used (few-shot examples, system message, answer-extraction regex). Run a prompt-sensitivity ablation: 3 different few-shot example sets, report mean and standard deviation. Move the prompts into the released code.
+    replacement: null
+    severity: high
+- source: 'standard related-work positioning concern'
+  article: |-
+    We propose a novel method for steering language model generation through activation editing.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: a novel method for steering language model generation through activation editing
+    span: [11, 90]
+    issue_label: novelty claim vs concurrent work
+    question: |-
+      Activation steering is a well-developed line of work (Hernandez et al. 2023, Turner et al. 2023, ITI by Li et al. 2023, RepE by Zou et al. 2023). "Novel" needs to specify what's new relative to these. The paper's Related Work doesn't position the contribution against this cluster, so the novelty claim reads as unaware of prior work rather than building on it.
+    why_it_matters: |-
+      Reviewers familiar with the activation-steering literature will mark the novelty claim as overstated and the related work as incomplete.
+    fix_suggestion: |-
+      Rewrite the contribution claim to specify what's new (a new objective? a new layer choice? a new control regime?). Expand the Related Work to acknowledge the steering / RepE line and articulate the specific gap your method addresses.
+    replacement: null
+    severity: high
+- source: 'ICML / NeurIPS theory-claim convention'
+  article: |-
+    Theoretically, our method has better generalization properties than standard approaches because it implicitly regularizes the model.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: Theoretically, our method has better generalization properties
+    span: [0, 60]
+    issue_label: theoretical claim without theorem
+    question: |-
+      A theoretical claim about generalization at an ICML / NeurIPS venue is expected to be backed by a theorem, a proof, or at minimum a proof sketch in the appendix. "Implicitly regularizes" is a hypothesis; without a formal statement (Rademacher complexity bound, PAC-Bayes argument, or similar) reviewers will treat the claim as informal hand-waving.
+    why_it_matters: |-
+      The discrepancy between "theoretically" and "no theorem" is a clear flag at ML theory venues and a credibility hit at empirical ones.
+    fix_suggestion: |-
+      Either drop the "theoretical" framing and present this as an empirical observation supported by experiments, or add a formal statement and proof sketch in an appendix. If the latter, name the assumptions and the bound type explicitly.
+    replacement: null
+    severity: medium
+- source: 'NeurIPS LLM-eval contamination'
+  article: |-
+    We evaluate our model on MMLU and report a top-1 accuracy of 71.4%, an improvement of 2.1 points over the baseline.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: 71.4%, an improvement of 2.1 points
+    span: [0, 39]
+    issue_label: MMLU contamination check absent
+    question: |-
+      MMLU is known to be partly contaminated in most open-source pretraining corpora, and the contamination footprint differs by model. A 2.1-point gain on MMLU without a contamination check could be attributable to your training data overlapping the test set rather than to the method. The paper does not report a contamination analysis.
+    why_it_matters: |-
+      LLM-savvy reviewers expect contamination checks on MMLU-style benchmarks; the absence will be flagged.
+    fix_suggestion: |-
+      Run an n-gram overlap or model-likelihood contamination check between your training data and MMLU (Pythia-style or Llama-3 paper-style methodology). Report the contamination rate. If feasible, evaluate on a verified-contamination-free subset and re-report the gain.
+    replacement: null
+    severity: medium
+- source: 'standard ablation-table convention'
+  article: |-
+    We performed an ablation study showing that each component of our method contributes positively (Table 4).
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: We performed an ablation study
+    span: [0, 30]
+    issue_label: ablation table format
+    question: |-
+      Table 4 lists ablations but doesn't follow the standard ML-paper convention: full method in row 1, then one ablation per row going from least-impactful to most-impactful, then the bare baseline at the bottom. As presented, the reader can't easily see which component is doing the most work. Per-component contribution numbers are also missing standard deviations across seeds.
+    why_it_matters: |-
+      The hardest reviewer test of an ablation table is "what's the most-stripped version that still beats the baseline?" Your table doesn't make that easy to read.
+    fix_suggestion: |-
+      Restructure Table 4: row 1 = full method (with mean and standard deviation), then rows that remove one component each, then a "baseline only" row. Order rows by performance impact (smallest drop first, largest drop last). Three seeds per cell.
+    replacement: null
+    severity: medium
+- source: 'evaluation regime vs claim alignment'
+  article: |-
+    Our method is particularly well-suited to low-data regimes. We demonstrate this on the SST-2 and CoLA benchmarks.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: particularly well-suited to low-data regimes
+    span: [0, 45]
+    issue_label: claim doesn't match evaluation regime
+    question: |-
+      The paper claims the method excels in low-data regimes but evaluates on SST-2 and CoLA at their default training-set sizes (67K and 8.5K examples). The "low-data" claim needs evaluation at intentionally subsampled regimes: typically 16, 64, 256, 1024 examples, possibly more.
+    why_it_matters: |-
+      A reviewer who reads the claim and the experiments will notice the mismatch immediately and ask for the experiments that would actually support the claim.
+    fix_suggestion: |-
+      Add a subsection in Results: subsample the training data to {16, 64, 256, 1024} examples per class. Run your method and the baselines at each setting (5 seeds each). Plot accuracy vs. training-set size. If your method's advantage grows as data shrinks, the claim is supported.
+    replacement: null
+    severity: high
+- source: 'standard description-precision concern'
+  article: |-
+    We use a modified attention mechanism that incorporates positional information through learned offsets, similar in spirit to relative position encoding.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: 'similar in spirit to relative position encoding'
+    span: [82, 130]
+    issue_label: architecture described too informally
+    question: |-
+      "Similar in spirit to" is not a specification. An ML paper's attention mechanism needs to be defined precisely: an equation showing how queries, keys, values, and the positional term combine, or pseudocode that an implementer could follow. As written, two competent practitioners would implement two different things.
+    why_it_matters: |-
+      Without precise definition, reviewers cannot judge whether your formulation is novel and practitioners cannot reproduce it.
+    fix_suggestion: |-
+      Add an equation block (or two) showing the exact attention computation. Specify the dimensionality of the learned offset, where in the attention formula it enters (additive on logits? gated on values?), and any normalization. Include pseudocode in the appendix.
+    replacement: null
+    severity: medium

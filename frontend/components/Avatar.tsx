@@ -66,6 +66,8 @@ const AVATARS: Record<AgentName, () => React.ReactNode> = {
   narrative_editor: NoraAvatar,
   research_editor: ReeseAvatar,
   rhetorical_editor: RheaAvatar,
+  methodology_editor: MiraAvatar,
+  cs_ml_specialist: CyrilAvatar,
 };
 
 /* Anne — Legal Skeptic. Pink background, sharp dark bob, slight angle. */
@@ -384,6 +386,45 @@ function ParkerAvatar() {
       <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
       <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
       <path d="M36 41 L 44 41" stroke="#7C2D12" strokeWidth="1.4" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Mira — Methodology Editor. Teal, lab-coat, focused expression. */
+function MiraAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#CCFBF1" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#0F766E" />
+      {/* lab-coat lapels suggested by lighter triangles on shoulders */}
+      <path d="M34 50 L 40 62 L 46 50 Z" fill="#F0FDFA" />
+      <rect x="34" y="42" width="12" height="10" fill="#F9A8D4" />
+      <circle cx="40" cy="34" r="14" fill="#FBCFE8" />
+      {/* hair — neat shoulder-length, parted */}
+      <path d="M24 30 Q 22 14, 40 13 Q 58 14, 56 30 Q 56 38, 54 42 L 50 26 Q 40 22, 30 26 L 26 42 Q 24 38, 24 30 Z" fill="#3F2E1A" />
+      <line x1="40" y1="15" x2="40" y2="20" stroke="#1F0F00" strokeWidth="0.8" />
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      <path d="M36 42 L 44 42" stroke="#0F766E" strokeWidth="1.2" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Cyril — CS / ML Specialist. Blue, glasses, slightly nerdy. */
+function CyrilAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#DBEAFE" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#1D4ED8" />
+      <rect x="34" y="42" width="12" height="10" fill="#A78B6E" />
+      <circle cx="40" cy="34" r="14" fill="#C39A75" />
+      {/* hair — short, slightly tousled */}
+      <path d="M26 30 Q 28 16, 40 16 Q 52 16, 54 30 Q 50 24, 44 26 Q 40 22, 36 26 Q 30 24, 26 30 Z" fill="#1F2937" />
+      {/* rectangular tech glasses */}
+      <rect x="30" y="31" width="8" height="6" rx="1" stroke="#0F172A" strokeWidth="1.2" fill="none" />
+      <rect x="42" y="31" width="8" height="6" rx="1" stroke="#0F172A" strokeWidth="1.2" fill="none" />
+      <line x1="38" y1="34" x2="42" y2="34" stroke="#0F172A" strokeWidth="1.2" />
+      <path d="M36 41 Q 40 42, 44 41" stroke="#1D4ED8" strokeWidth="1.2" fill="none" strokeLinecap="round" />
     </>
   );
 }

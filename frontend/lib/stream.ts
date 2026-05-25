@@ -1,4 +1,12 @@
-import { Critique, AgentName, CitationStyle, EssayType, Mode } from "./types";
+import {
+  Critique,
+  AgentName,
+  CitationStyle,
+  EssayType,
+  Mode,
+  ResearchSection,
+  ResearchSubject,
+} from "./types";
 
 type StreamEvent =
   | { kind: "agent_start"; agent: string }
@@ -102,6 +110,88 @@ export function streamCritique(
 
   return controller;
 }
+
+/**
+ * Research-mode upload + stream. Sends a PDF file as multipart/form-data
+ * to /critique/stream-pdf with the research routing fields. Returns an
+ * AbortController so the caller can cancel mid-stream.
+ */
+interface ResearchStreamOptions {
+  disabledAgents?: AgentName[];
+  section?: ResearchSection;
+  subject?: ResearchSubject;
+  venue?: string;
+}
+
+export function streamResearchCritique(
+  backendUrl: string,
+  pdf: File,
+  handlers: Handlers,
+  options: ResearchStreamOptions = {},
+): AbortController {
+  const controller = new AbortController();
+  const {
+    disabledAgents = [],
+    section = "full_paper",
+    subject = "none",
+    venue = "",
+  } = options;
+
+  (async () => {
+    try {
+      const form = new FormData();
+      form.append("pdf", pdf, pdf.name);
+      form.append("mode", "research");
+      form.append("research_section", section);
+      form.append("research_subject", subject);
+      if (venue) form.append("research_venue", venue);
+      form.append("disabled_agents", JSON.stringify(disabledAgents));
+
+      const response = await fetch(`${backendUrl}/critique/stream-pdf`, {
+        method: "POST",
+        body: form,
+        signal: controller.signal,
+      });
+      if (!response.ok || !response.body) {
+        handlers.onError?.(friendlyHttpError(response.status));
+        return;
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      const DELIM = /\r?\n\r?\n/;
+      const LINE = /\r?\n/;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        while (true) {
+          const m = buffer.match(DELIM);
+          if (!m || m.index === undefined) break;
+          const block = buffer.slice(0, m.index);
+          buffer = buffer.slice(m.index + m[0].length);
+          const dataLine = block.split(LINE).find((l) => l.startsWith("data:"));
+          if (!dataLine) continue;
+          try {
+            const payload = JSON.parse(dataLine.slice(5).trim()) as StreamEvent;
+            dispatch(payload, handlers);
+          } catch (err) {
+            console.error("SSE parse error", err, dataLine);
+          }
+        }
+      }
+    } catch (e) {
+      const err = e as Error;
+      if (err.name === "AbortError") return;
+      handlers.onError?.(friendlyNetworkError(err));
+    }
+  })();
+
+  return controller;
+}
+
 
 function dispatch(ev: StreamEvent, h: Handlers) {
   switch (ev.kind) {

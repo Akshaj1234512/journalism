@@ -11,6 +11,7 @@ import { SampleDraftsButton } from "@/components/SampleDrafts";
 import { Tutorial } from "@/components/Tutorial";
 import { streamCritique } from "@/lib/stream";
 import { PLANS, countWords } from "@/lib/plans";
+import { streamResearchCritique } from "@/lib/stream";
 import {
   AgentName,
   CitationStyle,
@@ -19,7 +20,12 @@ import {
   EssayType,
   MODE_AGENTS,
   Mode,
+  RESEARCH_SECTION_CHOICES,
+  RESEARCH_SUBJECT_CHOICES,
+  ResearchSection,
+  ResearchSubject,
   getEssaysRoster,
+  getResearchRoster,
 } from "@/lib/types";
 import { extractTextFromFile } from "@/lib/upload";
 
@@ -36,6 +42,9 @@ const MODE_KEY = "redroom:mode";
 const CITATION_KEY = "redroom:citation-style";
 const ESSAY_TYPE_KEY = "redroom:essay-type";
 const ESSAY_PROMPT_KEY = "redroom:essay-prompt";
+const RESEARCH_SECTION_KEY = "redroom:research-section";
+const RESEARCH_SUBJECT_KEY = "redroom:research-subject";
+const RESEARCH_VENUE_KEY = "redroom:research-venue";
 
 export default function Page() {
   const [article, setArticle] = useState(SAMPLE_DRAFT);
@@ -43,6 +52,14 @@ export default function Page() {
   const [citationStyle, setCitationStyle] = useState<CitationStyle>("none");
   const [essayType, setEssayType] = useState<EssayType>("none");
   const [essayPrompt, setEssayPrompt] = useState<string>("");
+  // Research-mode state. The PDF stays in memory only; section / subject /
+  // venue persist in localStorage so the writer doesn't reset their setup
+  // when they reload.
+  const [researchPdf, setResearchPdf] = useState<File | null>(null);
+  const [researchSection, setResearchSection] = useState<ResearchSection>("full_paper");
+  const [researchSubject, setResearchSubject] = useState<ResearchSubject>("cs_ml");
+  const [researchVenue, setResearchVenue] = useState<string>("");
+  const researchFileInputRef = useRef<HTMLInputElement>(null);
   const [critiques, setCritiques] = useState<Critique[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [status, setStatus] = useState<"idle" | "running" | "done" | "error">("idle");
@@ -79,7 +96,28 @@ export default function Page() {
     } catch {}
     try {
       const m = localStorage.getItem(MODE_KEY);
-      if (m === "essays" || m === "journalism") setMode(m);
+      if (m === "essays" || m === "journalism" || m === "research") setMode(m);
+    } catch {}
+    try {
+      const rs = localStorage.getItem(RESEARCH_SECTION_KEY);
+      const valid: ResearchSection[] = [
+        "abstract", "introduction", "related_work", "methods",
+        "results", "discussion", "conclusion", "full_paper",
+      ];
+      if (rs && valid.includes(rs as ResearchSection)) {
+        setResearchSection(rs as ResearchSection);
+      }
+    } catch {}
+    try {
+      const rsubj = localStorage.getItem(RESEARCH_SUBJECT_KEY);
+      const valid: ResearchSubject[] = ["cs_ml", "engineering", "biology", "medicine", "none"];
+      if (rsubj && valid.includes(rsubj as ResearchSubject)) {
+        setResearchSubject(rsubj as ResearchSubject);
+      }
+    } catch {}
+    try {
+      const rv = localStorage.getItem(RESEARCH_VENUE_KEY);
+      if (rv) setResearchVenue(rv);
     } catch {}
     try {
       const cs = localStorage.getItem(CITATION_KEY);
@@ -123,6 +161,18 @@ export default function Page() {
   }, [essayPrompt]);
 
   useEffect(() => {
+    try { localStorage.setItem(RESEARCH_SECTION_KEY, researchSection); } catch {}
+  }, [researchSection]);
+
+  useEffect(() => {
+    try { localStorage.setItem(RESEARCH_SUBJECT_KEY, researchSubject); } catch {}
+  }, [researchSubject]);
+
+  useEffect(() => {
+    try { localStorage.setItem(RESEARCH_VENUE_KEY, researchVenue); } catch {}
+  }, [researchVenue]);
+
+  useEffect(() => {
     try {
       localStorage.setItem(DISABLED_KEY, JSON.stringify(Array.from(disabledAgents)));
     } catch {}
@@ -159,28 +209,51 @@ export default function Page() {
     setResolvedIds(new Set());
     setStatus("running");
 
+    // Shared stream handlers (same for all modes).
+    const handlers = {
+      onAgentStart: (agent: string) =>
+        setRunningAgents((prev) => new Set(prev).add(agent as AgentName)),
+      onCritique: (c: Critique) =>
+        setCritiques((prev) => [...prev, { ...c, _id: crypto.randomUUID() }]),
+      onAgentDone: (agent: string) => {
+        setRunningAgents((prev) => {
+          const next = new Set(prev);
+          next.delete(agent as AgentName);
+          return next;
+        });
+        setDoneAgents((prev) => new Set(prev).add(agent as AgentName));
+      },
+      onDone: () => setStatus("done"),
+      onError: (msg: string) => {
+        setErrorMessage(msg);
+        setStatus("error");
+      },
+    };
+
+    if (mode === "research") {
+      if (!researchPdf) {
+        setErrorMessage("Upload a PDF before running the review.");
+        setStatus("error");
+        return;
+      }
+      abortRef.current = streamResearchCritique(
+        BACKEND_URL,
+        researchPdf,
+        handlers,
+        {
+          disabledAgents: Array.from(disabledAgents),
+          section: researchSection,
+          subject: researchSubject,
+          venue: researchVenue.trim(),
+        },
+      );
+      return;
+    }
+
     abortRef.current = streamCritique(
       BACKEND_URL,
       article,
-      {
-        onAgentStart: (agent) =>
-          setRunningAgents((prev) => new Set(prev).add(agent as AgentName)),
-        onCritique: (c) =>
-          setCritiques((prev) => [...prev, { ...c, _id: crypto.randomUUID() }]),
-        onAgentDone: (agent) => {
-          setRunningAgents((prev) => {
-            const next = new Set(prev);
-            next.delete(agent as AgentName);
-            return next;
-          });
-          setDoneAgents((prev) => new Set(prev).add(agent as AgentName));
-        },
-        onDone: () => setStatus("done"),
-        onError: (msg) => {
-          setErrorMessage(msg);
-          setStatus("error");
-        },
-      },
+      handlers,
       {
         disabledAgents: Array.from(disabledAgents),
         mode,
@@ -189,7 +262,18 @@ export default function Page() {
         essayPrompt: essayPrompt.trim(),
       },
     );
-  }, [article, disabledAgents, mode, citationStyle, essayType, essayPrompt]);
+  }, [
+    article,
+    disabledAgents,
+    mode,
+    citationStyle,
+    essayType,
+    essayPrompt,
+    researchPdf,
+    researchSection,
+    researchSubject,
+    researchVenue,
+  ]);
 
   const onSelectCritique = useCallback(
     (id: string | null) => {
@@ -303,7 +387,11 @@ export default function Page() {
   // The essays rail grows when an essay type is picked (Sol + the matching
   // Purpose Editor are appended). Journalism rail is fixed.
   const modeRoster =
-    mode === "essays" ? getEssaysRoster(essayType) : MODE_AGENTS.journalism;
+    mode === "research"
+      ? getResearchRoster(researchSubject)
+      : mode === "essays"
+        ? getEssaysRoster(essayType)
+        : MODE_AGENTS.journalism;
   const totalAgents = modeRoster.length;
   const enabledCount = modeRoster.filter((a) => !disabledAgents.has(a)).length;
 
@@ -356,7 +444,13 @@ export default function Page() {
           <button
             data-tutorial="run"
             onClick={onRun}
-            disabled={status === "running" || article.trim().length === 0 || enabledCount === 0 || overCap}
+            disabled={
+              status === "running" ||
+              enabledCount === 0 ||
+              (mode === "research"
+                ? !researchPdf
+                : article.trim().length === 0 || overCap)
+            }
             className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
           >
             {status === "running" ? (
@@ -402,6 +496,20 @@ export default function Page() {
         </div>
       )}
 
+      {/* Research-mode sub-toolbar. Section / subject / venue selectors.
+          The PDF is uploaded inside the main pane below. */}
+      {mode === "research" && (
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-neutral-200 bg-stone-50 px-7 py-2">
+          <ResearchSectionPicker value={researchSection} onChange={setResearchSection} />
+          <ResearchSubjectPicker value={researchSubject} onChange={setResearchSubject} />
+          <ResearchVenueInput value={researchVenue} onChange={setResearchVenue} />
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] text-neutral-500">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            {enabledCount} of {totalAgents} editors active
+          </span>
+        </div>
+      )}
+
       <div className="flex flex-1 overflow-hidden">
         <div data-tutorial="rail" className="flex shrink-0">
           <AgentRoster
@@ -413,7 +521,23 @@ export default function Page() {
           />
         </div>
 
-        <div className="flex flex-1 items-stretch p-4">
+        <div className="flex flex-1 min-w-0 items-stretch p-4">
+          {mode === "research" ? (
+            <ResearchUploadPane
+              pdf={researchPdf}
+              onSelectPdf={(f) => {
+                setResearchPdf(f);
+                setCritiques([]);
+                setActiveId(null);
+                setResolvedIds(new Set());
+                setStatus("idle");
+                setErrorMessage(null);
+              }}
+              fileInputRef={researchFileInputRef}
+              section={researchSection}
+              subject={researchSubject}
+            />
+          ) : (
           <div
             data-tutorial="editor"
             className={[
@@ -523,6 +647,7 @@ export default function Page() {
               </div>
             )}
           </div>
+          )}
         </div>
 
         <div data-tutorial="sidebar" className="flex shrink-0">
@@ -574,6 +699,9 @@ function ModeSwitcher({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => v
       </ModeChip>
       <ModeChip active={mode === "essays"} onClick={() => onChange("essays")}>
         Essays
+      </ModeChip>
+      <ModeChip active={mode === "research"} onClick={() => onChange("research")}>
+        Research
       </ModeChip>
     </div>
   );
@@ -760,6 +888,219 @@ function PromptBoxButton({
         </div>
       )}
     </div>
+  );
+}
+
+function ResearchSectionPicker({
+  value,
+  onChange,
+}: {
+  value: ResearchSection;
+  onChange: (v: ResearchSection) => void;
+}) {
+  return (
+    <label className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800">
+      <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
+        Section
+      </span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value as ResearchSection)}
+        className="cursor-pointer border-0 bg-transparent text-[11.5px] font-medium text-neutral-800 focus:outline-none focus:ring-0"
+      >
+        {RESEARCH_SECTION_CHOICES.map((c) => (
+          <option key={c.value} value={c.value}>{c.label}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function ResearchSubjectPicker({
+  value,
+  onChange,
+}: {
+  value: ResearchSubject;
+  onChange: (v: ResearchSubject) => void;
+}) {
+  return (
+    <label className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800">
+      <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
+        Subject
+      </span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value as ResearchSubject)}
+        className="cursor-pointer border-0 bg-transparent text-[11.5px] font-medium text-neutral-800 focus:outline-none focus:ring-0"
+      >
+        {RESEARCH_SUBJECT_CHOICES.map((c) => (
+          <option key={c.value} value={c.value} disabled={!c.available}>
+            {c.label}{c.available ? "" : " (coming soon)"}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function ResearchVenueInput({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <label className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800">
+      <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
+        Venue
+      </span>
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="e.g. ICML 2026"
+        className="w-32 border-0 bg-transparent text-[11.5px] font-medium text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-0"
+      />
+    </label>
+  );
+}
+
+function ResearchUploadPane({
+  pdf,
+  onSelectPdf,
+  fileInputRef,
+  section,
+  subject,
+}: {
+  pdf: File | null;
+  onSelectPdf: (f: File | null) => void;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  section: ResearchSection;
+  subject: ResearchSubject;
+}) {
+  const [dragging, setDragging] = useState(false);
+  const sectionLabel =
+    RESEARCH_SECTION_CHOICES.find((c) => c.value === section)?.label ?? section;
+  const subjectLabel =
+    RESEARCH_SUBJECT_CHOICES.find((c) => c.value === subject)?.label ?? subject;
+
+  function onPickFile(f: File | null | undefined) {
+    if (!f) return;
+    if (!f.name.toLowerCase().endsWith(".pdf") && f.type !== "application/pdf") {
+      return; // ignore non-PDFs silently
+    }
+    if (f.size > 25 * 1024 * 1024) {
+      return; // ignore files over 25MB (backend cap)
+    }
+    onSelectPdf(f);
+  }
+
+  return (
+    <div
+      className={[
+        "relative flex flex-1 min-w-0 flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed bg-white p-10 text-center shadow-sm transition",
+        dragging
+          ? "border-rose-300 ring-4 ring-rose-100"
+          : pdf
+            ? "border-emerald-300 bg-emerald-50/40"
+            : "border-neutral-300",
+      ].join(" ")}
+      onDragEnter={(e) => {
+        if (!e.dataTransfer?.types?.includes("Files")) return;
+        e.preventDefault();
+        setDragging(true);
+      }}
+      onDragOver={(e) => {
+        if (!e.dataTransfer?.types?.includes("Files")) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "copy";
+      }}
+      onDragLeave={(e) => {
+        if (!e.dataTransfer?.types?.includes("Files")) return;
+        e.preventDefault();
+        setDragging(false);
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDragging(false);
+        onPickFile(e.dataTransfer?.files?.[0]);
+      }}
+    >
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".pdf,application/pdf"
+        className="hidden"
+        onChange={(e) => {
+          onPickFile(e.target.files?.[0]);
+          e.target.value = "";
+        }}
+      />
+
+      {pdf ? (
+        <>
+          <div className="mb-2 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+            <PdfGlyph />
+          </div>
+          <div className="max-w-full break-all font-serif text-xl text-neutral-900">{pdf.name}</div>
+          <div className="mt-1 text-[12.5px] text-neutral-500">
+            {(pdf.size / (1024 * 1024)).toFixed(1)} MB · reviewing{" "}
+            <span className="font-medium text-neutral-700">{sectionLabel}</span> against{" "}
+            <span className="font-medium text-neutral-700">{subjectLabel}</span> conventions
+          </div>
+          <div className="mt-5 flex items-center gap-2">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="rounded-xl border border-neutral-300 bg-white px-4 py-2 text-[12.5px] font-medium text-neutral-700 transition hover:bg-neutral-50"
+            >
+              Replace PDF
+            </button>
+            <button
+              onClick={() => onSelectPdf(null)}
+              className="rounded-xl px-4 py-2 text-[12.5px] font-medium text-neutral-500 transition hover:text-neutral-800"
+            >
+              Remove
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="mb-3 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-neutral-100 text-neutral-500">
+            <PdfGlyph />
+          </div>
+          <div className="font-serif text-2xl italic tracking-tight text-neutral-900">
+            Upload your paper
+          </div>
+          <p className="mt-2 max-w-[520px] text-[13px] text-neutral-500">
+            Drop a PDF here, or click below to browse. The room reads the
+            full paper (figures, tables, and all) and focuses critique on
+            the section you picked above.
+          </p>
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-4 py-2.5 text-[13px] font-semibold text-white shadow-sm transition hover:bg-neutral-700"
+          >
+            <PdfGlyph />
+            Choose PDF
+          </button>
+          <p className="mt-3 text-[11.5px] text-neutral-400">
+            PDF only · up to 25 MB · stays in this browser session
+          </p>
+        </>
+      )}
+    </div>
+  );
+}
+
+function PdfGlyph() {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M14 2 H6 a2 2 0 0 0 -2 2 v16 a2 2 0 0 0 2 2 h12 a2 2 0 0 0 2 -2 V8 Z" />
+      <path d="M14 2 v6 h6" />
+      <path d="M9 13 h6" />
+      <path d="M9 17 h6" />
+    </svg>
   );
 }
 

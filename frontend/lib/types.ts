@@ -4,7 +4,7 @@ export type AgentName =
   | "data_expert"
   | "human_rights"
   | "partisan"
-  // Shared craft layer (runs in BOTH modes)
+  // Shared craft layer (runs in BOTH journalism + essays)
   | "thesis_editor"
   | "prose_style"
   | "structure_editor"
@@ -18,11 +18,33 @@ export type AgentName =
   | "analytical_editor"
   | "narrative_editor"
   | "research_editor"
-  | "rhetorical_editor";
+  | "rhetorical_editor"
+  // Research-paper editors (run in research mode)
+  | "methodology_editor"
+  | "cs_ml_specialist";
 
 export type Severity = "high" | "medium" | "low";
 
-export type Mode = "journalism" | "essays";
+export type Mode = "journalism" | "essays" | "research";
+
+// Section of a research paper the agents focus their review on.
+export type ResearchSection =
+  | "abstract"
+  | "introduction"
+  | "related_work"
+  | "methods"
+  | "results"
+  | "discussion"
+  | "conclusion"
+  | "full_paper";
+
+// Subject area: picks which specialist runs alongside the core research editors.
+export type ResearchSubject =
+  | "cs_ml"
+  | "engineering"
+  | "biology"
+  | "medicine"
+  | "none";
 export type CitationStyle = "mla" | "apa" | "chicago" | "turabian" | "none";
 export type EssayType =
   | "argumentative"
@@ -350,6 +372,44 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
       "Reports that scholars disagree without entering the disagreement",
     ],
   },
+  methodology_editor: {
+    label: "Mira — Methodology",
+    shortLabel: "Methodology",
+    firstName: "Mira",
+    brandHex: "#0F766E",
+    highlightHex: "#CCFBF1",
+    borderClass: "border-teal-700",
+    available: true,
+    kind: "flagger",
+    mode: "research",
+    tagline:
+      "Reads your research paper for rigor failures the way an ICML or NeurIPS reviewer would. Catches missing baselines, missing ablations, no error bars, test-set tuning, cherry-picked benchmarks, and overclaiming.",
+    lookFor: [
+      "Missing or weak baselines (the obvious recent SOTA isn't compared)",
+      "Missing per-component ablations on a multi-part method",
+      "No error bars / no variance across seeds",
+      "Overclaim relative to evaluation scope",
+    ],
+  },
+  cs_ml_specialist: {
+    label: "Cyril — CS / ML Specialist",
+    shortLabel: "CS / ML",
+    firstName: "Cyril",
+    brandHex: "#1D4ED8",
+    highlightHex: "#DBEAFE",
+    borderClass: "border-blue-700",
+    available: true,
+    kind: "flagger",
+    mode: "research",
+    tagline:
+      "Reviews your paper against ICML / NeurIPS / ICLR conventions. Knows the venue bar on novelty, the scale-confound trap, reproducibility-checklist compliance, LLM-evaluation pitfalls (prompt sensitivity, contamination), and what ablation tables should look like.",
+    lookFor: [
+      "Novelty bar for the target venue (main track vs workshop)",
+      "Scale confound: is the gain just from a bigger model?",
+      "LLM eval pitfalls: prompt sensitivity, benchmark contamination",
+      "Reproducibility checklist compliance",
+    ],
+  },
   rhetorical_editor: {
     label: "Rhea — Rhetorical-Analysis Editor",
     shortLabel: "Rhetoric",
@@ -400,7 +460,86 @@ export const MODE_AGENTS: Record<Mode, AgentName[]> = {
     ...SHARED_CRAFT,
     "citation_editor",
   ],
+  // Research mode has its own roster (not shared with journalism / essays).
+  // Methodology editor always runs; subject specialist added at runtime.
+  research: [
+    "methodology_editor",
+  ],
 };
+
+// Maps the chosen research subject to its specialist agent. Phase 1 has
+// only CS/ML; engineering / biology / medicine come in Phase 2.
+export const RESEARCH_SPECIALIST_BY_SUBJECT: Partial<Record<
+  Exclude<ResearchSubject, "none">,
+  AgentName
+>> = {
+  cs_ml: "cs_ml_specialist",
+};
+
+export function getResearchRoster(subject: ResearchSubject): AgentName[] {
+  const roster: AgentName[] = [...MODE_AGENTS.research];
+  if (subject !== "none") {
+    const specialist = RESEARCH_SPECIALIST_BY_SUBJECT[subject];
+    if (specialist) roster.push(specialist);
+  }
+  return roster;
+}
+
+export interface ResearchSectionChoice {
+  value: ResearchSection;
+  label: string;
+}
+
+export const RESEARCH_SECTION_CHOICES: ResearchSectionChoice[] = [
+  { value: "full_paper", label: "Full paper" },
+  { value: "abstract", label: "Abstract" },
+  { value: "introduction", label: "Introduction" },
+  { value: "related_work", label: "Related Work" },
+  { value: "methods", label: "Methods" },
+  { value: "results", label: "Results / Experiments" },
+  { value: "discussion", label: "Discussion" },
+  { value: "conclusion", label: "Conclusion" },
+];
+
+export interface ResearchSubjectChoice {
+  value: ResearchSubject;
+  label: string;
+  available: boolean;
+  venuesHint: string;
+}
+
+export const RESEARCH_SUBJECT_CHOICES: ResearchSubjectChoice[] = [
+  {
+    value: "cs_ml",
+    label: "CS / ML",
+    available: true,
+    venuesHint: "ICML, NeurIPS, ICLR, AAAI, EMNLP",
+  },
+  {
+    value: "engineering",
+    label: "Engineering / Robotics",
+    available: false,
+    venuesHint: "ICRA, IROS, IEEE Transactions (coming soon)",
+  },
+  {
+    value: "biology",
+    label: "Biology / Life Sciences",
+    available: false,
+    venuesHint: "Nature, Cell, PNAS (coming soon)",
+  },
+  {
+    value: "medicine",
+    label: "Medicine / Clinical",
+    available: false,
+    venuesHint: "NEJM, Lancet, JAMA (coming soon)",
+  },
+  {
+    value: "none",
+    label: "No specialist",
+    available: true,
+    venuesHint: "Just the core research editors, no field-specific reviewer",
+  },
+];
 
 export const PURPOSE_EDITOR_BY_TYPE: Record<
   Exclude<EssayType, "none">,

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import itertools
 import json
 import os
 from abc import ABC, abstractmethod
@@ -14,6 +15,12 @@ from red_room.schemas import AgentName, Critique
 
 PROMPTS_DIR = Path(__file__).resolve().parent.parent / "prompts"
 EXEMPLARS_DIR = Path(__file__).resolve().parent.parent / "exemplars"
+
+# PDF-mode critiques can't be anchored to article text. We hand each one a
+# unique, non-overlapping synthetic span so the frontend's overlap-based
+# hotspot clustering doesn't collapse every critique onto the same anchor.
+# Process-wide counter — values just need to be unique, not stable across runs.
+_PDF_SPAN_COUNTER = itertools.count(start=1)
 
 
 # Sonnet 4.6 pricing per million tokens (verify at anthropic.com/pricing).
@@ -196,19 +203,53 @@ class BaseAgent(ABC):
         a subclass that needs per-request state (e.g. citation style)."""
         return ""
 
-    async def critique(self, article: str) -> tuple[list[Critique], Message]:
+    async def critique(
+        self,
+        article: str,
+        pdf_b64: str | None = None,
+    ) -> tuple[list[Critique], Message]:
+        """Run the agent on a text article or a PDF document.
+
+        When `pdf_b64` is provided (research mode), it's attached as a
+        document block in the user message and cached so subsequent agents
+        in the same review pay cache-read rates rather than re-uploading.
+        The `article` string in research mode carries the extracted-text
+        version of the section being reviewed, used for span anchoring.
+        """
         prefix = self.extra_user_context()
         prefix_block = f"{prefix}\n\n" if prefix else ""
-        response = await self.client.messages.create(
-            model=self.model,
-            max_tokens=4096,
-            thinking={"type": "enabled", "budget_tokens": self.thinking_budget},
-            system=self.system_blocks,
-            tools=self.tools(),
-            messages=[
+
+        if pdf_b64 is not None:
+            # Research mode: PDF document + focused review instruction.
+            # Cache the PDF so all agents in this review share the upload.
+            user_content: list[dict] = [
                 {
-                    "role": "user",
-                    "content": (
+                    "type": "document",
+                    "source": {
+                        "type": "base64",
+                        "media_type": "application/pdf",
+                        "data": pdf_b64,
+                    },
+                    "cache_control": {"type": "ephemeral"},
+                },
+                {
+                    "type": "text",
+                    "text": (
+                        f"{prefix_block}"
+                        "Review this research paper. Return a JSON array of "
+                        "critique objects per the OUTPUT CONTRACT in your "
+                        "system prompt. Return [] if there are no issues.\n\n"
+                        "When you quote from the paper in `text_quote`, copy "
+                        "the verbatim wording so the user can locate it."
+                    ),
+                },
+            ]
+        else:
+            # Journalism / essays: plain text article.
+            user_content = [
+                {
+                    "type": "text",
+                    "text": (
                         f"{prefix_block}"
                         "Review this draft. Return a JSON array of critique "
                         "objects per the OUTPUT CONTRACT in your system "
@@ -217,16 +258,39 @@ class BaseAgent(ABC):
                         f"{article}"
                     ),
                 }
-            ],
+            ]
+
+        response = await self.client.messages.create(
+            model=self.model,
+            max_tokens=4096,
+            thinking={"type": "enabled", "budget_tokens": self.thinking_budget},
+            system=self.system_blocks,
+            tools=self.tools(),
+            messages=[{"role": "user", "content": user_content}],
         )
-        critiques = self._parse_response(response, article)
+        critiques = self._parse_response(
+            response, article, anchor_to_article=(pdf_b64 is None)
+        )
         return critiques, response
 
-    def _parse_response(self, response: Message, article: str) -> list[Critique]:
+    def _parse_response(
+        self,
+        response: Message,
+        article: str,
+        anchor_to_article: bool = True,
+    ) -> list[Critique]:
         """Extract the JSON array from the model's text output and validate
-        each critique. Drops critiques whose `text_quote` is not a literal
-        substring of the article — that catches hallucinated quotes before
-        the frontend tries to highlight nothing."""
+        each critique.
+
+        For text-mode reviews (journalism / essays), drops critiques whose
+        `text_quote` is not a literal substring of the article — that catches
+        hallucinated quotes before the frontend tries to highlight nothing.
+
+        For PDF-mode reviews (research), the quotes come from the cached PDF
+        document and aren't in `article`, so we keep them all and use span
+        [0, len(text_quote)] as a placeholder. The frontend renders the quote
+        inside the critique card rather than highlighting it on the page.
+        """
         text = ""
         for block in response.content:
             if block.type == "text":
@@ -242,14 +306,24 @@ class BaseAgent(ABC):
                 critique = Critique.model_validate(raw)
             except Exception:
                 continue
-            if critique.text_quote not in article:
-                continue
-            # Recompute span from article to be safe — the model's offsets
-            # are often off-by-one. We trust text_quote and find it ourselves.
-            start = article.find(critique.text_quote)
-            critique = critique.model_copy(
-                update={"span": (start, start + len(critique.text_quote))}
-            )
+            if anchor_to_article:
+                if critique.text_quote not in article:
+                    continue
+                # Recompute span from article to be safe — the model's offsets
+                # are often off-by-one. We trust text_quote and find it ourselves.
+                start = article.find(critique.text_quote)
+                critique = critique.model_copy(
+                    update={"span": (start, start + len(critique.text_quote))}
+                )
+            else:
+                # PDF mode: no in-article anchoring possible. Give each
+                # critique a unique 2-char synthetic span so the frontend's
+                # overlap-based hotspot logic treats them as distinct anchors
+                # (the actual numbers don't matter — only uniqueness does).
+                pos = next(_PDF_SPAN_COUNTER) * 2
+                critique = critique.model_copy(
+                    update={"span": (pos, pos + 1)}
+                )
             results.append(critique)
         return results
 

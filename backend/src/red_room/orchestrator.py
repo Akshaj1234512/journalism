@@ -25,13 +25,24 @@ from red_room.agents.analytical_editor import AnalyticalEditor
 from red_room.agents.narrative_editor import NarrativeEditor
 from red_room.agents.research_editor import ResearchEditor
 from red_room.agents.rhetorical_editor import RhetoricalEditor
+from red_room.agents.methodology_editor import MethodologyEditor
+from red_room.agents.cs_ml_specialist import CSMLSpecialist
 from red_room.schemas import (
     CitationStyle,
     Critique,
     EssayType,
     Mode,
     RedRoomResult,
+    ResearchSection,
+    ResearchSubject,
 )
+
+
+# Map from chosen subject area to specialist agent class.
+_RESEARCH_SUBJECT_SPECIALISTS = {
+    "cs_ml": CSMLSpecialist,
+    # Phase 2: engineering, biology, medicine
+}
 
 
 _PURPOSE_EDITORS = {
@@ -87,21 +98,44 @@ def default_agents(
     citation_style: CitationStyle = "none",
     essay_type: EssayType = "none",
     essay_prompt: str | None = None,
+    research_section: ResearchSection = "full_paper",
+    research_subject: ResearchSubject = "none",
+    research_venue: str | None = None,
 ) -> list[BaseAgent]:
     """Return the roster for the requested mode.
 
-    Both modes share the six craft editors (Theo, Will, Stella, Logan, Evan,
-    Sol). On top of that, journalism mode adds four press specialists
-    (Anne legal, Peter data, Joe human rights, Parker partisan) and essays
-    mode adds Kate the citation editor plus, when essay_type is set, the
-    matching Purpose Editor. Each persona is one Anthropic call dispatched
-    in parallel by `run` / `stream`.
+    Journalism / essays share six craft editors (Theo, Will, Stella, Logan,
+    Evan, Sol); journalism adds four press specialists, essays adds Kate +
+    one purpose editor.
+
+    Research is its own world: a research-specific roster (Methodology
+    Editor for now; Phase 1B will add the other 8 core research editors)
+    plus a subject-area specialist picked by `research_subject`. The full
+    PDF is passed to each agent in research mode by `run` / `stream`.
     """
     # More retry headroom for transient 529s (see BaseAgent.__init__).
     client = client or AsyncAnthropic(max_retries=6)
+
+    if mode == "research":
+        roster: list[BaseAgent] = [
+            MethodologyEditor(client=client, section=research_section),
+        ]
+        # One subject specialist runs alongside the core research editors.
+        # `none` skips it.
+        specialist_cls = _RESEARCH_SUBJECT_SPECIALISTS.get(research_subject)
+        if specialist_cls is not None:
+            roster.append(
+                specialist_cls(
+                    client=client,
+                    section=research_section,
+                    venue=research_venue,
+                )
+            )
+        return roster
+
     shared = _shared_craft_roster(client, mode, essay_type)
     if mode == "essays":
-        roster: list[BaseAgent] = [
+        roster = [
             *shared,
             CitationEditor(client=client, citation_style=citation_style),
         ]
@@ -125,9 +159,11 @@ async def run(
     article: str,
     article_id: str | None = None,
     agents: list[BaseAgent] | None = None,
+    pdf_b64: str | None = None,
 ) -> RedRoomResult:
     """Non-streaming entrypoint: dispatch all agents in parallel and return
-    a merged result. Used by the CLI and tests."""
+    a merged result. When pdf_b64 is provided (research mode), each agent
+    receives the PDF as a cached document input."""
     article_id = article_id or uuid.uuid4().hex[:12]
     # `agents is None` means "use the default roster". An empty list is a
     # valid, explicit choice (every agent turned off in the UI) and we must
@@ -136,7 +172,9 @@ async def run(
         agents = default_agents()
 
     started = time.monotonic()
-    pairs = await asyncio.gather(*(a.critique(article) for a in agents))
+    pairs = await asyncio.gather(
+        *(a.critique(article, pdf_b64=pdf_b64) for a in agents)
+    )
     elapsed_ms = int((time.monotonic() - started) * 1000)
 
     critiques: list[Critique] = []
@@ -158,9 +196,12 @@ async def stream(
     article: str,
     article_id: str | None = None,
     agents: list[BaseAgent] | None = None,
+    pdf_b64: str | None = None,
 ) -> AsyncIterator[AgentEvent]:
     """Streaming entrypoint for SSE. Yields agent_start / critique /
-    agent_done events as each agent's call completes, then a final `done`."""
+    agent_done events as each agent's call completes, then a final `done`.
+    When pdf_b64 is provided (research mode), each agent receives the PDF
+    as a cached document input."""
     article_id = article_id or uuid.uuid4().hex[:12]
     # `agents is None` means "use the default roster". An empty list is a
     # valid, explicit choice (every agent turned off in the UI) and we must
@@ -172,7 +213,7 @@ async def stream(
 
     async def _run_one(agent: BaseAgent) -> tuple[BaseAgent, list[Critique], float, int]:
         agent_started = time.monotonic()
-        critiques, response = await agent.critique(article)
+        critiques, response = await agent.critique(article, pdf_b64=pdf_b64)
         return (
             agent,
             critiques,
