@@ -1,247 +1,307 @@
 # Exemplars for data_expert
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the data_expert lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
 #
 - source: |-
-    Documented example: monthly payroll change of 270,000 against a margin of error near 263,000
+    niemanstoryboard.org — how-a-reporter-tracked-good-intentions-to-problematic-consequences-in-family-cou: data-driven investigation balanced with narrative
   article: |-
-    The economy added jobs at a slower pace last month, with payrolls falling by 270,000, a clear sign the labour market is cooling.
-  critiques:
-  - agent: data_expert
-    text_quote: payrolls falling by 270,000, a clear sign the labour market is cooling
-    span: [57, 127]
-    issue_label: a change reported inside its margin of error
-    question: |-
-      BLS publishes payrolls with a 90 percent confidence interval near plus or minus 130,000, so a 270,000 monthly change sits inside its own noise floor. Signal, or rounding error dressed as a trend?
-    why_it_matters: |-
-      Calling a figure inside its uncertainty 'a clear sign' tells the reader we know something we do not.
-    fix_suggestion: |-
-      Put the MOE next to the figure. Only call it a trend if the change clears it; otherwise say the move is within statistical noise.
-    replacement: |-
-      payrolls falling by 270,000, a figure within the survey's margin of error of about 260,000
-    severity: high
-- source: 'HealthNewsReview standard: do not treat animal research as a human result'
-  article: |-
-    Scientists have found a compound that reverses memory loss, raising hopes of a breakthrough treatment for Alzheimer's patients.
-  critiques:
-  - agent: data_expert
-    text_quote: raising hopes of a breakthrough treatment for Alzheimer's patients
-    span: [60, 126]
-    issue_label: animal result framed as a human treatment
-    question: |-
-      Was this a mouse or a human? On HealthNewsReview's tally, roughly 90 percent of compounds that work in mice die in human trials, and the gap between 'reverses memory loss in mice' and 'treatment for Alzheimer's patients' is most of a decade and several hundred million dollars.
-    why_it_matters: Readers and patients hear 'breakthrough treatment' and do not
-      hear 'in mice'.
-    fix_suggestion: |-
-      Put the model in the sentence, not three paragraphs down. If trials in people exist, name the phase; if not, say so.
-    replacement: raising early hopes, though the compound has so far only been tested
-      in mice
-    severity: high
-- source: Correlation vs causation; standard policy-evaluation critique
-  article: |-
-    Violent crime fell 12 percent in the year after the new policing law took effect, evidence that the law is working.
-  critiques:
-  - agent: data_expert
-    text_quote: evidence that the law is working
-    span: [82, 114]
-    issue_label: causation claimed from a single before-and-after
-    question: |-
-      A one-year before-and-after is the textbook causation overclaim, the same shape Levitt and Donohue had to defend for years on crime and abortion. Was crime already falling before the law?
-    why_it_matters: |-
-      If a critic shows the prior trend, the 'evidence that the law is working' framing collapses.
-    fix_suggestion: |-
-      Run the drop and the prior trend side by side. If you want the causal claim, attribute it to a researcher whose analysis controls for the pre-trend.
-    replacement: |-
-      the same year that violent crime fell 12 percent, though crime had been declining before the law as well
-    severity: high
-- source: Editorialised magnitude; a comparison word with no denominator
-  article: |-
-    The city poured a massive 1 million dollars into the youth jobs program this year.
-  critiques:
-  - agent: data_expert
-    text_quote: a massive 1 million dollars
-    span: [16, 43]
-    issue_label: magnitude adjective with no denominator
-    question: |-
-      Massive against what? 1 million on a 2 billion dollar budget is 0.05 percent, about what the city spends on office supplies.
-    why_it_matters: |-
-      A magnitude adjective with no denominator is editorialising, and partisan readers will read 'massive' as a tell.
-    fix_suggestion: |-
-      Drop the adjective. Anchor the figure to the budget share or to last year's number.
-    replacement: 1 million dollars, about 0.05 percent of the city budget,
-    severity: medium
-- source: Mean vs median; right-skewed distributions
-  article: |-
-    The average household income in the neighbourhood is 98,000 dollars, well above the city as a whole.
-  critiques:
-  - agent: data_expert
-    text_quote: The average household income in the neighbourhood is 98,000 dollars
-    span: [0, 67]
-    issue_label: mean used where median belongs
-    question: |-
-      Mean or median? Income is the canonical right-skewed distribution, which is why the Census Bureau publishes median household income, not the mean. A handful of high earners can drag the average up by twenty thousand dollars.
-    why_it_matters: |-
-      Choosing the mean over the median for income systematically overstates what a typical household earns.
-    fix_suggestion: |-
-      Use the median for income. If you keep the mean, report both and explain the gap.
-    replacement: The median household income in the neighbourhood is 71,000 dollars
-    severity: medium
-- source: 'HealthNewsReview criterion: conflicts of interest in expert sources'
-  article: |-
-    'These results are a game-changer for the field,' said Dr Hollister, who led the trial.
-  critiques:
-  - agent: data_expert
-    text_quote: said Dr Hollister, who led the trial
-    span: [50, 86]
-    issue_label: sole quoted expert is the study's author
-    question: |-
-      Our only quoted expert is the principal investigator. ICMJE disclosure rules exist because the field learned the hard way, from Vioxx through the SSRI trials, that authors paid by sponsors describe their own results differently than outsiders do. Who would say something else?
-    why_it_matters: |-
-      One stakeholder voice without disclosure is not an independent assessment, and the reader is owed both.
-    fix_suggestion: |-
-      Quote a researcher unaffiliated with the trial. Disclose Hollister's funding and any equity alongside the quote.
-    replacement: null
-    severity: high
-- source: Statistical-significance reporting; effect size matters more than the p-value
-  article: |-
-    Researchers found a statistically significant link between coffee consumption and reduced cognitive decline.
+    With the help of the data team at The Marshall Project, Clifford delved into a sea of data: hospital contracts, federal court cases, civil cases and demographic data; Weihua Li played an especially important role in finding crucial data, Clifford said. While data anchors key points, the story isn't dry.
   critiques:
   - agent: data_expert
     text_quote: |-
-      a statistically significant link between coffee consumption and reduced cognitive decline
-    span: [18, 107]
-    issue_label: significance without effect size
+      With the help of the data team at The Marshall Project, Clifford delved into a sea of data: hospital contracts, federal court cases, civil cases and demographic data; Weihua Li played an especially important role in finding crucial data, Clifford said. While data anchors key points, the story isn't dry.
+    span:
+    - 0
+    - 304
+    issue_label: data-driven investigation balanced with narrative
     question: |-
-      Significant at what effect size? In an n of 50,000 a clinically meaningless effect clears p less than 0.05, which is exactly how Daryl Bem's 2011 precognition paper got into JPSP. How many test points, how many years?
+      How did Clifford and her team keep a data-heavy investigation from becoming merely a spreadsheet of findings? By pairing the data analysis with intimate profiles of two families, the story used numbers to establish the scope and pattern while human stories provided the emotional weight.
     why_it_matters: |-
-      P-values tell you a result is unlikely to be chance, not whether it is big enough to matter.
+      It shows how to structure an investigation so that data proves the systemic problem exists while narrative examples show what that problem actually costs real people.
     fix_suggestion: |-
-      Lead with the effect size in human terms (points, minutes, years). Then say it was statistically significant.
-    replacement: |-
-      researchers found that coffee drinkers scored on average 0.4 points higher on the cognitive test, a small but statistically significant difference
-    severity: high
-- source: Self-selected samples in survey reporting
+      In data-driven investigations, use quantitative findings to establish that a problem is widespread, then use your best narrative reporting to show what that problem feels like from the inside.
+    replacement: null
+    severity: medium
+- source: |-
+    slate.com — al-gore-washed-up-politician-finds-a-new-venue-for-his-ideas-press-criticism.htm: misleading statistic without methodological context
   article: |-
-    An online survey of 2,000 readers found that 78 percent oppose the proposed development.
+    Gore writes, 'The average American, meanwhile, is watching television an astonishing five hours a day. In the average household, at least one television set is turned on more than eight hours a day.' Those numbers sound horrific... But how many times have you walked into a room in which a television was playing to no audience at all? How often have you walked into a TV room and found the one person sitting paying no attention to the set? Nielsen tabulates those televisions as 'watched.'
   critiques:
   - agent: data_expert
     text_quote: |-
-      An online survey of 2,000 readers found that 78 percent oppose the proposed development
-    span: [0, 87]
-    issue_label: self-selected sample reported as opinion
+      Gore writes, 'The average American, meanwhile, is watching television an astonishing five hours a day. In the average household, at least one television set is turned on more than eight hours a day.' Those numbers sound horrific... But how many times have you walked into a room in which a television was playing to no audience at all? How often have you walked into a TV room and found the one person sitting paying no attention to the set? Nielsen tabulates those televisions as 'watched.'
+    span:
+    - 0
+    - 491
+    issue_label: misleading statistic without methodological context
     question: |-
-      Who answered? An opt-in click-through is the textbook self-selected sample, the same design flaw that made the 1936 Literary Digest poll famously call the election for Landon. Is 78 percent an opinion poll, or a measure of who showed up?
+      When you cite Nielsen ratings without explaining how Nielsen counts 'watched' television—including sets running unwatched in the background—you're presenting a number that inflates reality and serves your thesis. Gore knew better or should have.
     why_it_matters: |-
-      Opt-in surveys overweight the most motivated audience, and reporting them as opinion polls is one of the most common framing errors in local news.
+      Citing statistics without context about how they're measured lets you create false impressions that support your argument without lying outright.
     fix_suggestion: |-
-      Label it for what it is: an opt-in reader survey, not a representative poll. Drop 'oppose' as if it stood for the public.
-    replacement: |-
-      Of the 2,000 readers who responded to an opt-in online survey, 78 percent said they opposed the development; the survey was not a representative poll
-    severity: high
-- source: Nominal versus real dollars in long time-series
-  article: |-
-    Federal education spending has tripled since 1980, rising from 14 billion dollars to 45 billion dollars.
-  critiques:
-  - agent: data_expert
-    text_quote: has tripled since 1980, rising from 14 billion dollars to 45 billion
-      dollars
-    span: [27, 103]
-    issue_label: nominal dollars across decades
-    question: |-
-      Those are nominal dollars across 45 years. Run through the BLS CPI calculator, 14 billion in 1980 is roughly 53 billion today, so real spending has fallen, not tripled.
-    why_it_matters: |-
-      Nominal-dollar comparisons across decades routinely flip the direction of a trend the reader thinks they understood.
-    fix_suggestion: |-
-      Use real dollars indexed to a single base year for any comparison spanning more than five years. State the base year.
-    replacement: |-
-      Federal education spending has fallen in real terms since 1980 once adjusted for inflation, from the equivalent of 53 billion dollars in today's money to 45 billion
-    severity: high
-- source: Confidence interval not reported
-  article: |-
-    The new vaccine is 94 percent effective at preventing severe disease, the company said.
-  critiques:
-  - agent: data_expert
-    text_quote: 94 percent effective at preventing severe disease
-    span: [19, 68]
-    issue_label: point estimate without confidence interval
-    question: |-
-      94 percent is a point estimate. The Pfizer Phase 3 efficacy reading on COVID came in at 95 percent with a CI of 90.3 to 97.6; small trials routinely produce headline numbers that shrink in larger ones. What is the interval here?
-    why_it_matters: |-
-      Without the CI the reader cannot tell whether the figure is precise or could move ten points in the next trial.
-    fix_suggestion: |-
-      Quote the 95 percent confidence interval next to the point estimate, and give the sample size.
-    replacement: |-
-      94 percent effective at preventing severe disease, with a 95 percent confidence interval of 87 to 97 percent, based on the company's trial of 12,000 participants
-    severity: medium
-- source: Example of a number reported correctly with its uncertainty
-  article: |-
-    The unemployment rate was 4.1 percent in March, unchanged from February and within the survey's margin of error, the bureau said.
-  critiques: []
-- source: Example of a properly reported trial result with effect size and uncertainty
-  article: |-
-    In a randomized trial of 8,500 patients, the drug reduced hospitalisations by 4.2 percentage points, from 11.8 percent to 7.6 percent, with a 95 percent confidence interval of 2.9 to 5.5 points. Two of the principal investigators disclosed consulting payments from the drug's manufacturer.
-  critiques: []
-- source: AP Stylebook 'titles' entry; common newsroom correction pattern
-  article: |-
-    Senator Mark Calhoun (D-MI) introduced the bill on Tuesday, calling for federal action on rural broadband.
-  critiques:
-  - agent: data_expert
-    text_quote: Senator Mark Calhoun
-    span: [0, 20]
-    issue_label: wrong title
-    question: |-
-      AP Stylebook 'titles' entry, first rule: verify the office before the name. Mark Calhoun has been a representative, not a senator, since 2018. Either he just won a Senate seat I missed, or the title is wrong.
-    why_it_matters: |-
-      Wrong office in the lede is the single most common newsroom correction, and the most likely thing a hostile clipper will screenshot.
-    fix_suggestion: |-
-      Verify against the House clerk's roster or his official site, then correct to 'Representative.'
-    replacement: Representative Mark Calhoun (D-MI)
-    severity: high
-- source: Stephen Glass retraction patterns; standard newsroom quote-accuracy practice
-  article: |-
-    'We made a mistake,' said CEO Sarah Vance in her resignation statement on Monday, 'and I take full responsibility for the consequences.'
-  critiques:
-  - agent: data_expert
-    text_quote: '''and I take full responsibility for the consequences.'''
-    span: [80, 134]
-    issue_label: compound quote with hidden ellipsis
-    question: |-
-      The two clauses sit inside one quoted breath, but the filed statement has 'We made a mistake in our communications' in paragraph one and 'I take full responsibility' from a separate paragraph about the board's decision. That stitching is the move tracked across the Stephen Glass retractions.
-    why_it_matters: |-
-      A compound quote that did not happen in one breath misleads on what the source actually committed to.
-    fix_suggestion: |-
-      Run the two clauses as separate quotes attributed to the parts of the statement they came from, or use only the clause that genuinely refers to the action being reported.
+      Always explain what a statistic actually measures and acknowledge alternative interpretations. In this case, the real individual primetime viewership was 1 hour 12 minutes, not five hours—a fundamental difference.
     replacement: null
     severity: high
-- source: Standard newsroom copy-desk practice on internal consistency
+- source: |-
+    slate.com — print-vs-online-how-the-print-edition-of-the-new-york-times-trumps-the-online-ve: small sample size, generalizability unexamined
   article: |-
-    The council voted Tuesday, March 12, to approve the budget after a marathon debate. The vote, on Wednesday, March 12, came after lobbyists from both sides packed the chamber.
+    The discussion of the University of Oregon study showing print readers 'remember significantly more news stories than online news readers' and 'remembered significantly more topics,' with only 45 readers tested.
   critiques:
   - agent: data_expert
-    text_quote: Wednesday, March 12
-    span: [99, 118]
-    issue_label: internal day-of-week inconsistency
+    text_quote: |-
+      The discussion of the University of Oregon study showing print readers 'remember significantly more news stories than online news readers' and 'remembered significantly more topics,' with only 45 readers tested.
+    span:
+    - 0
+    - 211
+    issue_label: small sample size, generalizability unexamined
     question: |-
-      Same date, two days: Tuesday in your lede, Wednesday in the next graf. A calendar check settles it in ten seconds. Newsroom copy desks log this internal-consistency error more than almost anything else.
+      The author cites this study as confirmation of his print-superiority bias, but does he adequately caveat that 45 readers is a small sample? Does he explore whether these findings would hold for different demographics, different websites, different reading habits, or different types of news?
     why_it_matters: |-
-      When the date contradicts itself, the reader has no way to know which day the event actually happened.
-    fix_suggestion: Anchor to the date, then look up the day. Reconcile both references.
+      Citing a study without interrogating its limitations lets readers believe the finding is more conclusive than it actually is, especially when the author is arguing from anecdotal evidence himself.
+    fix_suggestion: |-
+      Acknowledge explicitly that 45 is a small sample and that the study tested only one newspaper (the Times) in one format (web), so the conclusions may not generalize to all online news consumption or all readers.
     replacement: null
     severity: medium
-- source: USAspending.gov as the contract-of-record verification source
+- source: |-
+    slate.com — bloggers-who-aren-t-parasites-an-academic-finds-a-species-of-blogger-that-pulls-: raw numbers presented without comparative context
   article: |-
-    The defense contract is worth $1.4 million, the largest in the agency's history, awarded to Lockheed Martin last week.
+    In the 1,000 blog posts examined, bloggers used 2,246 sources, of which only 517 were from traditional media, and Watson found that local public-affairs bloggers are more likely to depend on original sources—documents, government databases, shoe-leather reporting (interviews, eyewitness reports, etc.)—than on media sources.
   critiques:
   - agent: data_expert
-    text_quote: $1.4 million, the largest in the agency's history
-    span: [22, 71]
-    issue_label: order-of-magnitude error
+    text_quote: |-
+      In the 1,000 blog posts examined, bloggers used 2,246 sources, of which only 517 were from traditional media, and Watson found that local public-affairs bloggers are more likely to depend on original sources—documents, government databases, shoe-leather reporting (interviews, eyewitness reports, etc.)—than on media sources.
+    span:
+    - 0
+    - 325
+    issue_label: raw numbers presented without comparative context
     question: |-
-      $1.4 million as 'the largest in the agency's history' is implausible on its face: defense contracts of that size are eight-figure routine. USAspending.gov shows this award at $1.4 billion. The 'M' for 'B' mistype is the magnitude error that lives in correction archives forever.
-    why_it_matters: Mistyping the unit changes the story by three orders of magnitude.
+      The piece tells us 517 out of 2,246 sources are traditional media (about 23%), but doesn't compare that proportion to what we'd expect from newspapers or other news outlets covering similar topics—is 23% high or low without a baseline?
+    why_it_matters: |-
+      Readers can't judge whether Watson's finding actually overturns the 'parasite' claim without knowing what the typical reliance ratio is for other news organizations.
     fix_suggestion: |-
-      Verify against the contract filing or press release, fix the unit, and sanity-check: does this number make sense given everything else in the paragraph?
-    replacement: $1.4 billion, the largest in the agency's history
+      Include a sentence comparing bloggers' 23% traditional-media reliance to newspapers' or wire services' reliance on original reporting, or acknowledge the absence of that comparison.
+    replacement: null
+    severity: high
+- source: |-
+    PolitiFact fact-check (ruling: half-true): cherry-picked scenario without context
+  article: |-
+    Johnston's analysis, and the Facebook meme posted by Stacey Sharp, are both true in a narrow sense. The amounts they mentioned were accurate but were based on only one of many possible scenarios for disabled veterans.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      Johnston's analysis, and the Facebook meme posted by Stacey Sharp, are both true in a narrow sense. The amounts they mentioned were accurate but were based on only one of many possible scenarios for disabled veterans.
+    span:
+    - 0
+    - 217
+    issue_label: cherry-picked scenario without context
+    question: |-
+      The meme cites specific dollar figures ($1,890/month cut) that apply only to veterans aged 65+ eligible for Social Security—one narrow scenario. Did the reporting make clear this wasn't universal, or did it imply all disabled veterans faced these cuts?
+    why_it_matters: |-
+      Readers get a false impression of the proposal's scope; 225,000 vets affected sounds massive until you learn it's a subset of 9+ million disabled veterans.
+    fix_suggestion: |-
+      Lead with the actual scope: 'Trump's budget would have reduced benefits for ~225,000 veterans aged 65+ eligible for Social Security, cutting their monthly disability pay by up to $1,890—but left other disabled vets unaffected.'
+    replacement: null
+    severity: medium
+- source: 'PolitiFact fact-check (ruling: half-true): Single image as conclusive evidence'
+  article: |-
+    The only evidence the tabloid offered for the assumption Breuer was making a hate symbol with his hand was the photograph that showed Breuer, along with dozens of other interns, standing with President Trump. All but Breuer were smiling and offering a 'thumbs-up' gesture, but a straight-faced Breuer held his forefinger and thumb together with his other fingers splayed out.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      The only evidence the tabloid offered for the assumption Breuer was making a hate symbol with his hand was the photograph that showed Breuer, along with dozens of other interns, standing with President Trump. All but Breuer were smiling and offering a 'thumbs-up' gesture, but a straight-faced Breuer held his forefinger and thumb together with his other fingers splayed out.
+    span:
+    - 0
+    - 375
+    issue_label: Single image as conclusive evidence
+    question: |-
+      One photograph at one moment in time is being used to infer a private citizen's political beliefs and symbolic intent. How does a still image—absent video, other photos, or statements—establish what an expression or gesture meant?
+    why_it_matters: |-
+      A single frozen moment lacks the context needed to rule out innocent explanations (mimicry, coincidence, muscle position).
+    fix_suggestion: |-
+      Seek other images or video from the event. Ask Breuer or other interns present what happened. Report the ambiguity: 'The gesture could be interpreted as X, but also fits Y explanation.'
+    replacement: null
+    severity: high
+- source: 'PolitiFact fact-check (ruling: half-true): muddled ownership definition'
+  article: |-
+    It's true that Sharon Malone Holder and Margie Malone Tuckson were, and still are, co-trustees of a family trust that includes the property at 6210 Old National Highway... However, their ownership of the property is not straightforward... the property's true owners are Monica and Michael Jones, and not their aunts Sharon Malone Holder and Margie Malone Tuckson, who are co-trustees of the family trust — and as such, will not ultimately derive any substantive material benefit from the property.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      It's true that Sharon Malone Holder and Margie Malone Tuckson were, and still are, co-trustees of a family trust that includes the property at 6210 Old National Highway... However, their ownership of the property is not straightforward... the property's true owners are Monica and Michael Jones, and not their aunts Sharon Malone Holder and Margie Malone Tuckson, who are co-trustees of the family trust — and as such, will not ultimately derive any substantive material benefit from the property.
+    span:
+    - 0
+    - 497
+    issue_label: muddled ownership definition
+    question: |-
+      The ruling grants that Holders/Tuckson are co-trustees with 'legal ownership of and responsibility' but then contradicts itself by saying the 'true owners' are the beneficiary children. Which is it—and does the distinction between trustee ownership (legal) and beneficiary ownership (equitable) actually resolve the claim, or does it just obscure it?
+    why_it_matters: |-
+      The half-true rating hinges on an ambiguous ownership framework that the fact-checker explains but never decisively applies; readers cannot easily understand whether the claim is technically accurate or materially misleading.
+    fix_suggestion: |-
+      Pick a single legal standard (e.g., 'Under Georgia law, trustees hold title but are fiduciaries, not beneficial owners') and apply it consistently to the claim. State clearly: does this meet or not meet the definition of 'owning' the property?
+    replacement: null
+    severity: medium
+- source: |-
+    PolitiFact fact-check (ruling: false): cherry-picked asteroid data / missing safe-distance context
+  article: |-
+    In early March 2020, tabloids published articles claiming that NASA had issued a warning about a large asteroid approaching Earth... failed to mention in headlines how the space agency's data showed the asteroid passing Earth at a safe distance of a nearly 4 million miles (16 times farther than the moon).
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      In early March 2020, tabloids published articles claiming that NASA had issued a warning about a large asteroid approaching Earth... failed to mention in headlines how the space agency's data showed the asteroid passing Earth at a safe distance of a nearly 4 million miles (16 times farther than the moon).
+    span:
+    - 0
+    - 306
+    issue_label: cherry-picked asteroid data / missing safe-distance context
+    question: |-
+      Headlines screamed 'doomsday asteroid' without mentioning NASA's own data: 4 million miles away (16× the Earth-Moon distance). Isn't burying the safe-distance denominator a misleading way to sensationalize the story?
+    why_it_matters: |-
+      Readers see 'asteroid warning' and assume imminent danger, not 'routine NASA tracking at safe distance'—a classic data-framing failure that fuels doomsday rumors.
+    fix_suggestion: |-
+      Lead with NASA's distance and safety assessment in the headline or opening. Reserve 'warning' for actual threats; use 'observation' or 'tracking' for routine monitoring.
+    replacement: null
+    severity: medium
+- source: 'PolitiFact fact-check (ruling: half-true): scope inflation / wrong denominator'
+  article: |-
+    Some social media users also appeared to be under the impression that an 'entire day's worth' of swabs had to be destroyed after Trump's visit. But that wasn't the case. During the visit, the company gave a 15-minute demonstration of the manufacturing process, after which the swabs involved in the demonstration were destroyed.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      Some social media users also appeared to be under the impression that an 'entire day's worth' of swabs had to be destroyed after Trump's visit. But that wasn't the case. During the visit, the company gave a 15-minute demonstration of the manufacturing process, after which the swabs involved in the demonstration were destroyed.
+    span:
+    - 0
+    - 328
+    issue_label: scope inflation / wrong denominator
+    question: |-
+      The claim says 'medical supplies' had to be destroyed, implying a meaningful quantity. But the company destroyed only swabs from a 15-minute demo—not a day's production or a batch. Did reporting distinguish between demo-batch destruction and actual production loss?
+    why_it_matters: |-
+      Conflating a small demonstration run with real production loss overstates the claim's material impact and misleads readers about scale.
+    fix_suggestion: |-
+      Lead with the actual scope: 'swabs from a 15-minute demonstration' rather than 'medical supplies,' and note upfront that production was rescheduled, not lost.
+    replacement: null
+    severity: medium
+- source: 'PolitiFact fact-check (ruling: half-true): anecdotal evidence as pattern'
+  article: |-
+    The shelter's founder, Alfred Restivo, told magazine that the incidents described in their post date to February 2018, when Sydney, a 6-year-old border collie, developed a heavily-swollen tongue. Three more dogs, Restivo said, were later found with similar issues.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      The shelter's founder, Alfred Restivo, told magazine that the incidents described in their post date to February 2018, when Sydney, a 6-year-old border collie, developed a heavily-swollen tongue. Three more dogs, Restivo said, were later found with similar issues.
+    span:
+    - 0
+    - 264
+    issue_label: anecdotal evidence as pattern
+    question: |-
+      Four dogs with swelling over several months constitutes a pattern of 'chemical burns' from tennis balls—but how many dogs chew tennis balls annually? Without a denominator or baseline of typical adverse events, can we assess whether these four cases represent a real hazard or statistical noise?
+    why_it_matters: |-
+      A claim of injury causation demands context: is this a rare fluke or a documented risk? Without incidence rates or comparison to normal injury prevalence, readers can't judge whether to change behavior.
+    fix_suggestion: |-
+      Report how many dogs are treated annually for tennis-ball-related injuries, or note that no veterinary literature documents chemical-burn clusters from tennis balls—then explain why these four cases may or may not be typical.
+    replacement: null
+    severity: medium
+- source: |-
+    PolitiFact fact-check (ruling: half-true): unverified geographic claim, implausible scale given conditions
+  article: |-
+    the 'pendejo' photograph does not contain any information identifying it as having been taken in Puerto Rico... only 10 percent of Puerto Rican Electric Power Authority customers (PREPA) had electricity restored as of 6 October 2017, so it is unclear who could make and distribute a poster 'all over' the territory
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      the 'pendejo' photograph does not contain any information identifying it as having been taken in Puerto Rico... only 10 percent of Puerto Rican Electric Power Authority customers (PREPA) had electricity restored as of 6 October 2017, so it is unclear who could make and distribute a poster 'all over' the territory
+    span:
+    - 0
+    - 314
+    issue_label: unverified geographic claim, implausible scale given conditions
+    question: |-
+      The poster image has no location metadata. With 90% of Puerto Rico without power or basic services in early October, what evidence supports the claim posters were distributed 'all over' the island rather than circulated online or posted in isolated locations?
+    why_it_matters: |-
+      Without geographic verification or logistical corroboration, 'all over' inflates the scope and coordination of what may have been a localized or digital phenomenon.
+    fix_suggestion: |-
+      Require reporter to either locate the poster in situ with photo/location data, or quote local Puerto Rican sources confirming widespread physical sightings. Absent that, use 'circulated online' or 'reported to appear' instead of 'all over.'
+    replacement: null
+    severity: medium
+- source: |-
+    PolitiFact fact-check (ruling: half-true): cherry-picked metric; wrong denominator
+  article: |-
+    Walking in the door (Sonia Sotomayor) would bring more experience on the bench, and more varied experience on the bench, than anyone currently serving on the United States Supreme Court had when they were appointed.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      Walking in the door (Sonia Sotomayor) would bring more experience on the bench, and more varied experience on the bench, than anyone currently serving on the United States Supreme Court had when they were appointed.
+    span:
+    - 0
+    - 215
+    issue_label: cherry-picked metric; wrong denominator
+    question: |-
+      The claim compares Sotomayor's total bench experience (17 years) to the bench experience others *had when appointed*—but PolitiFact's own data shows Sotomayor had 17 years on the bench when nominated, while Roberts had only 2 years, Alito 14, and Breyer 12. On the actual metric invoked, Sotomayor ranks second, not first. Why pit 'total experience' against 'experience at appointment' unless the framing guarantees a win?
+    why_it_matters: |-
+      Shifting the goalposts from bench experience at appointment (where the claim fails) to total experience obscures whether the core assertion—that Sotomayor would arrive with exceptional credentials—is actually true.
+    fix_suggestion: |-
+      State plainly: 'Sotomayor would have 17 years of federal bench experience at appointment, more than Roberts (2) or Alito (14) at their appointments, but comparable to Breyer (12).' Then test the 'varied experience' claim separately with comparable metrics.
+    replacement: null
+    severity: medium
+- source: |-
+    PolitiFact fact-check (ruling: half-true): Hypothetical math vs. actual commitment
+  article: |-
+    The one who kills him should receive this amount... 'Iran has 80 million inhabitants. Based on the Iranian population, we want to raise $80 million, which is a reward for those who get close to the head of President Trump,' it said on state TV. Each Iranian should therefore donate a dollar to pay the amount to the alleged murderer.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      The one who kills him should receive this amount... 'Iran has 80 million inhabitants. Based on the Iranian population, we want to raise $80 million, which is a reward for those who get close to the head of President Trump,' it said on state TV. Each Iranian should therefore donate a dollar to pay the amount to the alleged murderer.
+    span:
+    - 0
+    - 333
+    issue_label: Hypothetical math vs. actual commitment
+    question: |-
+      Was $80 million actually pledged, or was it a rhetorical calculation (80 million people × $1 each = $80M in theory)? The EXPLAIN shows no evidence money was actually collected or committed, only that the math was announced.
+    why_it_matters: |-
+      Readers may believe Iran put $80M on the table when it was a hypothetical proposal with zero evidence of funds raised.
+    fix_suggestion: |-
+      Specify: 'A eulogist proposed a hypothetical crowdfunded bounty of $80 million — one dollar per Iranian — with no evidence funds were collected or the government backed the pledge.'
+    replacement: null
+    severity: medium
+- source: 'PolitiFact fact-check (ruling: false): Wrong year, five-year gap'
+  article: |-
+    Although King told The Daily Beast he remembered al-Baghdadi being released from Camp Bucca in 2009, the Defense Department disputed this account. According to a statement from the Pentagon, al-Baghdadi was captured in February 2004 and then released a few months later in December.
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      Although King told The Daily Beast he remembered al-Baghdadi being released from Camp Bucca in 2009, the Defense Department disputed this account. According to a statement from the Pentagon, al-Baghdadi was captured in February 2004 and then released a few months later in December.
+    span:
+    - 0
+    - 282
+    issue_label: Wrong year, five-year gap
+    question: |-
+      The claim pins al-Baghdadi's release to 2009, but official Pentagon records and FOIA documents place his release in December 2004—nearly five years earlier, before Obama took office. Why did reporting treat a colonel's fuzzy five-year-old recollection as equal to contemporaneous detainee files?
+    why_it_matters: |-
+      A five-year dating error flips the entire claim's political thrust—and collapses the supposed link between the release and the Obama administration.
+    fix_suggestion: |-
+      Check primary documents (Pentagon statements, FOIA detainee records) before relying on a source's memory of an encounter from years prior, especially when the source later concedes he 'could be mistaken' about timing.
+    replacement: null
+    severity: high
+- source: |-
+    PolitiFact fact-check (ruling: false): Conflating different people via shared alias
+  article: |-
+    While al-Baghdadi may have used the name 'Abu Duaa' at one point, this is likely a nom de guerre, a fake name an individual assumes during war, that multiple members of IS used… 'We either arrested or killed a man of that name about half a dozen times.'
+  critiques:
+  - agent: data_expert
+    text_quote: |-
+      While al-Baghdadi may have used the name 'Abu Duaa' at one point, this is likely a nom de guerre, a fake name an individual assumes during war, that multiple members of IS used… 'We either arrested or killed a man of that name about half a dozen times.'
+    span:
+    - 0
+    - 253
+    issue_label: Conflating different people via shared alias
+    question: |-
+      Reporting cited a Pentagon document about 'Abu Duaa' as evidence for al-Baghdadi's 2009 release, but a British special forces commander says the name was used by multiple different people and they arrested or killed 'a man of that name about half a dozen times.' How confident can we be the 2009 'Abu Duaa' release was actually al-Baghdadi?
+    why_it_matters: |-
+      Using a shared nom de guerre as proof of identity, when multiple people used it, undermines the entire factual foundation—you can't prove which 'Abu Duaa' the document discusses.
+    fix_suggestion: |-
+      When relying on a document mentioning an alias used by multiple people, explicitly note the ambiguity and avoid treating it as definitive evidence of identity or timing.
+    replacement: null
     severity: high

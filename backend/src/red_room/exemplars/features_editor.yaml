@@ -1,85 +1,312 @@
-# Exemplars for features_editor (Faye)
-# Bootstrap synthetic exemplars in features-editor voice. Will be replaced
-# by real-data ingestion (Pulitzer-feature methodology essays, Nieman
-# Storyboard analyses, CJR long-form criticism) in Phase 2.
+# Exemplars for features_editor
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the features_editor lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
 #
-- source: 'entire piece in summary, no scenes'
+- source: |-
+    niemanstoryboard.org — cutting-through-numbing-numbers-with-electrified-writing: closing that inverts the pattern
   article: |-
-    Over the next eight months, Hassan would build the bakery into one of the most popular small businesses in the neighborhood. Customers came from across the city. The local paper wrote about it. Hassan was even featured on a podcast.
+    He remixes its signature phrase: 'Over 104 years, we should have known better. Numbers should never have made us numb.' It's a small twist; the rearranging of a few words. But it provides a final surprise and a lesson in changing a pattern to make it stick.
   critiques:
   - agent: features_editor
-    text_quote: Over the next eight months, Hassan would build the bakery
-    span: [0, 56]
-    issue_label: all summary, no scene
+    text_quote: |-
+      He remixes its signature phrase: 'Over 104 years, we should have known better. Numbers should never have made us numb.' It's a small twist; the rearranging of a few words. But it provides a final surprise and a lesson in changing a pattern to make it stick.
+    span:
+    - 0
+    - 257
+    issue_label: closing that inverts the pattern
     question: |-
-      Eight months in two sentences and nothing on the page. We need to be in a moment — one morning at the bakery, one customer, one specific thing that happened.
+      By rearranging the signature phrase at the end—inverting 'numb to the numbers' into 'Numbers should never have made us numb'—doesn't Pierce give readers the satisfaction of recognizing a familiar pattern and then upending it?
     why_it_matters: |-
-      Summary tells the reader what happened. Scene lets them watch it happen. The difference is the entire form.
+      The inversion of a repeated pattern in the closing creates surprise and closure at once, leaving readers with a sense that the argument has turned inside out and arrived at its destination.
     fix_suggestion: |-
-      Pick one specific morning from your reporting. Open it: who was there, what was on the counter, what Hassan said to which regular. Let one scene carry what the summary tries to do in two sentences.
-    replacement: null
-    severity: high
-- source: 'feature about nothing — no one-sentence summary possible'
-  article: |-
-    Lin reflects on her years in the industry, the changes she's seen, the people who have come and gone. She has many thoughts about what makes a meaningful career and the value of resilience.
-  critiques:
-  - agent: features_editor
-    text_quote: Lin reflects on her years in the industry, the changes she's seen
-    span: [0, 64]
-    issue_label: feature about nothing
-    question: |-
-      What is this story actually about? "Career reflections" and "the value of resilience" are not a story; they're a vibe. Strong features can be summed up in one sentence — what's the sentence here?
-    why_it_matters: |-
-      Features without a center read as well-written essays adrift from any reason for the reader to be in them.
-    fix_suggestion: |-
-      Find the one specific tension that's driving this piece. Then rewrite the lede around that — not "Lin reflects" but "Lin had to decide whether to..."
-    replacement: null
-    severity: high
-- source: 'sensory detail abstracted into generic adjectives'
-  article: |-
-    The restaurant was charming and the food was delicious. The decor was beautiful and the staff was friendly.
-  critiques:
-  - agent: features_editor
-    text_quote: The restaurant was charming and the food was delicious.
-    span: [0, 55]
-    issue_label: abstract not specific
-    question: |-
-      "Charming," "delicious," "beautiful," "friendly" — these are the words you write when you weren't taking notes. What did the room actually look like? What did one dish taste like?
-    why_it_matters: |-
-      Generic sensory adjectives are the prose equivalent of stock photos. They tell the reader the writer wasn't paying attention.
-    fix_suggestion: |-
-      Pick one specific detail per sense for one scene: the green tile floor, the smell of cardamom from the kitchen, the song that was playing, the bowl of pickled turnips on the counter.
+      If you've established a pattern through repetition, consider inverting or remixing it in your final paragraph to signal that the argument has come full circle or reached new ground.
     replacement: null
     severity: medium
-- source: 'subject talked about but never on the page'
+- source: |-
+    niemanstoryboard.org — avi-selk-eulogizes-the-long-life-and-too-soon-death-of-spider-16-and-what-she-ta: perspective choice anchors abstract science
   article: |-
-    Colleagues describe Wright as a perfectionist. Her former students remember her as demanding but fair. Industry observers say her influence on the field has been profound.
+    Selk narrates the spider's life from the creature's own perspective, using the spider as the protagonist: 'After a year in her burrow, in 1975, she would have felt strange, heavy vibrations on the twigs outside her door.' The entire story maintains this chronological first-person-adjacent structure throughout the spider's 43-year life.
   critiques:
   - agent: features_editor
-    text_quote: Colleagues describe Wright as a perfectionist.
-    span: [0, 46]
-    issue_label: subject not present on page
+    text_quote: |-
+      Selk narrates the spider's life from the creature's own perspective, using the spider as the protagonist: 'After a year in her burrow, in 1975, she would have felt strange, heavy vibrations on the twigs outside her door.' The entire story maintains this chronological first-person-adjacent structure throughout the spider's 43-year life.
+    span:
+    - 0
+    - 337
+    issue_label: perspective choice anchors abstract science
     question: |-
-      Three secondhand characterizations in a row. Where is Wright herself? What is she doing on the page? A feature where the subject is only described by other people reads as a dossier.
+      By putting everything in the spider's perspective, Selk found 'the simplest structure' and made the spider itself the story. 'The spider is the story. It spanned both women, and whatever details I could find in the scientific paper, about things it would have seen — or not exactly seen, but crawled amongst.'
     why_it_matters: |-
-      The reader wants to see the subject, not just read what other people said about them.
+      Organizing around the spider's lived experience makes scientific data feel personal and chronological rather than explanatory, which lets readers relate to a creature most fear.
     fix_suggestion: |-
-      Find one moment from your time with Wright — a gesture, a remark, the way she ran a meeting, the way she took a phone call. Open the next section with her doing something.
+      When writing about non-human subjects, consider whether the creature's own timeline and sensory world can become the organizing principle, rather than layering human interpretation on top.
     replacement: null
     severity: high
-- source: 'kicker that just summarizes'
+- source: |-
+    niemanstoryboard.org — avi-selk-eulogizes-the-long-life-and-too-soon-death-of-spider-16-and-what-she-ta: closing lands earned emotional recognition
   article: |-
-    And so, the village had changed forever, but its spirit remained.
+    The closing moment: 'The entire story is magical, down to the throat-catch you feel when you read the closing.' The critic notes this is the emotional payoff that ties the spider's death to the human observers' grief.
   critiques:
   - agent: features_editor
-    text_quote: And so, the village had changed forever, but its spirit remained.
-    span: [0, 65]
-    issue_label: kicker just summarizes
+    text_quote: |-
+      The closing moment: 'The entire story is magical, down to the throat-catch you feel when you read the closing.' The critic notes this is the emotional payoff that ties the spider's death to the human observers' grief.
+    span:
+    - 0
+    - 215
+    issue_label: closing lands earned emotional recognition
     question: |-
-      "And so, X had changed forever but its Y remained" is the canonical bad-feature ending. It's the writer's commentary on the meaning of the piece, not a moment that lets the reader feel it.
+      The critic flagged that readers felt a 'throat-catch' at the ending—a small physical response to something genuinely moving rather than manipulated.
     why_it_matters: |-
-      The kicker is the part the reader remembers. A summary kicker tells the reader the writer didn't trust them to feel anything on their own.
+      A closing that earns emotional response through specificity and structure rather than sentimentality creates lasting impact.
     fix_suggestion: |-
-      End with a small specific moment instead. A gesture, an image, a single line of dialogue. The shopkeeper closing the shutters at the end of the day, the schoolchildren walking past the empty lot, the smell of bread from the new bakery in the old building.
+      Test whether your ending moment has been *earned* by the details and structure you've laid; if it relies on adjectives rather than observed fact, it won't land the same way.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — avi-selk-eulogizes-the-long-life-and-too-soon-death-of-spider-16-and-what-she-ta: anthropomorphism through fact, not adjective
+  article: |-
+    Selk says he deliberately avoided overt anthropomorphism: 'I'm not overtly trying to humanize the spider. I'm just sort of pointing out things, knowing that the reader might read between the lines and do the work for me. Like by pointing out it has a mother, and it is doing the same things its mother did, and by not calling it an 'it' but always calling it a 'she.'
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      Selk says he deliberately avoided overt anthropomorphism: 'I'm not overtly trying to humanize the spider. I'm just sort of pointing out things, knowing that the reader might read between the lines and do the work for me. Like by pointing out it has a mother, and it is doing the same things its mother did, and by not calling it an 'it' but always calling it a 'she.'
+    span:
+    - 0
+    - 367
+    issue_label: anthropomorphism through fact, not adjective
+    question: |-
+      Selk drew a careful line between making readers relate to the spider and making it cheesy. He accomplished this by 'pointing out things, knowing that the reader might read between the lines and do the work for me'—using pronouns and observed behavior rather than explicit comparison.
+    why_it_matters: |-
+      Readers are more willing to project emotion onto animals when they discover the resemblance themselves rather than being told to feel it.
+    fix_suggestion: |-
+      Let factual details about behavior (motherhood, repetition of learned actions, female pronouns) invite reader connection instead of stating emotional equivalence outright.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — avi-selk-eulogizes-the-long-life-and-too-soon-death-of-spider-16-and-what-she-ta: source interview reframed for narrative detail
+  article: |-
+    Selk asked his source Leanda Mason: 'Rather than giving me the conventional science interview, as best you can, just tell me what a day in the life of the spider was like, beginning at its birth.' He specifically requested experiential narrative from the scientist rather than expert commentary.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      Selk asked his source Leanda Mason: 'Rather than giving me the conventional science interview, as best you can, just tell me what a day in the life of the spider was like, beginning at its birth.' He specifically requested experiential narrative from the scientist rather than expert commentary.
+    span:
+    - 0
+    - 295
+    issue_label: source interview reframed for narrative detail
+    question: |-
+      Instead of conducting a 'conventional science interview,' Selk asked his expert to narrate the spider's sensory and behavioral experience. 'From the get-go, we just made it a personal story about the spider rather than a scientific article.'
+    why_it_matters: |-
+      Asking scientists for lived-world details rather than expert analysis produces material that feels observed rather than translated.
+    fix_suggestion: |-
+      When interviewing experts on non-human subjects, try redirecting them away from 'what does this mean' toward 'what would this creature experience'—let them be eyewitnesses to behavior rather than interpreters of significance.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-pitch-how-to-get-the-attention-of-a-senior-editor-at-smithsonian-magazine: sensory specificity demonstrates narrative capability
+  article: |-
+    He also used superlatives right away: Magazines generally like things that are the 'largest' or 'oldest.' We could also tell right away he was a really good writer: We could see the tree, and it was a really captivating image.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      He also used superlatives right away: Magazines generally like things that are the 'largest' or 'oldest.' We could also tell right away he was a really good writer: We could see the tree, and it was a really captivating image.
+    span:
+    - 0
+    - 226
+    issue_label: sensory specificity demonstrates narrative capability
+    question: |-
+      We could tell right away he was a really good writer: We could see the tree, and it was a really captivating image. Thimmamma Marrimanu's branches spread across the ground and rise again toward the sun, giving an impression of many different trees.
+    why_it_matters: |-
+      A pitch written with scene-level sensory language shows the editor that the writer can execute narrative, not just report a topic.
+    fix_suggestion: |-
+      In pitches, include 2-3 sentences of the prose you'd actually write—not plot summary, but vivid description that proves you can make things come alive.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-pitch-how-to-get-the-attention-of-a-senior-editor-at-smithsonian-magazine: thematic resonance across disparate elements
+  article: |-
+    It shows that he has a poetic sensibility. You have to be careful with that, because you don't want to be overwrought and pompous. But you want to show that you have a mind that can take in symbolism and be literary in the pitch... his mind worked in a storytelling way.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      It shows that he has a poetic sensibility. You have to be careful with that, because you don't want to be overwrought and pompous. But you want to show that you have a mind that can take in symbolism and be literary in the pitch... his mind worked in a storytelling way.
+    span:
+    - 0
+    - 270
+    issue_label: thematic resonance across disparate elements
+    question: |-
+      It shows that he has a poetic sensibility... his mind worked in a storytelling way. Someone else might've missed this point—the smallest insect and biggest tree need each other to survive—but his mind worked in a storytelling way.
+    why_it_matters: |-
+      Demonstrating that you can find and articulate the symbolic or thematic architecture of a story (not just list facts) shows editorial maturity.
+    fix_suggestion: |-
+      In pitches, flag the surprising thematic connection or symbolic resonance you've found in your subject. This proves you're thinking like a writer, not just a reporter.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — a-final-phone-call-from-the-wildfires-inspires-an-unusual-intimate-story-written: opening line that arrests attention through abstraction and visual anchor
+  article: |-
+    The first sentence is treacherous: 'This is how I die.' It stands alone, in italics – first person, no quote marks. It reads like an epitaph beneath a photograph of six people huddled close.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      The first sentence is treacherous: 'This is how I die.' It stands alone, in italics – first person, no quote marks. It reads like an epitaph beneath a photograph of six people huddled close.
+    span:
+    - 0
+    - 190
+    issue_label: opening line that arrests attention through abstraction and visual anchor
+    question: |-
+      The opening deploys an arresting, italicized first-person declaration without attribution or context—a risky choice that trades conventional narrative scaffolding for emotional immediacy. Does the reader's uncertainty about whose voice this is actually deepen the impact?
+    why_it_matters: |-
+      By delaying identification and context, the opening forces readers into the subject's interior experience before they have the safety of journalistic framing—a craft choice that creates intimacy rather than distance.
+    fix_suggestion: |-
+      When opening with an abstract or attributed voice, ensure the sensory and visual details that follow are specific enough to ground the abstraction; don't leave readers suspended in voice alone.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — a-final-phone-call-from-the-wildfires-inspires-an-unusual-intimate-story-written: abandoning conventional structure for emotional authenticity under deadline
+  article: |-
+    No official sources. No direct quotes. No context beyond the moment she puts us in. Not even the hint of a context paragraph. It was written, as Knoll later told us, on tight deadline, in a rush of emotion and images.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      No official sources. No direct quotes. No context beyond the moment she puts us in. Not even the hint of a context paragraph. It was written, as Knoll later told us, on tight deadline, in a rush of emotion and images.
+    span:
+    - 0
+    - 208
+    issue_label: abandoning conventional structure for emotional authenticity under deadline
+    question: |-
+      Knoll dispensed entirely with traditional news scaffolding—official attribution, direct quotes, explanatory context—and instead wrote from close observation and the subject's interior thoughts. How does this unconventional approach land on deadline, and what does it risk in terms of credibility?
+    why_it_matters: |-
+      Stripping away conventional attribution and nut-paragraph structure forces the narrative to earn credibility through sensory specificity and emotional authenticity rather than official validation, a move that works only if reporting is deep enough.
+    fix_suggestion: |-
+      If you're abandoning traditional structure, ensure you've conducted enough reporting (in this case, a 90-minute recorded interview) to justify writing from inside your subject's head without letting readers question whether you're inventing interiority.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — a-final-phone-call-from-the-wildfires-inspires-an-unusual-intimate-story-written: strategic shifts in point of view and typography to signal interiority
+  article: |-
+    Knoll captures most of the experience by writing in close third person... When Knoll wants Ferguson's thoughts to be stated directly, she shifts to first person and italics: 'What is the best way to be taken by fire?'
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      Knoll captures most of the experience by writing in close third person... When Knoll wants Ferguson's thoughts to be stated directly, she shifts to first person and italics: 'What is the best way to be taken by fire?'
+    span:
+    - 0
+    - 217
+    issue_label: strategic shifts in point of view and typography to signal interiority
+    question: |-
+      Knoll uses deliberate typographic and POV shifts—close third person narration alternating with italicized first-person moments—to distinguish observed action from reported thought. Does this visual and grammatical clarity help readers understand what they're witnessing versus what they're being told?
+    why_it_matters: |-
+      Transparent use of POV and typography signals to readers where information is coming from (observation, interview, subject's own words), preserving credibility even in an unconventional structure.
+    fix_suggestion: |-
+      When writing intimate narrative from a subject's interiority without direct quotes, use consistent visual or grammatical markers (italics, present tense, POV shifts) so readers can distinguish narrator's interpretation from subject's actual thought or speech.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-pitch-erika-hayasaki-on-how-to-leave-the-newsroom-and-kill-it-as-a-freelance: opening with curiosity rather than assigned story
+  article: |-
+    I often start with a question or world that interests me. For example, my Kindle Single started when I was looking up news about avalanches and found a headline about boys who drowned in corn.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      I often start with a question or world that interests me. For example, my Kindle Single started when I was looking up news about avalanches and found a headline about boys who drowned in corn.
+    span:
+    - 0
+    - 192
+    issue_label: opening with curiosity rather than assigned story
+    question: |-
+      How does Hayasaki's process of stumbling onto story ideas—following tangents, noticing unexpected details—differ from the typical assigned-beat model, and what does it suggest about how freelancers must generate their own friction?
+    why_it_matters: |-
+      Freelancers don't have editors assigning them beats; they must develop a methodology for reliably finding stories that will sustain months of reporting and that publications will actually want.
+    fix_suggestion: |-
+      Teach writers to practice deliberate curiosity: maintain research streams (news alerts, journal subscriptions, courthouse dockets) that generate unexpected collisions, not just follow pre-assigned topics.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-pitch-erika-hayasaki-on-how-to-leave-the-newsroom-and-kill-it-as-a-freelance: characters as the gatekeep to reportability
+  article: |-
+    Once you have a world that fascinates you, you have to get access to people who can carry a feature story. With the corn story, I showed up in the community and found survivors. In a science story, you might begin with a study and find the people involved in the research or affected by it. The characters have to be willing to open up and spend time with you and must have a compelling story that is a microcosm of a bigger issue.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      Once you have a world that fascinates you, you have to get access to people who can carry a feature story. With the corn story, I showed up in the community and found survivors. In a science story, you might begin with a study and find the people involved in the research or affected by it. The characters have to be willing to open up and spend time with you and must have a compelling story that is a microcosm of a bigger issue.
+    span:
+    - 0
+    - 431
+    issue_label: characters as the gatekeep to reportability
+    question: |-
+      Hayasaki emphasizes that 'the characters have to be willing to open up'—recognizing that a strong world or study is inert without human subjects who can both embody the idea and sustain a writer's access over months. How does this reframe what makes a story 'pitchable'?
+    why_it_matters: |-
+      It shifts the burden from having a clever idea to having secured (or at least assessed the likelihood of securing) willing, articulate human characters—a more honest metric of story viability.
+    fix_suggestion: |-
+      When vetting story ideas, writers should map character availability early, not late; a great world without characters is a lecture, not a feature.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — from-sept-11-to-covid-using-the-personal-to-write-the-global: opening scene establishes personal stakes before the global event
+  article: |-
+    At 8:45 AM on September 11, 2001, I arrived at Lenox Hill Hospital in Manhattan, pregnant and expecting a tour of the maternity ward. But the nurses behind the reception desk paid me no attention. They were all staring at the tiny television screen above the reception desk.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      At 8:45 AM on September 11, 2001, I arrived at Lenox Hill Hospital in Manhattan, pregnant and expecting a tour of the maternity ward. But the nurses behind the reception desk paid me no attention. They were all staring at the tiny television screen above the reception desk.
+    span:
+    - 0
+    - 274
+    issue_label: opening scene establishes personal stakes before the global event
+    question: |-
+      The essay opens with a vivid, intimate scene—a pregnant woman arriving for a routine maternity tour, unaware of the tragedy unfolding—before revealing what's happening. Why does this work as an entry point to a larger meditation on how to write about shared global events through personal experience?
+    why_it_matters: |-
+      By grounding the reader in the author's specific sensory and emotional reality before widening the lens to the historical moment, the scene demonstrates the core craft principle the essay teaches: that personal detail is the vehicle through which readers can understand collective experience.
+    fix_suggestion: |-
+      When writing about large historical events, resist the urge to begin with the event itself; instead, begin with a specific, sensory moment from an individual's perspective, then gradually reveal the larger context.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — from-sept-11-to-covid-using-the-personal-to-write-the-global: sensory specificity anchors emotional memory across decades
+  article: |-
+    Yet to this day, I remember the face of the nurse who took a moment to explain what was happening. I remember the purple coat I was wearing that morning. I remember people running through the streets as I came out of the hospital, and the rising bile that caused me to vomit into a waste basket on the side of the road.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      Yet to this day, I remember the face of the nurse who took a moment to explain what was happening. I remember the purple coat I was wearing that morning. I remember people running through the streets as I came out of the hospital, and the rising bile that caused me to vomit into a waste basket on the side of the road.
+    span:
+    - 0
+    - 319
+    issue_label: sensory specificity anchors emotional memory across decades
+    question: |-
+      The author catalogs small, visceral details—the nurse's face, the purple coat, the physical act of vomiting—rather than explaining the emotional weight of the day. What does this accumulation of sensory memory accomplish that abstract reflection cannot?
+    why_it_matters: |-
+      Precise sensory details make memory feel lived and retrievable, allowing readers to understand not just what happened but how it was experienced, which is essential when writing personal narrative about shared events.
+    fix_suggestion: |-
+      When mining your own memory for memoir, ask: What did I see, hear, smell, taste, and feel in that moment? Those details will carry more weight than analysis of what the moment meant.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — from-sept-11-to-covid-using-the-personal-to-write-the-global: personal observation of a friend reveals a global pattern
+  article: |-
+    I remember how Muslim identity shifted, not just among my friends in New York City or in America, but around the world as some Muslims began choosing their religious identity over their secular or national identity... Donning the hijab, Ameena told me, gave her an opening to explain her faith to unknowing friends.
+  critiques:
+  - agent: features_editor
+    text_quote: |-
+      I remember how Muslim identity shifted, not just among my friends in New York City or in America, but around the world as some Muslims began choosing their religious identity over their secular or national identity... Donning the hijab, Ameena told me, gave her an opening to explain her faith to unknowing friends.
+    span:
+    - 0
+    - 315
+    issue_label: personal observation of a friend reveals a global pattern
+    question: |-
+      The author moves from her own experience to her friend Ameena's decision to wear a hijab for the first time as a response to post-9/11 discrimination. How does this shift from 'I' to 'we' (via a specific other person) allow her to write about global change without abandoning the personal perspective?
+    why_it_matters: |-
+      Using a specific relationship and direct observation of someone close to you allows a personal essayist to credibly report on larger social patterns and shifts without claiming omniscience or losing intimacy.
+    fix_suggestion: |-
+      To write the personal-to-global arc: show how the world changed through the eyes and choices of people you actually knew and observed, rather than through abstract reporting or your own isolated perspective.
     replacement: null
     severity: medium

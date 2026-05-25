@@ -1,82 +1,309 @@
-# Exemplars for reviews_editor (Remy). Bootstrap synthetic; replaced in Phase 2.
-- source: 'no position by graf 3'
+# Exemplars for reviews_editor
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the reviews_editor lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
+#
+- source: |-
+    www.theguardian.com — tuner-review-leo-woodall-dustin-hoffman: sharp performance contrast with canon context
   article: |-
-    The film opens in a small town in Montana. The lead character, played by an actor we've seen in many similar roles, gradually becomes entangled in a series of events involving his estranged brother. The cinematography is interesting, and the score is notable.
+    Leo Woodall's breakout TV roles in The White Lotus and One Day offered a megawatt charisma, but for his biggest film role to date he dims it to a soft glow with gentle performance opposite Dustin Hoffman
   critiques:
   - agent: reviews_editor
-    text_quote: The cinematography is interesting, and the score is notable.
-    span: [196, 256]
-    issue_label: no position by graf 3
+    text_quote: |-
+      Leo Woodall's breakout TV roles in The White Lotus and One Day offered a megawatt charisma, but for his biggest film role to date he dims it to a soft glow with gentle performance opposite Dustin Hoffman
+    span:
+    - 0
+    - 203
+    issue_label: sharp performance contrast with canon context
     question: |-
-      Three grafs in and I still can't tell if you liked this. "Interesting" and "notable" are the words you use when you don't want to commit. What did you think?
+      This grounds the performance claim in Woodall's prior work and uses a specific image ('dims it to a soft glow') to show what the performance does differently. Does the review sustain this kind of specificity, or revert to generality later?
     why_it_matters: |-
-      A review without a position is consumer-confusion, not criticism. Readers come to a review to find out what someone thought.
+      Anchoring a performance judgment in prior work + concrete visual language makes the claim credible and lets readers calibrate what they're about to see.
     fix_suggestion: |-
-      State your position by the end of graf 2: "This is a serious, slow-moving film that will reward viewers patient enough to..." or whatever your actual take is.
-    replacement: null
-    severity: high
-- source: 'mostly plot summary'
-  article: |-
-    [4 grafs of plot recap] Overall, the book has both strengths and weaknesses, and readers will form their own views.
-  critiques:
-  - agent: reviews_editor
-    text_quote: Overall, the book has both strengths and weaknesses
-    span: [27, 78]
-    issue_label: plot summary masquerading as review
-    question: |-
-      Four grafs of plot, one graf of "well, there are good and bad things." The reader is here for your judgment, not a synopsis.
-    why_it_matters: |-
-      Plot-summary reviews are the lowest form of the craft and the easiest to dismiss.
-    fix_suggestion: |-
-      Compress the plot summary to two sentences. Use the recovered space for what you actually thought — specific scenes, what worked and what didn't, where the book sits relative to its genre.
-    replacement: null
-    severity: high
-- source: 'claims about the work with no evidence from it'
-  article: |-
-    The dialogue is brilliantly written and the characters feel fully realized.
-  critiques:
-  - agent: reviews_editor
-    text_quote: The dialogue is brilliantly written
-    span: [0, 35]
-    issue_label: no specific evidence from the work
-    question: |-
-      "Brilliantly written" without a single quoted line is empty. The reader needs to see what you're seeing.
-    why_it_matters: |-
-      Unsubstantiated craft claims are how reviews lose authority — the reader has no way to evaluate whether your take is supported by the work itself.
-    fix_suggestion: |-
-      Quote one specific line and explain what makes it brilliant. "When the lawyer says X to her daughter, she's saying three things at once: A, B, and C."
-    replacement: null
-    severity: high
-- source: 'work treated as if no genre exists'
-  article: |-
-    This is an entirely fresh take on the concept of memory in fiction.
-  critiques:
-  - agent: reviews_editor
-    text_quote: This is an entirely fresh take on the concept of memory in fiction.
-    span: [0, 66]
-    issue_null: no genre / canon context
-    issue_label: no genre / canon context
-    question: |-
-      "Entirely fresh" — fresh compared to what? Memory in fiction is its own tradition (Proust, Sebald, Atwood). Where does this book sit?
-    why_it_matters: |-
-      Reviews without genre or canon context read as if the reviewer thinks the book exists in a vacuum.
-    fix_suggestion: |-
-      Place the book in a tradition. Comparison can be brief: "Like Sebald and unlike Proust, X uses memory as Y." Pick the writers whose work casts the most light.
+      When describing acting, return to this move: name prior work, then specify what changes (tone, energy, restraint) with a concrete image.
     replacement: null
     severity: medium
-- source: 'authorial intent fallacy'
+- source: |-
+    www.theguardian.com — tuner-review-leo-woodall-dustin-hoffman: unsupported thematic claim + authorial-intent pivot
   article: |-
-    The author was clearly trying to make a statement about modern alienation, but the execution falls flat.
+    The scene taps into an undercurrent of class consciousness; the script is co-written by director Daniel Roher, a documentary maker who won an Oscar for his 2022 documentary Navalny, and Tuner is his feature-film debut.
   critiques:
   - agent: reviews_editor
-    text_quote: The author was clearly trying to make a statement about modern alienation
-    span: [0, 73]
-    issue_label: authorial intent fallacy
+    text_quote: |-
+      The scene taps into an undercurrent of class consciousness; the script is co-written by director Daniel Roher, a documentary maker who won an Oscar for his 2022 documentary Navalny, and Tuner is his feature-film debut.
+    span:
+    - 0
+    - 218
+    issue_label: unsupported thematic claim + authorial-intent pivot
     question: |-
-      You don't know what the author was trying to do unless they told you. Focus on what the book actually does, not what you guess the writer intended.
+      The review asserts a class-consciousness undercurrent exists in the scene, then immediately shifts to director biography as if that explains or proves it. What exactly in the scene shows class consciousness? How does knowing Roher's doc background support the reading?
     why_it_matters: |-
-      Intent claims invite easy counter-arguments and shift the critique away from the work itself.
+      Missing the textual evidence for the thematic claim weakens it; pivoting to biography can feel like you're explaining away the work rather than analyzing it.
     fix_suggestion: |-
-      Rewrite: "The book reaches for a statement about modern alienation but the execution falls flat — specifically, when [scene] tries to land [point], the prose retreats into [problem]."
+      If you spot a theme, quote or describe the specific moment that carries it—what does Ruthie say or do that reveals class dynamics? Only invoke biography if it directly illuminates a choice the film makes.
+    replacement: null
+    severity: high
+- source: |-
+    www.theguardian.com — criminal-review-homelessness-show-delivers-a-rage-making-punch-in-the-gut: specificity-through-sensory-detail-then-inversion
+  article: |-
+    A trim caravan sits in an idyllic garden in the grounds of a former gatehouse. Its cosy interior is decked with a cornucopia of crafts: pastel-coloured bunting, felt embroidery, a bright rag rug, plumply immaculate cushions. On the sideboard is a small display of pristine china. It feels like a glamping retreat or a chi-chi refuge from the Chelsea flower show. But look more closely at the china, and you'll see that it's decorated with Sun newspaper headlines venomously fulminating against Gypsy and Traveller encampments.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      A trim caravan sits in an idyllic garden in the grounds of a former gatehouse. Its cosy interior is decked with a cornucopia of crafts: pastel-coloured bunting, felt embroidery, a bright rag rug, plumply immaculate cushions. On the sideboard is a small display of pristine china. It feels like a glamping retreat or a chi-chi refuge from the Chelsea flower show. But look more closely at the china, and you'll see that it's decorated with Sun newspaper headlines venomously fulminating against Gypsy and Traveller encampments.
+    span:
+    - 0
+    - 526
+    issue_label: specificity-through-sensory-detail-then-inversion
+    question: |-
+      This passage uses close visual description and a sensory walk-through to set up the show's central strategy—juxtaposing beauty with violence. The 'But look more closely' signals the turn where the installation's critique lives. How does anchoring the abstraction (criminalisation) in material detail make the argument land harder than a statement could?
+    why_it_matters: |-
+      Concrete description of what visitors actually see and touch makes the show's conceptual argument visceral; it's the difference between 'the installation critiques media bias' and watching the bias bloom from a china teacup.
+    fix_suggestion: |-
+      When reviewing exhibitions or design, lead with what the visitor encounters before naming the idea. Let the sensory path guide the argument.
+    replacement: null
+    severity: medium
+- source: |-
+    www.theguardian.com — criminal-review-homelessness-show-delivers-a-rage-making-punch-in-the-gut: position-stated-early-with-metaphor
+  article: |-
+    Criminal: An Untold Story of Homelessness, Resistance and Survival, a compact yet punchy assemblage of installations, collaborations and infographics that hits you in the gut like a nimble flyweight boxer.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      Criminal: An Untold Story of Homelessness, Resistance and Survival, a compact yet punchy assemblage of installations, collaborations and infographics that hits you in the gut like a nimble flyweight boxer.
+    span:
+    - 0
+    - 205
+    issue_label: position-stated-early-with-metaphor
+    question: |-
+      The review delivers a clear valuation by line 3—'hits you in the gut'—and uses a specific metaphor (nimble flyweight, not heavyweight brutality) that captures both the show's scale and its agility. Does the metaphor do work beyond 'this is powerful'? What does 'flyweight' tell us about the show's approach?
+    why_it_matters: |-
+      A precise metaphor (not just 'packs a punch') signals the critic has thought about *how* the show works, not just *whether* it's good.
+    fix_suggestion: |-
+      When using metaphors to describe impact, choose one that illuminates the show's actual strategy or form, not just its intensity.
+    replacement: null
+    severity: medium
+- source: 'www.avclub.com — deep-water-review: unsupported claim about actor range'
+  article: |-
+    With a soothing voice and brighter-than-average star power charisma, Eckhart reminds viewers that he's never too good to be unabashedly corny—a virtue that persists even in films like I, Frankenstein.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      With a soothing voice and brighter-than-average star power charisma, Eckhart reminds viewers that he's never too good to be unabashedly corny—a virtue that persists even in films like I, Frankenstein.
+    span:
+    - 0
+    - 200
+    issue_label: unsupported claim about actor range
+    question: |-
+      What evidence from *Deep Water* shows Eckhart being 'unabashedly corny' here? The comparison to *I, Frankenstein* is external; you need a scene or a line from this film that demonstrates the specific quality you're praising.
+    why_it_matters: |-
+      Without grounding the claim in *this* film's text, the praise floats free and reads like recycled actor-reputation knowledge rather than review work.
+    fix_suggestion: |-
+      Quote a specific line of dialogue or describe a scene where Eckhart commits fully to melodrama in a way that earns the film's tone. Show, don't tell.
+    replacement: null
+    severity: high
+- source: 'www.avclub.com — deep-water-review: plot summary replacing analysis'
+  article: |-
+    It's still refreshing to see both men take their obligations seriously, not just out of professional responsibility, but because they want to set a good example, like when Ben tries to reassure the snarky but worried gradeschooler Cora (Molly Wright), who's traveling with her father (Ryan Brown), stepmother (Kelly Gale), and stepbrother Finn (Elijah Tamati).
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      It's still refreshing to see both men take their obligations seriously, not just out of professional responsibility, but because they want to set a good example, like when Ben tries to reassure the snarky but worried gradeschooler Cora (Molly Wright), who's traveling with her father (Ryan Brown), stepmother (Kelly Gale), and stepbrother Finn (Elijah Tamati).
+    span:
+    - 0
+    - 360
+    issue_label: plot summary replacing analysis
+    question: |-
+      You're describing what happens in the scene, not examining how the filmmaking or performance creates the effect you're claiming. What visual, tonal, or performative choice makes us *feel* that Eckhart's taking his obligation seriously?
+    why_it_matters: |-
+      Plot recaps are reading notes, not criticism. Readers need analysis of craft to understand why this moment works.
+    fix_suggestion: |-
+      Pair the scene with a specific detail: Eckhart's cadence, his eye-line, Harlin's framing of the interaction. Let one concrete choice anchor the thematic claim.
+    replacement: null
+    severity: high
+- source: 'www.avclub.com — deep-water-review: sharp position with vivid evidence'
+  article: |-
+    Harlin's at his ghoulish best when he's toying with viewers' emotions during the shark-centric scenes of Deep Water, the best of which will make you holler with glee given their crowd-pleasing, over-the-top violence.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      Harlin's at his ghoulish best when he's toying with viewers' emotions during the shark-centric scenes of Deep Water, the best of which will make you holler with glee given their crowd-pleasing, over-the-top violence.
+    span:
+    - 0
+    - 216
+    issue_label: sharp position with vivid evidence
+    question: |-
+      This is strong craft. You've named Harlin's authorial signature ('ghoulish,' 'toying'), identified the genre function ('crowd-pleasing'), and predicted the effect ('holler with glee'). The accumulation of claims is proportional to the evidence.
+    why_it_matters: |-
+      This sentence tells readers *and* other critics what Harlin is actually doing in the film, with enough specificity that they can test the claim.
+    fix_suggestion: |-
+      This is a model. When you have this kind of clarity, you can trust it to carry weight without additional hedging or scene recaps.
+    replacement: null
+    severity: medium
+- source: |-
+    www.avclub.com — bridgerton-season-4-volume-1-review-netflix: Plot summary as substitute for analysis
+  article: |-
+    The two escape his family's party to waltz in the garden and share personal thoughts, forging a strong connection and a kiss that neither wants to forget. The catch? Benedict is a member of the upper echelons of London society, while Sophie works as a maid under the strict rule of her overbearing stepmother (played by Harry Potter's Katie Leung).
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      The two escape his family's party to waltz in the garden and share personal thoughts, forging a strong connection and a kiss that neither wants to forget. The catch? Benedict is a member of the upper echelons of London society, while Sophie works as a maid under the strict rule of her overbearing stepmother (played by Harry Potter's Katie Leung).
+    span:
+    - 0
+    - 348
+    issue_label: Plot summary as substitute for analysis
+    question: |-
+      Two paragraphs recap the Cinderella setup and the class-divide obstacle without examining *how* the show dramatizes this tension or what the writers do with it thematically. Does the obstacle feel inevitable or contrived? How does the script handle the power imbalance? The reader learns the story but not the show's craft choices.
+    why_it_matters: |-
+      Summarizing plot points is not reviewing. It tells readers what happens, not whether or how well it's executed.
+    fix_suggestion: |-
+      After the plot setup, dig into one scene that shows how the class divide creates actual friction—a line of dialogue, a moment of shame or fear in Ha's or Thompson's face. That scene becomes evidence of the show's thematic ambition.
+    replacement: null
+    severity: high
+- source: |-
+    pitchfork.com — angine-de-poitrine-vol-ii: specific craft analysis with quoted evidence
+  article: |-
+    What makes Angine de Poitrine special is how they wiggle and writhe within that structure, filling the grid with weird rhythmic curlicues, ill-timed accents, and unlikely hooklets. Khn's riffs span large gulfs of time so they lose their familiar shape, punctuating the air in strange polygons.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      What makes Angine de Poitrine special is how they wiggle and writhe within that structure, filling the grid with weird rhythmic curlicues, ill-timed accents, and unlikely hooklets. Khn's riffs span large gulfs of time so they lose their familiar shape, punctuating the air in strange polygons.
+    span:
+    - 0
+    - 293
+    issue_label: specific craft analysis with quoted evidence
+    question: |-
+      The reviewer moves past genre-name-dropping to show *how* the band creates rhythmic illusion. 'Filling the grid with weird rhythmic curlicues' and 'polygons' are sensory descriptions tied to the actual compositional move (creating illusions within a locked meter). This is the bar for musical analysis.
+    why_it_matters: |-
+      Readers understand not just that the band is complex, but *why* it works—the mechanism underneath the strangeness.
+    fix_suggestion: |-
+      When analyzing instrumental music, ground abstract praise ('special,' 'thrilling') in specific moments and sensory language. This reviewer does it well here.
+    replacement: null
+    severity: medium
+- source: |-
+    pitchfork.com — angel-dust-cold-2-the-touch: biographical context establishes thematic through-line
+  article: |-
+    For years, Angel Du$t was Justice Tripp's balmy reprieve from Trapped Under Ice. When he fronted the Baltimore hardcore band, he cursed out ice queens and swore he'd "stay cold forevermore" to protect his heart.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      For years, Angel Du$t was Justice Tripp's balmy reprieve from Trapped Under Ice. When he fronted the Baltimore hardcore band, he cursed out ice queens and swore he'd "stay cold forevermore" to protect his heart.
+    span:
+    - 0
+    - 211
+    issue_label: biographical context establishes thematic through-line
+    question: |-
+      The reviewer uses Tripp's earlier band history and a direct lyrical quote to anchor the album's title and emotional arc. How does grounding the review in this specific biographical detail shape the reader's entry point into what the album is about?
+    why_it_matters: |-
+      It establishes that the album's coldness isn't arbitrary—it's a return to a documented emotional state, making the cyclical narrative credible rather than impressionistic.
+    fix_suggestion: |-
+      When reviewing artists with complex back-catalogs, a single strong biographical detail + direct quote can replace vague characterizations. Use it early.
+    replacement: null
+    severity: medium
+- source: |-
+    pitchfork.com — angel-dust-cold-2-the-touch: clear position statement by mid-review
+  article: |-
+    COLD 2 THE TOUCH isn't a full return to the band's lovably spartan beginnings, but it is the best balance of no-frills punk and experimentation that Angel Du$t have ever delivered.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      COLD 2 THE TOUCH isn't a full return to the band's lovably spartan beginnings, but it is the best balance of no-frills punk and experimentation that Angel Du$t have ever delivered.
+    span:
+    - 0
+    - 180
+    issue_label: clear position statement by mid-review
+    question: |-
+      By the second full section, the reviewer has stated a clear thesis: this album achieves what earlier records didn't (balance). How does naming what makes it the 'best' do more work than just saying 'it's good'?
+    why_it_matters: |-
+      It gives the reader a concrete criterion for judgment—not taste, but a specific achievement measured against the band's catalog.
+    fix_suggestion: |-
+      State your position in comparative terms ('best ___ since/ever') rather than in absolutes; it makes the judgment feel earned.
+    replacement: null
+    severity: medium
+- source: |-
+    pitchfork.com — angel-dust-cold-2-the-touch: lazy comparison without tethering to specific song
+  article: |-
+    Although a good portion of this album still sounds like Kurt Vile going through a Sly Stone phase, the kumbaya squishiness of the past few records has hardened into a brisk antagonism.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      Although a good portion of this album still sounds like Kurt Vile going through a Sly Stone phase, the kumbaya squishiness of the past few records has hardened into a brisk antagonism.
+    span:
+    - 0
+    - 184
+    issue_label: lazy comparison without tethering to specific song
+    question: |-
+      The Kurt Vile / Sly Stone reference floats—it's evocative but unmoored to an actual track or moment. Does naming the comparison without evidence from the album itself make the critique feel impressionistic rather than grounded?
+    why_it_matters: |-
+      Readers can't verify the claim or use it to navigate the album. A lazy comparison suggests the reviewer heard a vibe rather than analyzed the work.
+    fix_suggestion: |-
+      Name the comparison but immediately anchor it: 'tracks like X have that Kurt Vile / Sly Stone drift' or drop the comparison and describe the sound directly.
+    replacement: null
+    severity: medium
+- source: |-
+    pitchfork.com — angel-dust-cold-2-the-touch: specific track analysis with quoted/described moments
+  article: |-
+    "Zero" fuses smokey Southern-rock riffing with chunky hardcore churn, while "DU$T" swings from acoustic balladry to throttling powerviolence and ends with Tripp teasing a mosh part that—surprise!—is actually a funk breakdown.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      "Zero" fuses smokey Southern-rock riffing with chunky hardcore churn, while "DU$T" swings from acoustic balladry to throttling powerviolence and ends with Tripp teasing a mosh part that—surprise!—is actually a funk breakdown.
+    span:
+    - 0
+    - 225
+    issue_label: specific track analysis with quoted/described moments
+    question: |-
+      The reviewer doesn't quote lyrics—they describe the *sonic and structural* moves within each song. How does this approach avoid plot summary and instead reveal craft?
+    why_it_matters: |-
+      By pointing to actual compositional choices (key changes, genre shifts, production details) rather than lyrical content, the review demonstrates close listening and gives readers a roadmap for what they'll hear.
+    fix_suggestion: |-
+      Use song-by-song breakdowns to show, not tell. Describe the moves (instrumental arrangement, tempo shifts, vocal timbres) that embody the album's argument.
+    replacement: null
+    severity: medium
+- source: |-
+    pitchfork.com — angel-dust-cold-2-the-touch: subculture context as interpretive frame
+  article: |-
+    What makes Angel Du$t's evolution fulfilling is that it's never been an attempt to grow out of hardcore. They load their songs with acoustic twiddles and picnicky melodies while regularly playing hardcore festivals, touring with much heavier bands, and encouraging stage-dive mayhem at their shows, maintaining a firm foothold in a subculture that has little tolerance for "too cool" maturations.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      What makes Angel Du$t's evolution fulfilling is that it's never been an attempt to grow out of hardcore. They load their songs with acoustic twiddles and picnicky melodies while regularly playing hardcore festivals, touring with much heavier bands, and encouraging stage-dive mayhem at their shows, maintaining a firm foothold in a subculture that has little tolerance for "too cool" maturations.
+    span:
+    - 0
+    - 396
+    issue_label: subculture context as interpretive frame
+    question: |-
+      The reviewer uses hardcore's actual values (anti-pretense, DIY loyalty) to explain why the band's genre-blending works where it might fail for others. Does this contextualize the musical choices in a way that pure sonic analysis wouldn't?
+    why_it_matters: |-
+      It prevents the review from treating the album in a vacuum. The music only makes sense—and the 'balance' claim only holds—if you understand the subcultural constraints the band is working within.
+    fix_suggestion: |-
+      When a band operates within a specific scene or tradition, name that tradition and show how the album negotiates it. This elevates the review beyond taste.
+    replacement: null
+    severity: medium
+- source: |-
+    pitchfork.com — broncho-natural-pleasure: structural weakness + extended metaphor instead of specificity
+  article: |-
+    This pervading haze is double-edged, though, as the album admittedly gets a little repetitive once the more upbeat tracks give way to a slower second half. It's a gorgeous listen, but the line between mesmerizing and soporific starts to blur as the songs' edges melt into one another, kind of like how couchlock can feel amazing until you realize you haven't gotten up in hours.
+  critiques:
+  - agent: reviews_editor
+    text_quote: |-
+      This pervading haze is double-edged, though, as the album admittedly gets a little repetitive once the more upbeat tracks give way to a slower second half. It's a gorgeous listen, but the line between mesmerizing and soporific starts to blur as the songs' edges melt into one another, kind of like how couchlock can feel amazing until you realize you haven't gotten up in hours.
+    span:
+    - 0
+    - 378
+    issue_label: structural weakness + extended metaphor instead of specificity
+    question: |-
+      The critic identifies a real problem—repetitiveness, a structural slump in the second half—but then explains it via a couchlock metaphor rather than naming *which songs* blur together or *what production choice* causes the sameness. The metaphor is clever, but does it help the reader understand the album's actual failure?
+    why_it_matters: |-
+      A metaphor can feel like analysis when it's actually just decoration. Readers want to know: which tracks repeat? What's missing? Without those specifics, the complaint reads as mood-setting, not craft criticism.
+    fix_suggestion: |-
+      Name the repetitive tracks by title. Identify the production or compositional choice that makes them feel interchangeable. Then, if a metaphor helps, use it—but not as a substitute for the evidence.
     replacement: null
     severity: medium

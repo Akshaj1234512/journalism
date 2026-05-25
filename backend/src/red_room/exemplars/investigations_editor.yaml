@@ -1,101 +1,312 @@
-# Exemplars for investigations_editor (Iris)
-# Bootstrap synthetic exemplars in investigations-editor voice. Will be
-# replaced by real-data ingestion (IPSO press council rulings, CJR
-# criticism, ProPublica methods notes) in Phase 2.
+# Exemplars for investigations_editor
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the investigations_editor lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
 #
-- source: 'single-source allegation with no document trail'
+- source: |-
+    niemanstoryboard.org — the-pitch-how-to-crack-the-code-for-live-storytelling-with-pop-up-magazine: access and corroboration bar set by medium constraint
   article: |-
-    According to a person familiar with the matter, Reyes diverted at least $200,000 in foundation funds to a personal account between 2020 and 2022.
+    We needed to know she was going to be able to access the voicemails and one of the customer service reps. If she'd had one preliminary call with a rep where he'd anecdotally described a lot of things in the voicemails, guaranteed access to them, and agreed to the interview, that wouldn't have been enough. She didn't necessarily need to have listened to them all herself. But the fact that she already had access and mentioned that in the pitch was helpful because the story hinges on it.
   critiques:
   - agent: investigations_editor
-    text_quote: According to a person familiar with the matter, Reyes diverted at least $200,000
-    span: [0, 80]
-    issue_label: single anonymous source on material allegation
+    text_quote: |-
+      We needed to know she was going to be able to access the voicemails and one of the customer service reps. If she'd had one preliminary call with a rep where he'd anecdotally described a lot of things in the voicemails, guaranteed access to them, and agreed to the interview, that wouldn't have been enough. She didn't necessarily need to have listened to them all herself. But the fact that she already had access and mentioned that in the pitch was helpful because the story hinges on it.
+    span:
+    - 0
+    - 489
+    issue_label: access and corroboration bar set by medium constraint
     question: |-
-      This is a fraud allegation against a named subject. One unnamed source, no document. When the subject's lawyer responds, what do we have to fall back on?
+      We needed to know she was going to be able to access the voicemails and one of the customer service reps. We don't have room to kill stories, because we work on a tight production timeline capped at 10 stories.
     why_it_matters: |-
-      Single-source allegations of financial wrongdoing are the canonical investigations-desk weakness, and the first thing a libel lawyer will exploit.
+      Because Pop-Up has zero kill capacity and a fixed story count, it requires higher evidence of access and feasibility in the pitch than a traditional magazine would—you're essentially pre-vetting the story's reportability.
     fix_suggestion: |-
-      Add either a named second source or specific documentation (bank record, audit, court filing) before this sentence runs.
+      When pitching to outlets with tight production timelines or limited story slots, lead with proof of access and preliminary corroboration. Don't pitch on promise alone; pitch on what you've already secured.
     replacement: null
     severity: high
-- source: 'pattern claim from a single incident'
+- source: |-
+    niemanstoryboard.org — the-pitch-how-to-get-the-attention-of-a-senior-editor-at-smithsonian-magazine: named expert source demonstrates reporting work
   article: |-
-    The behavior reflects a systemic pattern at the agency, where senior officials routinely override safety reviews.
+    It showed that he'd gone far enough to talk to one of the experts on this topic and that there was a character... And it gave the pitch authority: A scientist was backing up his assertion that it was the largest tree on the planet.
   critiques:
   - agent: investigations_editor
-    text_quote: The behavior reflects a systemic pattern at the agency
-    span: [0, 51]
-    issue_label: pattern claim from one incident
+    text_quote: |-
+      It showed that he'd gone far enough to talk to one of the experts on this topic and that there was a character... And it gave the pitch authority: A scientist was backing up his assertion that it was the largest tree on the planet.
+    span:
+    - 0
+    - 231
+    issue_label: named expert source demonstrates reporting work
     question: |-
-      The reporting documents one override. "Systemic pattern" requires multiple documented incidents. We can either soften the framing or add the other instances.
+      It showed that he'd gone far enough to talk to one of the experts on this topic and that there was a character. In the end, he didn't end up being featured prominently, but when you're talking about a tree, it's nice to see that there are humans there as well. And it gave the pitch authority.
     why_it_matters: |-
-      A "pattern" claim invites the institutional response and we lose the room if we can only point to one example.
+      Including a named source with credentials in a pitch demonstrates the writer has done preliminary reporting and corroborated the central claim.
     fix_suggestion: |-
-      Either change to "in at least one documented case" or add specifics on the other instances the reporting found.
+      Pitch with specific sources you've already identified or contacted, not hypothetical characters or experts you plan to find.
     replacement: null
     severity: high
-- source: 'no right-to-reply on the specific allegation'
+- source: |-
+    niemanstoryboard.org — the-pitch-erika-hayasaki-on-how-to-leave-the-newsroom-and-kill-it-as-a-freelance: methodical source discovery through public records
   article: |-
-    Reached for comment, the company said it "does not comment on personnel matters."
+    I put that term into Nexis to look for court cases where the condition had come up, and stumbled across a guy in California who'd gone to federal prison. I looked up the court transcripts in PACER, then used Intelius to track down his family. I found the guy in prison through an app called JPay, and the next thing I know I was able to visit the prison.
   critiques:
   - agent: investigations_editor
-    text_quote: Reached for comment, the company said it "does not comment on personnel matters."
-    span: [0, 82]
-    issue_label: no specific-allegation right of reply
+    text_quote: |-
+      I put that term into Nexis to look for court cases where the condition had come up, and stumbled across a guy in California who'd gone to federal prison. I looked up the court transcripts in PACER, then used Intelius to track down his family. I found the guy in prison through an app called JPay, and the next thing I know I was able to visit the prison.
+    span:
+    - 0
+    - 354
+    issue_label: methodical source discovery through public records
     question: |-
-      "Reached for comment" without disclosing what specific allegations we put to the company is a thin record. The story has six distinct accusations; we need to show we put them.
+      What's striking here is the transparent tool chain—Nexis, PACER, Intelius, JPay—that Hayasaki names explicitly, showing how a feature writer can systematically convert a research question into human access without waiting for a Rolodex of contacts.
     why_it_matters: |-
-      Without a specific-allegation request, the company's lawyer can later say they never had a chance to respond to the actual claims.
+      It demystifies the leap from abstract idea to on-the-ground reporting: you don't need a fixer or assignment editor; you need a systematic approach to finding willing characters in the public record.
     fix_suggestion: |-
-      Add: "The company was sent a written list of the specific allegations described in this story on [date] and given [X] days to respond."
-    replacement: null
-    severity: high
-- source: 'inferential leap via "essentially"'
-  article: |-
-    These three contracts, combined with the timing of the meeting, essentially amount to an undisclosed kickback arrangement.
-  critiques:
-  - agent: investigations_editor
-    text_quote: essentially amount to an undisclosed kickback arrangement
-    span: [60, 117]
-    issue_label: inferential leap via "essentially"
-    question: |-
-      "Essentially" is doing the work of an evidentiary claim. Either show the explicit kickback agreement or soften the characterization.
-    why_it_matters: |-
-      "Essentially," "in effect," and "amounts to" are the words reporters reach for when the inference exceeds the evidence.
-    fix_suggestion: |-
-      Lay out the explicit chain: contract A, meeting B, payment C, with what each document says. Let the reader make the inference. If you don't have a kickback record, change the framing to "raises questions about whether..."
+      Encourage investigative writers to narrate their tool choices in pitches and reporting—it shows rigor and makes the story reproducible; also signals to editors that the writer can find access independently.
     replacement: null
     severity: medium
-- source: 'document referenced without provenance'
+- source: |-
+    niemanstoryboard.org — 5ish-questions-for-michelle-mizner-and-katie-worth-the-journalists-behind-the-la: character selection based on reporting depth
   article: |-
-    Internal emails reviewed by the Tribune show that the warning was raised three months before the incident.
+    We met a lot of great kids and it was hard to narrow down whose stories we'd end up capturing, but Izerman impressed us right away with his precociousness and his deep understanding of some of the actual physical and geological impacts of climate change.
   critiques:
   - agent: investigations_editor
-    text_quote: Internal emails reviewed by the Tribune
-    span: [0, 39]
-    issue_label: document provenance vague
+    text_quote: |-
+      We met a lot of great kids and it was hard to narrow down whose stories we'd end up capturing, but Izerman impressed us right away with his precociousness and his deep understanding of some of the actual physical and geological impacts of climate change.
+    span:
+    - 0
+    - 254
+    issue_label: character selection based on reporting depth
     question: |-
-      "Internal emails reviewed" tells the reader nothing about whether we hold these documents or just saw them, and from how many sources. Reviewers will ask.
+      Michelle Mizner describes the process of selecting which children to feature as organic, based on reporting that revealed which kids had the deepest understanding of the story's themes. How do you balance the temptation to pick the most photogenic or quotable subject against the one whose reporting demonstrates genuine knowledge?
     why_it_matters: |-
-      Document-provenance vagueness is exactly the thread the subject's lawyer pulls on first.
+      Selecting characters based on the depth of their understanding—rather than charm or availability—ensures that the voices driving the narrative can actually illuminate the story's complexity.
     fix_suggestion: |-
-      Specify: "Internal emails obtained by the Tribune from two sources" or "Internal emails the Tribune was permitted to view but does not possess."
+      Let your reporting, not your casting instincts, determine which characters anchor your story. The kid who understands geology is more valuable than the kid who photographs well.
     replacement: null
     severity: medium
-- source: 'methods note absent on complex investigation'
+- source: |-
+    niemanstoryboard.org — qa-greg-bishop-on-a-quarterback-a-suicide-and-a-search-for-answers: reporter resists lead-friendly headline angle to honor complexity
   article: |-
-    Our six-month investigation reveals a previously unreported network of relationships between the agency and three private contractors.
+    I spent more than a month talking to Mark Hilinski (Tyler's father) before he revealed that Tyler had CTE. I was more interested in the timeless themes – a family's grief, an unexplainable tragedy.
   critiques:
   - agent: investigations_editor
-    text_quote: Our six-month investigation reveals a previously unreported network
-    span: [0, 65]
-    issue_label: no methods note on complex investigation
+    text_quote: |-
+      I spent more than a month talking to Mark Hilinski (Tyler's father) before he revealed that Tyler had CTE. I was more interested in the timeless themes – a family's grief, an unexplainable tragedy.
+    span:
+    - 0
+    - 197
+    issue_label: reporter resists lead-friendly headline angle to honor complexity
     question: |-
-      "Six-month investigation" is a strong claim that earns nothing without a methods note. How many documents? How many interviews? What did we exclude?
+      How did you resist the impulse to lead with CTE—the most journalistically convenient and sensational element—when the family hadn't immediately volunteered that information, and how did withholding that reveal until halfway through shape reader trust?
     why_it_matters: |-
-      Methods notes are how reviewers and other reporters judge the strength of an investigation; their absence reads as either oversight or evasion.
+      By honoring the reporting timeline (family reveals CTE slowly, not upfront), the writer avoids the 'football killed him' reductionism and creates space for readers to experience the family's own evolution from confusion to partial answers.
     fix_suggestion: |-
-      Add a sidebar or end-note: "This story is based on review of [X] documents obtained via [method], [Y] interviews with [class of source], and [Z] public records requests filed between [dates]."
+      When reporting sensitive stories, let the source's own pace of disclosure guide your story structure. What they volunteer first often reflects what matters most to understanding their experience, not what makes the best headline.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — qa-greg-bishop-on-a-quarterback-a-suicide-and-a-search-for-answers: source request honored with transparent one-sentence placeholder
+  article: |-
+    The only detail they asked me to keep out of the story was what Tyler wrote in the note he left behind... I worried that leaving it out would lead to more questions than answers – and ultimately they decided they didn't want the contents published.
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      The only detail they asked me to keep out of the story was what Tyler wrote in the note he left behind... I worried that leaving it out would lead to more questions than answers – and ultimately they decided they didn't want the contents published.
+    span:
+    - 0
+    - 248
+    issue_label: source request honored with transparent one-sentence placeholder
+    question: |-
+      By including a single sentence that acknowledges the suicide note's existence and the family's choice to withhold its contents, rather than omitting all reference to it, does the piece respect reader intelligence while honoring source boundaries?
+    why_it_matters: |-
+      Naming what you're not publishing (and why) prevents readers from assuming the reporter failed to ask, and demonstrates that source protection was an active editorial choice, not a reporting gap.
+    fix_suggestion: |-
+      When sources set boundaries around sensitive material, one transparent sentence acknowledging that boundary is often more credible than silence, which can read as either omission or suppression.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — how-an-editor-guided-the-many-cooks-reporting-how-racism-shaped-george-floyd: balancing news urgency with reporting rigor
+  article: |-
+    We basically gave everyone six to eight weeks to come up with an initial draft, and then another six weeks or so before we published. That's a pretty tight timeline for something of this magnitude... we felt strongly that it needed to run before Election Day, before we got too far from the moment.
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      We basically gave everyone six to eight weeks to come up with an initial draft, and then another six weeks or so before we published. That's a pretty tight timeline for something of this magnitude... we felt strongly that it needed to run before Election Day, before we got too far from the moment.
+    span:
+    - 0
+    - 298
+    issue_label: balancing news urgency with reporting rigor
+    question: |-
+      How do you move quickly on a story that deserves fuller treatment without sacrificing depth? Ginsberg's team gave themselves 12-16 weeks total while staying newsworthy—tight but not rushed.
+    why_it_matters: |-
+      Newsroom editors must navigate the tension between timeliness and thoroughness; premature publication loses impact, but delaying past the moment of public attention wastes the platform.
+    fix_suggestion: |-
+      Set a hard news peg deadline, but work backward to determine minimum reporting time needed. Build the timeline into initial planning, not as an afterthought.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — how-an-editor-guided-the-many-cooks-reporting-how-racism-shaped-george-floyd: disciplined omission in deep reporting
+  article: |-
+    How to narrow the scope of some of the stories. There's just so much... But there can be too much, and then you lose focus and lose the sense of what you're trying to say. So we had a lot that we left out of stories, which can be hard — especially for reporters who work so hard to get information and want to use it all.
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      How to narrow the scope of some of the stories. There's just so much... But there can be too much, and then you lose focus and lose the sense of what you're trying to say. So we had a lot that we left out of stories, which can be hard — especially for reporters who work so hard to get information and want to use it all.
+    span:
+    - 0
+    - 321
+    issue_label: disciplined omission in deep reporting
+    question: |-
+      What do you leave on the floor when you've done months of deep reporting? Ginsberg acknowledged the emotional difficulty of cutting material, but identified scope-creep as a clarity killer.
+    why_it_matters: |-
+      The most thorough reporting often produces more material than any single story can bear; editing is partly about knowing what pulls focus and having the courage to cut it.
+    fix_suggestion: |-
+      Distinguish between what's interesting and what's essential to the throughline. When in doubt, ask: Does this serve the main claim, or does it distract from it?
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — parachute-reporting-in-a-foreign-land-getting-it-fast-and-getting-it-right: human contact as reporting currency
+  article: |-
+    The process was really quite organic, on-the-ground reporting, literally knocking on people's doors, talking with people who had not evacuated... Once you have that introduction, it means a lot. The residents of Leilani Estates literally guided us in their vehicles around the lava flows.
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      The process was really quite organic, on-the-ground reporting, literally knocking on people's doors, talking with people who had not evacuated... Once you have that introduction, it means a lot. The residents of Leilani Estates literally guided us in their vehicles around the lava flows.
+    span:
+    - 0
+    - 288
+    issue_label: human contact as reporting currency
+    question: |-
+      Romero describes how on-the-ground presence—knocking on doors, accepting resident introductions, letting locals guide the reporting—gave him access and perspective that remote research couldn't provide, and he credits residents for making the story possible.
+    why_it_matters: |-
+      Trust-based access built through physical presence and reciprocal relationships yields both richer sources and more nuanced understanding of a community than parachute reporting typically achieves.
+    fix_suggestion: |-
+      When time is limited, lean into organic, human-centered reporting: follow introductions, accept guidance from locals, and make relationships the foundation of source selection rather than pre-planned interview lists.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — take-two-avi-selk-on-the-life-and-death-of-a-spider-aggregation-and-writing-fast: aggregation through data extraction, not prose mimicry
+  article: |-
+    When I am skimming an AP story or something, as much as I can I'm trying to distill the information away from the actual prose. I intentionally sometimes read stories backwards, or just randomly paste lines into a story... When you do it that way, and think about your own original outline and how you want to tell it, you end up with something unique.
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      When I am skimming an AP story or something, as much as I can I'm trying to distill the information away from the actual prose. I intentionally sometimes read stories backwards, or just randomly paste lines into a story... When you do it that way, and think about your own original outline and how you want to tell it, you end up with something unique.
+    span:
+    - 0
+    - 352
+    issue_label: aggregation through data extraction, not prose mimicry
+    question: |-
+      Selk describes deliberately separating information from prose when aggregating: he reads stories backwards, randomly reorders pasted lines, and rebuilds from his own outline to avoid accidentally echoing source structure or language. He contrasts this with a dismissed colleague who 'closely copied not just the information but the form of the story.'
+    why_it_matters: |-
+      This method transforms aggregated facts into genuinely original reporting by forcing the writer to conceptualize the story separately from its source narration, preventing plagiarism-adjacent prose duplication.
+    fix_suggestion: |-
+      When aggregating, extract facts into a raw text dump, then outline independently before writing. Avoid reading aggregated sources in final order; scramble them mentally so you reconstruct the narrative from your own logic.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — take-two-avi-selk-on-the-life-and-death-of-a-spider-aggregation-and-writing-fast: originality through primary-source drilling
+  article: |-
+    That spider story had been written in a ton of places, and most of the stories I had read were all parroting each other. It would have been faster to do it that way, but I instead read the entire study, and then read the 1970s study that was in the footnote of that study.
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      That spider story had been written in a ton of places, and most of the stories I had read were all parroting each other. It would have been faster to do it that way, but I instead read the entire study, and then read the 1970s study that was in the footnote of that study.
+    span:
+    - 0
+    - 272
+    issue_label: originality through primary-source drilling
+    question: |-
+      Rather than simply aggregating competing published accounts of the spider's death, Selk chose the slower path: reading the original study and then the historical study cited within it. He acknowledges this was *not* faster, but it yielded something the parroting cycle had missed.
+    why_it_matters: |-
+      Going to primary sources breaks aggregation loops and uncovers details competitors missed, creating genuinely fresh reporting even under deadline constraints.
+    fix_suggestion: |-
+      When multiple outlets have covered the same story, assume they're echoing each other. Use aggregation as a signpost to the primary source (study, dataset, original interview), not as your reporting destination.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — who-how-and-why-an-interview-with-the-super-bowl-streaker: following reporting threads beyond original source
+  article: |-
+    There also was a lot of talk on sports websites about whether there was an over-under on the streaker. So I reached out to the betting site to confirm it -- and doubled back with Yuri to ask if he's actually gotten the pay-out... So I had to re-write that part of the story.
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      There also was a lot of talk on sports websites about whether there was an over-under on the streaker. So I reached out to the betting site to confirm it -- and doubled back with Yuri to ask if he's actually gotten the pay-out... So I had to re-write that part of the story.
+    span:
+    - 0
+    - 274
+    issue_label: following reporting threads beyond original source
+    question: |-
+      DeGregory didn't stop with a fun, one-source feature. She figured out what radiated around the central event and reported that out. Then she went back to her original source — the streaker — to confirm her new information. She tracked things as they changed, and updated her story when they did.
+    why_it_matters: |-
+      Reporting outward from your main source to other actors (betting sites, authorities) and then cycling back to verify claims prevents you from simply transcribing one person's narrative as fact.
+    fix_suggestion: |-
+      After your primary interview, identify secondary sources who can independently confirm or complicate what you've been told—then return to your main source with what you've found to catch contradictions or new information in real time.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — writers-memoir-nerve-looks-at-science-and-psychology-of-fear: Real-time documentation vs. lived experience
+  article: |-
+    Holland took detailed notes during and after her mother's ICU hospitalization and EMDR therapy sessions, sometimes immediately after events and sometimes reconstructing from years earlier. For the therapy sessions, she didn't ask to see her therapist's notes, 'but knowing I had the option helped me, because I wanted to just be in the moment in the in the therapy so that it would work.'
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      Holland took detailed notes during and after her mother's ICU hospitalization and EMDR therapy sessions, sometimes immediately after events and sometimes reconstructing from years earlier. For the therapy sessions, she didn't ask to see her therapist's notes, 'but knowing I had the option helped me, because I wanted to just be in the moment in the in the therapy so that it would work.'
+    span:
+    - 0
+    - 388
+    issue_label: Real-time documentation vs. lived experience
+    question: |-
+      There's a tension between being an observer with a notebook and being a participant fully present in an emotional moment. How do you document something you're also experiencing without letting the documentation undermine the experience itself?
+    why_it_matters: |-
+      Taking contemporaneous notes increases accuracy and specificity, but the act of note-taking can distance you from emotional authenticity or create self-consciousness that shapes what actually happens.
+    fix_suggestion: |-
+      When reporting on your own emotional experiences, consider waiting until after the moment to take notes (as Holland did with therapy) if your presence of mind during the event is more important than perfect recall. For less volatile moments, detailed contemporaneous notes are worth the minor distancing effect.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — pitching-propublicas-local-reporting-network-focus-on-sources-and-impact: Specificity to place and moment, not generic pattern
+  article: |-
+    We want to see that there is a high probability that their hunch or instinct of what's happening is actually happening. We also want to make sure that it's not something that can be told in any community across the country. We really ask the questions of, 'Why does this story need to be told here, in this community?' and, 'Why does this story need to be told now?'
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      We want to see that there is a high probability that their hunch or instinct of what's happening is actually happening. We also want to make sure that it's not something that can be told in any community across the country. We really ask the questions of, 'Why does this story need to be told here, in this community?' and, 'Why does this story need to be told now?'
+    span:
+    - 0
+    - 366
+    issue_label: Specificity to place and moment, not generic pattern
+    question: |-
+      Ornstein emphasizes that editors should reject proposals where the problem is national but the reporting doesn't explain why this particular jurisdiction, at this particular time, is the right place to tell it. A criminal justice problem happening everywhere is not a reason to greenlight a local investigation unless the reporter can articulate the local angle.
+    why_it_matters: |-
+      Ensures that local investigative reporting serves actual community accountability rather than applying a generic national template to a local newsroom.
+    fix_suggestion: |-
+      When pitching a local investigation, lead with the geographic and temporal specificity: what makes this place and moment distinct, and why does the story unlock something here that wouldn't elsewhere?
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — pitching-propublicas-local-reporting-network-focus-on-sources-and-impact: Question-only pitch insufficient for year-long project
+  article: |-
+    People identify something bad going on, but have no idea what's behind it. The proposal comes in with a question, and 'I want to investigate whether X, Y and Z is happening.' That is an excellent first question, but when you're in a year-long investigative project that has a deadline, you're going to need to know more about the project than asking those initial questions.
+  critiques:
+  - agent: investigations_editor
+    text_quote: |-
+      People identify something bad going on, but have no idea what's behind it. The proposal comes in with a question, and 'I want to investigate whether X, Y and Z is happening.' That is an excellent first question, but when you're in a year-long investigative project that has a deadline, you're going to need to know more about the project than asking those initial questions.
+    span:
+    - 0
+    - 374
+    issue_label: Question-only pitch insufficient for year-long project
+    question: |-
+      Blustain identifies a common weakness: pitches that are purely interrogative, offering a phenomenon to investigate but no emerging hypothesis or explanation for what's driving it. A year-long investigation needs more scaffolding than 'Is X happening?'
+    why_it_matters: |-
+      Editors need to see that the reporter has already begun to understand the causation and mechanics of the problem, not just spotted a symptom.
+    fix_suggestion: |-
+      Move beyond identifying the problem to proposing a preliminary explanation of how or why it's happening. What is your working theory about the root cause?
     replacement: null
     severity: medium

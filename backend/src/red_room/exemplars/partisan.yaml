@@ -1,181 +1,310 @@
 # Exemplars for partisan
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the partisan lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
 #
-- source: IPSO ruling 06628-24, Moore v Daily Mail (headline not supported by text)
+- source: |-
+    niemanstoryboard.org — 14-hours-from-event-to-post-delivering-narrative-with-context-on-deadline: deliberate structural counterweight to rally crowd
   article: |-
-    LABOUR'S 400 POUND TAX HIT TO YOUR FAMILY HOLIDAY. Families flying abroad next year face higher costs under the government's plans, which will push Air Passenger Duty for a family of four travelling to the United States to 408 pounds, up from 352 pounds.
-  critiques:
-  - agent: partisan
-    text_quote: LABOUR'S 400 POUND TAX HIT TO YOUR FAMILY HOLIDAY
-    span: [0, 49]
-    issue_label: headline not supported by the text
-    question: |-
-      IPSO upheld 06628-24 on this exact Daily Mail front: a 56 pound rise headlined as a 400 pound hit, contradicted by your own body text. What headline can the article actually defend?
-    why_it_matters: |-
-      When the contradiction is internal, the screenshot of the lede is the rebuttal, and we wrote it.
-    fix_suggestion: Headline only the increase Labour is responsible for, not the
-      cumulative total.
-    replacement: LABOUR'S 56 POUND RISE ON YOUR FAMILY HOLIDAY TAX
-    severity: high
-- source: IPSO ruling 01710-24, Full Fact v Daily Express (estimate presented as fact)
-  article: |-
-    The party's policy would see Britain take in 100,000 extra illegal migrants, already in Europe, every year.
+    Kruse spent time in Greenville before the rally, and devotes considerable story space the voices of locals, including members of the Latino community, who expressed fears for the future of America... Why did you spend so much time focusing on Latino members of the Greenville community? Contrast. Which is to say tension.
   critiques:
   - agent: partisan
     text_quote: |-
-      would see Britain take in 100,000 extra illegal migrants, already in Europe, every year
-    span: [19, 106]
-    issue_label: an estimate presented as established fact
+      Kruse spent time in Greenville before the rally, and devotes considerable story space the voices of locals, including members of the Latino community, who expressed fears for the future of America... Why did you spend so much time focusing on Latino members of the Greenville community? Contrast. Which is to say tension.
+    span:
+    - 0
+    - 321
+    issue_label: deliberate structural counterweight to rally crowd
     question: |-
-      IPSO 01710-24 hit the Express for exactly this move: a party projection rendered as plain fact, no 'the opposition estimates' anywhere near it. Whose number is 100,000?
+      Kruse deliberately built the story around contrast—not just covering Trump supporters in the rally, but also the community members who feared the rhetoric. How does this structural choice prevent the piece from becoming a mere megaphone for the rally's energy?
     why_it_matters: |-
-      A figure with a hidden author and a hidden assumption is the first thing the other side pulls apart.
-    fix_suggestion: Attribute the figure and state the assumption it rests on.
-    replacement: |-
-      would, the opposition estimates, see Britain take in 100,000 extra migrants a year, a figure that assumes Britain joins an EU relocation scheme
+      It establishes competing narratives and emotional stakes, ensuring the story doesn't default to simply amplifying the dominant voice in the room.
+    fix_suggestion: |-
+      On deadline, identify the absent or silenced voices in your scene, then actively report them out. Build structure around tension between competing realities, not just the loudest event.
+    replacement: null
     severity: high
 - source: |-
-    Australian Press Council adjudication (repeated 'election fixer' label implying involvement)
+    niemanstoryboard.org — 5ish-questions-richard-marosi-and-without-a-country: representing all sides despite backlash
   article: |-
-    The election fixer at the center of the scandal was photographed leaving the building on Tuesday. The election fixer has not been charged with any offence.
-  critiques:
-  - agent: partisan
-    text_quote: The election fixer
-    span: [0, 18]
-    issue_label: a loaded label repeated as proven
-    question: |-
-      The Australian Press Council upheld a complaint for repeating 'election fixer' as identifier when no body had found election fixing. We use it twice, then say he has not been charged. Has any inquiry actually established the label?
-    why_it_matters: |-
-      A label we have not proven, repeated in our voice, is the line the subject's defenders quote first.
-    fix_suggestion: Use a neutral identifier; attribute the label if a finding supports
-      it.
-    replacement: The consultant at the center of the inquiry
-    severity: high
-- source: Press impartiality practice; the reporter's voice carries facts, not verdicts
-  article: |-
-    The administration unveiled an aggressive new immigration enforcement policy on Wednesday that lets federal agents detain people at courthouses and hospitals.
-  critiques:
-  - agent: partisan
-    text_quote: an aggressive new immigration enforcement policy
-    span: [28, 76]
-    issue_label: loaded adjective in our voice
-    question: |-
-      'Aggressive' is the AP and Reuters stylebook example of a loaded adjective in the reporter's voice. To a hostile reader, that one word is proof we picked a side.
-    why_it_matters: |-
-      It lets defenders wave away every accurate fact that follows as the work of a biased newsroom.
-    fix_suggestion: |-
-      Use a neutral descriptor for the same scope, or attribute 'aggressive' to a named critic.
-    replacement: an expansive new immigration enforcement policy
-    severity: medium
-- source: Fairness practice on placement of the subject's response
-  article: |-
-    The mayor accepted more than 40,000 dollars in travel and lodging from a developer who held a major city contract, records show. (Twelve paragraphs later.) In a statement, the mayor's office said the gifts were fully disclosed and the contract was awarded by competitive bid years before any of the trips.
+    Every time you humanize Mexican immigrants, it's inevitable that you're going to get a lot of hate mail. Anything that kind of tells a story from their perspective, or reaches out and includes perspectives of the folks that are most affected by immigration policies. There's a lot of hate out there. The job is getting it all right.
   critiques:
   - agent: partisan
     text_quote: |-
-      (Twelve paragraphs later.) In a statement, the mayor's office said the gifts were fully disclosed and the contract was awarded by competitive bid years before any of the trips.
-    span: [129, 305]
-    issue_label: rebuttal buried below the fold
+      Every time you humanize Mexican immigrants, it's inevitable that you're going to get a lot of hate mail. Anything that kind of tells a story from their perspective, or reaches out and includes perspectives of the folks that are most affected by immigration policies. There's a lot of hate out there. The job is getting it all right.
+    span:
+    - 0
+    - 332
+    issue_label: representing all sides despite backlash
     question: |-
-      Hunter Biden laptop coverage taught this lesson the hard way: when the qualification sits twelve paragraphs down, the qualification becomes the story. The mayor's disclosure and the timeline live below the fold.
-    why_it_matters: By paragraph twelve most readers are gone and every share is just
-      the lede.
-    fix_suggestion: |-
-      Move one sentence of the response into the top five paragraphs, then continue the reporting.
-    replacement: null
-    severity: high
-- source: Fairness practice on guilt by association
-  article: |-
-    Senator Hayes voted against the consumer bill on Tuesday. Last month he was seen at a Washington steakhouse with industrialist Roy Marsh, who has lobbied against the bill.
-  critiques:
-  - agent: partisan
-    text_quote: |-
-      Last month he was seen at a Washington steakhouse with industrialist Roy Marsh, who has lobbied against the bill.
-    span: [58, 171]
-    issue_label: guilt by association without a link
-    question: |-
-      Karl Rove's playbook calls this smear by proximity: a steakhouse photo, no established link, reader left to draw the line. Did they discuss the bill, did Marsh fund Hayes, or do we just have a dinner?
+      Marosi acknowledges that centering immigrant voices generates 'a lot of hate mail,' but his stated approach is 'the job is getting it all right'—implying that journalistic accuracy, not palatability to critics, should drive coverage decisions.
     why_it_matters: |-
-      A proximity detail with no link is the weakest brick, and right now it is load-bearing.
+      This stance resists the implicit editorial pressure to soften or balance immigrant narratives in ways that distort reality, and instead holds the line that representing affected voices accurately is the core obligation.
     fix_suggestion: |-
-      Establish a functional connection (donations, lobbying contact, the bill itself) or cut the steakhouse line.
-    replacement: null
-    severity: high
-- source: Fairness practice on symmetrical treatment of named parties
-  article: |-
-    The soft-spoken teacher, who has devoted twenty years to the district, filed the complaint. The administrator she accused, a former corporate lawyer, declined to comment.
-  critiques:
-  - agent: partisan
-    text_quote: |-
-      The soft-spoken teacher, who has devoted twenty years to the district, filed the complaint. The administrator she accused, a former corporate lawyer, declined to comment.
-    span: [0, 170]
-    issue_label: asymmetric character framing
-    question: |-
-      'Soft-spoken' and 'devoted twenty years' on one party; 'former corporate lawyer' on the other. This is the asymmetry the IPSO Lily Allen ruling flagged: every phrase accurate, the pattern not.
-    why_it_matters: |-
-      Readers register the asymmetry even when each phrase checks out, and so do critics looking for it.
-    fix_suggestion: |-
-      Describe both parties at the same depth and register, or drop the colour from both.
+      When covering polarized topics, distinguish between criticism rooted in factual error (worth addressing) and backlash rooted in discomfort with whose voices are centered (worth tolerating).
     replacement: null
     severity: medium
 - source: |-
-    Fairness practice on question-mark headlines (Betteridge's law and the Daily Express tradition)
+    niemanstoryboard.org — how-narrative-moments-can-elevate-a-non-narrative-story: reader perception of bias despite balanced reporting
   article: |-
-    DID THE MAYOR KNOWINGLY MISLEAD THE COUNCIL ABOUT THE BUDGET? Hours after an internal review found accounting errors, sources say...
+    Two parallel stories on renewable energy development—one where a wheat farmer welcomes wind turbines for income, another where a retiring couple rejects solar panels to preserve their view—both using equally compelling narrative ledes, yet readers accused Bernton of bias in favor of the wind farmer.
   critiques:
   - agent: partisan
-    text_quote: DID THE MAYOR KNOWINGLY MISLEAD THE COUNCIL ABOUT THE BUDGET?
-    span: [0, 61]
-    issue_label: question-mark headline pinning an unproven claim
+    text_quote: |-
+      Two parallel stories on renewable energy development—one where a wheat farmer welcomes wind turbines for income, another where a retiring couple rejects solar panels to preserve their view—both using equally compelling narrative ledes, yet readers accused Bernton of bias in favor of the wind farmer.
+    span:
+    - 0
+    - 300
+    issue_label: reader perception of bias despite balanced reporting
     question: |-
-      Betteridge's law and the standing IPSO line on question-headlines: the question mark does not neutralise the accusation, it smuggles it. The reader sees 'mayor knowingly misled' before they see 'maybe not'.
+      He said he consciously chose ledes for each that would capture the equally sincere but polar opposite views of this complex debate. 'But,' he told me, 'a lot of readers don't see it see it that way.' Instead, the readers he heard from zeroed in on those ledes—in most cases, according to Bernton, the one about the wheat farmer who welcomes wind turbines—as a sign of the reporter's bias.
     why_it_matters: |-
-      Regulators have repeatedly upheld complaints on exactly this construction; in court it is treated as an assertion.
+      Readers interpret framing and narrative emphasis through their own values; balanced reporting and equivalent craft do not guarantee balanced perception, especially on polarized issues.
     fix_suggestion: |-
-      If the claim is proven, headline it as a statement; if not, rewrite so the question does not embed the accusation.
-    replacement: MAYOR FACES QUESTIONS AFTER COUNCIL BUDGET REVIEW
+      Be aware that strong narrative ledes, no matter how fair, may be read as endorsements; consider pre-emptively explaining your editorial choices and the logic behind how you structured opposing perspectives.
+    replacement: null
     severity: high
-- source: Fairness practice on stacking past-conduct labels
-  article: The controversial, embattled, scandal-hit mayor faces another inquiry this
-    week.
+- source: |-
+    niemanstoryboard.org — the-crucial-challenge-of-precision-as-descriptors-evolve-the-press-must-too: respecting self-identification over imposed labels
+  article: |-
+    The language that people use to describe themselves continues to evolve and change, and some fields catch up faster than others... For many people, the labels they use for their gender identity or sexual orientation has no synonym, in part because they want to be in control of how they are described.
   critiques:
   - agent: partisan
-    text_quote: The controversial, embattled, scandal-hit mayor
-    span: [0, 47]
-    issue_label: adjective ladder doing the accusing
+    text_quote: |-
+      The language that people use to describe themselves continues to evolve and change, and some fields catch up faster than others... For many people, the labels they use for their gender identity or sexual orientation has no synonym, in part because they want to be in control of how they are described.
+    span:
+    - 0
+    - 301
+    issue_label: respecting self-identification over imposed labels
     question: |-
-      Three loaded adjectives stacked in one phrase is the move Bret Stephens caught the Atlantic on: cumulative weight standing in for a specific finding. Has anything been established, or are we running the accusation three times?
+      For many people, the labels they use for their gender identity or sexual orientation has no synonym, in part because they want to be in control of how they are described. What people used to describe as 'gay rights' is now described as 'LGBTQ rights' or 'LGBTQ+ rights.'
     why_it_matters: |-
-      Stacked, they tell the reader to assume the worst; separately, none of them survives a fact-check.
+      Using a person's chosen descriptor rather than an outdated or clinical one honors their agency and reflects the actual scope of their identity; choosing the wrong term effectively misrepresents who they are.
     fix_suggestion: |-
-      Use the specific record instead, or drop the adjectives if the record will not carry them.
-    replacement: The mayor, who has been the subject of two prior ethics findings,
+      In reporting on or describing LGBTQ+ individuals and movements, ask sources how they describe themselves and their communities, and use that language; treat descriptor choice as a factual accuracy question, not a style preference.
+    replacement: null
     severity: high
-- source: Fairness practice on selective quoting of an opposing voice
+- source: |-
+    niemanstoryboard.org — when-writing-news-requires-a-distance-from-neutrality-to-tell-it-like-it-is: Non-neutral language deployed responsibly via causation
   article: |-
-    Asked about the funding cut, Councilwoman Reyes said, 'You can't possibly justify spending more right now. I mean, look at the deficit. We have no choice.' We have no choice, Reyes told the council.
+    The word 'incendiary' is not neutral, but among reasonable people an expression of cause and effect... The word 'riot' is not used here, but its ghost is lurking behind the word 'incited.'
   critiques:
   - agent: partisan
-    text_quote: We have no choice, Reyes told the council.
-    span: [156, 198]
-    issue_label: selective quoting reverses the meaning
+    text_quote: |-
+      The word 'incendiary' is not neutral, but among reasonable people an expression of cause and effect... The word 'riot' is not used here, but its ghost is lurking behind the word 'incited.'
+    span:
+    - 0
+    - 188
+    issue_label: Non-neutral language deployed responsibly via causation
     question: |-
-      IPSO's Mail Online ruling on Lily Allen turned on exactly this: a partial quote that reverses the speaker's meaning. The four-word lift makes her sound forced into the cut; her full sentence says she chose it.
+      Words like 'incendiary' and 'incited' push beyond traditional neutrality, but Clark argues they work because they express demonstrable cause-and-effect relationships rather than mere opinion or loaded adjectives.
     why_it_matters: |-
-      Press councils worldwide have upheld complaints on this move; it is the textbook fairness failure.
+      Using engaged language to describe causation (rather than inserting opinion) maintains credibility while abandoning the false pretense that the president's words and the mob's violence were unconnected.
     fix_suggestion: |-
-      Quote the full clause, or anchor the four-word lift to the sentence it came from.
-    replacement: '''We have no choice but to cut,'' Reyes told the council, citing
-      the deficit'
+      When pushing past neutrality, ground your language in observable causation or fact rather than judgment—'incendiary' works because the president's actual words were documented; a synonym like 'inflammatory' alone would be thinner.
+    replacement: null
     severity: high
-- source: Example of a neutral, well-balanced passage
+- source: |-
+    niemanstoryboard.org — who-how-and-why-an-interview-with-the-super-bowl-streaker: legitimate editorial pushback explicitly addressed
   article: |-
-    The county will raise the property tax rate by 4 percent next year, the commission said Tuesday. The increase, the first since 2019, will add about 120 dollars to the annual bill on a median-priced home.
-  critiques: []
-- source: Example of a routine procedure described neutrally
+    Before I even started trying to get a hold of these guys, I raised that very point: Do we want to give publicity-seekers more publicity? ... So many outlets had recounted the streaking at the stadium, and reported this guy's arrest, but we still had questions.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      Before I even started trying to get a hold of these guys, I raised that very point: Do we want to give publicity-seekers more publicity? ... So many outlets had recounted the streaking at the stadium, and reported this guy's arrest, but we still had questions.
+    span:
+    - 0
+    - 260
+    issue_label: legitimate editorial pushback explicitly addressed
+    question: |-
+      A sportswriter at the Times vehemently disagreed with doing the story at all, thinking that it would encourage this type of behavior. But we had published three stories online in the aftermath and clearly there was an appetite for follow-ups. Also, we considered the severity of his crime: No one got hurt, no one was naked, the game was only delayed for a few minutes.
+    why_it_matters: |-
+      Naming internal disagreement and then articulating the reasoning for the editorial choice (audience interest, proportional harm assessment) makes the decision-making transparent rather than appearing dismissive of legitimate ethical concerns.
+    fix_suggestion: |-
+      When you know a story choice will face criticism, document your reasoning upfront—address the strongest version of the objection, not a strawman—and explain what public interest outweighs the concern.
+    replacement: null
+    severity: medium
+- source: |-
+    slate.com — al-gore-washed-up-politician-finds-a-new-venue-for-his-ideas-press-criticism.htm: sweeping accusations without specific evidence
   article: |-
-    The senate health committee voted 7 to 4 on Tuesday to advance the bill to the floor, after a one-hour markup. Two committee members said they would file dissenting reports.
-  critiques: []
+    Gore's criticism is hopelessly vague. He blames the press for covering global warming like a professional wrestling referee—working from a script to boost viewership—but then gives no examples. He bitches about 'extremist ideologues' but names none. He denounces 'large carbon polluters' who finance 'pseudoscientists' but doesn't name either.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      Gore's criticism is hopelessly vague. He blames the press for covering global warming like a professional wrestling referee—working from a script to boost viewership—but then gives no examples. He bitches about 'extremist ideologues' but names none. He denounces 'large carbon polluters' who finance 'pseudoscientists' but doesn't name either.
+    span:
+    - 0
+    - 343
+    issue_label: sweeping accusations without specific evidence
+    question: |-
+      If you're going to criticize the press, you need to name names and provide examples. Gore's broadside against media coverage lacks the specificity that makes press criticism credible—he makes grand claims about the press corps' behavior but never shows his work.
+    why_it_matters: |-
+      Vague accusations undermine credibility and allow readers to dismiss criticism as partisan ranting rather than documented analysis.
+    fix_suggestion: |-
+      Always anchor media criticism in named outlets, named journalists, and quoted passages from actual coverage. Make the wrongdoing visible, not just asserted.
+    replacement: null
+    severity: high
+- source: |-
+    slate.com — al-gore-washed-up-politician-finds-a-new-venue-for-his-ideas-press-criticism.htm: undisclosed conflict of interest in criticism
+  article: |-
+    If you're going to be a press critic and a press mogul simultaneously, you should probably mention this in your press criticism. Gore, chairman of the lefty-liberal news channel Current, doesn't mention this fact in the body of his Rolling Stone piece.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      If you're going to be a press critic and a press mogul simultaneously, you should probably mention this in your press criticism. Gore, chairman of the lefty-liberal news channel Current, doesn't mention this fact in the body of his Rolling Stone piece.
+    span:
+    - 0
+    - 252
+    issue_label: undisclosed conflict of interest in criticism
+    question: |-
+      Gore criticizes Fox News and media ideologues while helming his own ideological news channel with ideological journalists like Keith Olbermann. How can he credibly denounce ideologues for being ideologues when he's simultaneously an ideologue running an ideological news operation?
+    why_it_matters: |-
+      A press critic who also owns a news outlet has an obvious conflict of interest that shapes their credibility; failing to acknowledge it undermines the entire piece.
+    fix_suggestion: |-
+      Disclose your own media interests and explain why they don't bias your criticism, or revise your criticism to acknowledge that you're offering an ideological perspective, not a neutral one.
+    replacement: null
+    severity: high
+- source: |-
+    slate.com — glenn-beck-s-departure-murdoch-and-company-mark-the-depths-to-which-even-they-wi: loaded opening adjectives without immediate source
+  article: |-
+    The entire opening section establishing Murdoch's track record: 'Rupert Murdoch will kowtow to the Chinese. He will lie. He will make promises about maintaining the old standards at a newspaper he's purchasing and then promptly break them.'
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      The entire opening section establishing Murdoch's track record: 'Rupert Murdoch will kowtow to the Chinese. He will lie. He will make promises about maintaining the old standards at a newspaper he's purchasing and then promptly break them.'
+    span:
+    - 0
+    - 240
+    issue_label: loaded opening adjectives without immediate source
+    question: |-
+      The critic is writing opinion-column style, but does he establish 'lie' and 'break promises' with reported evidence right away, or does he assume readers will accept the characterization based on reputation? The opening stacks moral judgments before anchoring them.
+    why_it_matters: |-
+      Setting up a column with unsourced character judgments can feel like begging the question rather than building the case—readers may not know which claims are documented fact versus author opinion.
+    fix_suggestion: |-
+      If opening with moral claims about a subject, anchor the most damaging one to a specific incident or quote immediately, so readers know what evidence supports the assertion.
+    replacement: null
+    severity: medium
+- source: |-
+    slate.com — les-hinton-and-rebekah-brooks-are-gone-will-rupert-murdoch-now-sacrifice-his-own: loaded adjectives and mind-reading
+  article: |-
+    Don't feel bad for Rupert Murdoch. He's having a splendid time with the phone-hacking scandal... He was gauging how best to sacrifice Brooks to satisfy the mobs threatening his beloved News Corp.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      Don't feel bad for Rupert Murdoch. He's having a splendid time with the phone-hacking scandal... He was gauging how best to sacrifice Brooks to satisfy the mobs threatening his beloved News Corp.
+    span:
+    - 0
+    - 195
+    issue_label: loaded adjectives and mind-reading
+    question: |-
+      The piece opens by asserting Murdoch's emotional state and motivations with certainty ('having a splendid time,' 'gauging how best to sacrifice') rather than reporting what Murdoch actually said or did. How can we know what Murdoch was thinking when he said Brooks was his 'top priority' five days before firing her?
+    why_it_matters: |-
+      These attributions of private motive without evidence undermine the credibility of the analysis and cross from commentary into speculation presented as fact.
+    fix_suggestion: |-
+      Ground claims about motivation in what sources actually said, or explicitly frame them as the writer's interpretation: 'The timing suggests Murdoch may have been...' or 'Critics argue he was...'
+    replacement: null
+    severity: high
+- source: |-
+    slate.com — will-rupert-murdoch-s-editorialists-at-the-wall-street-journal-revisit-the-phone: asymmetric dismissal of critics as biased competitors
+  article: |-
+    The WSJ editorial page's response to the phone-hacking scandal: dismissing the New York Times and Guardian as 'competitor-critics' driven by 'commercial and ideological motives,' with 'Schadenfreude' so thick 'you can't cut it with a chainsaw.'
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      The WSJ editorial page's response to the phone-hacking scandal: dismissing the New York Times and Guardian as 'competitor-critics' driven by 'commercial and ideological motives,' with 'Schadenfreude' so thick 'you can't cut it with a chainsaw.'
+    span:
+    - 0
+    - 244
+    issue_label: asymmetric dismissal of critics as biased competitors
+    question: |-
+      The Schadenfreude is so thick you can't cut it with a chainsaw. Especially redolent are lectures about journalistic standards from publications that give Julian Assange and WikiLeaks their moral imprimatur. Does attacking the messenger rather than engaging the substance of criticism serve the editorial's argument?
+    why_it_matters: |-
+      Deflecting criticism by impugning competitors' motives avoids addressing the actual allegations, a rhetorical move that substitutes ad hominem for substantive rebuttal.
+    fix_suggestion: |-
+      When your publication is under scrutiny, distinguish between legitimate criticism and competitor bias—but only after seriously engaging with the facts critics are raising.
+    replacement: null
+    severity: high
+- source: |-
+    PolitiFact fact-check (ruling: half-true): smear-by-association / loaded causal framing
+  article: |-
+    when it was revealed that this company had destroyed swabs shortly after Trump's visit, many people laid the blame on the president's refusal to wear a mask during the visit
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      when it was revealed that this company had destroyed swabs shortly after Trump's visit, many people laid the blame on the president's refusal to wear a mask during the visit
+    span:
+    - 0
+    - 173
+    issue_label: smear-by-association / loaded causal framing
+    question: |-
+      Framing the destruction as Trump's fault—via mask-refusal—is a smear without evidence. The company pre-planned the demo-batch destruction. Why present a partisan social-media narrative as the news hook instead of Puritan's actual explanation?
+    why_it_matters: |-
+      Leading with an unsubstantiated blame-frame primes readers to hold Trump responsible for a decision he didn't make, corrupting the factual record.
+    fix_suggestion: |-
+      Lead with the company's own statement: Puritan planned to limit production during the visit due to crowding. Report the social-media blame as a later, debunked claim, not the primary narrative.
+    replacement: null
+    severity: high
+- source: 'PolitiFact fact-check (ruling: false): smear-by-association without evidence'
+  article: |-
+    Each of them — including former Republican Alaska U.S. Senate candidate Joe Miller and the website of anti-Muslim commentator Pamela Geller — claimed Tlaib had said the thought of the extermination of millions of Jews gave her a 'warm feeling.' These claims were inaccurate, but more substantively, they were grossly misleading and misrepresented the actual sense and context of what was said by Tlaib, who called the Holocaust 'horrific' and a 'tragedy.'
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      Each of them — including former Republican Alaska U.S. Senate candidate Joe Miller and the website of anti-Muslim commentator Pamela Geller — claimed Tlaib had said the thought of the extermination of millions of Jews gave her a 'warm feeling.' These claims were inaccurate, but more substantively, they were grossly misleading and misrepresented the actual sense and context of what was said by Tlaib, who called the Holocaust 'horrific' and a 'tragedy.'
+    span:
+    - 0
+    - 455
+    issue_label: smear-by-association without evidence
+    question: |-
+      The outlets attributed bad faith to Tlaib ('in a fit of anti-semitic pique') without evidence she held anti-semitic intent. Is describing a 'calming feeling' about Palestinian dignity in the post-Holocaust era logically the same as celebrating Jewish suffering?
+    why_it_matters: |-
+      Attributing motive without evidence of intent inflames rather than informs, and conflates policy disagreement with bigotry.
+    fix_suggestion: |-
+      Distinguish between 'Tlaib said X' and 'Tlaib intends to promote anti-semitism'—the latter requires explicit evidence of intent, not inference from a quote.
+    replacement: null
+    severity: high
+- source: |-
+    PolitiFact fact-check (ruling: false): false claim amplified by conspiracy-theory ecosystem
+  article: |-
+    Hastings was not arrested by the FBI, and the accusations circulating on social media that the Netflix CEO was involved in child pornography are baseless and largely driven by pedophilia panic that consumed portions of the internet in 2020.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      Hastings was not arrested by the FBI, and the accusations circulating on social media that the Netflix CEO was involved in child pornography are baseless and largely driven by pedophilia panic that consumed portions of the internet in 2020.
+    span:
+    - 0
+    - 240
+    issue_label: false claim amplified by conspiracy-theory ecosystem
+    question: |-
+      How many times was this hoax republished or shared by outlets or social accounts, and did they fact-check it before amplifying it? The fact-checker notes this panic 'consumed portions of the internet' and was 'amplified by the growing QAnon conspiracy movement'—but who in mainstream media gave it oxygen?
+    why_it_matters: |-
+      Even well-intentioned outlets can amplify fringe conspiracy theories if they report on them without clearly labeling them as debunked or unverified from the start.
+    fix_suggestion: |-
+      When reporting on a viral claim you believe is false, lead with 'This is unsubstantiated' or 'No evidence supports this,' and explain why it spread, rather than treating it as plausible news.
+    replacement: null
+    severity: medium
+- source: 'PolitiFact fact-check (ruling: half-true): Loaded framing, smear-by-association'
+  article: |-
+    A Florida mother took her high-risk teenage daughter to a 'COVID party' at their church, tried treating the girl at home with unproven drugs when she got sick — and then hailed her as a patriot after she died.
+  critiques:
+  - agent: partisan
+    text_quote: |-
+      A Florida mother took her high-risk teenage daughter to a 'COVID party' at their church, tried treating the girl at home with unproven drugs when she got sick — and then hailed her as a patriot after she died.
+    span:
+    - 0
+    - 209
+    issue_label: Loaded framing, smear-by-association
+    question: |-
+      Raw Story's opening packs 'conspiracy theorist mom,' 'COVID party,' 'unproven drugs,' and 'patriot' into one synoptic condemnation. But the medical examiner confirms the parents were a nurse and a physician's assistant, and the 'unproven' drugs (azithromycin, hydroxychloroquine) were at least medically supervised attempts. Isn't this framing more prosecutorial than factual?
+    why_it_matters: |-
+      Readers see the parents as reckless ideologues, not frightened medical professionals trying to save their daughter's life during an emergency.
+    fix_suggestion: |-
+      Separate the facts: parents are a nurse and PA; they tried azithromycin early (potentially prophylactic); they declined intubation (a real clinical decision); they pursued convalescent plasma and ECMO. Save editorial judgment for analysis, not the opening.
+    replacement: null
+    severity: medium

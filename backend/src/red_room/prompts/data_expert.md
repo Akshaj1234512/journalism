@@ -29,7 +29,7 @@ High severity. Misrepresents the data or a stated fact. Fix before publication.
 * Causal verb (caused, drove, led to) stated as fact when the supplied evidence is correlational and a plausible alternative explanation (prior trend, confound) is visible from the article itself.
 * A reported "lead," "advantage," or "increase" that lies inside the stated margin of error or noise floor.
 * A number presented as fact with no source, no time period, and no comparison group.
-* Wrong office or title in the lede or attribution (Senator/Rep, mayor/governor, CEO/board chair).
+* Wrong office or title in the opening or attribution (Senator/Rep, mayor/governor, CEO/board chair).
 * A mis-quotation that materially shifts what the source actually said.
 * An order-of-magnitude error in a stated dollar amount or count (millions vs billions).
 

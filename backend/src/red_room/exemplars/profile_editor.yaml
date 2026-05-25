@@ -1,81 +1,312 @@
-# Exemplars for profile_editor (Pia). Bootstrap synthetic; replaced in Phase 2.
-- source: 'profile reads as official narrative'
+# Exemplars for profile_editor
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the profile_editor lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
+#
+- source: |-
+    niemanstoryboard.org — a-final-phone-call-from-the-wildfires-inspires-an-unusual-intimate-story-written: character-revealing details embedded without official biography
   article: |-
-    Vasquez has long believed that great teams are built on trust. "We've always tried to put people first," she said.
+    With a just three lightning-strike sentences high in the story, Knoll illuminates Ferguson's character: She graduated high school with a 4-month old and a 4.0 grade point average. She put herself through nursing school while pregnant and with four children. She coaches panicked women through difficult labors.
   critiques:
   - agent: profile_editor
-    text_quote: '"We''ve always tried to put people first," she said.'
-    span: [60, 109]
-    issue_label: official narrative unchallenged
+    text_quote: |-
+      With a just three lightning-strike sentences high in the story, Knoll illuminates Ferguson's character: She graduated high school with a 4-month old and a 4.0 grade point average. She put herself through nursing school while pregnant and with four children. She coaches panicked women through difficult labors.
+    span:
+    - 0
+    - 310
+    issue_label: character-revealing details embedded without official biography
     question: |-
-      "Great teams are built on trust" and "we put people first" — these are sentences from her company's About page. Where is the texture that makes this her, not the press release?
+      Rather than a traditional context paragraph or character introduction, Knoll deploys three specific biographical details that reveal Ferguson's resilience and vocation. Do these details function as sufficient character establishment in an unconventional narrative structure?
     why_it_matters: |-
-      A profile that the subject's communications team would have written is not a profile; it's PR.
+      Specific, earned details about a subject can do the work of traditional character introduction—they show rather than tell, and they're memorable because they're concrete.
     fix_suggestion: |-
-      Find one moment where you saw Vasquez act in a way that didn't match her public talking points — or one outside source who'd push back on the "people first" framing. Lead with the tension, not the brand line.
-    replacement: null
-    severity: high
-- source: 'no source other than the subject'
-  article: |-
-    In the kitchen, Chen described his philosophy at length. He has many strong views about Italian cuisine, the modern restaurant industry, and the meaning of hospitality.
-  critiques:
-  - agent: profile_editor
-    text_quote: In the kitchen, Chen described his philosophy at length.
-    span: [0, 55]
-    issue_label: no outside voices
-    question: |-
-      The piece is entirely Chen on Chen. A profile needs at least three or four other voices: a sous chef, a longtime regular, a critic, a former mentor. Where are they?
-    why_it_matters: |-
-      Without outside sources the profile is autobiography, and the reader notices.
-    fix_suggestion: |-
-      Interview at least three people who know Chen from different angles. Quote the ones who disagree with each other.
-    replacement: null
-    severity: high
-- source: 'unspecific flattering adjectives'
-  article: |-
-    Lopez is a visionary leader whose transformative ideas have reshaped the industry. She is widely regarded as brilliant.
-  critiques:
-  - agent: profile_editor
-    text_quote: a visionary leader whose transformative ideas have reshaped the industry
-    span: [10, 79]
-    issue_label: hagiographic adjectives
-    question: |-
-      "Visionary," "transformative," "brilliant" — these are the words you use when you don't have the specific. Show the reader the moment that made you think "visionary" and let them come to the word themselves.
-    why_it_matters: |-
-      Hagiographic adjective stacks are the prose tell of a profile that didn't do the reporting work to earn its take.
-    fix_suggestion: |-
-      Cut the adjectives. Replace with a specific scene or a specific decision Lopez made that exhibited the quality you want to claim.
+      When you can't rely on traditional biographical scaffolding, gather the most revealing specific details about your subject (achievements, choices, patterns of behavior) and deploy them early to establish who they are before readers need to understand their interior life.
     replacement: null
     severity: medium
-- source: 'no direct-observation moments'
+- source: |-
+    niemanstoryboard.org — 5ish-questions-for-michelle-mizner-and-katie-worth-the-journalists-behind-the-la: character as emotional bridge to overwhelming topic
   article: |-
-    Singh spoke at length about his approach to leadership during a phone call last Tuesday.
+    It was Michelle's brilliant stroke to focus on kids. One of the problems of climate change stories is our tendency to turn the page – it just feels so overwhelming; it's a story that's huge and people don't feel like they have power over it.
   critiques:
   - agent: profile_editor
-    text_quote: during a phone call last Tuesday
-    span: [54, 86]
-    issue_label: no direct observation
+    text_quote: |-
+      It was Michelle's brilliant stroke to focus on kids. One of the problems of climate change stories is our tendency to turn the page – it just feels so overwhelming; it's a story that's huge and people don't feel like they have power over it.
+    span:
+    - 0
+    - 241
+    issue_label: character as emotional bridge to overwhelming topic
     question: |-
-      A phone interview is reporting input, not a profile foundation. We need a scene where you were physically present with Singh — at work, at home, anywhere.
+      Katie Worth identifies a core problem in climate-change journalism: the topic itself overwhelms readers into disengagement. By centering children's voices and perspectives rather than the abstract science, how does the choice of character point-of-view function as a solution to that psychological barrier?
     why_it_matters: |-
-      Without direct observation the profile has no authority — the reader can't tell what's the subject's self-portrait vs. what's the writer's seeing.
+      Grounding an overwhelming systemic story in the specific, immediate experience of individual human voices makes the abstract concrete enough for audiences to remain engaged rather than turning away.
     fix_suggestion: |-
-      Arrange in-person time. Even an hour at his office gives you the material a phone interview can't: how he greets staff, how his desk looks, what he's reading.
+      When tackling stories that risk reader overwhelm due to scale or complexity, ask whether centering a specific human perspective—particularly one with emotional resonance—might be the formal solution, not just the narrative garnish.
     replacement: null
     severity: high
-- source: 'opens with biographical summary'
+- source: |-
+    niemanstoryboard.org — parachute-reporting-in-a-foreign-land-getting-it-fast-and-getting-it-right: story arc building from personal to structural
   article: |-
-    Born in 1972 in Lima, Peru, Maria Reyes immigrated to the United States with her family at age eight. After graduating from State University in 1994, she worked at three different firms before founding Reyes Capital in 2008.
+    His stories seemed to progress in depth of understanding. The first feature was a fairly straightforward profile of a resident who'd lost her house to the lava. The second explored the historical, cultural, and spiritual underpinnings of the event and – rather thrillingly – introduced the Hawaiian goddess Pele. In his final piece, Romero looked at the socioeconomic factors that led to people living in Zone 1.
   critiques:
   - agent: profile_editor
-    text_quote: Born in 1972 in Lima, Peru, Maria Reyes immigrated to the United States with her family at age eight.
-    span: [0, 102]
-    issue_label: opens with bio summary
+    text_quote: |-
+      His stories seemed to progress in depth of understanding. The first feature was a fairly straightforward profile of a resident who'd lost her house to the lava. The second explored the historical, cultural, and spiritual underpinnings of the event and – rather thrillingly – introduced the Hawaiian goddess Pele. In his final piece, Romero looked at the socioeconomic factors that led to people living in Zone 1.
+    span:
+    - 0
+    - 412
+    issue_label: story arc building from personal to structural
     question: |-
-      "Born in 19XX in [place]" is the laziest profile opening there is — Wikipedia-style entry instead of putting Reyes in a room with the reader.
+      The critic observes that Romero's three stories formed a narrative progression: starting with individual loss, moving to cultural and spiritual meaning-making, then ending with the economic structures that explained why people lived in danger zones. Each story deepened the reporting's ambition.
     why_it_matters: |-
-      The opening graf is the most-read part of any profile. Wasting it on biographical summary means the reader never meets the person.
+      A reporter with a week-and-a-half on the ground can build credibility by showing escalating depth of understanding rather than trying to do everything in one piece.
     fix_suggestion: |-
-      Open with a scene: a specific moment when you were with Reyes. Background can come in graf 4 or 5, braided into scene rather than dumped up front.
+      For parachute reporting, consider pitching a series that allows you to show your own learning curve: start with accessible human stories, build to cultural context, and end with the structural forces that outsiders rarely uncover.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — annotation-tuesday-sarah-scoles-and-how-to-save-people-from-snakebites: narrative perspective discipline
+  article: |-
+    I wanted to ground the initial scene in a single perspective–Lewin's perspective–and not have it rove around. I wanted the narrative to stay inside his head (and paralyzed body) so a person reading could go through the experience with him, without being pulled out of it.
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      I wanted to ground the initial scene in a single perspective–Lewin's perspective–and not have it rove around. I wanted the narrative to stay inside his head (and paralyzed body) so a person reading could go through the experience with him, without being pulled out of it.
+    span:
+    - 0
+    - 271
+    issue_label: narrative perspective discipline
+    question: |-
+      Did you think about talking to the anesthesiologists at all, or did you think they would distract from the narrative's focus?
+    why_it_matters: |-
+      Maintaining a single perspective deepens reader empathy and prevents narrative fragmentation that would dilute the emotional immediacy of the scene.
+    fix_suggestion: |-
+      When a scene works best from one person's interior perspective, resist the impulse to corroborate with outside voices if doing so pulls focus from the primary narrative experience.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — ellen-barry-and-how-to-get-away-with-murder-in-small-town-india: self-awareness as character flaw in reporter
+  article: |-
+    Barry reveals that after four years of reporting and a dozen visits, Jahiruddin 'did not know, or care to know, my name' and 'saved my telephone number under the name Angrezi, which translates, more or less, as white lady.'
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      Barry reveals that after four years of reporting and a dozen visits, Jahiruddin 'did not know, or care to know, my name' and 'saved my telephone number under the name Angrezi, which translates, more or less, as white lady.'
+    span:
+    - 0
+    - 223
+    issue_label: self-awareness as character flaw in reporter
+    question: |-
+      It went on like that. I promised to keep in touch, and he saved my telephone number under the name 'Angrezi,' which translates, more or less, as 'white lady.' We parted on good terms.
+    why_it_matters: |-
+      By highlighting what she was *not* to her source despite years of access, Barry undercuts any claim to native understanding and positions the first-person narration as inherently limited.
+    fix_suggestion: |-
+      When using first-person reporting from abroad, include moments that reveal the hard limits of your access and understanding, not just your empathy.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — building-writing-muscles-a-postcard-a-day: subject articulates own evolution
+  article: |-
+    Goold's email quote: 'We both know writers who write a lot about the I — and I've always been hesitant to think readers care about the writer... But sometimes to my detriment as a writer.' And later: 'There was a chance to write more conversationally... It took me a while to find that footing, to gain the confidence to write to anyone and not believe it was imposing on them.'
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      Goold's email quote: 'We both know writers who write a lot about the I — and I've always been hesitant to think readers care about the writer... But sometimes to my detriment as a writer.' And later: 'There was a chance to write more conversationally... It took me a while to find that footing, to gain the confidence to write to anyone and not believe it was imposing on them.'
+    span:
+    - 0
+    - 378
+    issue_label: subject articulates own evolution
+    question: |-
+      Rather than the writer narrating Goold's journey from stiff beat writer to conversational voice, Goold himself describes the shift in his own words. He owns the contradiction — his hesitation about the 'I,' his fear of imposing on readers, his slow gain in confidence. What does that accomplish?
+    why_it_matters: |-
+      It allows the reader to see Goold's self-awareness and intellectual honesty rather than having the writer declare what changed. The subject becomes a reliable narrator of his own growth.
+    fix_suggestion: |-
+      When profiling someone whose work has evolved, let them articulate the turning points in their own voice. It's more persuasive than external analysis.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — how-a-high-school-newspaper-editor-geared-up-to-cover-riots-in-portland-oregon: interviewer's personal relationship transparency
+  article: |-
+    The interviewer discloses at the beginning: 'I've known Eddy since she was 9. Her mom, Warren Binford, is a law professor at Willamette University, and we became friends when I worked as the law school's communications director from 2010-13.'
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      The interviewer discloses at the beginning: 'I've known Eddy since she was 9. Her mom, Warren Binford, is a law professor at Willamette University, and we became friends when I worked as the law school's communications director from 2010-13.'
+    span:
+    - 0
+    - 242
+    issue_label: interviewer's personal relationship transparency
+    question: |-
+      The critic conducting this Q&A discloses upfront her personal relationship with the subject—she's known Eddy since childhood and is friends with her mother. How does this prior relationship shape the reader's ability to trust the neutrality of the interview?
+    why_it_matters: |-
+      Transparency about interviewer bias allows readers to calibrate how much weight to give the subject's self-presentation and the framing of her accomplishments.
+    fix_suggestion: |-
+      Always disclose material relationships with interview subjects early, as this piece does, so readers can assess potential conflicts of interest.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — how-a-high-school-newspaper-editor-geared-up-to-cover-riots-in-portland-oregon: hagiography through family endorsement
+  article: |-
+    The mother's quote is included to explain the family's decision-making and to vouch for Eddy's 'detailed, blow-by-blow, matter-of-fact way' and her role in creating 'an accurate, unbiased historical account,' but the mother is clearly a partisan advocate for her daughter.
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      The mother's quote is included to explain the family's decision-making and to vouch for Eddy's 'detailed, blow-by-blow, matter-of-fact way' and her role in creating 'an accurate, unbiased historical account,' but the mother is clearly a partisan advocate for her daughter.
+    span:
+    - 0
+    - 272
+    issue_label: hagiography through family endorsement
+    question: |-
+      The mother's testimonial praises Eddy's 'detailed, blow-by-blow, matter-of-fact' approach and claims her coverage 'helped to create an accurate, unbiased historical account'—but isn't the mother inherently biased and invested in validating her daughter's work?
+    why_it_matters: |-
+      Using a parent's praise as evidence of journalistic quality invites hagiography rather than critical assessment of the actual reporting.
+    fix_suggestion: |-
+      Pair family testimony with professional evaluation—a quote from an editor who published her work, a media critic who analyzed it, or a subject of her reporting who can speak to accuracy and fairness.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — 14-hours-from-event-to-post-delivering-narrative-with-context-on-deadline: first-person authority as competitive advantage
+  article: |-
+    One of the challenges of this kind of quick piece is that I'm not there to do what the people who are there to cover it for The New York Times or The Washington Post or CNN are there to do. I'm not filing practically instantaneously. But I am doing it fast. And I have to deliver something else. What is that? One of those things is … me. Where have I put myself to report? What am I seeing and hearing? What am I feeling?
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      One of the challenges of this kind of quick piece is that I'm not there to do what the people who are there to cover it for The New York Times or The Washington Post or CNN are there to do. I'm not filing practically instantaneously. But I am doing it fast. And I have to deliver something else. What is that? One of those things is … me. Where have I put myself to report? What am I seeing and hearing? What am I feeling?
+    span:
+    - 0
+    - 422
+    issue_label: first-person authority as competitive advantage
+    question: |-
+      Kruse argues that on deadline, his presence—his sensibility, his observed reactions—becomes a differentiator from straight wire reporting. How does inserting the reporter's witness and judgment actually strengthen deadline narrative rather than undermine it?
+    why_it_matters: |-
+      It reframes the deadline constraint as an opportunity: speed forces reliance on voice and judgment, which are harder to replicate than mere factual coverage.
+    fix_suggestion: |-
+      On deadline, lean into what only you can offer: your reporting position, what you saw and heard directly, your informed perspective. Don't apologize for your presence; use it as the story's engine.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — 5ish-questions-bridget-huber-and-the-living-disappeared-of-argentina: flattening of personality in service of trauma narrative
+  article: |-
+    One thing that I had trouble getting across in the piece is just that she's extremely funny. She's kind of mischievous. She's a very sociable person. But she is also a woman who had lived through unimaginable sorrows, and those are kind of right on the surface too.
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      One thing that I had trouble getting across in the piece is just that she's extremely funny. She's kind of mischievous. She's a very sociable person. But she is also a woman who had lived through unimaginable sorrows, and those are kind of right on the surface too.
+    span:
+    - 0
+    - 265
+    issue_label: flattening of personality in service of trauma narrative
+    question: |-
+      How do you honor a subject's full dimensionality—humor, mischief, sociability—while still centering their profound grief? Huber acknowledges that her published piece couldn't fully capture Delia's warmth and personality, only her pain.
+    why_it_matters: |-
+      Readers can feel when a profile reduces someone to their trauma; capturing humor and lightness alongside sorrow makes a person feel alive and whole rather than defined by suffering alone.
+    fix_suggestion: |-
+      Look for scenes that show joy, mischief, or levity in proximity to grief—not as relief from it, but as proof the subject is still present and complex. Specific examples of what made her funny work better than telling readers she was funny.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — 5ish-questions-bodega-stories-creator-talks-about-her-love-for-the-corner-store: subject defines her own stakes
+  article: |-
+    The interview allows Castillo to articulate her own framework for understanding bodegas—as community centers, safe spaces, job creators, and cultural anchors—rather than the interviewer narrating who she is or what her project means.
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      The interview allows Castillo to articulate her own framework for understanding bodegas—as community centers, safe spaces, job creators, and cultural anchors—rather than the interviewer narrating who she is or what her project means.
+    span:
+    - 0
+    - 233
+    issue_label: subject defines her own stakes
+    question: |-
+      Rather than having the interviewer (or opening narration) explain what Bodega Stories accomplishes or what Castillo believes, the Q&A lets Castillo speak her own values directly: 'I let them all know that I care about their story. It's a privilege being able to tell our own stories.'
+    why_it_matters: |-
+      Letting the subject articulate her own mission in her own voice avoids the hagiography trap of the interviewer doing the interpreting; readers hear conviction unmediated.
+    fix_suggestion: |-
+      In profile-adjacent Q&As, resist the urge to paraphrase what the subject 'really' cares about in the setup. Ask questions that let them say it themselves.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — so-you-want-to-write-a-book-the-risks-and-rewards-of-memoir: discovering the full cast through reporting, not assumption
+  article: |-
+    I always knew that my mother would play a central role in my memoir, since her death, when I was 11, sparked the eating disorder that took grip a year later. But it wasn't until I started delving deeper into my memoir writing that I realized how big of a role my father would need to play. Without him, my memoir would be incomplete.
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      I always knew that my mother would play a central role in my memoir, since her death, when I was 11, sparked the eating disorder that took grip a year later. But it wasn't until I started delving deeper into my memoir writing that I realized how big of a role my father would need to play. Without him, my memoir would be incomplete.
+    span:
+    - 0
+    - 333
+    issue_label: discovering the full cast through reporting, not assumption
+    question: |-
+      The author presumed her mother's death was the linchpin of her story, but reported interviews revealed that her father's role was equally essential—a discovery that only surfaced through doing the actual work, not through initial outline.
+    why_it_matters: |-
+      Reporting on the people in your life often reveals whose presence or absence matters far more than you assumed, which can reshape the entire structure of your narrative.
+    fix_suggestion: |-
+      Don't lock in your cast of characters before you've interviewed them. Let reporting surprise you about who actually shaped the story, and be willing to reorganize your narrative around what you learn.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — introducing-the-pivot-in-which-journalists-find-their-way-through-industry-chaos: avoiding the hagiography trap by showing the fall
+  article: |-
+    Chris Jones was Esquire's youngest 'writer at large,' when he won two National Magazine Awards... Yet despite a pair of Ellies and a position many writers covet, a decade later Jones was out of a job.
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      Chris Jones was Esquire's youngest 'writer at large,' when he won two National Magazine Awards... Yet despite a pair of Ellies and a position many writers covet, a decade later Jones was out of a job.
+    span:
+    - 0
+    - 200
+    issue_label: avoiding the hagiography trap by showing the fall
+    question: |-
+      Rather than presenting Jones as a triumph narrative, Shipley introduces him at his lowest point—unemployed despite prestigious credentials. The contrast between 'youngest writer at large' with major awards and being 'out of a job' creates tension that makes his eventual pivot feel earned rather than inevitable.
+    why_it_matters: |-
+      Showing both the achievement and the vulnerability prevents the profile from becoming a simple success story and makes the subject's actual struggle credible.
+    fix_suggestion: |-
+      When profiling someone who pivoted, don't hide the desperation or failure. The deeper the hole they climbed out of, the more meaningful the climb becomes.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — a-writer-instagrams-his-way-back-to-love-or-something-close-to-it: source dignity through form choice
+  article: |-
+    I thought about the power and racial dynamics of that moment. Two African American men, one getting his shoes shined, one shining those shoes... I didn't want to feel as if I was making an old black man serve me... Instead of pictures, I posted several videos of my interview with him... I could tell the community about him but why not let him say it?
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      I thought about the power and racial dynamics of that moment. Two African American men, one getting his shoes shined, one shining those shoes... I didn't want to feel as if I was making an old black man serve me... Instead of pictures, I posted several videos of my interview with him... I could tell the community about him but why not let him say it?
+    span:
+    - 0
+    - 352
+    issue_label: source dignity through form choice
+    question: |-
+      Beason wrestled with the power dynamics of presenting Eddie McFerrin—an older Black shoe shiner—in a sympathetic story, and ultimately chose to let McFerrin's own voice and image dominate the footage rather than photograph him from above while being served. How did that ethical deliberation reshape the storytelling?
+    why_it_matters: |-
+      It demonstrates how conscious attention to racial dynamics and power in reporting can force a journalist to rethink not just the narrative frame but the actual visual and textual grammar of how a character appears.
+    fix_suggestion: |-
+      Before writing about someone from a marginalized community, explicitly ask: whose perspective dominates the frame? What is the camera angle? Who gets to speak, and who is merely observed? Can you restructure to restore agency?
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — the-pitch-hate-to-wait-a-marie-claire-editor-answers-pitch-emails-within-48-hour: Age requirement tied to narrative structure
+  article: |-
+    For stories that are character-centric and include a personal anecdotal opening, yes. When stories are more about a topic or issue, we have experts of all ages and genders quoted.
+  critiques:
+  - agent: profile_editor
+    text_quote: |-
+      For stories that are character-centric and include a personal anecdotal opening, yes. When stories are more about a topic or issue, we have experts of all ages and genders quoted.
+    span:
+    - 0
+    - 176
+    issue_label: Age requirement tied to narrative structure
+    question: |-
+      When do sources need to fit the 20s-40s demographic? Only when the story is character-driven and opens with a personal scene. Issue-oriented stories with expert voices don't have that constraint.
+    why_it_matters: |-
+      The age requirement isn't arbitrary; it's tied to whose voice anchors the emotional and narrative center of the piece.
+    fix_suggestion: |-
+      If you're pitching a character-driven feature, know the magazine's demographic; if you're pitching an issue story, you can bring in older experts and historians without constraint.
     replacement: null
     severity: medium

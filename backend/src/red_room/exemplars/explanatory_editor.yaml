@@ -1,81 +1,312 @@
-# Exemplars for explanatory_editor (Eli). Bootstrap synthetic; replaced in Phase 2.
-- source: 'no "why this matters" framing'
+# Exemplars for explanatory_editor
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the explanatory_editor lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
+#
+- source: |-
+    niemanstoryboard.org — cutting-through-numbing-numbers-with-electrified-writing: grounding present crisis in historical echo
   article: |-
-    The Federal Reserve raised interest rates by 0.25 percentage points on Wednesday, the fourth such increase this year. The decision was unanimous. The rate is now in the 5.25-5.50% range.
+    Pierce brings in a biting piece of history: a premature celebration by The Boston Globe at the apparent end of the 1918 flu pandemic—which proved not to be the ending at all. Pierce writes, 'The amusement and mirth (referred to in the Globe story) had a short shelf-life. In the fall of 1918, nearly 5,000 Bostonians died from the resurgent flu.' In another portion, he references a similar sequence in Birmingham, Alabama, from 104 years ago.
   critiques:
   - agent: explanatory_editor
-    text_quote: The Federal Reserve raised interest rates by 0.25 percentage points on Wednesday
-    span: [0, 81]
-    issue_label: no why-this-matters
+    text_quote: |-
+      Pierce brings in a biting piece of history: a premature celebration by The Boston Globe at the apparent end of the 1918 flu pandemic—which proved not to be the ending at all. Pierce writes, 'The amusement and mirth (referred to in the Globe story) had a short shelf-life. In the fall of 1918, nearly 5,000 Bostonians died from the resurgent flu.' In another portion, he references a similar sequence in Birmingham, Alabama, from 104 years ago.
+    span:
+    - 0
+    - 443
+    issue_label: grounding present crisis in historical echo
     question: |-
-      We have the what, when, and how. We never tell the reader why this matters — what it changes for someone with a mortgage, a credit-card balance, a job search. That's the entire reason this is an explainer and not a news brief.
+      By surfacing what The Boston Globe got wrong in 1918—and finding a matching pattern 104 years later—doesn't Pierce give readers a framework for understanding how we repeat historical mistakes with numbing regularity?
     why_it_matters: |-
-      Explainers earn their length by making the practical impact legible. Without it, this is just a press-release rewrite.
+      Historical echoes provide context and richness to a present-day story by showing that the crisis isn't novel, which paradoxically makes the current numbness more damning and the repetition more urgent.
     fix_suggestion: |-
-      Add a graf two: "For someone with a $300,000 mortgage at a variable rate, the new ceiling means roughly $40 more per month. For a small business with a $200,000 line of credit, X."
-    replacement: null
-    severity: high
-- source: 'causation asserted from correlation'
-  article: |-
-    Cities that adopted the new policy saw violent crime drop by 12 percent over two years, demonstrating that the policy works.
-  critiques:
-  - agent: explanatory_editor
-    text_quote: demonstrating that the policy works
-    span: [85, 121]
-    issue_label: causation from correlation
-    question: |-
-      A drop in crime in cities that adopted the policy doesn't demonstrate the policy worked — those cities might differ from non-adopters in other ways (demographics, economics, baseline trends). "Demonstrates" overstates what correlational data can show.
-    why_it_matters: |-
-      Causation-from-correlation is the single most-cited error in explanatory journalism and the easiest one for a skeptical reader to dismiss.
-    fix_suggestion: |-
-      Soften to "is associated with" or cite the specific causal-inference study that controls for the selection effects ("a 2024 difference-in-differences study by X found...").
-    replacement: null
-    severity: high
-- source: 'unscoped projection'
-  article: |-
-    By 2040, the entire industry will be transformed by AI.
-  critiques:
-  - agent: explanatory_editor
-    text_quote: By 2040, the entire industry will be transformed by AI.
-    span: [0, 56]
-    issue_label: unscoped projection
-    question: |-
-      "By 2040 the entire industry will be transformed" — whose projection is that, and what assumptions does it rest on? Projections without provenance read as the writer's own forecast.
-    why_it_matters: |-
-      Unscoped projections are the most-deleted line in any explainer that goes to a careful copy desk.
-    fix_suggestion: |-
-      Attribute and qualify: "A 2024 McKinsey projection estimates that 40% of industry roles could be automated by 2040, assuming current rates of AI capability advancement continue." Or remove the projection if you can't source it.
+      Search archives and historical records for moments when journalists, officials, or institutions faced similar crises and either succeeded or failed; use those echoes to deepen the stakes of your current story.
     replacement: null
     severity: medium
-- source: 'jargon stacked without definition'
+- source: |-
+    niemanstoryboard.org — annotation-tuesday-sarah-scoles-and-how-to-save-people-from-snakebites: weaving facts minimally without breaking narrative
   article: |-
-    The bank's tier-one capital ratio fell below the CCAR stress-test threshold, triggering a SIFI re-classification under Dodd-Frank.
+    It was an antidote Lewin himself had developed: a nasal spray of the compound neostigmine. Doctors first described neostigmine's ability to undo snake-induced paralysis in 1972, but it is usually injected, and administered by doctors in a hospital.
   critiques:
   - agent: explanatory_editor
-    text_quote: The bank's tier-one capital ratio fell below the CCAR stress-test threshold
-    span: [0, 76]
-    issue_label: jargon without definitions
+    text_quote: |-
+      It was an antidote Lewin himself had developed: a nasal spray of the compound neostigmine. Doctors first described neostigmine's ability to undo snake-induced paralysis in 1972, but it is usually injected, and administered by doctors in a hospital.
+    span:
+    - 0
+    - 248
+    issue_label: weaving facts minimally without breaking narrative
     question: |-
-      "Tier-one capital ratio," "CCAR stress test," "SIFI," "Dodd-Frank" — four pieces of regulatory jargon in one sentence with no definitions. A reader who isn't a banking analyst is lost.
+      Here you're slipping key context into the narrative. Was it challenging to know where to stop the action to work in this important information?
     why_it_matters: |-
-      The whole point of an explainer is to make this accessible. Stacking unexplained jargon defeats the form.
+      Integrating necessary exposition at moments when it clarifies the scene maintains narrative momentum while readers gain understanding.
     fix_suggestion: |-
-      Either define the terms inline ("The bank's tier-one capital ratio — the buffer banks must hold against potential losses — fell below...") or substitute plain English where precision allows.
-    replacement: null
-    severity: high
-- source: 'abstract concept with no concrete example'
-  article: |-
-    The new framework creates a marginal incentive structure that shifts behavior at the decision boundary.
-  critiques:
-  - agent: explanatory_editor
-    text_quote: marginal incentive structure that shifts behavior at the decision boundary
-    span: [29, 102]
-    issue_label: abstract, no concrete case
-    question: |-
-      This is pure framework with no concrete example. What does this look like for one specific person facing one specific decision? Without a case the reader has nothing to hold on to.
-    why_it_matters: |-
-      Abstract-only explainers fail the test of whether the reader actually has a clearer mental model coming out than going in.
-    fix_suggestion: |-
-      Add an example: "Take a small-business owner deciding whether to hire one more employee. Under the old rules, X; under the new framework, Y. The marginal change is the decision boundary the policy is targeting."
+      Mention a fact whenever it's warranted, do it as briefly as possible, then get back to the scene—don't break away from the narrative momentum but ensure readers understand what's happening.
     replacement: null
     severity: medium
+- source: |-
+    niemanstoryboard.org — who-how-and-why-an-interview-with-the-super-bowl-streaker: finding white space in saturated coverage
+  article: |-
+    Almost all stories, no matter how well or widely covered, leave unanswered questions. It is those questions that can lead to investigative, explanatory and narrative stories that put the original news in compelling context.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      Almost all stories, no matter how well or widely covered, leave unanswered questions. It is those questions that can lead to investigative, explanatory and narrative stories that put the original news in compelling context.
+    span:
+    - 0
+    - 223
+    issue_label: finding white space in saturated coverage
+    question: |-
+      Remember that last phrase: 'We still had questions.' Almost all stories, no matter how well or widely covered, leave unanswered questions. It is those questions that can lead to investigative, explanatory and narrative stories that put the original news in compelling context.
+    why_it_matters: |-
+      Identifying the gap between what's been reported and what remains unanswered is the entry point for original reporting even on heavily covered events.
+    fix_suggestion: |-
+      When approaching a story that's already gotten significant news coverage, explicitly list what the existing reporting has established, then ask what it left opaque—those gaps are your assignment.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-keys-to-global-journalism-curiosity-open-mindedness-and-a-broad-network: contextualizing through domestic analogs
+  article: |-
+    The half-hour of content is drawn from The Newsroom, BBC's live news show, selecting items for a deeper dive or added perspective into the day's top stories. (Editor's note: A U.S. analog might be The Daily, which is the 30-minute podcast that explores select news from The New York Times, although The Daily only focuses on one story a day. NPR's All Things Considered is also similar, although it airs over a longer time slot.)
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      The half-hour of content is drawn from The Newsroom, BBC's live news show, selecting items for a deeper dive or added perspective into the day's top stories. (Editor's note: A U.S. analog might be The Daily, which is the 30-minute podcast that explores select news from The New York Times, although The Daily only focuses on one story a day. NPR's All Things Considered is also similar, although it airs over a longer time slot.)
+    span:
+    - 0
+    - 429
+    issue_label: contextualizing through domestic analogs
+    question: |-
+      The interviewer provides parenthetical editor's notes anchoring the BBC Global News Podcast to U.S. equivalents that readers might already know—The Daily and All Things Considered—with precise distinctions about format and scope.
+    why_it_matters: |-
+      Grounding an unfamiliar international product in familiar domestic reference points helps readers quickly understand the form and ambition of the thing being discussed.
+    fix_suggestion: |-
+      When explaining an unfamiliar news product or service, especially to a primarily English-language audience, anchor it immediately to a known domestic equivalent, then use specific format differences to deepen understanding.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — writers-memoir-nerve-looks-at-science-and-psychology-of-fear: Hedging claims from single studies
+  article: |-
+    Holland hired a fact-checker with a PhD in psychology to verify the science portions, and was 'particularly nervous about overstating research results. Often I reference only a single paper, rather than an accumulation of evidence, and I didn't want to overstate what one paper represents.'
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      Holland hired a fact-checker with a PhD in psychology to verify the science portions, and was 'particularly nervous about overstating research results. Often I reference only a single paper, rather than an accumulation of evidence, and I didn't want to overstate what one paper represents.'
+    span:
+    - 0
+    - 290
+    issue_label: Hedging claims from single studies
+    question: |-
+      Holland was acutely aware of the gap between what one research paper shows and what it can responsibly claim to mean. How do you frame tentative research findings in a way that's honest about their limits without making the prose feel hedged to death?
+    why_it_matters: |-
+      Readers of science writing expect precision about evidence strength; overstating a single study erodes credibility and can mislead readers about what we actually know.
+    fix_suggestion: |-
+      When citing a single paper, use language like 'one study suggests' or 'researchers found' rather than 'this proves' or 'this shows.' Have your fact-checker specifically flag moments where you might be implying more certainty than the evidence supports.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — grounding-apocalyptic-issues-in-reality-without-losing-hope: grounding abstraction in concrete detail
+  article: |-
+    Zak's essay zips up and down the 'ladder of abstraction,' a term American linguist and U.S. Sen. S. I. Hayakawa coined in 1939. Concrete, tangible details form the ladder's lower rungs; as you climb, the ideas and language grow more abstract.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      Zak's essay zips up and down the 'ladder of abstraction,' a term American linguist and U.S. Sen. S. I. Hayakawa coined in 1939. Concrete, tangible details form the ladder's lower rungs; as you climb, the ideas and language grow more abstract.
+    span:
+    - 0
+    - 242
+    issue_label: grounding abstraction in concrete detail
+    question: |-
+      It's a useful way to introduce abstract concepts while grounding them in reality, but Zak uses it to heartbreaking effect: moving from personal, sensory observations (basements that flood yearly, asthma worsening, Halloween costumes) up to the geologic implications.
+    why_it_matters: |-
+      The ladder of abstraction lets a writer handle an overwhelming existential threat by anchoring fear in observable, lived experience before zooming out to planetary scale.
+    fix_suggestion: |-
+      When writing about abstract or apocalyptic issues, identify the rungs: start with what readers have felt in their own bodies or homes, then climb toward the larger philosophical or scientific implications.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — grounding-apocalyptic-issues-in-reality-without-losing-hope: conscience over factoids in climate reporting
+  article: |-
+    I wanted to write something that got beyond the 12-word headlines about how 'we're all going to drown or burn,' and that also stepped around the 1,200-page climate report that's too dense and disorienting for the average person like myself. Science is why we know what we know, but my editors want me to look at conscience, too, and other intangibles—like why we are how we are, and what we hope to be.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      I wanted to write something that got beyond the 12-word headlines about how 'we're all going to drown or burn,' and that also stepped around the 1,200-page climate report that's too dense and disorienting for the average person like myself. Science is why we know what we know, but my editors want me to look at conscience, too, and other intangibles—like why we are how we are, and what we hope to be.
+    span:
+    - 0
+    - 402
+    issue_label: conscience over factoids in climate reporting
+    question: |-
+      An existential threat deserves to be interrogated by the heart and the spirit, not just the mind. Did your editors want you to add any more science facts or numbers? The piece contains almost none—it's metaphorical and philosophical instead.
+    why_it_matters: |-
+      Centering emotional and philosophical responses alongside (rather than buried under) scientific facts allows readers already paralyzed by climate news to find agency and meaning.
+    fix_suggestion: |-
+      When reporting on existential threats, resist the impulse to stuff the piece with data and factoids; instead, use science as the foundation and let philosophy, testimony, and emotional truth carry the reader forward.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — so-you-want-to-write-a-book-the-risks-and-rewards-of-memoir: imprecision masquerading as shorthand
+  article: |-
+    'Wasn't well-educated' becomes 'went to vocational school and didn't go to college.' It's truer... It's important, then, to challenge long-held assumptions and recognize when our writing falls short of the precision required by the truth.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      'Wasn't well-educated' becomes 'went to vocational school and didn't go to college.' It's truer... It's important, then, to challenge long-held assumptions and recognize when our writing falls short of the precision required by the truth.
+    span:
+    - 0
+    - 238
+    issue_label: imprecision masquerading as shorthand
+    question: |-
+      When the author's grandmother pushed back on 'wasn't well-educated'—noting her daughter made the honor roll—it revealed how casual language can distort the actual truth and offend the people closest to you.
+    why_it_matters: |-
+      Vague language that relies on reader assumption undermines credibility and can hurt the very people you're writing about, especially when they can fact-check you.
+    fix_suggestion: |-
+      In memoir revision, hunt for every instance where you've used a summary judgment instead of a concrete fact. Replace 'wasn't well-educated' with the actual educational path. This forces you to think more precisely about what you mean.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — ditching-monkey-mind-to-find-joy-while-writing: abstract principle followed by concrete naming and practical application
+  article: |-
+    Cushman's answer on staying grounded: 'You don't have to believe everything you think' followed by the explanation of 'monkey mind' and the practical reframe of choosing which thoughts to devote energy to
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      Cushman's answer on staying grounded: 'You don't have to believe everything you think' followed by the explanation of 'monkey mind' and the practical reframe of choosing which thoughts to devote energy to
+    span:
+    - 0
+    - 204
+    issue_label: abstract principle followed by concrete naming and practical application
+    question: |-
+      The piece moves from a paradoxical-sounding statement ('don't believe your thoughts') to naming the Buddhist term that makes it intelligible ('monkey mind'), then to actionable steps (choose which thoughts matter to you). Does this structure—paradox, naming, application—help readers understand a counterintuitive concept?
+    why_it_matters: |-
+      Explaining abstract concepts by first naming them with culturally familiar language (monkey mind), then showing the practical application for writers, makes meditation wisdom feel usable rather than mystical.
+    fix_suggestion: |-
+      When introducing counterintuitive ideas, move from paradox → culturally recognizable term → practical action a reader can take today.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — earthquakes-analogies-accessible-writing-numbers: translating abstract numbers via familiar analogy
+  article: |-
+    Guterson then nails his argument by offering some analogies to help consider the odds: The odds of a 9.0 quake impacting the coastal Pacific Northwest over the next 50 years is said, by seismologists, to be about 14%. Maybe you'll take those odds and bet against it happening. They're not terrible, after all: about the same that an NFL closing will miss a 37-yard field goal.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      Guterson then nails his argument by offering some analogies to help consider the odds: The odds of a 9.0 quake impacting the coastal Pacific Northwest over the next 50 years is said, by seismologists, to be about 14%. Maybe you'll take those odds and bet against it happening. They're not terrible, after all: about the same that an NFL closing will miss a 37-yard field goal.
+    span:
+    - 0
+    - 375
+    issue_label: translating abstract numbers via familiar analogy
+    question: |-
+      Guterson uses the NFL closing analogy to make a 14% probability visceral and understandable—it's not dumbing stories down; it's smarting them up. He gives readers something concrete they already understand to anchor an otherwise abstract statistical claim.
+    why_it_matters: |-
+      This move transforms a number that readers might mentally dismiss as 'not that likely' into a lived comparison—many people have watched field goals missed—making the risk feel immediate and real.
+    fix_suggestion: |-
+      When explaining odds or probabilities, search for anchors in your audience's shared cultural knowledge (sports, elections, everyday events) rather than stacking numbers or percentages alone.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — earthquakes-analogies-accessible-writing-numbers: naming the misconception before explaining the truth
+  article: |-
+    The moment magnitude scale suggests phenomena that get more intense by steady, equal degrees, one-tenth of a whole number at a time. In other words, it suggests that a 9.2 earthquake would be about a third more intense than a 6.2. That isn't how it is, though, because the moment magnitude scale is logarithmic. A 9.2 is in fact many thousands of times more intense than a 6.2.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      The moment magnitude scale suggests phenomena that get more intense by steady, equal degrees, one-tenth of a whole number at a time. In other words, it suggests that a 9.2 earthquake would be about a third more intense than a 6.2. That isn't how it is, though, because the moment magnitude scale is logarithmic. A 9.2 is in fact many thousands of times more intense than a 6.2.
+    span:
+    - 0
+    - 377
+    issue_label: naming the misconception before explaining the truth
+    question: |-
+      Guterson first names what readers likely believe the Richter scale means—a linear progression—then corrects it by explaining the logarithmic reality. This structure meets the audience where they are, rather than assuming they'll follow a technical explanation from cold.
+    why_it_matters: |-
+      By surfacing the common misunderstanding first, the writer validates readers' existing intuition before overturning it, making the correction land harder and feel less like a lecture.
+    fix_suggestion: |-
+      When explaining a frequently misunderstood technical concept, structure the explanation as a contrast: 'You might think X, but actually Y,' rather than jumping straight to the correct version.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — earthquakes-analogies-accessible-writing-numbers: audience-first thinking in analogy selection
+  article: |-
+    PS: Always think of your audience. The NFL analogy Guterson used likely wouldn't work in cultures that aren't somewhat familiar with American-style football. When you use comparisons, similes or metaphors, you need to consider who you're trying to reach, and use language that makes your story more — not less — accessible.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      PS: Always think of your audience. The NFL analogy Guterson used likely wouldn't work in cultures that aren't somewhat familiar with American-style football. When you use comparisons, similes or metaphors, you need to consider who you're trying to reach, and use language that makes your story more — not less — accessible.
+    span:
+    - 0
+    - 323
+    issue_label: audience-first thinking in analogy selection
+    question: |-
+      Banaszynski flags that while Guterson's NFL analogy is brilliant for a Seattle readership, it has geographic and cultural limits. The craft move isn't just finding any familiar anchor—it's finding one that actually fits your specific audience.
+    why_it_matters: |-
+      An analogy that confuses or alienates readers defeats the purpose of clarity; it becomes a barrier instead of a bridge.
+    fix_suggestion: |-
+      Before settling on a comparison or analogy, ask: Who am I writing for? What do they actually know? A sports analogy works for sports fans; a cooking analogy for home cooks. Test your anchor against your audience demographics.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — earthquakes-analogies-accessible-writing-numbers: making historical data emotionally legible
+  article: |-
+    Quakes of this sort occur in our region on average every 500 years. The last one happened 322 years ago, and the one before that about 1,300 years ago. You might choose to focus on the fact that about 1,000 years passed between the two, but only if you're an insistently cup-half-full person. For everybody else, it might be chastening to hear that the interval between the quake of 1,300 years ago and the one before it was around 320 years.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      Quakes of this sort occur in our region on average every 500 years. The last one happened 322 years ago, and the one before that about 1,300 years ago. You might choose to focus on the fact that about 1,000 years passed between the two, but only if you're an insistently cup-half-full person. For everybody else, it might be chastening to hear that the interval between the quake of 1,300 years ago and the one before it was around 320 years.
+    span:
+    - 0
+    - 442
+    issue_label: making historical data emotionally legible
+    question: |-
+      Guterson lays out the raw data (500-year average, 322 years since last quake, 1,300 years before that), then walks readers through the interpretive choice: you could be reassured by the 1,000-year gap, or sobered by the 320-year one. He doesn't tell you which to feel; he shows you the math that justifies either reading.
+    why_it_matters: |-
+      By naming both emotional interpretations upfront, the writer gives readers agency while also nudging them toward the more cautionary one—which supports his larger argument about preparedness.
+    fix_suggestion: |-
+      When presenting historical patterns or statistical ranges, don't hide behind false objectivity; acknowledge the competing ways people interpret the same data, then guide readers toward the more honest reading.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — wisdom-from-melissa-fay-greene-about-deep-reporting-on-sensitive-subjects: humanizing scientist before introducing complex data
+  article: |-
+    I try to lower the threshold of data-heavy, fact-heavy sections. To introduce the brain imaging technology and longitudinal studies, for example, I introduced pediatric neurologist Charles Nelson as 'gregarious and kind' and having a mustache that looks like Captain Kangaroo's. I'm hoping that even the most statistics-averse reader might feel, 'Oh, gregarious and kind? Captain Kangaroo? Okay, I can handle this.'
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      I try to lower the threshold of data-heavy, fact-heavy sections. To introduce the brain imaging technology and longitudinal studies, for example, I introduced pediatric neurologist Charles Nelson as 'gregarious and kind' and having a mustache that looks like Captain Kangaroo's. I'm hoping that even the most statistics-averse reader might feel, 'Oh, gregarious and kind? Captain Kangaroo? Okay, I can handle this.'
+    span:
+    - 0
+    - 415
+    issue_label: humanizing scientist before introducing complex data
+    question: |-
+      Speaking of numbers, were you worried that these dense factoids would take away from the emotional power of the narrative — that the readers' eyes would glaze over? Yes. My own eyes glaze over. I adore strong narrative, with just a sprinkling of vital data points... Can you give an example of how you made numbers more palatable?
+    why_it_matters: |-
+      Introducing a scientist as a vivid, quirky person before asking readers to absorb their research findings lowers psychological resistance to technical material and creates a human entry point into otherwise opaque data.
+    fix_suggestion: |-
+      Before presenting complex scientific findings, anchor the scientist as a specific, memorable person with idiosyncratic details—this makes readers more willing to follow them into difficult material.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — from-five-minutes-to-finished: concrete, repeatable process with low friction entry
+  article: |-
+    He pours himself a cup of coffee, sets a timer for five minutes and opens his laptop. He then commits to writing two lines — just two lines. They can be the start of his story, a summary of his 'context paragraph' or main point, a question he wants the story to answer.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: |-
+      He pours himself a cup of coffee, sets a timer for five minutes and opens his laptop. He then commits to writing two lines — just two lines. They can be the start of his story, a summary of his 'context paragraph' or main point, a question he wants the story to answer.
+    span:
+    - 0
+    - 260
+    issue_label: concrete, repeatable process with low friction entry
+    question: |-
+      Rather than abstractly describing 'breaking through writer's block,' Banaszynski gives the exact mechanics: five minutes, two lines, coffee, timer—actions a writer can replicate immediately.
+    why_it_matters: |-
+      The specificity makes the method actionable and demystifies what could otherwise feel like magical thinking or talent, which is the entire point of the essay.
+    fix_suggestion: |-
+      When explaining a process or method, include the actual materials, time limits, and measurable outputs, not just the philosophy.
+    replacement: null
+    severity: high

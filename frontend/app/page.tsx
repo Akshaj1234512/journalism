@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { AccountMenu } from "@/components/AccountMenu";
 import { AgentRoster } from "@/components/AgentRoster";
+import { Avatar } from "@/components/Avatar";
 import { CritiqueSidebar } from "@/components/CritiqueSidebar";
 import { Editor, critiqueId } from "@/components/Editor";
 import { PrintView } from "@/components/PrintView";
@@ -14,6 +15,7 @@ import { streamCritique } from "@/lib/stream";
 import { PLANS, countWords } from "@/lib/plans";
 import { streamResearchCritique } from "@/lib/stream";
 import {
+  AGENTS,
   AgentName,
   ARTICLE_TYPE_CHOICES,
   ArticleType,
@@ -578,33 +580,33 @@ export default function Page() {
               }}
             />
           </div>
-          <JournalismToggleChip
-            label="Partisan"
-            on={journalismToggles.partisan}
-            onChange={(on) =>
-              setJournalismToggles((t) => ({ ...t, partisan: on }))
-            }
-            color="#EF4444"
-            title="Activates Parker (Fairness / Partisan Checker)"
-          />
-          <JournalismToggleChip
-            label="Data claims"
-            on={journalismToggles.hasDataClaims}
-            onChange={(on) =>
-              setJournalismToggles((t) => ({ ...t, hasDataClaims: on }))
-            }
-            color="#0F172A"
-            title="Activates Peter (Data Expert)"
-          />
-          <JournalismToggleChip
-            label="Anonymous sources"
-            on={journalismToggles.hasAnonymousSources}
-            onChange={(on) =>
-              setJournalismToggles((t) => ({ ...t, hasAnonymousSources: on }))
-            }
-            color="#6366F1"
-            title="Activates Joe (Source Privacy)"
-          />
+          <div data-tutorial="journalism-toggles" className="inline-flex items-center gap-1.5">
+            <JournalismToggleChip
+              agent="partisan"
+              trigger="Partisan"
+              on={journalismToggles.partisan}
+              onChange={(on) =>
+                setJournalismToggles((t) => ({ ...t, partisan: on }))
+              }
+            />
+            <JournalismToggleChip
+              agent="data_expert"
+              trigger="Data claims"
+              on={journalismToggles.hasDataClaims}
+              onChange={(on) =>
+                setJournalismToggles((t) => ({ ...t, hasDataClaims: on }))
+              }
+            />
+            <JournalismToggleChip
+              agent="human_rights"
+              trigger="Anonymous sources"
+              on={journalismToggles.hasAnonymousSources}
+              onChange={(on) =>
+                setJournalismToggles((t) => ({ ...t, hasAnonymousSources: on }))
+              }
+            />
+            <JournalismSpecialistsHelp />
+          </div>
           <div data-tutorial="subject-context">
             <SubjectContextButton value={subjectContext} onChange={setSubjectContext} />
           </div>
@@ -1104,38 +1106,132 @@ function ArticleTypePicker({
   );
 }
 
+/**
+ * A pill-shaped chip that activates a specific journalism specialist. The
+ * binding (toggle <-> editor) is visible at-rest: each chip shows the
+ * editor's avatar + first name + role and uses "+" / "✓" prefixes so the
+ * "click to add a specialist" affordance is obvious without a tutorial.
+ *
+ * Off-state: dashed outline with "+" — looks clickable and unfilled.
+ * On-state: solid border in the editor's brand color with "✓" — looks
+ * applied. The avatar always reads the rail color so a user scanning the
+ * row sees which named editor each chip refers to.
+ */
+/**
+ * A small "?" button next to the journalism toggle chips. Click opens a
+ * brief popover explaining what the chips do (they add named specialist
+ * editors to the review). The chips' own labels carry most of the
+ * affordance; this is the belt-and-suspenders helper for users who skip
+ * the tutorial or come back months later.
+ */
+function JournalismSpecialistsHelp() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onMouse = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", onMouse);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onMouse);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  return (
+    <div ref={ref} className="relative inline-flex">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-label="About specialist editors"
+        className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-neutral-200 bg-white text-[10.5px] font-bold text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800"
+        title="What do these add?"
+      >
+        ?
+      </button>
+      {open && (
+        <div
+          role="dialog"
+          className="absolute left-0 top-[calc(100%+6px)] z-50 w-[300px] rounded-2xl border border-neutral-200 bg-white p-3 text-[11.5px] leading-snug shadow-xl"
+        >
+          <div className="mb-1 font-semibold text-neutral-900">Specialist editors</div>
+          <p className="text-neutral-600">
+            Click a chip to add that editor to your review. Each one is a
+            specialist for the kind of story you said this is:
+          </p>
+          <ul className="mt-2 space-y-1.5 text-neutral-700">
+            <li><span className="font-semibold">Parker</span> reads for partisan framing and asymmetric treatment of named parties.</li>
+            <li><span className="font-semibold">Peter</span> stress-tests statistical and quantitative claims.</li>
+            <li><span className="font-semibold">Joe</span> watches for source-protection and privacy risks when anonymous sources are involved.</li>
+          </ul>
+          <p className="mt-2 text-neutral-500">
+            The chips pre-fill sensible defaults when you change article type.
+            Toggle them off if a default doesn't fit your story.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function JournalismToggleChip({
-  label,
+  agent,
+  trigger,
   on,
   onChange,
-  color,
   title,
 }: {
-  label: string;
+  agent: AgentName;
+  trigger: string; // human-readable context that turns this on, e.g. "Partisan"
   on: boolean;
   onChange: (on: boolean) => void;
-  color: string;
   title?: string;
 }) {
+  const meta = AGENTS[agent];
   return (
     <button
       type="button"
       onClick={() => onChange(!on)}
-      title={title}
+      title={
+        title ??
+        `Click to ${on ? "remove" : "add"} ${meta.firstName} (${meta.shortLabel}). ` +
+          `Recommended for stories that are: ${trigger.toLowerCase()}.`
+      }
       aria-pressed={on}
       className={[
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-medium transition",
+        "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11.5px] font-medium transition",
+        "border",
         on
-          ? "border-neutral-300 bg-white text-neutral-900 shadow-sm"
-          : "border-transparent bg-neutral-100 text-neutral-500 hover:bg-neutral-200",
+          ? "bg-white text-neutral-900 shadow-sm"
+          : "border-dashed border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900",
       ].join(" ")}
+      style={
+        on
+          ? { borderColor: meta.brandHex, backgroundColor: meta.highlightHex + "80" }
+          : undefined
+      }
     >
       <span
         aria-hidden
-        className="h-1.5 w-1.5 rounded-full"
-        style={{ backgroundColor: on ? color : "#cbd5e1" }}
-      />
-      {label}
+        className={[
+          "inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold",
+          on ? "text-white" : "text-neutral-500 bg-neutral-100",
+        ].join(" ")}
+        style={on ? { backgroundColor: meta.brandHex } : undefined}
+      >
+        {on ? "✓" : "+"}
+      </span>
+      <span className="inline-flex h-5 w-5 overflow-hidden rounded-full">
+        <Avatar agent={agent} size={20} active={on} muted={!on} />
+      </span>
+      <span className="leading-tight">
+        <span className="font-semibold">{meta.firstName}</span>
+        <span className="ml-1 text-[10.5px] uppercase tracking-wider text-neutral-500">
+          {trigger}
+        </span>
+      </span>
     </button>
   );
 }

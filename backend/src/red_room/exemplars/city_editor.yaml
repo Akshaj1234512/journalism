@@ -1,135 +1,312 @@
-# Exemplars for city_editor (Cole)
-# Bootstrap synthetic exemplars in city-editor voice, anchored on AP and
-# NYTimes style standards. Will be replaced by real-data ingestion (IPSO
-# rulings, CJR criticism, Poynter feedback) in Phase 2.
+# Exemplars for city_editor
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the city_editor lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
 #
-- source: 'buried lede: news appears in graf 4 after long scene-set'
+- source: |-
+    niemanstoryboard.org — the-pitch-how-to-get-the-attention-of-a-senior-editor-at-smithsonian-magazine: demonstrating publication knowledge in pitch
   article: |-
-    On a damp Wednesday morning in Trenton, the air outside the statehouse smelled of wet asphalt and the cherry trees were just beginning to bud. State Sen. Maria Cortez, wearing a navy suit and a small American flag pin, walked briskly past the press gallery. She has represented the 14th district for eleven years. On Wednesday, Cortez announced she will resign at the end of the month.
+    If he'd said, 'I have this in mind for your Evotourism issue,' we would've been flattered. Magazines like when people notice they have special issues because they take a lot of work... I'll give a pitch closer attention if it says it's similar to a certain piece we ran—it shows the person is an actual reader.
   critiques:
   - agent: city_editor
-    text_quote: On a damp Wednesday morning in Trenton, the air outside the statehouse smelled of wet asphalt
-    span: [0, 95]
-    issue_label: buried lede
+    text_quote: |-
+      If he'd said, 'I have this in mind for your Evotourism issue,' we would've been flattered. Magazines like when people notice they have special issues because they take a lot of work... I'll give a pitch closer attention if it says it's similar to a certain piece we ran—it shows the person is an actual reader.
+    span:
+    - 0
+    - 310
+    issue_label: demonstrating publication knowledge in pitch
     question: |-
-      The news (Cortez resigning) is in graf 4 behind weather, scene-set, and biographical filler. Open with the resignation announcement.
+      If he'd said, 'I have this in mind for your Evotourism issue,' we would've been flattered. Magazines like when people notice they have special issues because they take a lot of work. I'll give a pitch closer attention if it says it's similar to a certain piece we ran—it shows the person is an actual reader.
     why_it_matters: |-
-      Three quarters of readers stop before graf 4. They will leave this story not knowing the news.
+      Naming a specific themed issue or citing a similar published piece proves the writer reads the publication, not just mass-mails pitches.
     fix_suggestion: |-
-      Open with: "State Sen. Maria Cortez, who has represented New Jersey's 14th district for eleven years, said Wednesday she will resign at the end of the month." Move the scene-set into graf 3 if you want it at all.
-    replacement: null
-    severity: high
-- source: 'weak attribution: "officials" when a named source is available'
-  article: |-
-    Officials said the new policy will take effect in January and is expected to affect roughly 12,000 commuters.
-  critiques:
-  - agent: city_editor
-    text_quote: Officials said
-    span: [0, 14]
-    issue_label: vague attribution
-    question: |-
-      "Officials" is the laziest attribution there is. Who told you this — the transit authority? The mayor's office? Name them.
-    why_it_matters: |-
-      Vague attribution lets a reader (and a competitor) assume we don't actually have a real source.
-    fix_suggestion: |-
-      Replace "Officials said" with the specific spokesperson and agency: "A spokesperson for the Metropolitan Transit Authority, Sarah Chen, said..."
+      Research the publication's special issues and editorial calendar. Reference a recent comparable story or note which issue your idea suits. Editors reward readers.
     replacement: null
     severity: medium
-- source: 'no nut graf on a story that needs context'
+- source: |-
+    niemanstoryboard.org — how-an-editor-guided-the-many-cooks-reporting-how-racism-shaped-george-floyd: translating complexity without reducing nuance
   article: |-
-    The school board voted 7-2 Tuesday night to adopt the new attendance policy. Members debated the measure for nearly three hours. Supporters cited improved completion rates in three pilot schools last year. Opponents raised concerns about transportation impact for students in the outer wards.
+    Many of our conversations with reporters were about trying to simplify things. These are big, difficult topics. How are we going to make it simple? How are we going to make it relatable? How are we going to tell the story that we want to tell without losing readers?
   critiques:
   - agent: city_editor
-    text_quote: The school board voted 7-2 Tuesday night to adopt the new attendance policy.
-    span: [0, 77]
-    issue_label: no nut graf
+    text_quote: |-
+      Many of our conversations with reporters were about trying to simplify things. These are big, difficult topics. How are we going to make it simple? How are we going to make it relatable? How are we going to tell the story that we want to tell without losing readers?
+    span:
+    - 0
+    - 266
+    issue_label: translating complexity without reducing nuance
     question: |-
-      We have a vote, we have the debate, we have positions. We never tell the reader what this attendance policy actually does. A nut graf needs to explain the policy itself.
+      How do you make systemic racism readable without dumbing it down? Ginsberg's recurring editorial question focused reporters on clarity and accessibility as craft challenges, not shortcuts.
     why_it_matters: |-
-      Without it, readers who weren't already following the school-board debate can't follow what changed.
+      Readers abandon stories that feel inaccessible; but simplification can also flatten nuance. The goal is translation—making the complex legible without lying about it.
     fix_suggestion: |-
-      Add a graf two: "The new policy requires schools to flag students after three unexcused absences in a quarter and triggers mandatory parent meetings after five. It replaces the district's previous 10-absence threshold."
+      Ask reporters: What is the simplest true version of this? Not the simplest version, but the simplest one that's still accurate.
     replacement: null
-    severity: high
-- source: 'soft quantifier when specifics exist'
-  article: |-
-    Several council members raised objections during the public comment period.
-  critiques:
-  - agent: city_editor
-    text_quote: Several council members
-    span: [0, 22]
-    issue_label: soft quantifier
-    question: |-
-      If you know it was three, write three. "Several" is the AP-style soft hedge that signals you didn't count or you don't remember.
-    why_it_matters: |-
-      Soft quantifiers in the body of a news story degrade the reader's trust that we know what we're talking about.
-    fix_suggestion: |-
-      Name the number: "Three council members." Better: name them when there are few enough to list.
-    replacement: Three council members
-    severity: low
-- source: 'lede over 30 words and stuffed with three facts'
-  article: |-
-    The City Council voted Wednesday night to approve a $4.2 million contract with Green Source LLC for the construction of a new emergency response coordination center on the site of the former municipal parking garage on Burnham Avenue.
-  critiques:
-  - agent: city_editor
-    text_quote: The City Council voted Wednesday night to approve a $4.2 million contract with Green Source LLC for the construction of a new emergency response coordination center on the site of the former municipal parking garage on Burnham Avenue.
-    span: [0, 233]
-    issue_label: lede too long, three facts in one sentence
-    question: |-
-      This lede is 38 words and is doing three jobs: contract size, the vendor, and the location. Pick the news, lead with it, and break the rest into graf 2.
-    why_it_matters: |-
-      Long stuffed ledes obscure which fact is the actual news.
-    fix_suggestion: |-
-      Lead with: "The City Council voted Wednesday night to approve a $4.2 million contract for a new emergency response coordination center." Use graf 2 for vendor and site detail.
-    replacement: The City Council voted Wednesday night to approve a $4.2 million contract for a new emergency response coordination center.
     severity: medium
-- source: 'decorative first quote that restates the lede'
+- source: |-
+    niemanstoryboard.org — take-two-avi-selk-on-the-life-and-death-of-a-spider-aggregation-and-writing-fast: opening-first as structural necessity
   article: |-
-    The bond issue passed by a margin of two votes. "It's a great day for the city," Mayor Davis said.
+    I need to have my opening down before I can write anything else... It's pretty important to me that I have a good idea of a strong beginning, or how it's going to flow, or have a strong ending.
   critiques:
   - agent: city_editor
-    text_quote: '"It''s a great day for the city," Mayor Davis said.'
-    span: [50, 100]
-    issue_label: decorative quote, no information
+    text_quote: |-
+      I need to have my opening down before I can write anything else... It's pretty important to me that I have a good idea of a strong beginning, or how it's going to flow, or have a strong ending.
+    span:
+    - 0
+    - 190
+    issue_label: opening-first as structural necessity
     question: |-
-      First quote slot is real estate. The mayor's "great day for the city" doesn't move the story; it just restates the result.
+      Selk describes needing to nail the opening before he can proceed with anything else—it's a structural requirement, not optional. Even when the opening isn't entirely certain, he'll write multiple outline versions to test different openings: 'What if I start with this scene instead and loop it back?'
     why_it_matters: |-
-      A wasted first quote signals to the reader that the reporting is thin.
+      Having a strong structural anchor (opening, ending, narrative flow) allows fast writers to avoid the paralysis of staring at blank pages and keeps the story coherent when written under deadline pressure.
     fix_suggestion: |-
-      Find a quote that adds something: what the bond money will be spent on first, when residents will see the change, why the vote was so close.
+      When writing fast, sketch your opening(s) before you draft. Test competing ledeapproaches on paper to unlock the narrative spine, even if you refine them later.
     replacement: null
-    severity: low
-- source: 'headline-lede mismatch'
+    severity: medium
+- source: |-
+    niemanstoryboard.org — take-two-avi-selk-on-the-life-and-death-of-a-spider-aggregation-and-writing-fast: outlining discipline regardless of length
   article: |-
-    Headline: City to slash police budget by 20%
-
-    Lede: The City Council on Tuesday adopted a 2025 budget that reduces police department funding from the prior year's level.
+    Even for 300-word stories, I have just gotten in the habit of outlining... I do everything on a laptop, but I will have scrap paper next to me, where I jot down bullet-point level outlines.
   critiques:
   - agent: city_editor
-    text_quote: City to slash police budget by 20%
-    span: [10, 44]
-    issue_label: headline overstates lede
+    text_quote: |-
+      Even for 300-word stories, I have just gotten in the habit of outlining... I do everything on a laptop, but I will have scrap paper next to me, where I jot down bullet-point level outlines.
+    span:
+    - 0
+    - 189
+    issue_label: outlining discipline regardless of length
     question: |-
-      The headline says "slash" and "20%." The lede only says "reduces." Either the headline is wrong or the lede is buried.
+      Selk emphasizes that even tiny stories (300 words) get outlined—he does this on paper beside his laptop, creating bullet-point-level scaffolding before he drafts.
     why_it_matters: |-
-      Headline-lede mismatches are the easiest credibility hit there is and the first thing a hostile reader screenshots.
+      Outlining at any length prevents writer sprawl and ensures efficient reporting-to-writing conversion, especially critical when your whole assignment might take a few hours.
     fix_suggestion: |-
-      Verify the actual reduction. If it really is 20%, put the percentage in the lede. If it's smaller, rewrite the headline.
+      Treat outlining as non-negotiable prep work, even for short-form pieces. Use paper to separate the planning phase from the writing phase.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — take-two-avi-selk-on-the-life-and-death-of-a-spider-aggregation-and-writing-fast: pile-to-prose reduction with tonal passes
+  article: |-
+    I start every story with this gigantic text file of facts pasted from aggregation or raw notes from my phone interviews. It's thousands of words long. Then I start winnowing that down into a story with my own prose... I write really simply for the first pass. Subject-verb-object. I don't worry about making it fancy.
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      I start every story with this gigantic text file of facts pasted from aggregation or raw notes from my phone interviews. It's thousands of words long. Then I start winnowing that down into a story with my own prose... I write really simply for the first pass. Subject-verb-object. I don't worry about making it fancy.
+    span:
+    - 0
+    - 317
+    issue_label: pile-to-prose reduction with tonal passes
+    question: |-
+      Selk's process moves from a massive raw-material dump (aggregated facts and interview notes) through progressive reduction and then into fresh prose, starting deliberately plain. Only on subsequent passes does he layer tone or style: 'If that's all I have time to do, sometimes that's the way it publishes.'
+    why_it_matters: |-
+      This staged approach (dump → distill → draft simply → refine tone) allows fast writers to separate information architecture from voice work, preventing either from derailing the other under deadline.
+    fix_suggestion: |-
+      Build your first draft in plain, functional prose. Accept that your opening pass may publish as-is if time runs out. Save stylistic choices for revision passes when the structure is stable.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — building-writing-muscles-a-postcard-a-day: concrete evidence of impact
+  article: |-
+    The scene where Goold receives the postcard from fellow columnist Ben Hochman describing the Hamilton card: 'The front is a picture of Lafayette, Hochman's favorite character from the musical. The writing on the back is tiny, to accommodate the length of Goold's creative brainstorm. Hochman still has the card.'
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      The scene where Goold receives the postcard from fellow columnist Ben Hochman describing the Hamilton card: 'The front is a picture of Lafayette, Hochman's favorite character from the musical. The writing on the back is tiny, to accommodate the length of Goold's creative brainstorm. Hochman still has the card.'
+    span:
+    - 0
+    - 312
+    issue_label: concrete evidence of impact
+    question: |-
+      Rather than just telling us the postcards matter to people, the writer shows us a specific card in Hochman's possession, with sensory detail (tiny handwriting to fit the message) and proof of care (Hochman has kept it). Why does that work better than summary?
+    why_it_matters: |-
+      It demonstrates the postcards' actual effect on recipients through material evidence rather than assertion, making the claim credible.
+    fix_suggestion: |-
+      Use specific objects and details to show impact rather than stating it. A postcard someone has kept is more persuasive than 'people appreciate his cards.'
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — who-how-and-why-an-interview-with-the-super-bowl-streaker: structural rigor in feature interviews
+  article: |-
+    DeGregory went into the interview with three big questions from the standard six: Who, How and Why. All three questions are evident in her feature. I was especially impressed that she didn't leave out 'how.'
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      DeGregory went into the interview with three big questions from the standard six: Who, How and Why. All three questions are evident in her feature. I was especially impressed that she didn't leave out 'how.'
+    span:
+    - 0
+    - 207
+    issue_label: structural rigor in feature interviews
+    question: |-
+      I was especially impressed that she didn't leave out 'how.' As a result, she unpeels a fascinating glimpse of the planning that went into what seemed like a spontaneous stunt.
+    why_it_matters: |-
+      Including the 'how' question transforms a surface-level curiosity piece into one that reveals process and intent, giving readers genuine new information rather than just colorful anecdotes.
+    fix_suggestion: |-
+      When approaching a feature interview, explicitly ask yourself which of the classic questions (who, how, why, what, when, where) you're actually answering—and push back if you're skipping one that would deepen the story.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — coming-home-from-stories-of-war: multi-draft approach clarifies news-to-feature progression
+  article: |-
+    Constable's explanation of her breaking-news workflow: first draft 'as soon as you can,' then a second draft with 'more depth, more creativity,' then a third form as a 'personal feature' about how the incident affected her—all from the same source reporting.
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      Constable's explanation of her breaking-news workflow: first draft 'as soon as you can,' then a second draft with 'more depth, more creativity,' then a third form as a 'personal feature' about how the incident affected her—all from the same source reporting.
+    span:
+    - 0
+    - 258
+    issue_label: multi-draft approach clarifies news-to-feature progression
+    question: |-
+      Does Constable's three-tiered reporting and writing structure (fast breaking news, then deeper rewrite, then personal feature) show a useful model for how one initial reporting effort can yield multiple story forms?
+    why_it_matters: |-
+      The answer demystifies how veteran correspondents manage the tension between deadline pressure and narrative depth by planning for multiple drafts and forms from the start.
+    fix_suggestion: |-
+      When asking a working journalist about their process under pressure, get them to name the actual sequence of drafts and story forms; it's more actionable than general advice about 'going deeper.'
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — 14-hours-from-event-to-post-delivering-narrative-with-context-on-deadline: recognizing and organizing around the news break
+  article: |-
+    Inside barely 15 minutes into his hour-and-a-half stemwinder, Trump gave the people what they wanted... The chant was on early on, but it was clearly and immediately important. Put it this way: It was going to take a lot to make it something other than the defining moment of the event.
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      Inside barely 15 minutes into his hour-and-a-half stemwinder, Trump gave the people what they wanted... The chant was on early on, but it was clearly and immediately important. Put it this way: It was going to take a lot to make it something other than the defining moment of the event.
+    span:
+    - 0
+    - 286
+    issue_label: recognizing and organizing around the news break
+    question: |-
+      Kruse had to make a structural choice on the fly: once the 'Send her back' chant erupted, it became the gravitational center of the story. How did he resist over-planning and let the actual news event reshape his reporting priorities?
+    why_it_matters: |-
+      Flexibility on deadline—letting the actual event, not pre-reporting, determine structure—allows a story to capture what's genuinely newsworthy rather than executing a predetermined template.
+    fix_suggestion: |-
+      Don't lock your structure before the event happens. Have a three-part framework ready, but be prepared to rebuild around the actual news break once you encounter it.
     replacement: null
     severity: high
-- source: '5W gap: missing the "why this matters"'
+- source: |-
+    niemanstoryboard.org — the-pitch-a-veteran-freelancer-on-pitching-the-new-york-times-magazine-and-more: opening choice for audience comprehension
   article: |-
-    The state Department of Transportation announced Tuesday that the eastbound lanes of Highway 95 between exits 12 and 18 will be closed for repaving from May 5 through May 22.
+    Why did you decide to open with numbers rather than a character or the news hook? Generally, it's sound to start with anecdotal opening, but it depends on the magazine and the story. I've found that editors on the East Coast don't have as complete an understanding of environmental issues in the West. I thought it was a good idea in this case to start with what's at stake: This wildfire thing is a big fucking deal even though it never touches you.
   critiques:
   - agent: city_editor
-    text_quote: between exits 12 and 18 will be closed for repaving from May 5 through May 22
-    span: [78, 159]
-    issue_label: no "why this matters" for the commuter
+    text_quote: |-
+      Why did you decide to open with numbers rather than a character or the news hook? Generally, it's sound to start with anecdotal opening, but it depends on the magazine and the story. I've found that editors on the East Coast don't have as complete an understanding of environmental issues in the West. I thought it was a good idea in this case to start with what's at stake: This wildfire thing is a big fucking deal even though it never touches you.
+    span:
+    - 0
+    - 447
+    issue_label: opening choice for audience comprehension
     question: |-
-      We have the who, what, when, where. We never say what this means for the 40,000 daily commuters on that stretch — detour route? Expected delay? Best alternate?
+      Tullis chose to open with data rather than anecdote, reasoning that East Coast editors needed to understand scale and stakes before being drawn into character. He says: 'I thought it was a good idea in this case to start with what's at stake: This wildfire thing is a big fucking deal even though it never touches you.'
     why_it_matters: |-
-      A road-closure story exists to help readers plan around it. Without the practical impact, it's a press release.
+      A strong opening balances reader engagement with reader education; when your editor may not fully grasp the topic's importance, establishing stakes upfront can anchor an abstract policy story in urgency.
     fix_suggestion: |-
-      Add a graf: "Drivers will be detoured onto Route 17 and should expect delays of 20 to 40 minutes during peak hours, the agency said."
+      Know your editor's baseline knowledge of your topic. If they need convincing the subject matters before they'll care about the people in it, lead with scope and significance, not sentiment.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-pitch-a-veteran-freelancer-on-pitching-the-new-york-times-magazine-and-more: news peg and editorial calendar awareness
+  article: |-
+    I think it's a good idea to include a plan... Do you always speak to the visuals and editorial calendar? I think it helps to give a news peg, for them and for you. I've had a story sit around for six months, since a story without a peg becomes easy to push from the schedule. It shows that you're thinking like an editor.
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      I think it's a good idea to include a plan... Do you always speak to the visuals and editorial calendar? I think it helps to give a news peg, for them and for you. I've had a story sit around for six months, since a story without a peg becomes easy to push from the schedule. It shows that you're thinking like an editor.
+    span:
+    - 0
+    - 321
+    issue_label: news peg and editorial calendar awareness
+    question: |-
+      Tullis includes a reporting plan and explicitly ties his story to an anticipated news event—summer wildfires—so editors understand both what he'll deliver and when. He notes that stories without pegs languish on assignment schedules.
+    why_it_matters: |-
+      Editors need permission to commit resources and schedule space; a story without a news hook or time pressure is easy to defer indefinitely.
+    fix_suggestion: |-
+      Always anchor your pitch to a news cycle or reporting window. Tell the editor when you'll report, what newsy moment makes this timely, and why waiting reduces the story's value.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-pitch-hate-to-wait-a-marie-claire-editor-answers-pitch-emails-within-48-hour: Pitch density and economy of language
+  article: |-
+    This initial query is just one paragraph long, and she hasn't secured access. Why does that work? It's short, but it covers a lot of ground, which is pretty ideal. This meaty paragraph covers what the thing is, what types of people we might be able to feature, what else has been written about it, and how the story will build on what else is out there.
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      This initial query is just one paragraph long, and she hasn't secured access. Why does that work? It's short, but it covers a lot of ground, which is pretty ideal. This meaty paragraph covers what the thing is, what types of people we might be able to feature, what else has been written about it, and how the story will build on what else is out there.
+    span:
+    - 0
+    - 353
+    issue_label: Pitch density and economy of language
+    question: |-
+      Why does a short, one-paragraph pitch with no secured sources work better than a longer, over-reported initial query? Because it covers essential ground—the what, the who, the precedent, and the fresh angle—without wasting anyone's time.
+    why_it_matters: |-
+      A tight pitch gives an editor enough to assess interest and ask smart follow-up questions, rather than forcing writers to build out premature reporting that may get redirected.
+    fix_suggestion: |-
+      When pitching, include: the core concept, representative characters or access strategy, prior coverage, and what's new since that coverage. One substantive paragraph beats five pages of half-formed reporting.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-pitch-hate-to-wait-a-marie-claire-editor-answers-pitch-emails-within-48-hour: Peg as gatekeeping question for news-driven sections
+  article: |-
+    How often do you respond to a pitch with questions? Probably 99 percent of the time. Most of the time, the first question is, 'What's the peg for this?' That's not always the case for features, but is crucial for News Feed.
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      How often do you respond to a pitch with questions? Probably 99 percent of the time. Most of the time, the first question is, 'What's the peg for this?' That's not always the case for features, but is crucial for News Feed.
+    span:
+    - 0
+    - 223
+    issue_label: Peg as gatekeeping question for news-driven sections
+    question: |-
+      Why ask 'What's the peg for this?' on nearly every pitch? Because the editor needs to know *when* the story can run and what news trigger justifies its timing—essential for a section with a four-month lead time.
+    why_it_matters: |-
+      The peg question ensures stories aren't pitched as evergreen when they need a hook; it also manages expectations about deadlines and publication windows.
+    fix_suggestion: |-
+      For News Feed pitches especially, answer 'What's the peg?' before being asked. Give the news hook, the timing, why now. For features, a peg is nice but less critical.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-pitch-at-the-guardians-long-read-no-rigid-formula-or-geographic-limits: establishing subject relevance without news hook
+  article: |-
+    The writer is obviously conscious here that this guy isn't a household name. Obviously, reviews in Newsweek and Obrist's comment help answer the 'why this guy' question... This list of the ways in which he's percolating in more mainstream culture felt like a good way of saying, 'This person is current and matters.'
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      The writer is obviously conscious here that this guy isn't a household name. Obviously, reviews in Newsweek and Obrist's comment help answer the 'why this guy' question... This list of the ways in which he's percolating in more mainstream culture felt like a good way of saying, 'This person is current and matters.'
+    span:
+    - 0
+    - 316
+    issue_label: establishing subject relevance without news hook
+    question: |-
+      We work on fairly long lead times... we're not generally looking for hooks per se. We want everything we publish to have a feeling of urgency—this is something that matters now—without necessarily being pegged to something.
+    why_it_matters: |-
+      Demonstrating that a subject is gaining cultural traction—through citations, reviews, mentions—creates a sense of timeliness without requiring a hard news peg.
+    fix_suggestion: |-
+      For profiles of lesser-known subjects, gather evidence of rising influence (press mentions, institutional recognition, peer adoption) to justify the 'why now' without a news event.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — stuck-before-you-start-eat-a-cookie: universal writing advice rarely transfers
+  article: |-
+    The tips came pouring in — writer friends, journalist friends, friend friends. Everyone wanted to be helpful. Everyone wanted to provide the perfect tip that would shake me out of my paralysis. They were all great tips. I used none of them.
+  critiques:
+  - agent: city_editor
+    text_quote: |-
+      The tips came pouring in — writer friends, journalist friends, friend friends. Everyone wanted to be helpful. Everyone wanted to provide the perfect tip that would shake me out of my paralysis. They were all great tips. I used none of them.
+    span:
+    - 0
+    - 240
+    issue_label: universal writing advice rarely transfers
+    question: |-
+      Hertzel notes that while her Facebook friends offered well-intentioned, specific tactics (eat a cookie, go for a walk, write 'Dear Mom'), none of them worked for her. She observes: 'I think we each must find our own way, and none of these suggestions — helpful as they are — was what I needed.'
+    why_it_matters: |-
+      Writing rituals and unblocking tactics are deeply personal; what works for one writer may actively harm another's process.
+    fix_suggestion: |-
+      When seeking writing advice from peers, listen generously but don't expect to adopt their solutions wholesale. Use their examples as inspiration for discovering your own process.
     replacement: null
     severity: medium

@@ -18,7 +18,7 @@ The "feature about nothing" trap. The piece is beautifully written, the subject 
 
 Time discipline. Features can move freely through time but they have to do so deliberately. Random tense shifts, unclear chronology, or scene-changes that aren't signposted leave the reader lost.
 
-The "kicker." Features are remembered for their endings. The last paragraph should land — an image, a gesture, a line of dialogue, a small fact that resonates back through the piece. A summary ending ("And so, X had become Y") is a wasted kicker.
+The "closing." Features are remembered for their endings. The last paragraph should land — an image, a gesture, a line of dialogue, a small fact that resonates back through the piece. A summary ending ("And so, X had become Y") is a wasted closing.
 
 Anecdote selection. Each anecdote in the piece should advance the story or reveal something specific about the subject. Anecdotes chosen because they're "good stories" but don't carry the piece forward are filler.
 
@@ -37,7 +37,7 @@ High severity. Significant rework.
 * No narrative arc — no tension, no rising action, no payoff. The piece is a static portrait.
 * Entire piece exists in summary, no scenes on the page.
 * "Feature about nothing": no one-sentence summary possible.
-* Kicker that just summarizes ("And so, the village had changed forever").
+* Closing that just summarizes ("And so, the village had changed forever").
 
 Medium severity. Real weakness.
 
@@ -83,7 +83,7 @@ Never use em or en dashes. Use a period, a comma, a colon, a semicolon, or paren
   "agent": "features_editor",
   "text_quote": "<verbatim substring of the article>",
   "span": [<start>, <end>],
-  "issue_label": "<2-5 words, e.g. 'no scene, all summary', 'missing kicker', 'feature about nothing'>",
+  "issue_label": "<2-5 words, e.g. 'no scene, all summary', 'missing closing', 'feature about nothing'>",
   "question": "<diagnostic in features-editor voice. Two short sentences max.>",
   "why_it_matters": "<one sentence: what it costs narrative pull.>",
   "fix_suggestion": "<concrete craft move.>",

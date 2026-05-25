@@ -1,101 +1,312 @@
-# Exemplars for opinion_editor (Otto)
-# Bootstrap synthetic exemplars in opinion-editor voice. Will be replaced
-# by real-data ingestion (CJR criticism of op-eds, Sulzberger-era Public
-# Editor columns, Poynter feedback) in Phase 2.
+# Exemplars for opinion_editor
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the opinion_editor lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
 #
-- source: 'no identifiable thesis by graf 3'
+- source: |-
+    niemanstoryboard.org — an-editors-sensitive-guide-to-interviewing-victims-of-trauma: distinguishing authentic purpose from self-serving rationalization
   article: |-
-    Our city is at a crossroads. Many people are talking about housing affordability. Others are worried about safety. The mayor has made several announcements. It is time we had a real conversation about what kind of city we want to be.
+    Your purpose must emanate from an honest place. You have to believe there is some greater good in telling the story. I'm not talking about a souped-up pitch aimed at convincing a trauma survivor or a victim's family to talk to you. And I'm not talking about a seemingly lofty purpose that, boiled down, is more about your reflected glory in the storytelling than the experiences of those whose stories you tell.
   critiques:
   - agent: opinion_editor
-    text_quote: It is time we had a real conversation about what kind of city we want to be.
-    span: [153, 230]
-    issue_label: no thesis, just gesturing
+    text_quote: |-
+      Your purpose must emanate from an honest place. You have to believe there is some greater good in telling the story. I'm not talking about a souped-up pitch aimed at convincing a trauma survivor or a victim's family to talk to you. And I'm not talking about a seemingly lofty purpose that, boiled down, is more about your reflected glory in the storytelling than the experiences of those whose stories you tell.
+    span:
+    - 0
+    - 411
+    issue_label: distinguishing authentic purpose from self-serving rationalization
     question: |-
-      Three grafs in and there's still no argument. "Time for a real conversation" is the canonical opinion-piece evasion: it asks for nothing and commits to nothing.
+      Your purpose must emanate from an honest place. You have to believe there is some greater good in telling the story... I'm not talking about a seemingly lofty purpose that, boiled down, is more about your reflected glory in the storytelling than the experiences of those whose stories you tell.
     why_it_matters: |-
-      Without a thesis, the reader has nothing to engage with — agreement or disagreement is impossible. It's a vibe, not a piece.
+      Holding reporters accountable to genuine ethical motivation—not just plausible-sounding justifications—is the difference between journalism that serves survivors and journalism that exploits them.
     fix_suggestion: |-
-      State the argument in one sentence at the end of graf 2: "The city should X." Then spend the rest of the piece defending that.
+      Before pursuing a trauma story, write down your actual purpose in plain language, then ask yourself honestly whether it centers the survivor's dignity and agency or your own professional advancement.
     replacement: null
     severity: high
-- source: 'strawman of the opposing view'
+- source: |-
+    niemanstoryboard.org — writing-past-politics-to-a-female-way-of-approaching-things-in-commentary: thesis clarity on gender and form
   article: |-
-    Critics of the policy believe we should just do nothing and let the problem solve itself. They have no real plan and no real care for the people affected.
+    Schmich attributes her longevity to the way she interprets the column... 'That is probably more of a female way of approaching things...but I was redefining this genre for the way I needed to work.'
   critiques:
   - agent: opinion_editor
-    text_quote: Critics of the policy believe we should just do nothing and let the problem solve itself.
-    span: [0, 89]
-    issue_label: strawman opposing view
+    text_quote: |-
+      Schmich attributes her longevity to the way she interprets the column... 'That is probably more of a female way of approaching things...but I was redefining this genre for the way I needed to work.'
+    span:
+    - 0
+    - 198
+    issue_label: thesis clarity on gender and form
     question: |-
-      No critic has ever argued "do nothing and let it solve itself." This is a strawman, and any reader who actually holds the opposing view will dismiss the entire piece.
+      Schmich articulates a clear editorial philosophy—that she reimagined the metro column from a male-dominated 'put up your dukes' tradition into something that centers human experience over political combat. Does she make this move explicit enough as her structural principle, or does it remain somewhat impressionistic?
     why_it_matters: |-
-      Steelman-then-refute is the bar. Strawman-then-mock signals to the only readers who needed convincing that you didn't take them seriously.
+      Readers understand where a columnist is coming from and what they're trying to do when the underlying thesis—not just the voice—is named.
     fix_suggestion: |-
-      State the strongest version of the opposing argument fairly, then refute it. "Critics argue that intervention X creates dependency effect Y. The evidence on this is..."
-    replacement: null
-    severity: high
-- source: 'contested fact dressed as opinion'
-  article: |-
-    I believe that tax cuts pay for themselves.
-  critiques:
-  - agent: opinion_editor
-    text_quote: I believe that tax cuts pay for themselves.
-    span: [0, 43]
-    issue_label: fact dressed as opinion
-    question: |-
-      Whether tax cuts pay for themselves is a contested empirical claim, not an opinion. "I believe" is being used here to insulate a factual assertion from fact-checking.
-    why_it_matters: |-
-      Smuggling fact-claims in as opinion is the move that gets opinion pieces called dishonest by their critics.
-    fix_suggestion: |-
-      Either acknowledge it as a contested empirical claim ("The evidence on whether tax cuts pay for themselves is mixed; my reading of the strongest studies is...") or treat your position as opinion about policy values, not opinion about empirical fact.
-    replacement: null
-    severity: high
-- source: 'goalpost move between positions'
-  article: |-
-    The proposal to increase the minimum wage to $20 is reckless. ... [3 grafs of argument against $20] ... So no one should support raising the minimum wage at all.
-  critiques:
-  - agent: opinion_editor
-    text_quote: So no one should support raising the minimum wage at all.
-    span: [120, 177]
-    issue_label: goalpost move
-    question: |-
-      The piece argues against $20 then jumps to opposing any wage increase. Those are two different positions and you've only earned the first one.
-    why_it_matters: |-
-      A goalpost move is the most-cited weakness in op-ed feedback — readers spot it and lose trust.
-    fix_suggestion: |-
-      Either argue against any minimum-wage increase from the start (and address $15, $18, $20 separately), or end with the position the piece actually argued for: against $20 specifically.
+      Opinion columnists should name their formal intervention early, not just demonstrate it over time. What are you redefining and why?
     replacement: null
     severity: medium
-- source: 'closing that restates instead of landing'
+- source: |-
+    niemanstoryboard.org — qa-a-conversation-with-alexandra-petri-on-conjugating-gender-and-politics: tension between poetic form and editorial standardization
   article: |-
-    In conclusion, climate change is a serious issue and we should take it seriously.
+    When I started writing I just let the line breaks do all the work in terms of where the pauses are. I didn't have periods in a bunch of places. So the editors went through and standardized it a little. Now it's more like you would find in your grammar textbook, and less freeform verse.
   critiques:
   - agent: opinion_editor
-    text_quote: In conclusion, climate change is a serious issue and we should take it seriously.
-    span: [0, 81]
-    issue_label: closing restates thesis
+    text_quote: |-
+      When I started writing I just let the line breaks do all the work in terms of where the pauses are. I didn't have periods in a bunch of places. So the editors went through and standardized it a little. Now it's more like you would find in your grammar textbook, and less freeform verse.
+    span:
+    - 0
+    - 286
+    issue_label: tension between poetic form and editorial standardization
     question: |-
-      Your kicker is restating what you opened with. The last graf is the most-remembered slot in the piece. Don't waste it on summary.
+      Petri reveals that her copy editors 'standardized' her deliberately broken punctuation and line breaks into traditional grammar-textbook format. She notes: 'I think sometimes the rhythm of poetic speech versus the rhythm of normal speech can help you get a point across more forcefully.' Was the standardization a loss?
     why_it_matters: |-
-      A wasted kicker is a wasted argument. The reader leaves with no specific action, no sharper formulation, no stake.
+      The editorial choice to normalize her form may have weakened the piece's ability to use rhythm and visual white space as argumentative tools—trading formal innovation for clarity.
     fix_suggestion: |-
-      End with one specific implication: a call to action, a policy mechanism, a counter-intuitive consequence — something the reader couldn't have anticipated from the opening.
+      Opinion editors should ask: does the writer's formal choice (broken syntax, unconventional punctuation, line breaks) serve the argument, or just decorate it? If it serves, push back against standardization requests.
     replacement: null
     severity: medium
-- source: '"studies show" with no study named'
+- source: |-
+    niemanstoryboard.org — qa-a-conversation-with-alexandra-petri-on-conjugating-gender-and-politics: sourcing of quoted language and paraphrase
   article: |-
-    Studies show that this approach has been counterproductive in cities where it has been tried.
+    Were all the phrases you used in your piece taken from published reports about Kavanaugh's accusers and defenders? I'd seen a lot of them in headlines. The first couple were from accounts of what happened. Then you get into the comments where people will be like, 'She was setting herself up for this' or 'She should have been careful.'
   critiques:
   - agent: opinion_editor
-    text_quote: Studies show that this approach has been counterproductive
-    span: [0, 60]
-    issue_label: unnamed studies
+    text_quote: |-
+      Were all the phrases you used in your piece taken from published reports about Kavanaugh's accusers and defenders? I'd seen a lot of them in headlines. The first couple were from accounts of what happened. Then you get into the comments where people will be like, 'She was setting herself up for this' or 'She should have been careful.'
+    span:
+    - 0
+    - 336
+    issue_label: sourcing of quoted language and paraphrase
     question: |-
-      "Studies show" with no study named is the canonical opinion-page tell. Either cite the studies or weaken the claim.
+      The interviewer asks whether the phrases Petri used were direct quotes or reconstructions from headlines and comments. Petri confirms some came from 'accounts' and some from comment sections—but the distinction between what's quoted versus paraphrased versus synthesized isn't entirely clear.
     why_it_matters: |-
-      Unnamed-studies is the first move a hostile reader screenshots to discredit a piece.
+      When a columnist is using language as evidence of cultural patterns, readers need to know whether they're seeing direct quotes from the public record or the writer's synthesis of a tone she observed.
     fix_suggestion: |-
-      Name at least one specific study with author and year, or rewrite as "Available evidence on cities that have tried this is mixed; the strongest case against is..."
+      If a piece relies on quoted or representative language to make its argument, be explicit about sourcing: 'These are actual headlines' vs. 'This is the tone I've seen in comments' vs. 'This is my paraphrase of a pattern.' The form of the piece shouldn't obscure the origin of the evidence.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — 14-hours-from-event-to-post-delivering-narrative-with-context-on-deadline: earned opinion grounded in accumulated reporting
+  article: |-
+    It was the extemporaneous product of an attention-seeking, room-reading savant, an instinctual gauger and tweaker and torquer of crowds... Yes in that I hadn't written that sentence before going to Greenville. No in that over the last several years, I've had many, many conversations about Trump with many, many people who know him... and this sentence is a result of all of those conversations, distilled.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      It was the extemporaneous product of an attention-seeking, room-reading savant, an instinctual gauger and tweaker and torquer of crowds... Yes in that I hadn't written that sentence before going to Greenville. No in that over the last several years, I've had many, many conversations about Trump with many, many people who know him... and this sentence is a result of all of those conversations, distilled.
+    span:
+    - 0
+    - 406
+    issue_label: earned opinion grounded in accumulated reporting
+    question: |-
+      Kruse inserts a bold analytical sentence about Trump's psychology mid-rally. But he didn't compose it on deadline from nothing—it's distilled from years of reporting and conversations. How does this distinction between 'composed now' and 'synthesized from prior reporting' affect credibility?
+    why_it_matters: |-
+      It allows opinion to feel authoritative even in a news story, because it's anchored in documented expertise rather than in-the-moment reaction.
+    fix_suggestion: |-
+      If you're going to assert an interpretation on deadline, make sure it's rooted in prior reporting conversations and expertise, not guesswork. The voice can be confident because the sourcing is deep.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — when-the-story-we-cover-becomes-our-own: gatekeeping between private reflection and public writing
+  article: |-
+    If I just wanted to write about myself, I have a journal. For something I'm creating for mass consumption, I want it to serve a greater purpose than simply a place for my thoughts to bounce around.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      If I just wanted to write about myself, I have a journal. For something I'm creating for mass consumption, I want it to serve a greater purpose than simply a place for my thoughts to bounce around.
+    span:
+    - 0
+    - 197
+    issue_label: gatekeeping between private reflection and public writing
+    question: |-
+      What's the distinction between writing for yourself and writing for an audience? Graziosi argues that public writing must transcend personal catharsis and serve a larger purpose—otherwise it belongs in a journal.
+    why_it_matters: |-
+      This discipline prevents writers from conflating emotional honesty with editorial necessity, ensuring personal essays earn their place in publication.
+    fix_suggestion: |-
+      Before including a personal detail or anecdote, ask: does this serve the reader's understanding of the larger story, or just my need to process?
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — calling-out-olympic-officials-past-actions-as-coronavirus-threatens-the-2020-gam: stakes the reasonable middle before pivoting to accountability
+  article: |-
+    Jenkins says it's too early to argue for calling off the Tokyo Olympics, scheduled to commence in about three months, but by no means too early to ask the IOC how it intends to keep the athletes safe and healthy.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      Jenkins says it's too early to argue for calling off the Tokyo Olympics, scheduled to commence in about three months, but by no means too early to ask the IOC how it intends to keep the athletes safe and healthy.
+    span:
+    - 0
+    - 212
+    issue_label: stakes the reasonable middle before pivoting to accountability
+    question: |-
+      After that crackling lead sentence, Jenkins says it's too early to argue for calling off the Tokyo Olympics... but by no means too early to ask the IOC how it intends to keep the athletes safe and healthy.
+    why_it_matters: |-
+      Establishing what you're NOT arguing before you argue your actual point inoculates an opinion piece against strawman dismissals and shows intellectual seriousness.
+    fix_suggestion: |-
+      In opinion writing about contested topics, explicitly fence off what remains undecided before staking your actual claim—it gives the argument room to breathe and makes the writer look fair-minded.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — calling-out-olympic-officials-past-actions-as-coronavirus-threatens-the-2020-gam: personal conviction grounds the argument in moral urgency
+  article: |-
+    It motivated coverup. And when athletes or families try to sue, their position is, 'We had no legal duty to you or your children.' I don't trust these entities as far as I can throw them.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      It motivated coverup. And when athletes or families try to sue, their position is, 'We had no legal duty to you or your children.' I don't trust these entities as far as I can throw them.
+    span:
+    - 0
+    - 187
+    issue_label: personal conviction grounds the argument in moral urgency
+    question: |-
+      What broke the tie for me was the knowledge that the IOC and other governing bodies have a bad habit of saying, 'Come on in, the water is fine,' when they know it's not... Those professions of confidence and expertise led to many, many more victims... I don't trust these entities as far as I can throw them.
+    why_it_matters: |-
+      The columnist's genuine distrust—rooted in pattern recognition across multiple Olympic failures—becomes the intellectual and moral engine of the piece, not just rhetoric.
+    fix_suggestion: |-
+      In opinion writing, show the reader the specific pattern or repeated behavior that hardened your conviction, not just the conclusion you've reached.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — ditching-monkey-mind-to-find-joy-while-writing: first-person vulnerability establishes interview stakes
+  article: |-
+    The writer's personal admission: 'Personally, I've been a student of Buddhism and meditation for decades...But no matter how many songs, poems or stories I compose, I lose my composure around deadline.'
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      The writer's personal admission: 'Personally, I've been a student of Buddhism and meditation for decades...But no matter how many songs, poems or stories I compose, I lose my composure around deadline.'
+    span:
+    - 0
+    - 202
+    issue_label: first-person vulnerability establishes interview stakes
+    question: |-
+      By admitting her own struggle with deadline panic despite decades of practice, the interviewer establishes both credibility (she's not a casual observer) and genuine need for Cushman's guidance. Does this vulnerability in the interviewer's voice make the Q&A feel like a peer conversation rather than a feature extraction?
+    why_it_matters: |-
+      The interviewer's honesty about her own limitations makes the interview feel like a real conversation between two people wrestling with the same problem, not an expert dispensing wisdom to a novice.
+    fix_suggestion: |-
+      In Q&A pieces, share your own stake in the problem before asking the expert—it transforms the dynamic from interrogation to genuine inquiry.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — a-literary-take-on-a-hole-in-the-ground: context paragraph stakes a moral claim without attribution
+  article: |-
+    This is about how the whims of a plutocrat can upend the lives of an entire city block, challenging the culture and the well-being of the people who live there. It's about coming to terms with everyday existence in New York, where the rich run rampant and the rest of us have to deal with it.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      This is about how the whims of a plutocrat can upend the lives of an entire city block, challenging the culture and the well-being of the people who live there. It's about coming to terms with everyday existence in New York, where the rich run rampant and the rest of us have to deal with it.
+    span:
+    - 0
+    - 292
+    issue_label: context paragraph stakes a moral claim without attribution
+    question: |-
+      The context paragraph is unattributed and makes a sweeping moral claim—'the rich run rampant.' Margolick says his editor Bill Ferguson actually insisted on this authorial voice. How does the Times justify an unattributed value judgment in what reads like a news feature?
+    why_it_matters: |-
+      This move signals a shift in Times house style: the paper is 'trying harder to level with its readers, to drop its air of Olympian detachment.' It requires confident editors and writers who understand the difference between opinion and reporting.
+    fix_suggestion: |-
+      If your context paragraph makes a judgment call, you need editorial cover and a clear sense of your outlet's appetite for authorial voice. Know your lane: this works in the Sunday Metropolitan section because it's positioned as narrative, not straight news. Harder sell in the daily A section.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — the-route-to-a-pulitzer-in-opinion-writing-rigorous-reporting: opinion must be declarative, not hedged
+  article: |-
+    My editor said, 'Just spit it out, man. You got an opinion. Spit it out.' My advice is to give it a chance. You don't have to give up your reporting skills.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      My editor said, 'Just spit it out, man. You got an opinion. Spit it out.' My advice is to give it a chance. You don't have to give up your reporting skills.
+    span:
+    - 0
+    - 156
+    issue_label: opinion must be declarative, not hedged
+    question: |-
+      Gerritt admits that when he first started writing editorials, 'one of my weaknesses was that my editorials and columns lacked strong opinion and read like well-reported feature stories.' His editor had to push him to state his position plainly rather than bury it in reporting. This suggests a common trap for reporters moving into opinion work.
+    why_it_matters: |-
+      An editorial without a clear, forceful position reads as reporting, not argument—it fails to do the work opinion is supposed to do, which is to persuade or illuminate a stance.
+    fix_suggestion: |-
+      When moving from reporting to opinion, explicitly separate the reporting foundation from the claim you're making. State your position early and plainly, then use reporting to support it. Don't let evidence do the work that argument should do.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — the-route-to-a-pulitzer-in-opinion-writing-rigorous-reporting: authority requires subject mastery plus confidence
+  article: |-
+    I think you have to have a little bit of swagger to write with authority. You need more than a news reporter does because, in a lot of cases, you are taking on the conventional wisdom.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      I think you have to have a little bit of swagger to write with authority. You need more than a news reporter does because, in a lot of cases, you are taking on the conventional wisdom.
+    span:
+    - 0
+    - 184
+    issue_label: authority requires subject mastery plus confidence
+    question: |-
+      Gerritt argues that editorial writers need 'swagger'—confidence born from genuine expertise. But he's also clear about what that swagger rests on: 'The only way you can be sure of yourself is to know what you're writing about. If you try to fake that, you're going to get in trouble.'
+    why_it_matters: |-
+      Earned authority—not faux certainty—is what allows an editorial writer to challenge conventional wisdom without sounding reckless or inexperienced.
+    fix_suggestion: |-
+      Don't adopt a confident tone until you've done the reporting that justifies it. If you're unsure, do more interviews and document review, not more rhetorical hand-waving.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — roy-peter-clark-on-the-embedded-narrative: solution proposed without addressing counterargument
+  article: |-
+    The closing argument that underfunded arts journalism can be expanded by tapping journalists' own creative passions—poets, musicians, painters on staff—as a resource for coverage, 'avoiding conflicts of interest, and with necessary transparency.'
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      The closing argument that underfunded arts journalism can be expanded by tapping journalists' own creative passions—poets, musicians, painters on staff—as a resource for coverage, 'avoiding conflicts of interest, and with necessary transparency.'
+    span:
+    - 0
+    - 246
+    issue_label: solution proposed without addressing counterargument
+    question: |-
+      Clark proposes using journalists' personal creative interests as a reporting resource, but does he adequately grapple with the conflict-of-interest risks? Is 'necessary transparency' enough?
+    why_it_matters: |-
+      An opinion move that sidesteps a legitimate objection (that reporter-artists might favor their own communities or lack objectivity) weakens the argument's credibility.
+    fix_suggestion: |-
+      When proposing a solution to a problem, name the strongest objection readers will raise and answer it directly, rather than tucking a disclaimer into a subordinate clause.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — an-investigative-journalist-takes-a-yearly-leap-out-of-the-comfort-zone-into-fic: thematic armature beneath plot
+  article: |-
+    A major lesson, though, is that to truly resonate with readers, a story has to operate on multiple levels. You need the strong characters and cliffhangers and twists to pull you along, but what's the deeper thing the story is really about? Redemption. Forgiveness. Healing. Once you settle on that, it should inform and shape the structure, plot and dialogue and everything else that goes into the piece.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      A major lesson, though, is that to truly resonate with readers, a story has to operate on multiple levels. You need the strong characters and cliffhangers and twists to pull you along, but what's the deeper thing the story is really about? Redemption. Forgiveness. Healing. Once you settle on that, it should inform and shape the structure, plot and dialogue and everything else that goes into the piece.
+    span:
+    - 0
+    - 404
+    issue_label: thematic armature beneath plot
+    question: |-
+      How do you prevent a story from being merely entertaining? Borowski insists that beneath the plot mechanics, you must identify the true subject—the theme—and let that govern all your structural and dialogue choices. 'What is the story about?' has two answers: the plot and the deeper idea.
+    why_it_matters: |-
+      A story that operates only on the level of plot feels thin and forgettable; when plot serves a thematic purpose (redemption, healing, forgiveness), the reader carries something away that lingers.
+    fix_suggestion: |-
+      Before you draft, write down your story's plot summary in one sentence, then write down its thematic summary in one sentence. Every scene should serve both.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — annotation-tuesday-criminal-and-the-fifth-suspect: explicit narrator positioning before evidence unfolds
+  article: |-
+    You say in the introduction to this episode that 'It's a horrible story.' Why did you choose to use such strong language before the story begins? Judge: In this story, we had a clear case of misjustice being done to a man. That was clear. There was no skirting around the facts.
+  critiques:
+  - agent: opinion_editor
+    text_quote: |-
+      You say in the introduction to this episode that 'It's a horrible story.' Why did you choose to use such strong language before the story begins? Judge: In this story, we had a clear case of misjustice being done to a man. That was clear. There was no skirting around the facts.
+    span:
+    - 0
+    - 278
+    issue_label: explicit narrator positioning before evidence unfolds
+    question: |-
+      Judge defends leading with 'It's a horrible story' by claiming they had 'a clear case of misjustice'—no ambiguity about the facts. The strong language isn't hedged; it's a direct signal to the listener to prepare for injustice and feel compassion for the subject.
+    why_it_matters: |-
+      Declaring judgment upfront is only defensible when the underlying facts genuinely support that judgment without dispute; otherwise it primes listeners to interpret ambiguous evidence in a predetermined direction.
+    fix_suggestion: |-
+      Reserve explicit moral framing for cases where the factual foundation is ironclad. If facts are still contested or complex, let listeners discover the horror gradually rather than being told to expect it.
     replacement: null
     severity: medium

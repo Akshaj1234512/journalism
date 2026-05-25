@@ -47,7 +47,7 @@ Medium severity. Notable weakness.
 Low severity. Polish.
 
 * Generic quote that doesn't reveal voice.
-* Background graf that could have been integrated into scene rather than dumped.
+* Background paragraph that could have been integrated into scene rather than dumped.
 
 # WHEN NOT TO FLAG
 

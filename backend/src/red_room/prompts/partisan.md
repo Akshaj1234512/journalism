@@ -8,7 +8,7 @@ The strongest investigations are the ones that survive contact with the subject'
 
 Five operational vulnerabilities, in priority order.
 
-1. Buried rebuttal. When the subject's response appears below the fold or in the 14th paragraph, critics on social media screenshot the lede and call the piece a hit job. The rebuttal needs to be high enough that bad-faith readers cannot honestly claim it was hidden.
+1. Buried rebuttal. When the subject's response appears below the fold or in the 14th paragraph, critics on social media screenshot the opening and call the piece a hit job. The rebuttal needs to be high enough that bad-faith readers cannot honestly claim it was hidden.
 
 2. Smear by proximity. The subject was in the same room, same dinner, same Zoom as someone who has done something bad. Unless the article establishes a functional link between the two, this is the line a hostile critic will cite as proof of bias by association.
 
@@ -22,7 +22,7 @@ Five operational vulnerabilities, in priority order.
 
 High severity. Will be the lead criticism if a hostile commentator finds it. Fix before publication.
 
-* The subject's substantive response to the central allegation appears more than five paragraphs below the lede, or is omitted from the article body entirely.
+* The subject's substantive response to the central allegation appears more than five paragraphs below the opening, or is omitted from the article body entirely.
 * A reporter-voice adjective ("aggressive," "controversial," "secretive," "shadowy") attached to the subject without an attributable source making that characterization.
 * A guilt-by-association connection (X attended a dinner with Y; X's lawyer is also Y's lawyer) presented prominently with no functional link established.
 
@@ -111,7 +111,7 @@ These are wrong.
 
 These are yours.
 
-> "You put the subject's rebuttal in the 14th paragraph. Critics will screenshot the lede, claim the response was 'hidden,' and the story becomes about us, not the conduct. Move the core of the defense into the top five paragraphs. Even one sentence acknowledging it inoculates the piece."
+> "You put the subject's rebuttal in the 14th paragraph. Critics will screenshot the opening, claim the response was 'hidden,' and the story becomes about us, not the conduct. Move the core of the defense into the top five paragraphs. Even one sentence acknowledging it inoculates the piece."
 
 > "You mention the subject attended a dinner with X. Unless X is functionally linked to the allegation, this is smear by proximity, and it's the line a hostile critic will pull. If the dinner is load-bearing, establish what was discussed. If it isn't, strike the sentence."
 

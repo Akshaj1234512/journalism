@@ -1,183 +1,311 @@
 # Exemplars for human_rights
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the human_rights lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
 #
 - source: |-
-    Australian Press Council adjudication (privacy breach, domestic violence complainant named and pictured)
+    niemanstoryboard.org — an-editors-sensitive-guide-to-interviewing-victims-of-trauma: ending interview with dignity, not retraumatization
   article: |-
-    The woman, Sarah Bennett of Maple Street, told the court her former partner had threatened her for months. A photograph of Bennett outside the courthouse accompanies this article.
+    Don't leave the person in a dark place. Ask questions that gently move them away from discussion of the trauma: What has given you strength? What brings you joy? What do you want others to know about your loved one?
   critiques:
   - agent: human_rights
-    text_quote: Sarah Bennett of Maple Street
-    span: [11, 40]
-    issue_label: domestic violence complainant named and located
+    text_quote: |-
+      Don't leave the person in a dark place. Ask questions that gently move them away from discussion of the trauma: What has given you strength? What brings you joy? What do you want others to know about your loved one?
+    span:
+    - 0
+    - 215
+    issue_label: ending interview with dignity, not retraumatization
     question: |-
-      The Australian Press Council upheld a privacy breach on this exact pattern: complainant named, street given, courthouse photograph run. Her former partner now has all three.
+      The most indelible advice my class heard about interviewing survivors also spoke to purpose. The advice was this: Don't leave the person in a dark place. Ask questions that gently move them away from discussion of the trauma.
     why_it_matters: |-
-      We just rebuilt her threat model for the person she sought a restraining order against.
+      Structuring an interview to end on a note of agency and reflection rather than raw pain respects the survivor's emotional wellbeing and recognizes that the reporter's presence creates a moral obligation beyond information-gathering.
     fix_suggestion: |-
-      Withhold her name and street, and do not run an identifying photograph. The story works without putting her in danger.
-    replacement: The woman, who asked not to be identified for her safety,
+      When planning a trauma interview, explicitly design the final third of questions to move from the trauma itself toward what the survivor values, preserves, or wants remembered—a deliberate shift in emotional terrain.
+    replacement: null
     severity: high
 - source: |-
-    Source-protection practice; the combination of details builds a searchable dossier
+    niemanstoryboard.org — writers-memoir-nerve-looks-at-science-and-psychology-of-fear: Family consent and narrative authority in memoir
   article: |-
-    Maria Lopez, 34, an undocumented housekeeper who lives in the Sunset Park neighbourhood, said her employer has not paid her for six weeks.
+    Holland included substantial material about her mother's death and ICU hospitalization, but noted: 'I don't know what everyone else who was there will think. With the exception of my dad, my family hasn't seen it yet. So that's scary, too. I wouldn't want to upset anyone or hurt them in some way.'
   critiques:
   - agent: human_rights
     text_quote: |-
-      Maria Lopez, 34, an undocumented housekeeper who lives in the Sunset Park neighbourhood
-    span: [0, 87]
-    issue_label: complete dossier on an undocumented source
+      Holland included substantial material about her mother's death and ICU hospitalization, but noted: 'I don't know what everyone else who was there will think. With the exception of my dad, my family hasn't seen it yet. So that's scary, too. I wouldn't want to upset anyone or hurt them in some way.'
+    span:
+    - 0
+    - 298
+    issue_label: Family consent and narrative authority in memoir
     question: |-
-      Full name, age, immigration status, occupation, neighbourhood, all in one sentence. ICE has subpoenaed newsrooms on less. Did Maria understand we would narrow her this far?
+      When you're writing about shared traumatic experiences—like a parent's death—who has the right to decide how that story gets told, and what's your obligation to people who were there but didn't agree to be in a published book?
     why_it_matters: |-
-      Each detail is harmless alone; together they are a searchable file with a deportation pathway at the end of it.
+      Publishing intimate family moments can wound people who didn't consent to their story being told, even if the author's motives are sound.
     fix_suggestion: |-
-      Use a first-name pseudonym, broaden the neighbourhood to the borough, and keep the immigration status only if it is essential and she agreed to it being public.
-    replacement: |-
-      Maria, a housekeeper in Brooklyn who asked that her full name not be used because of her immigration status,
+      Before publishing memoir that involves family, consider giving them advance notice and opportunity to object to specific details, even if you ultimately decide to publish. Distinguish between what you remember and what you're confident actually happened (Holland fact-checked her mother's hospitalization details rather than relying on grief-hazed memory).
+    replacement: null
     severity: high
-- source: Ethics practice on using trauma as a hook without follow-up infrastructure
+- source: |-
+    niemanstoryboard.org — wisdom-from-melissa-fay-greene-about-deep-reporting-on-sensitive-subjects: consent and dignity management with vulnerable sources
   article: |-
-    She still flinches at loud noises. In her first interview since the attack, the survivor described the night in detail, her voice breaking as she spoke.
+    Interviewing an adult with cognitive challenges is tricky; I proceeded carefully with Christina, 41, as if interviewing a young teenager, and in the company of her mom. And, honestly, interviewing adoptive parents can be delicate, too, especially when they've faced steep challenges... I reviewed their quotes with them before publication, having promised the adoptive parents that they could change their minds before publication and become anonymous.
   critiques:
   - agent: human_rights
     text_quote: |-
-      In her first interview since the attack, the survivor described the night in detail, her voice breaking as she spoke
-    span: [35, 151]
-    issue_label: trauma used as a hook with no infrastructure
+      Interviewing an adult with cognitive challenges is tricky; I proceeded carefully with Christina, 41, as if interviewing a young teenager, and in the company of her mom. And, honestly, interviewing adoptive parents can be delicate, too, especially when they've faced steep challenges... I reviewed their quotes with them before publication, having promised the adoptive parents that they could change their minds before publication and become anonymous.
+    span:
+    - 0
+    - 452
+    issue_label: consent and dignity management with vulnerable sources
     question: |-
-      Dart Center guidance is explicit: do not open on the worst night without consent on the framing and a contact channel afterwards. We opened on her worst night. Did she sign off on which line we used?
+      Interviewing an adult with cognitive challenges is tricky; I proceeded carefully with Christina, 41, as if interviewing a young teenager, and in the company of her mom... I believe that allowed folks to share more openly. One woman, a psychotherapist, told me her marriage had crashed soon after she and her husband realized what they were facing with the kid they'd brought home from Romania.
     why_it_matters: |-
-      Without consent on the framing and a way to reach us afterward, the story extracts from her and gives nothing back.
+      Offering pre-publication quote review and anonymity options to vulnerable sources—including both cognitively impaired adults and emotionally exposed parents—creates the trust needed for candid disclosure while preserving their dignity and agency.
     fix_suggestion: |-
-      Confirm she understood how the account would be used and how prominently, and add a way for her to reach the newsroom after publication.
+      When reporting on sensitive family situations or sources with cognitive vulnerabilities, offer contractual protections like quote review and anonymity options upfront; this transparency often yields deeper, more honest interviews.
     replacement: null
-    severity: medium
-- source: Ethics practice on a source losing control of the framing
-  article: |-
-    Asked about the hardest part, she said quietly, 'Some days I just don't know how I'll make rent.' The quote will run as the article's pull text and social card.
-  critiques:
-  - agent: human_rights
-    text_quote: The quote will run as the article's pull text and social card
-    span: [98, 159]
-    issue_label: source loses control of the framing
-    question: |-
-      She consented to the interview, not the pull quote. A line about not making rent becoming her social card is a separate decision, and we made it, not her.
-    why_it_matters: |-
-      The line she will be known for on the internet is now the most exposing line in the piece, chosen without her.
-    fix_suggestion: |-
-      Pick a pull quote that does not reduce her to her hardest moment, or check with her on which line she is comfortable being known by.
-    replacement: null
-    severity: medium
-- source: Ethics practice on identity details that are not load-bearing
-  article: |-
-    The suspect, an immigrant from Eastern Europe who speaks limited English, was arrested on Tuesday.
-  critiques:
-  - agent: human_rights
-    text_quote: an immigrant from Eastern Europe who speaks limited English
-    span: [13, 72]
-    issue_label: identity detail that is not load-bearing
-    question: |-
-      Does Eastern Europe or limited English have anything to do with the alleged crime? If not, the AP Stylebook calls this exactly the line that invites the reader to do the stereotyping for us.
-    why_it_matters: |-
-      When origin or language are not load-bearing, repeating them is the writer's choice to link the trait to the conduct.
-    fix_suggestion: |-
-      Cut the origin and language detail unless it is directly relevant. If it is, make the relevance explicit.
-    replacement: The suspect was arrested on Tuesday
-    severity: medium
-- source: WHO and Samaritans media guidelines on reporting suicide
-  article: |-
-    Mark Davies, a 24-year-old graphic designer, died by suicide on Tuesday at his apartment on Wilson Avenue. He hanged himself with a tie, police said. Friends said he had been struggling with depression.
-  critiques:
-  - agent: human_rights
-    text_quote: He hanged himself with a tie, police said
-    span: [107, 148]
-    issue_label: method of suicide described in detail
-    question: |-
-      WHO and Samaritans suicide-reporting guidelines are explicit: detailed method increases imitation, particularly in younger readers. We have published method and location. Does the public interest in either outweigh the documented copycat risk?
-    why_it_matters: |-
-      Detailed suicide method in print is the line research has tied directly to copycat behaviour.
-    fix_suggestion: Strike the method and the location. Lead with his life, end with
-      the 988 line.
-    replacement: |-
-      Mark Davies, 24, died by suicide on Tuesday. Friends said he had been struggling with depression. (Resources: if you are in distress, call or text 988.)
     severity: high
-- source: Ethics practice on identifying juvenile suspects
+- source: |-
+    niemanstoryboard.org — an-award-winning-food-writer-explores-the-legacy-of-sexual-identity-in-the-food-: source protection and proportional treatment of difficult material
   article: |-
-    Two boys, aged 14 and 15, were charged Tuesday with the burglary at the Ridgemont Mall. They are Tyler Mason, of Westgate Drive, and Daniel Kim of Maple Court.
-  critiques:
-  - agent: human_rights
-    text_quote: They are Tyler Mason, of Westgate Drive, and Daniel Kim of Maple Court
-    span: [88, 158]
-    issue_label: juveniles named in a charge
-    question: |-
-      Both boys are minors. Juvenile records are sealed because we recognise the disproportion between a 14-year-old and a name that will follow him to every future job. What public interest names them on a mall burglary?
-    why_it_matters: |-
-      Naming them forecloses the rehabilitation the sealed-record system exists to allow.
-    fix_suggestion: |-
-      Withhold names and streets. Report the charges, the ages, and the school district at most.
-    replacement: |-
-      Two boys, aged 14 and 15, were charged Tuesday with the burglary at the Ridgemont Mall
-    severity: high
-- source: Source-protection practice on inconsistent pseudonyms
-  article: |-
-    Aisha, who asked that her real name not be used, said she had been hiding from her ex-husband for two years. Aisha said the police had been slow to respond. 'I work at the Greenstone Salon on Mercer Street,' Aisha said. 'He knows where I work.'
-  critiques:
-  - agent: human_rights
-    text_quote: I work at the Greenstone Salon on Mercer Street
-    span: [158, 205]
-    issue_label: pseudonym contradicted by an identifying detail
-    question: |-
-      We gave Aisha a pseudonym to hide her from her ex-husband, then quoted her naming her workplace and the street. The pseudonym is undone by the quote we left in. Was this checked with her before publication?
-    why_it_matters: |-
-      An inconsistent pseudonym is worse than no pseudonym: it gives her a false sense of protection while still pointing him at her.
-    fix_suggestion: |-
-      Generalise the workplace and street, or, with her consent, drop the pseudonym and explain it. Do not leave the half-protection.
-    replacement: I work at a salon in the city. He knows where I work.
-    severity: high
-- source: Ethics practice on photographing children at protests and rallies
-  article: |-
-    Above the article: a photograph of an 8-year-old child holding a sign and shouting at counter-protesters at Saturday's rally.
+    Reports from 2000 suggest she was named as a suspect in a burglary... But at one point in this section, the tone shifts as Sen delves into a darker period of Gilmore's life... 'My sources had empathy for her struggles, not judgment,' he says. Furthermore, very few sources wanted to speak on the record about that period in her life, and he feels it important to keep trust with sources, especially those from marginalized communities.
   critiques:
   - agent: human_rights
     text_quote: |-
-      Above the article: a photograph of an 8-year-old child holding a sign and shouting at counter-protesters at Saturday's rally.
-    span: [0, 125]
-    issue_label: child identifiable in a polarised public event
+      Reports from 2000 suggest she was named as a suspect in a burglary... But at one point in this section, the tone shifts as Sen delves into a darker period of Gilmore's life... 'My sources had empathy for her struggles, not judgment,' he says. Furthermore, very few sources wanted to speak on the record about that period in her life, and he feels it important to keep trust with sources, especially those from marginalized communities.
+    span:
+    - 0
+    - 435
+    issue_label: source protection and proportional treatment of difficult material
     question: |-
-      An 8-year-old, identifiable face, at a polarised political rally. That image will follow them through school admissions, future job interviews, and the rest of their life. Did the parents consent to that, knowing how the image travels?
+      Sen faced the challenge of including difficult historical facts (burglary, fraud, identity theft charges) while respecting his sources' unwillingness to speak on record about that period and honoring the trust of a marginalized community. He chose to state the public record matter-of-factly but without giving these incidents disproportionate space.
     why_it_matters: |-
-      Children's images at political events persist indefinitely; the child's adult privacy outweighs the news value of one dramatic frame.
+      Keeping trust with marginalized sources sometimes means restraint—choosing not to dwell on salacious details even when they're public record, in order to preserve the relationship and center the subject's larger legacy.
     fix_suggestion: |-
-      Crop or blur the face, choose a wide-shot frame, or use a different image. If the parents have given informed consent for full identification, document it.
+      When reporting on difficult periods in a subject's life, check whether your sources from marginalized communities are willing to speak on record. If not, honor that boundary by stating public facts plainly but briefly, and consider whether dwelling on those details serves your central story or exploits the subject.
     replacement: null
-    severity: medium
-- source: Ethics practice on deception in newsgathering
+    severity: high
+- source: |-
+    niemanstoryboard.org — rezaian: duty of care to sources and vulnerable populations
   article: |-
-    Our reporter posed as a potential investor and recorded the meeting without disclosing her affiliation.
+    One piece of advice I give to journalists, especially those working in foreign countries is, 'Don't break any eggs. Don't make it any worse for people who live in places that you're covering than it already is.'...There's very little concern for what's going to happen to that person after this information becomes publicly known to the world.
   critiques:
   - agent: human_rights
     text_quote: |-
-      Our reporter posed as a potential investor and recorded the meeting without disclosing her affiliation
-    span: [0, 102]
-    issue_label: undisclosed deception in newsgathering
+      One piece of advice I give to journalists, especially those working in foreign countries is, 'Don't break any eggs. Don't make it any worse for people who live in places that you're covering than it already is.'...There's very little concern for what's going to happen to that person after this information becomes publicly known to the world.
+    span:
+    - 0
+    - 343
+    issue_label: duty of care to sources and vulnerable populations
     question: |-
-      Posing as someone else and secretly recording is the line Editors' Code Clause 10 (SPJ and BBC Editorial Guidelines say the same thing) puts a specific public-interest test on. Was that test applied? Did the editor sign off?
+      Rezaian emphasizes that journalists covering foreign countries often prioritize the 'most graphic or thrilling' telling of a story without considering the downstream consequences for the people and places they're writing about. He worried explicitly whether publishing his book might harm ordinary Iranians.
     why_it_matters: |-
-      Misrepresentation and secret recording without documented justification is the move that has cost reporters and outlets badly when challenged in court.
+      This articulates a crucial ethical boundary: the pursuit of a compelling narrative cannot override the safety and dignity of vulnerable populations; journalists must weigh their storytelling ambitions against real-world harm.
     fix_suggestion: |-
-      Document the public-interest justification, alternatives considered, and editor sign-off. If those were not in place, do not publish the recorded material.
+      Before publishing a story about foreign countries or vulnerable populations, conduct a harm assessment: what could happen to the sources, their families, or their communities after publication? Build that analysis into your editorial decisions.
     replacement: null
     severity: high
-- source: Example of a public figure speaking within their public role
+- source: |-
+    niemanstoryboard.org — faith-kohler-and-the-documentary-30-seconds-away: consent and grief boundary-setting
   article: |-
-    The police commissioner, speaking at a news conference, said the department would review its use-of-force policy after the incident.
-  critiques: []
-- source: Example of careful identification of a survivor with full documented consent
+    After Todd was killed, we actually interviewed his mother and one of his daughters, but I wondered at what point am I trespassing on his family's grief? We didn't use the footage, because it was terrible footage, the sound was horrible, but also because it didn't really add anything. I think he told his own story very well. And honestly looking back at the footage it felt voyeuristic. It felt so intrusive.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      After Todd was killed, we actually interviewed his mother and one of his daughters, but I wondered at what point am I trespassing on his family's grief? We didn't use the footage, because it was terrible footage, the sound was horrible, but also because it didn't really add anything. I think he told his own story very well. And honestly looking back at the footage it felt voyeuristic. It felt so intrusive.
+    span:
+    - 0
+    - 409
+    issue_label: consent and grief boundary-setting
+    question: |-
+      The filmmaker explicitly declined to use interviews with the deceased subject's family, recognizing the line between documentation and intrusion. Was that restraint the right call even though the family had consented?
+    why_it_matters: |-
+      Consent alone is not sufficient ethical guardrail; filmmakers must also consider whether including material serves the story or exploits vulnerability.
+    fix_suggestion: |-
+      When interviewing grieving relatives or vulnerable sources, ask whether the material adds understanding of the subject's story or merely extracts emotion for narrative effect—and exclude it if the latter.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — rejecting-the-simplified-news-narrative: reconstructing voice from digital evidence without consent
   article: |-
-    Maria, who agreed to be identified by her first name only after a counsellor walked her through the long-term implications, said the assault changed how she moved through public spaces.
-  critiques: []
+    Michelle Carter declined to participate in 'I Love You, Now Die.' How did you recreate her voice and inner thoughts without being able to interview her? ... The texts really were interviews. They were saying at the time what she was thinking.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      Michelle Carter declined to participate in 'I Love You, Now Die.' How did you recreate her voice and inner thoughts without being able to interview her? ... The texts really were interviews. They were saying at the time what she was thinking.
+    span:
+    - 0
+    - 242
+    issue_label: reconstructing voice from digital evidence without consent
+    question: |-
+      Carr asked Michelle Carter to participate 17 times but she declined. Instead, Carr used text messages as a stand-in for direct interview. The question becomes: can digital communications—even thousands of them—ethically substitute for a subject's own voice, especially in a case where the subject explicitly refused to participate?
+    why_it_matters: |-
+      Using texts as a proxy for interview access raises consent and representation questions; it allows a filmmaker to construct a narrative about a non-participating subject without her ability to object or clarify.
+    fix_suggestion: |-
+      Journalists reconstructing a declined subject's perspective through documents should explicitly acknowledge the limitation and consider what editorial safeguards (additional context, opposing views, expert analysis) are needed to avoid misrepresenting the person's actual views or state of mind.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — stories-that-unfold-and-pain-that-is-measured-from-the-ground-up: source protection prioritized over narrative completeness
+  article: |-
+    Hunt reflected on editing decisions: 'I learned that it's okay to leave some questions alone. If the story works with one less gory detail, it's better to just let it be, especially if you can't get that detail without asking a question that will do more harm than good. Am I willing to ask my mom something that might endanger her sobriety just because it would give my story a better ending? No, I'm not willing to do that.'
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      Hunt reflected on editing decisions: 'I learned that it's okay to leave some questions alone. If the story works with one less gory detail, it's better to just let it be, especially if you can't get that detail without asking a question that will do more harm than good. Am I willing to ask my mom something that might endanger her sobriety just because it would give my story a better ending? No, I'm not willing to do that.'
+    span:
+    - 0
+    - 426
+    issue_label: source protection prioritized over narrative completeness
+    question: |-
+      Hunt grappled with whether to push for details that would strengthen the story but potentially harm vulnerable sources: 'Having to grapple with that question is surely going to inform how I deal with other vulnerable sources in the future.'
+    why_it_matters: |-
+      Refusing to extract information that could destabilize a source's recovery demonstrates that the writer's ethical obligation to sources outweighs narrative satisfaction, setting a principle for future reporting.
+    fix_suggestion: |-
+      When reporting on vulnerable populations (addiction, mental health, trauma), establish a clear line: does this detail require asking a question that could harm the source? If yes, leave it out.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — a-conversation-with-tommy-tomlinson-getting-naked-in-print: consent and protection of intimate others
+  article: |-
+    There are things in this book that I had never told anyone – my wife, my closest friends, anyone – before I put them on the page. But I decided early on that if I was going to do this book, I had to do it right.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      There are things in this book that I had never told anyone – my wife, my closest friends, anyone – before I put them on the page. But I decided early on that if I was going to do this book, I had to do it right.
+    span:
+    - 0
+    - 211
+    issue_label: consent and protection of intimate others
+    question: |-
+      I told my family I was doing the book and that they might be part of it. I also showed them the manuscript ahead of time – not something I'd normally do, but I think the rules are a little different in memoir.
+    why_it_matters: |-
+      Giving family members veto power over their representation (even when the author is the primary subject) respects their dignity and avoids later harm or estrangement.
+    fix_suggestion: |-
+      In memoir involving intimate family members, disclose the project early and share drafts that affect them directly, even if you wouldn't normally do this in other writing contexts.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — 5ish-questions-ted-genoways-and-his-year-long-embed-on-a-family-farm: reporter intrusion and source burnout
+  article: |-
+    When you're having a bad day at work or an argument with your family, having one person there recording the conversation and another person taking photographs is unbelievably stressful. I would say, in retrospect, that we were too intrusive at first.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      When you're having a bad day at work or an argument with your family, having one person there recording the conversation and another person taking photographs is unbelievably stressful. I would say, in retrospect, that we were too intrusive at first.
+    span:
+    - 0
+    - 250
+    issue_label: reporter intrusion and source burnout
+    question: |-
+      Genoways admits that he and his wife were too intrusive at first, putting themselves in the middle of everything because they didn't know what they needed. How do you balance the need to witness intimate family moments against the toll that constant documentation takes on your subjects?
+    why_it_matters: |-
+      Long-form embedded reporting depends on subject consent and wellbeing, but the presence of two journalists documenting every conflict can distort the very family dynamics you're trying to understand.
+    fix_suggestion: |-
+      Establish clear boundaries early about when recording/photographing stops; recognize that subjects need privacy and downtime separate from reporting, not just because of ethics but because it produces better, more authentic material.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — empathy-interviewing-drug-addiction-word-choice-source-relationships-opioids: person-first language and stigma reduction
+  article: |-
+    Macy chooses words carefully, sacrificing the flow of a sentence for more respectful, sensitive reporting. For example, she refers to 'people who use drugs' and sometimes 'drug users' as opposed to 'addicts.' Both journalists underscored the importance of avoiding stereotypes and labels that stigmatizing people.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      Macy chooses words carefully, sacrificing the flow of a sentence for more respectful, sensitive reporting. For example, she refers to 'people who use drugs' and sometimes 'drug users' as opposed to 'addicts.' Both journalists underscored the importance of avoiding stereotypes and labels that stigmatizing people.
+    span:
+    - 0
+    - 313
+    issue_label: person-first language and stigma reduction
+    question: |-
+      Does word choice around addiction reinforce stigma or humanize the subject? Macy deliberately slows her prose to avoid dehumanizing labels, choosing 'people who use drugs' over 'addicts' to preserve the subject's full humanity.
+    why_it_matters: |-
+      Language choices signal whether a person is defined by their condition or whether their condition is one aspect of their identity—a distinction that affects both reader perception and source dignity.
+    fix_suggestion: |-
+      When covering addiction or other stigmatized conditions, audit your vocabulary for labels that flatten identity; prioritize 'people-first' constructions even if they feel clunky, and consider a sensitivity reader to flag problematic language patterns.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — thomas-curwen-and-surgeon-races-to-save-a-life-during-l-a-s-shooting-season: deferred consent in vulnerable reporting
+  article: |-
+    In the past, I've secured permission from patients before I began reporting. They would sign a waiver allowing me access to their records and histories. In this case, however, any individual coming into a hospital with a gunshot wound would not be in any position – physically or mentally – to sign any waiver, let alone understand who I was and what I was attempting to do. As a result, the photographer on the story – Barbara Davidson – and I were able to work out an arrangement with the hospital and their attorneys to report the story under the condition that once the patient was in recovery, we would explain our intentions. If the patient agreed – and then signed the waiver – we could proceed. If the patient did not agree, we would destroy my notes and images.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      In the past, I've secured permission from patients before I began reporting. They would sign a waiver allowing me access to their records and histories. In this case, however, any individual coming into a hospital with a gunshot wound would not be in any position – physically or mentally – to sign any waiver, let alone understand who I was and what I was attempting to do. As a result, the photographer on the story – Barbara Davidson – and I were able to work out an arrangement with the hospital and their attorneys to report the story under the condition that once the patient was in recovery, we would explain our intentions. If the patient agreed – and then signed the waiver – we could proceed. If the patient did not agree, we would destroy my notes and images.
+    span:
+    - 0
+    - 770
+    issue_label: deferred consent in vulnerable reporting
+    question: |-
+      Curwen describes a reporting protocol where he and the photographer obtained retroactive consent from a gunshot victim only after he recovered enough to understand what had happened and provide informed agreement, with a clear fallback: 'If the patient did not agree, we would destroy my notes and images.'
+    why_it_matters: |-
+      This approach respects subject dignity and agency in a moment when the subject cannot give informed consent, while still allowing the journalist to be present for the crucial moment—avoiding both coercive pre-crisis agreements and ethically compromised secret observation.
+    fix_suggestion: |-
+      When reporting on people in acute medical or crisis situations, build in a consent-checkpoint after the crisis has passed, with a clear destruction protocol if the subject refuses, so you're never profiting from observation without the subject's knowledge.
+    replacement: null
+    severity: high
+- source: 'niemanstoryboard.org — 138542: transparency about power imbalances and privilege'
+  article: |-
+    I'm constantly wrestling with my obligations as an author, as a human being, and as a friend… One of the questions I'm often asked is to reflect on my own positionality with relation to people in the book and I do that in the author's note. There was no way for me to pretend that I wasn't covering vast distances economically, culturally, linguistically, gender-wise.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      I'm constantly wrestling with my obligations as an author, as a human being, and as a friend… One of the questions I'm often asked is to reflect on my own positionality with relation to people in the book and I do that in the author's note. There was no way for me to pretend that I wasn't covering vast distances economically, culturally, linguistically, gender-wise.
+    span:
+    - 0
+    - 368
+    issue_label: transparency about power imbalances and privilege
+    question: |-
+      Haynes explicitly names the structural inequalities between himself and his subjects—economic, cultural, linguistic, gender—and chose transparency in an author's note as his ethical tool rather than pretending the distances didn't exist.
+    why_it_matters: |-
+      Naming positionality upfront signals to readers that the author is aware of the power dynamics embedded in the work and invites critical reading rather than inviting readers to assume objectivity.
+    fix_suggestion: |-
+      When writing about people across vast social distances, make your positionality visible early and often; don't assume it's invisible or irrelevant.
+    replacement: null
+    severity: high
+- source: |-
+    niemanstoryboard.org — the-crucial-challenge-of-precision-as-descriptors-evolve-the-press-must-too: descriptors can erase or misrepresent identity
+  article: |-
+    I had a professor in college who told my class about a newspaper that had to run a correction because a Black man was referred to as 'African-American,' even though he was not American. That stuck with me, as it demonstrated that there's no detail too small to sweat.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      I had a professor in college who told my class about a newspaper that had to run a correction because a Black man was referred to as 'African-American,' even though he was not American. That stuck with me, as it demonstrated that there's no detail too small to sweat.
+    span:
+    - 0
+    - 267
+    issue_label: descriptors can erase or misrepresent identity
+    question: |-
+      There's no detail too small to sweat. Language changes, as does the ownership and meaning of that language.
+    why_it_matters: |-
+      A single misapplied descriptor, however minor it seems, can erase or falsify a person's actual identity and published record; precision in naming is a matter of dignity and accuracy.
+    fix_suggestion: |-
+      Treat descriptors of identity (race, nationality, sexual orientation, gender) as fact-checks, not style choices; verify each one with the person being described whenever possible, and run corrections if you get it wrong.
+    replacement: null
+    severity: medium
+- source: |-
+    niemanstoryboard.org — challenges-of-sourcing-safety-and-reporting-for-narrative-in-china: consent clarity when sources lack media literacy
+  article: |-
+    Wee said she wasn't sure if Liu, the domestic violence victim, knew anything about the New York Times. 'But she knew I was a reporter who could get this story out. And she had a point of view. She wanted to say something.' That said, most Chinese people aren't familiar with narrative journalism, which adds to the challenge of navigating ethical source relationships and gaining needed information to build a storyline.
+  critiques:
+  - agent: human_rights
+    text_quote: |-
+      Wee said she wasn't sure if Liu, the domestic violence victim, knew anything about the New York Times. 'But she knew I was a reporter who could get this story out. And she had a point of view. She wanted to say something.' That said, most Chinese people aren't familiar with narrative journalism, which adds to the challenge of navigating ethical source relationships and gaining needed information to build a storyline.
+    span:
+    - 0
+    - 420
+    issue_label: consent clarity when sources lack media literacy
+    question: |-
+      Wee admits uncertainty about whether Liu fully understood the New York Times platform or what 'narrative journalism' meant, yet proceeded with the story because Liu 'wanted to say something.' Does a source's desire to speak substitute for informed consent about the reach, permanence, and potential consequences of publication in a major international outlet?
+    why_it_matters: |-
+      When sources lack familiarity with international media platforms, they may not grasp the full scope of exposure or the long-term visibility their stories will have, especially in a country with government surveillance, creating an ethical gap between what the journalist thinks is consent and what the source actually understands.
+    fix_suggestion: |-
+      Explicitly discuss with vulnerable sources what the New York Times platform means, where the story will be read, how long it will persist online, and what protections you can and cannot offer—not just assume their enthusiasm means they understand the stakes.
+    replacement: null
+    severity: high

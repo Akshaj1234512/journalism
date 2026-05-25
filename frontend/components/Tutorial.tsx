@@ -41,6 +41,30 @@ const STEPS: Step[] = [
       "Each editor specialises in one lane. Click any of them to read what they look for, or to turn them off for this review. The list updates whenever you switch modes; scroll to see all of them.",
   },
   {
+    target: "article-type",
+    side: "bottom",
+    requireMode: "journalism",
+    title: "Pick your article type",
+    body:
+      "In journalism mode, pick the kind of piece you're writing (news, investigative, opinion, feature, profile, review, or analysis). A specialised type editor is added to the roster who reads against THAT genre's standards — Cole for news, Iris for investigations, Otto for opinion, Faye for features, Pia for profiles, Remy for reviews, Eli for explainers.",
+  },
+  {
+    target: "journalism-toggles",
+    side: "bottom",
+    requireMode: "journalism",
+    title: "Add specialists for your story",
+    body:
+      "These chips activate three additional editors when your story calls for them. Click Partisan to add Parker (catches loaded framing on political stories). Click Data claims to add Peter (stress-tests statistics). Click Anonymous sources to add Joe (privacy + source-protection). The chips pre-fill sensible defaults when you change article type — toggle them off if a default doesn't fit.",
+  },
+  {
+    target: "subject-context",
+    side: "bottom",
+    requireMode: "journalism",
+    title: "Add story context (optional)",
+    body:
+      "Paste a short note about who the story is about, the angle, or the publication venue. Only the matching type editor sees it, and it uses the note to sharpen the read. Optional but it helps when the draft alone doesn't tell the editor everything they need.",
+  },
+  {
     target: "essay-type",
     side: "bottom",
     requireMode: "essays",

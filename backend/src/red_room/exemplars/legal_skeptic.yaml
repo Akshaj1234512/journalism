@@ -1,183 +1,306 @@
 # Exemplars for legal_skeptic
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Real editorial-room critique material pulled from two sources:
+#   1. PolitiFact fact-checks (via LIAR_RAW_RAWFC, 11k items)
+#   2. Nieman Storyboard + Slate Press Box craft criticism articles
+#      (Annotation Tuesday, Essays on Craft, 5 Questions)
+# Each was passed through Claude Haiku to extract specific editor-
+# room observations, classified into the legal_skeptic lane, and
+# the top 15 were selected with a diversity constraint
+# (round-robin across distinct sub-issue buckets) so the exemplars
+# cover the lane's failure-mode range rather than 15
+# variants of the same critique.
 #
 - source: |-
-    IPSO rulings on anonymous single-source claims presented as fact; Editors' Code Clause 1
+    niemanstoryboard.org — take-two-avi-selk-on-the-life-and-death-of-a-spider-aggregation-and-writing-fast: aggregation without source verification chain
   article: |-
-    The council's finance director took payments from a contractor in exchange for steering a 2 million pound waste contract, sources said.
+    CNN reported that there was a banner that said 'Death to Islam.' It was a buried detail in the CNN story, but I used it as my opening. Then we wrote a headline around it. Then CNN ran a correction, saying that banner was not actually at that rally.
   critiques:
   - agent: legal_skeptic
     text_quote: |-
-      took payments from a contractor in exchange for steering a 2 million pound waste contract
-    span: [31, 120]
-    issue_label: bribery alleged as fact
+      CNN reported that there was a banner that said 'Death to Islam.' It was a buried detail in the CNN story, but I used it as my opening. Then we wrote a headline around it. Then CNN ran a correction, saying that banner was not actually at that rally.
+    span:
+    - 0
+    - 245
+    issue_label: aggregation without source verification chain
     question: |-
-      'Took payments in exchange for steering a contract' is bribery, a specific crime, and we are pinning it on a named official with nothing visible but 'sources said'. Where are the payment records?
+      Selk took a buried detail from CNN and elevated it to his opening without independently verifying it—CNN had a reporter at the rally, so he thought it was safe. CNN later corrected the detail. Selk owned the error publicly but notes the trap: relying on another outlet's presence at an event doesn't guarantee their facts are correct.
     why_it_matters: |-
-      IPSO has repeatedly upheld breaches where an anonymous source's allegation was presented as fact; on a criminal verb against a named official, it is also the core defamation per se pattern.
+      Aggregation carries the risk of amplifying errors; sourcing to 'they were there' is insufficient protection when the original reporter's own reporting later gets corrected.
     fix_suggestion: |-
-      Attribute it plainly and soften the verb to what the evidence supports until intent is provable. Keep the documents in the file in case we defend it.
-    replacement: |-
-      is alleged by sources to have accepted payments from a contractor that later won a 2 million pound waste contract
+      Even when aggregating from outlets with on-the-ground sources, treat highly specific factual claims (especially inflammatory ones used as ledepoints) as requiring additional verification or explicit qualification of source reliability.
+    replacement: null
     severity: high
-- source: Editors' Code Clause 1 and right-of-reply practice
+- source: |-
+    niemanstoryboard.org — the-pitch-hate-to-wait-a-marie-claire-editor-answers-pitch-emails-within-48-hour: Name anonymization hierarchy and legal vetting
   article: |-
-    The investigation found that Detective James Cole pressured at least three witnesses to change their statements. Cole could not be reached for comment.
+    Sometimes we obscure names not because the women ask for it, but because our legal department does. We use real first names as a second choice and go to pseudonyms only if we have to.
   critiques:
   - agent: legal_skeptic
-    text_quote: Cole could not be reached for comment
-    span: [113, 150]
-    issue_label: thin right of reply on a serious allegation
+    text_quote: |-
+      Sometimes we obscure names not because the women ask for it, but because our legal department does. We use real first names as a second choice and go to pseudonyms only if we have to.
+    span:
+    - 0
+    - 183
+    issue_label: Name anonymization hierarchy and legal vetting
     question: |-
-      'Could not be reached' is the line plaintiff's counsel highlights first. On a witness-tampering allegation against a named detective, five words is not a right of reply.
+      What's the anonymization ladder? Real full name first, then real first name only, then pseudonym as a last resort—and sometimes legal will require anonymity even if the source doesn't ask for it.
     why_it_matters: |-
-      Editors' Code Clause 1 requires a fair opportunity to respond to significant allegations; bare 'could not be reached' is what a regulator reads as the minimum.
+      This shows how to balance source protection with searchability and accountability; full names are preferable for reader trust and verification, but legal exposure can override source preference.
     fix_suggestion: |-
-      Document the outreach inside the piece: the channels and the window. If we truly could not reach him, put exactly what we tried on the record.
-    replacement: |-
-      Cole did not respond to messages left with his lawyer and at two phone numbers over eight days
+      Understand that anonymity decisions aren't just about source comfort—they're also about legal risk. Expect a legal review on sensitive stories and be prepared to argue for or against full naming.
+    replacement: null
     severity: medium
-- source: Editors' Code Clause 1; defamation review on opinion stated as fact
+- source: |-
+    niemanstoryboard.org — a-literary-take-on-a-hole-in-the-ground: right-to-reply documented but owners don't respond
   article: |-
-    Internal emails show the chief executive ordered staff to delete the test records, a clear cover-up of the safety failures.
+    I never spoke to them, but it wasn't for lack of trying. Apart from contacting publicists, I reached out to all three architects who'd worked on the project; the owners' lawyer; their representative on the construction site; one of their fellow investors in various cultural productions they've backed; and the Juilliard School, where he'd been a trustee, and set up a scholarship for struggling jazz musicians.
   critiques:
   - agent: legal_skeptic
-    text_quote: a clear cover-up of the safety failures
-    span: [83, 122]
-    issue_label: our characterization stated as fact
+    text_quote: |-
+      I never spoke to them, but it wasn't for lack of trying. Apart from contacting publicists, I reached out to all three architects who'd worked on the project; the owners' lawyer; their representative on the construction site; one of their fellow investors in various cultural productions they've backed; and the Juilliard School, where he'd been a trustee, and set up a scholarship for struggling jazz musicians.
+    span:
+    - 0
+    - 411
+    issue_label: right-to-reply documented but owners don't respond
     question: |-
-      'A clear cover-up' is a conclusion no regulator has reached. The emails show deletion; we are the ones calling it a cover-up.
+      Margolick makes specific, critical claims about the owners' indifference and callousness but never speaks to them. Does documenting the attempt to reach them (and their silence) shield the piece legally, or does the piece still need their side?
     why_it_matters: |-
-      Calling a named executive's conduct a cover-up in our own voice turns description into a legal conclusion we then have to prove.
+      Right-to-reply attempts—especially when documented and detailed—create a strong editorial defense. The owners' refusal to respond becomes part of the story and doesn't require the writer to soften his characterization.
     fix_suggestion: |-
-      Describe what the emails show and let the reader infer, or attribute 'cover-up' to a named source who will stand behind it.
-    replacement: which former staff describe as an attempt to bury the safety failures
+      Always attempt to reach the subjects of criticism through multiple channels and report those attempts in the piece. The fact that you tried and they refused or ignored you is newsworthy in itself and protects you legally.
+    replacement: null
+    severity: high
+- source: |-
+    slate.com — al-gore-washed-up-politician-finds-a-new-venue-for-his-ideas-press-criticism.htm: strong accusation relying on indirect evidence
+  article: |-
+    The entire piece names just one corrupt news organization: the Fox News Channel. Yes, it's always fun to cane the Fox News Channel for its crimes, but Gore doesn't have the goods. Instead of citing a 'refereed' news story broadcast by Fox, he quotes from an email from a Fox News Washington Managing Editor Bill Sammon.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      The entire piece names just one corrupt news organization: the Fox News Channel. Yes, it's always fun to cane the Fox News Channel for its crimes, but Gore doesn't have the goods. Instead of citing a 'refereed' news story broadcast by Fox, he quotes from an email from a Fox News Washington Managing Editor Bill Sammon.
+    span:
+    - 0
+    - 319
+    issue_label: strong accusation relying on indirect evidence
+    question: |-
+      Gore calls Fox News 'corrupt' but his only evidence is a leaked email from an editor instructing reporters to question climate data—not actual news stories showing bias. Is an instruction to question data the same as corruption? The distinction matters.
+    why_it_matters: |-
+      Calling an organization corrupt requires demonstrating corrupt behavior through its actual published work, not through internal email directives that might reflect editorial judgment rather than malfeasance.
+    fix_suggestion: |-
+      If you're going to use a leaked email as evidence of wrongdoing, explain explicitly why the contents constitute corruption rather than leaving readers to infer it.
+    replacement: null
+    severity: high
+- source: |-
+    slate.com — al-gore-washed-up-politician-finds-a-new-venue-for-his-ideas-press-criticism.htm: incomplete quotation altering meaning
+  article: |-
+    In his Rolling Stone piece, Gore quotes a 'philosopher' who wrote, 'The conversion of all questions of truth into questions of power has attacked the very heart of the distinction between true and false.' The quotation from Theodor W. Adorno... reads in its entirety, 'The conversion of all questions of truth into questions of power, a process that truth itself cannot escape if it is not to be annihilated by power, not only suppresses truth, as in earlier despotic orders, but has attacked the very heart of the distinction between true and false, which the hirelings of logic were in any case diligently working to abolish.'
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      In his Rolling Stone piece, Gore quotes a 'philosopher' who wrote, 'The conversion of all questions of truth into questions of power has attacked the very heart of the distinction between true and false.' The quotation from Theodor W. Adorno... reads in its entirety, 'The conversion of all questions of truth into questions of power, a process that truth itself cannot escape if it is not to be annihilated by power, not only suppresses truth, as in earlier despotic orders, but has attacked the very heart of the distinction between true and false, which the hirelings of logic were in any case diligently working to abolish.'
+    span:
+    - 0
+    - 628
+    issue_label: incomplete quotation altering meaning
+    question: |-
+      Gore's version of the Adorno quote is missing crucial qualifiers about power 'annihilating' truth—language that complicates rather than simplifies the philosophical claim. The dropped text matters: it suggests Adorno was more nuanced than Gore's usage implies.
+    why_it_matters: |-
+      Selectively editing quotations to support your thesis, even without adding or changing words, misrepresents the source and constitutes intellectual dishonesty.
+    fix_suggestion: |-
+      Use ellipses to indicate omissions, as Gore did in his book 'Our Choice,' or quote the full passage. Never drop language that changes the meaning or force of the original claim.
+    replacement: null
+    severity: high
+- source: |-
+    slate.com — les-hinton-and-rebekah-brooks-are-gone-will-rupert-murdoch-now-sacrifice-his-own: sweeping character attack from convicted felon
+  article: |-
+    Conrad Black held that 'Murdoch has no loyalty to anyone or anything except his company'...and has 'betrayed every political leader who ever helped him in any country, except Ronald Reagan and perhaps Tony Blair.'
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      Conrad Black held that 'Murdoch has no loyalty to anyone or anything except his company'...and has 'betrayed every political leader who ever helped him in any country, except Ronald Reagan and perhaps Tony Blair.'
+    span:
+    - 0
+    - 213
+    issue_label: sweeping character attack from convicted felon
+    question: |-
+      The piece quotes Conrad Black—identified as a 'convicted felon'—making sweeping character judgments about Murdoch's lifetime of betrayal. Is Black a credible source for this kind of universal moral claim about Murdoch's nature, and does the convict status weaken or strengthen the passage?
+    why_it_matters: |-
+      Sourcing damaging character claims to someone with their own credibility problems can undermine the argument rather than strengthen it, even if the quote is accurate.
+    fix_suggestion: |-
+      Either find sources with stronger institutional or moral authority to make this case, or frame Black's quote as 'one critic's view' rather than wielding it as evidence of Murdoch's actual character.
+    replacement: null
     severity: medium
-- source: Editors' Code Clause 1; defamation review on paraphrase escalation
+- source: |-
+    slate.com — will-rupert-murdoch-s-editorialists-at-the-wall-street-journal-revisit-the-phone: credibility assessment without weighing new evidence
   article: |-
-    The whistleblower said the agency 'wasn't careful' with the figures. In other words, the agency falsified its budget reports.
-  critiques:
-  - agent: legal_skeptic
-    text_quote: In other words, the agency falsified its budget reports
-    span: [69, 124]
-    issue_label: paraphrase escalates the source's claim
-    question: |-
-      The source said 'wasn't careful'. We translated that into 'falsified', an intent verb. Did she say falsification, or did we upgrade her?
-    why_it_matters: |-
-      Turning a hedged claim into a definite accusation is a libel exposure we manufactured; if sued, we cannot fall back on the source because the source never said it.
-    fix_suggestion: |-
-      Quote the source's actual words, or go back and get her on the record as to whether she means deliberate falsification.
-    replacement: The whistleblower said the agency 'wasn't careful' with the figures
-    severity: high
-- source: IPSO guidance on anonymous sourcing; defamation review on source independence
-  article: |-
-    According to two people with knowledge of the matter, the director knew about the defect, hid it from regulators, and lied to the board.
+    The WSJ editorial vouches for Les Hinton's truthfulness to Parliament and characterizes Goodman's claims as mere assertions in a resignation protest letter, without acknowledging that Goodman's letter is now corroborated evidence of what Hinton said he didn't know.
   critiques:
   - agent: legal_skeptic
     text_quote: |-
-      the director knew about the defect, hid it from regulators, and lied to the board
-    span: [54, 135]
-    issue_label: one sourcing line carrying three allegations
+      The WSJ editorial vouches for Les Hinton's truthfulness to Parliament and characterizes Goodman's claims as mere assertions in a resignation protest letter, without acknowledging that Goodman's letter is now corroborated evidence of what Hinton said he didn't know.
+    span:
+    - 0
+    - 265
+    issue_label: credibility assessment without weighing new evidence
     question: |-
-      Knew, hid, and lied are three distinct allegations all riding on the same 'two people with knowledge'. If those two are the same circle, the paragraph is single-sourced.
+      But revelations published by the Guardian on Tuesday give the Wall Street Journal editorial page plenty of reason to doubt Hinton. The U.K. paper reproduces a March 2, 2007, letter from confessed phone-hacker Clive Goodman to Murdoch's HR department protesting his dismissal from News of the World by Les Hinton.
     why_it_matters: |-
-      Stacking distinct allegations behind one anonymous attribution means one recantation collapses everything; for libel purposes, two sources from the same room are close to one.
+      If Hinton testified to Parliament that he had no evidence the hacking spread beyond one journalist, but received a letter from that very journalist saying it was 'widely discussed' in editorial conference, the editorial's defense of Hinton's parliamentary testimony becomes legally and factually vulnerable.
     fix_suggestion: |-
-      Separate the claims and show what supports each. Keep the best-sourced one now and hold the rest until they are independently confirmed.
+      Before defending a source's truthfulness to regulators or courts, verify they had not received contradictory documentation at the time of their testimony.
     replacement: null
     severity: high
-- source: Defamation by implication / juxtaposition; standard pre-publication review
+- source: 'PolitiFact fact-check (ruling: false): unsubstantiated criminal accusation'
   article: |-
-    City Hall awarded the contract to Walsh Construction. The firm is owned by Frank Walsh, who lives three doors down from the mayor's mother.
-  critiques:
-  - agent: legal_skeptic
-    text_quote: lives three doors down from the mayor's mother
-    span: [92, 138]
-    issue_label: innuendo by juxtaposition
-    question: |-
-      After Charleston v Sunday Mail (1995), juxtaposition is its own defamation theory. We have set the contract award next to the owner's address and trusted the reader to draw the line.
-    why_it_matters: |-
-      Defamation by implication does not require a direct claim; placing two facts side by side so the reader infers wrongdoing is enough to sustain a suit.
-    fix_suggestion: |-
-      Either prove the connection (donations, calls, meetings on this contract) and report it directly, or strike the geography line.
-    replacement: null
-    severity: high
-- source: UK Contempt of Court Act 1981 and US guidance on pre-trial publicity
-  article: |-
-    Robert Lane, who is awaiting trial next month on murder charges, has a long history of violent outbursts, three former colleagues said.
-  critiques:
-  - agent: legal_skeptic
-    text_quote: has a long history of violent outbursts
-    span: [65, 104]
-    issue_label: prejudicial material on an awaiting-trial defendant
-    question: |-
-      Mr Lane is awaiting trial. Publishing colleagues' 'history of violent outbursts' next to murder charges is exactly the material the Contempt of Court Act 1981 is designed to keep out of public view during active proceedings.
-    why_it_matters: |-
-      Character-evidence reporting on an active defendant risks contempt in the UK and a venue-change or jury-strike motion in the US; it can collapse the trial.
-    fix_suggestion: |-
-      Hold the colleague accounts until the verdict. Report the charges and the next court date now, save the background for after.
-    replacement: null
-    severity: high
-- source: 'Defamation review: ''lied'' as a state-of-mind verb requiring proof of
-    intent'
-  article: |-
-    Senator Voss lied about his military service in last week's debate, records show.
-  critiques:
-  - agent: legal_skeptic
-    text_quote: Senator Voss lied about his military service
-    span: [0, 44]
-    issue_label: intent verb without proof of intent
-    question: |-
-      'Lied' is the verb Sullivan plaintiffs use to argue actual malice against us. The records show his statement was inaccurate. Do they show he knew it was?
-    why_it_matters: |-
-      'Lied' is a state-of-mind verb requiring proof of intent, which a paper trail of statements rarely supplies by itself.
-    fix_suggestion: |-
-      Report what the records show and what he said and let the gap be visible. If we have evidence he knew, lead with it.
-    replacement: |-
-      Senator Voss's account of his military service was contradicted by records released last week
-    severity: high
-- source: 'Defamation review: ''allegedly'' used everywhere as a legal fig leaf'
-  article: |-
-    Brewer allegedly stole from the trust, allegedly hid the funds in offshore accounts, and allegedly threatened his secretary into silence.
+    The definition of treason is giving aid and comfort to the enemy... How is giving them a suggestion about how they could target the United States... not giving aid and comfort to the enemy, and hence treason?
   critiques:
   - agent: legal_skeptic
     text_quote: |-
-      Brewer allegedly stole from the trust, allegedly hid the funds in offshore accounts, and allegedly threatened his secretary into silence
-    span: [0, 136]
-    issue_label: '''allegedly'' as a blanket shield'
+      The definition of treason is giving aid and comfort to the enemy... How is giving them a suggestion about how they could target the United States... not giving aid and comfort to the enemy, and hence treason?
+    span:
+    - 0
+    - 208
+    issue_label: unsubstantiated criminal accusation
     question: |-
-      Three serious allegations chained on three 'allegedly's. The word is doing structural work it cannot do; the reader still walks away believing he did all three.
+      PJ Media accused Omar of treason without establishing that she 'gave' Iran anything—she described a threat analysts and security experts had already publicly identified. Calling analysis of an obvious risk 'military advice to a hostile power' requires evidence of intent to aid; what is that evidence here?
     why_it_matters: |-
-      Courts have held that 'allegedly' does not by itself defeat defamation where the surrounding text treats the claims as established; we need attributed allegations, not a sprinkling.
+      Accusing a named public figure of a specific federal crime without proof of mens rea or material aid crosses into defamation and triggers real-world harm (the article spurred calls for violence against Omar and her family).
     fix_suggestion: |-
-      Attribute each claim to its source, ideally the lawsuit or filing, so the allegation rides on a privileged document and not on our voice.
+      If publishing a treason accusation, require: (1) evidence of intent to aid Iran; (2) evidence Omar knew Iran would act on her words; (3) proof she disclosed non-public military information. None were present.
     replacement: null
     severity: high
-- source: 'Privacy and defamation overlap: identifying suspects pre-charge'
+- source: |-
+    PolitiFact fact-check (ruling: half-true): unsubstantiated connection to named party
   article: |-
-    Police searched the home of David Mercer, a 38-year-old accountant, on Tuesday as part of the fraud investigation. No charges have been filed.
+    Eric Holder has never been listed on any public records associated with the property at 6210 Old National Highway, a fact which significantly undermines the claim made in the 2019 meme, that Holder and his wife Sharon 'own abortion clinics.'
   critiques:
   - agent: legal_skeptic
-    text_quote: David Mercer, a 38-year-old accountant
-    span: [28, 66]
-    issue_label: naming a pre-charge suspect
+    text_quote: |-
+      Eric Holder has never been listed on any public records associated with the property at 6210 Old National Highway, a fact which significantly undermines the claim made in the 2019 meme, that Holder and his wife Sharon 'own abortion clinics.'
+    span:
+    - 0
+    - 241
+    issue_label: unsubstantiated connection to named party
     question: |-
-      BBC v Cliff Richard (2018, 210,000 pound award) is the ruling that says identifying a suspect pre-charge is itself the harm. Mercer has not been charged. What public interest requires his name now?
+      The original 2012 reports and 2019 meme directly named Eric Holder as an owner. The fact-checker demolishes this by showing he's not on a single public record. Why is this not grounds for a 'false' rating on the Holder-specific prong, rather than half-true?
     why_it_matters: |-
-      Pre-charge naming carries both privacy and defamation exposure if the investigation closes without action; the Cliff Richard award is the going rate.
+      The claim's most serious allegation—directly tying the former Attorney General to the property—is conclusively disproven, yet the half-true rating suggests genuine ambiguity where none exists on this element.
     fix_suggestion: |-
-      Hold the name until charge unless there is a clear public interest in naming him now. Report the search and the investigation without the identifier.
-    replacement: |-
-      Police searched the home of a 38-year-old accountant on Tuesday as part of the fraud investigation
+      Break the ruling into parts: 'False' for the claim that Eric Holder owns property; 'True but misleading' or 'Mostly True' for the claim about his wife and sister-in-law's trustee status and the clinic's presence on the property.
+    replacement: null
     severity: high
-- source: Editors' Code Clause 1; example of a properly sourced and balanced passage
+- source: 'PolitiFact fact-check (ruling: false): unsubstantiated criminal conspiracy'
   article: |-
-    Senator Linda Hart voted against the housing bill on Tuesday after receiving more than 200,000 dollars in donations from the real estate lobby over two years, federal disclosure filings show. Hart's office said the vote reflected concerns about zoning preemption.
-  critiques: []
-- source: Example of an allegation attributed to a court filing, fully sourced
+    They included followers of the QAnon movement and accounts that suggested without any proof that billionaire investor Warren Buffet, Microsoft founder and philanthropist Bill Gates, or financier George Soros owned the bricks and created a master plan to instigate violence.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      They included followers of the QAnon movement and accounts that suggested without any proof that billionaire investor Warren Buffet, Microsoft founder and philanthropist Bill Gates, or financier George Soros owned the bricks and created a master plan to instigate violence.
+    span:
+    - 0
+    - 273
+    issue_label: unsubstantiated criminal conspiracy
+    question: |-
+      The claim names three real billionaires and accuses them of coordinating a scheme to 'instigate violence.' Where is the evidence? A video connecting Berkshire Hathaway to Acme Brick is not proof of coordination.
+    why_it_matters: |-
+      Publishing specific names + criminal intent without evidence opens outlets to defamation liability and spreads baseless smears that damage reputations.
+    fix_suggestion: |-
+      If covering conspiracy theories, clearly label them as unproven allegations, isolate them in quotation, and require on-record denial or silence from the named parties before running.
+    replacement: null
+    severity: high
+- source: 'PolitiFact fact-check (ruling: false): Unsubstantiated criminal conspiracy claim'
   article: |-
-    Brewer is accused in a lawsuit filed Tuesday in Cook County of diverting more than 400,000 dollars from the trust, hiding the funds in offshore accounts, and threatening his former secretary into silence. Brewer's lawyer said the claims were 'a fiction' and would be contested at trial.
-  critiques: []
+    TheRedPilledNews claimed the Times had stated 'as fact' that 'Soros and Clinton Paid Woman to Accuse Trump of Sexual Attack.' The Times article outlined efforts to 'capitalize upon and amplify allegations' and provide 'financial backing to their accusers,' but explicitly did not state that anyone had paid women to fabricate false allegations.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      TheRedPilledNews claimed the Times had stated 'as fact' that 'Soros and Clinton Paid Woman to Accuse Trump of Sexual Attack.' The Times article outlined efforts to 'capitalize upon and amplify allegations' and provide 'financial backing to their accusers,' but explicitly did not state that anyone had paid women to fabricate false allegations.
+    span:
+    - 0
+    - 344
+    issue_label: Unsubstantiated criminal conspiracy claim
+    question: |-
+      TheRedPilledNews accused Clinton and Soros of paying women to make false allegations—a serious criminal claim. But PolitiFact found the Times article never stated this, only that some lawyers accepted donations to vet and support accusers. Where's the evidence that allegations were intentionally fabricated rather than vetting costs covered?
+    why_it_matters: |-
+      Conflating financial support for accusers with paying women to lie is a defamation-adjacent claim that requires explicit proof, not inference from fundraising practices.
+    fix_suggestion: |-
+      Distinguish between (a) donations to support vetting and safety, and (b) payment to induce false testimony. Cite the Times directly: Bloom 'represented only clients whose stories she had corroborated' and 'did not offer money to coax clients to come forward.'
+    replacement: null
+    severity: high
+- source: |-
+    PolitiFact fact-check (ruling: half-true): unverified quote attribution (no source)
+  article: |-
+    We were not able to verify that this is an authentic, direct quotation from Newkirk, despite its having been widely shared online as such for around a decade. The earliest instance of it we could find was from a June 2005 editorial in the newsletter of the Best Friends Animal Society. There, the statement was not attributed to Newkirk as a direct quotation but rather as a summary of her alleged remarks.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      We were not able to verify that this is an authentic, direct quotation from Newkirk, despite its having been widely shared online as such for around a decade. The earliest instance of it we could find was from a June 2005 editorial in the newsletter of the Best Friends Animal Society. There, the statement was not attributed to Newkirk as a direct quotation but rather as a summary of her alleged remarks.
+    span:
+    - 0
+    - 406
+    issue_label: unverified quote attribution (no source)
+    question: |-
+      The 'kindest gift' quote has circulated for a decade but originated as a summary—not a direct quote—in a June 2005 editorial, with no linked transcript or press conference record. PETA's own spokesperson said they have no source for it. Why is this still treated as an authentic Newkirk statement?
+    why_it_matters: |-
+      Attributing unsubstantiated quotes to named figures, especially on contentious topics like euthanasia, crosses into defamation territory and erodes trust in the entire meme's veracity.
+    fix_suggestion: |-
+      Require a primary source (transcript, video, published interview, or direct quote in a news report) before labeling any quote 'authentic.' Flag paraphrases and derivatives as such.
+    replacement: null
+    severity: high
+- source: 'PolitiFact fact-check (ruling: false): unsubstantiated defamatory accusation'
+  article: |-
+    Multiple blogs and right-leaning websites followed Townhall's example, repeated and amplified the claim that, in a fit of anti-semitic pique, Tlaib had expressed joy or celebration at the thought of the Holocaust.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      Multiple blogs and right-leaning websites followed Townhall's example, repeated and amplified the claim that, in a fit of anti-semitic pique, Tlaib had expressed joy or celebration at the thought of the Holocaust.
+    span:
+    - 0
+    - 213
+    issue_label: unsubstantiated defamatory accusation
+    question: |-
+      Townhall and others accused Tlaib of anti-semitism and celebrating the Holocaust without checking the full interview context. Where's the right-to-reply before publishing the charge? Did anyone ask Tlaib what she meant before running the headline?
+    why_it_matters: |-
+      A defamatory claim (anti-semitism) was amplified across multiple outlets without basic corroboration or courtesy notification to the subject, damaging her reputation on a false premise.
+    fix_suggestion: |-
+      Request comment from Tlaib before publication; quote her in full context in the headline or pull quote; verify the claim against the primary source audio before running.
+    replacement: null
+    severity: high
+- source: 'PolitiFact fact-check (ruling: half-true): unsubstantiated criminal verb'
+  article: |-
+    The claim, made in @asdomke's tweet, that Rosenberg was 'convicted of' several 1983 bombings, was therefore false. The claim in the headline of an article on Wayne Dupree's website that Rosenberg 'carried out' the bombings stands in contrast to the fact that she was never tried or convicted in relation to those incidents.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      The claim, made in @asdomke's tweet, that Rosenberg was 'convicted of' several 1983 bombings, was therefore false. The claim in the headline of an article on Wayne Dupree's website that Rosenberg 'carried out' the bombings stands in contrast to the fact that she was never tried or convicted in relation to those incidents.
+    span:
+    - 0
+    - 323
+    issue_label: unsubstantiated criminal verb
+    question: |-
+      The tweet and headlines claim Rosenberg was 'convicted' of or 'carried out' the 1983–1985 bombing campaign. But prosecutors dropped those charges in 1990 before trial. On what basis can you attribute specific bombings to someone who was never charged or convicted for them?
+    why_it_matters: |-
+      Attributing specific criminal acts without conviction or guilty plea is the shape of defamation; it inflates a person's culpability beyond what the law established.
+    fix_suggestion: |-
+      Revise to: 'Rosenberg was charged with aiding and abetting bombings in 1988, but those charges were dropped in 1990 before trial. She was convicted only of weapons and explosives possession in 1985.'
+    replacement: null
+    severity: high
+- source: 'PolitiFact fact-check (ruling: half-true): anachronistic legal labeling'
+  article: |-
+    However, that definition was only added in 1992, years after Rosenberg was convicted of weapons and explosives possession and charged for her alleged role in the 1983-1985 bombing campaign, and her alleged role in a series of armed robberies by left-wing revolutionaries. In any event, despite the existence of a definition of domestic terrorism in federal law, a discrete criminal offense of domestic terrorism does not exist, and did not exist in the 1980s.
+  critiques:
+  - agent: legal_skeptic
+    text_quote: |-
+      However, that definition was only added in 1992, years after Rosenberg was convicted of weapons and explosives possession and charged for her alleged role in the 1983-1985 bombing campaign, and her alleged role in a series of armed robberies by left-wing revolutionaries. In any event, despite the existence of a definition of domestic terrorism in federal law, a discrete criminal offense of domestic terrorism does not exist, and did not exist in the 1980s.
+    span:
+    - 0
+    - 459
+    issue_label: anachronistic legal labeling
+    question: |-
+      The original posts and headlines call Rosenberg a 'convicted terrorist,' but no terrorism statute existed when her 1985 conviction occurred, and she was convicted only of weapons possession. Can a person be a 'convicted terrorist' when no terrorism conviction was possible under law at the time?
+    why_it_matters: |-
+      Using modern legal categories to describe historical conduct without that category obscures what Rosenberg was actually convicted of and misleads readers about the scope of legal culpability.
+    fix_suggestion: |-
+      If using 'terrorist,' add explicit qualifier: 'Rosenberg was convicted of weapons and explosives possession; she was charged but not convicted in connection with a 1983–1985 bombing campaign that could retrospectively fit definitions of domestic terrorism.'
+    replacement: null
+    severity: high
