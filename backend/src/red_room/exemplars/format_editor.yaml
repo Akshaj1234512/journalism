@@ -2,8 +2,11 @@
 # Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
 # NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
 # field 200-2500 words, must reference a specific anchor like
-# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
-# and the top 10 by quality score selected.
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku;
+# top 15 selected with a diversity constraint (round-robin
+# across distinct sub-issue buckets) so the exemplars cover the lane's
+# full failure-mode range rather than 15 variants of the
+# same critique.
 #
 - source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): undefined term, no citation
@@ -42,6 +45,26 @@
     fix_suggestion: Add all promised hyperparameter and methodological details to the appendix.
     replacement: null
     severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): load-bearing content misplaced
+  article: |-
+    Lines 252-264 (MLP plasticity rule results) versus line 82 (initial introduction of the rule).
+  critiques:
+  - agent: format_editor
+    text_quote: |-
+      Lines 252-264 (MLP plasticity rule results) versus line 82 (initial introduction of the rule).
+    span:
+    - 0
+    - 94
+    issue_label: load-bearing content misplaced
+    question: |-
+      The MLP plasticity rule introduction is difficult to understand; clarifying details appear later in lines 252-264. Should these explanations be moved to line 82 when the rule is first introduced, or should the introduction be moved to accompany the results?
+    why_it_matters: |-
+      Readers struggle to understand the method on first encounter, forcing them to read nonlinearly and hampering comprehension of the early paper flow.
+    fix_suggestion: |-
+      Move lines 252-264 to integrate into the section at line 82 where the rule is introduced, or vice versa.
+    replacement: null
+    severity: medium
 - source: |-
     NeurIPS.cc/2023/Conference OpenReview review (rating 8/10, confidence 4/5): missing RASP syntax figure, incomplete appendix
   article: |-
@@ -121,6 +144,46 @@
     replacement: null
     severity: medium
 - source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): Causal graph node definitions missing
+  article: |-
+    Section 2.2 defines the problem setting but does not clearly state whether prediction Ŷ and observed outcome Y are nodes in the causal graph.
+  critiques:
+  - agent: format_editor
+    text_quote: |-
+      Section 2.2 defines the problem setting but does not clearly state whether prediction Ŷ and observed outcome Y are nodes in the causal graph.
+    span:
+    - 0
+    - 141
+    issue_label: Causal graph node definitions missing
+    question: |-
+      Please clearly state that prediction Ŷ is regarded as a node (an endogenous variable) in the causal graph in Section 2.2. Otherwise, it is difficult to understand the problem setting. Is observed outcome Y also a node in the causal graph?
+    why_it_matters: |-
+      Ambiguity about whether Ŷ and Y are causal graph nodes makes it difficult to understand how the counterfactual fairness constraints formally apply.
+    fix_suggestion: |-
+      Explicitly define whether Ŷ, Y, or both appear as nodes in the causal graph, and clarify the distinction between observed and predicted outcomes in the graphical model.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): Page budget mis-allocation; contributions underexplored
+  article: |-
+    The current presentation seems somewhat unbalanced, with the authors' actual work only starting on page 6. While this is not inherently a weakness per se, this does mean that the authors were perhaps not able to fully explore / describe the actual contributions of their work in the remaining 4–5 pages.
+  critiques:
+  - agent: format_editor
+    text_quote: |-
+      The current presentation seems somewhat unbalanced, with the authors' actual work only starting on page 6. While this is not inherently a weakness per se, this does mean that the authors were perhaps not able to fully explore / describe the actual contributions of their work in the remaining 4–5 pages.
+    span:
+    - 0
+    - 303
+    issue_label: Page budget mis-allocation; contributions underexplored
+    question: |-
+      Why does the manuscript defer the main contribution until page 6, leaving only 4–5 pages to describe and validate the work? This severely limits space for proper ablation, intuition, and justification.
+    why_it_matters: |-
+      Insufficient space to adequately present and justify the core contributions weakens clarity and confidence in the work.
+    fix_suggestion: |-
+      Trim or move background material to appendix to allocate more space to the proposed method, experiments, and analysis of why lattice quantization provides benefits.
+    replacement: null
+    severity: medium
+- source: |-
     ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): equations not numbered throughout paper
   article: |-
     Loss function referenced as 'Line 272'; equations throughout the paper lack consistent numbering.
@@ -141,44 +204,6 @@
     replacement: null
     severity: medium
 - source: |-
-    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): unexplained memory component before Figure 4
-  article: |-
-    Page 8 memory component (mentioned but not explained); Figure 4 results depend on this component.
-  critiques:
-  - agent: format_editor
-    text_quote: |-
-      Page 8 memory component (mentioned but not explained); Figure 4 results depend on this component.
-    span:
-    - 0
-    - 97
-    issue_label: unexplained memory component before Figure 4
-    question: |-
-      The memory component in page 8 is not explained at all. It seems important to describe what this is to put Fig. 4's results in context.
-    why_it_matters: |-
-      Without explanation of a key architectural component, readers cannot understand or reproduce the results in Figure 4, and the contribution's scope remains unclear.
-    fix_suggestion: |-
-      Add an explicit description of the memory component (what it is, how it works, why it is included) before or in the section introducing Figure 4.
-    replacement: null
-    severity: medium
-- source: |-
-    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): missing appendix derivation
-  article: Section 4, toy example references derivation of Equation (5)
-  critiques:
-  - agent: format_editor
-    text_quote: Section 4, toy example references derivation of Equation (5)
-    span:
-    - 0
-    - 60
-    issue_label: missing appendix derivation
-    question: |-
-      In Section 4, toy example, there is a reference to the derivation of Equation (5), which does not appear in the Appendix.
-    why_it_matters: |-
-      Missing derivations prevent readers from understanding the construction and verifying claims in the toy example.
-    fix_suggestion: |-
-      Include the derivation of Equation (5) in the appendix or reference the correct location.
-    replacement: null
-    severity: medium
-- source: |-
     ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): undefined terminology
   article: 'Page 7, Line 377: use of the term ''late collaboration'''
   critiques:
@@ -196,3 +221,83 @@
       Define 'late collaboration' explicitly when first introduced, or clarify which prior work's technique it refers to.
     replacement: null
     severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): dataset size inconsistency (abstract vs. body)
+  article: |-
+    The abstract states '557 video pairs... 4,719 fine-grained action differences' (line 013-014), but line 260 mentions '656 video pairs, 5,580 annotated differences'.
+  critiques:
+  - agent: format_editor
+    text_quote: |-
+      The abstract states '557 video pairs... 4,719 fine-grained action differences' (line 013-014), but line 260 mentions '656 video pairs, 5,580 annotated differences'.
+    span:
+    - 0
+    - 164
+    issue_label: dataset size inconsistency (abstract vs. body)
+    question: |-
+      557 or 656 video pairs? In the abstract, the authors state that the dataset contains 557 video pairs... 4,719 fine-grained action differences (line 013-014), but on line 260, they mention 656 video pairs, 5,580 annotated differences. Clarification needed on which is correct.
+    why_it_matters: |-
+      Inconsistent dataset size reporting creates confusion about the actual benchmark scale and raises questions about the paper's accuracy and internal consistency.
+    fix_suggestion: |-
+      Verify and correct the dataset size figures throughout the paper; ensure the abstract, main text, and any tables report the same numbers consistently.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 5/5): Typos and notation inconsistencies
+  article: |-
+    Line 404: Union notation is written as {$\{\tilde{\zeta}\}$}. Line 1056: Typo 'sceheme'. Line 1353: Notation shift from 𝒫_X to $\tilde{Q}_X$.
+  critiques:
+  - agent: format_editor
+    text_quote: |-
+      Line 404: Union notation is written as {$\{\tilde{\zeta}\}$}. Line 1056: Typo 'sceheme'. Line 1353: Notation shift from 𝒫_X to $\tilde{Q}_X$.
+    span:
+    - 0
+    - 141
+    issue_label: Typos and notation inconsistencies
+    question: |-
+      Typos: line 1056 'sceheme' should be 'scheme'. Notation: line 1353 introduces $\tilde{Q}_X$ without explanation when 𝒫_X was used previously. Line 404 has double-brace LaTeX formatting error.
+    why_it_matters: |-
+      Typos and inconsistent notation reduce professionalism and clarity; readers may misinterpret notation changes as introducing new concepts.
+    fix_suggestion: |-
+      Fix typo on line 1056. Explain notation $\tilde{Q}_X$ on line 1353 or use consistent notation 𝒫_X. Fix LaTeX formatting on line 404.
+    replacement: null
+    severity: low
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): main results relegated to appendix
+  article: |-
+    Section 4 reads really strangely to me right now. It contains essentially no technical content, but is written in a technical way. It's more of an advertisement for the appendix.
+  critiques:
+  - agent: format_editor
+    text_quote: |-
+      Section 4 reads really strangely to me right now. It contains essentially no technical content, but is written in a technical way. It's more of an advertisement for the appendix.
+    span:
+    - 0
+    - 178
+    issue_label: main results relegated to appendix
+    question: |-
+      Section 4 contains essentially no technical content but reads technically; it's more of an advertisement for the appendix. Why not include at least one actual technical result (e.g., Theorem 2 from the appendix) in the main body to make clear what has been proven?
+    why_it_matters: |-
+      Readers cannot understand what was proven or what technical tools were used without reading the appendix, which 99% of readers will not do, leaving the paper's main contributions unclear.
+    fix_suggestion: |-
+      Add at least one actual technical result to the main body (e.g., Theorem 2 from the appendix). Move Proposition 1 (which is obvious and doesn't require proof) to the appendix. Make clear what technical statement backs each claim in Section 4.
+    replacement: null
+    severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): balance between main text and appendix broken
+  article: |-
+    Section 4: paper is needlessly complex while presenting almost no theoretical detail in the main manuscript. The hybrid of deferring detail to appendix while writing technically is not effective.
+  critiques:
+  - agent: format_editor
+    text_quote: |-
+      Section 4: paper is needlessly complex while presenting almost no theoretical detail in the main manuscript. The hybrid of deferring detail to appendix while writing technically is not effective.
+    span:
+    - 0
+    - 195
+    issue_label: balance between main text and appendix broken
+    question: |-
+      The paper strikes a strange balance of being needlessly complex while presenting almost no theoretical detail in the main manuscript. It's fine to defer the most general form to the appendix, but the current hybrid is not effective. Why not rewrite Section 4 to be either more applied (explaining what you do) or more theoretical (including main results)?
+    why_it_matters: |-
+      The paper is unclear about its contributions and technical approach, reducing its impact and accessibility.
+    fix_suggestion: |-
+      Restructure Section 4 by: (1) including at least one complete technical result (e.g., Theorem 2) with proof sketch, (2) removing obvious propositions, and (3) adopting a consistent tone aimed at a single audience (theorist or applied statistician).
+    replacement: null
+    severity: high

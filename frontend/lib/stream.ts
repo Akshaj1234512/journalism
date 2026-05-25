@@ -1,6 +1,7 @@
 import {
   Critique,
   AgentName,
+  ArticleType,
   CitationStyle,
   EssayType,
   Mode,
@@ -36,6 +37,12 @@ interface StreamOptions {
   citationStyle?: CitationStyle;
   essayType?: EssayType;
   essayPrompt?: string;
+  // Journalism-specific
+  articleType?: ArticleType;
+  partisan?: boolean;
+  hasDataClaims?: boolean;
+  hasAnonymousSources?: boolean;
+  subjectContext?: string;
 }
 
 export function streamCritique(
@@ -51,6 +58,11 @@ export function streamCritique(
     citationStyle = "none",
     essayType = "none",
     essayPrompt = "",
+    articleType = "none",
+    partisan = false,
+    hasDataClaims = false,
+    hasAnonymousSources = false,
+    subjectContext = "",
   } = options;
 
   (async () => {
@@ -65,6 +77,11 @@ export function streamCritique(
           citation_style: citationStyle,
           essay_type: essayType,
           essay_prompt: essayPrompt || null,
+          article_type: articleType,
+          partisan,
+          has_data_claims: hasDataClaims,
+          has_anonymous_sources: hasAnonymousSources,
+          subject_context: subjectContext || null,
         }),
         signal: controller.signal,
       });

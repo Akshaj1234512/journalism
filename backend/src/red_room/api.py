@@ -12,6 +12,7 @@ from sse_starlette.sse import EventSourceResponse
 
 from red_room import orchestrator
 from red_room.schemas import (
+    ArticleType,
     CitationStyle,
     CritiqueRequest,
     EssayType,
@@ -55,6 +56,11 @@ def _filtered_agents(
     research_section: ResearchSection = "full_paper",
     research_subject: ResearchSubject = "none",
     research_venue: str | None = None,
+    article_type: ArticleType = "none",
+    partisan: bool = False,
+    has_data_claims: bool = False,
+    has_anonymous_sources: bool = False,
+    subject_context: str | None = None,
 ):
     """Build the roster for this request, skipping any agent the user has
     turned off in the UI. Disabled agents are dropped here so they never
@@ -70,6 +76,11 @@ def _filtered_agents(
             research_section=research_section,
             research_subject=research_subject,
             research_venue=research_venue,
+            article_type=article_type,
+            partisan=partisan,
+            has_data_claims=has_data_claims,
+            has_anonymous_sources=has_anonymous_sources,
+            subject_context=subject_context,
         )
         if a.name not in disabled_set
     ]
@@ -91,6 +102,11 @@ async def critique(req: CritiqueRequest) -> dict:
             req.research_section,
             req.research_subject,
             req.research_venue,
+            req.article_type,
+            req.partisan,
+            req.has_data_claims,
+            req.has_anonymous_sources,
+            req.subject_context,
         ),
     )
     return result.model_dump()
@@ -107,6 +123,11 @@ async def critique_stream(req: CritiqueRequest) -> EventSourceResponse:
         req.citation_style,
         req.essay_type,
         req.essay_prompt,
+        article_type=req.article_type,
+        partisan=req.partisan,
+        has_data_claims=req.has_data_claims,
+        has_anonymous_sources=req.has_anonymous_sources,
+        subject_context=req.subject_context,
     )
 
     async def event_iter():

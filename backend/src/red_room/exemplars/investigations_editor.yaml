@@ -1,0 +1,101 @@
+# Exemplars for investigations_editor (Iris)
+# Bootstrap synthetic exemplars in investigations-editor voice. Will be
+# replaced by real-data ingestion (IPSO press council rulings, CJR
+# criticism, ProPublica methods notes) in Phase 2.
+#
+- source: 'single-source allegation with no document trail'
+  article: |-
+    According to a person familiar with the matter, Reyes diverted at least $200,000 in foundation funds to a personal account between 2020 and 2022.
+  critiques:
+  - agent: investigations_editor
+    text_quote: According to a person familiar with the matter, Reyes diverted at least $200,000
+    span: [0, 80]
+    issue_label: single anonymous source on material allegation
+    question: |-
+      This is a fraud allegation against a named subject. One unnamed source, no document. When the subject's lawyer responds, what do we have to fall back on?
+    why_it_matters: |-
+      Single-source allegations of financial wrongdoing are the canonical investigations-desk weakness, and the first thing a libel lawyer will exploit.
+    fix_suggestion: |-
+      Add either a named second source or specific documentation (bank record, audit, court filing) before this sentence runs.
+    replacement: null
+    severity: high
+- source: 'pattern claim from a single incident'
+  article: |-
+    The behavior reflects a systemic pattern at the agency, where senior officials routinely override safety reviews.
+  critiques:
+  - agent: investigations_editor
+    text_quote: The behavior reflects a systemic pattern at the agency
+    span: [0, 51]
+    issue_label: pattern claim from one incident
+    question: |-
+      The reporting documents one override. "Systemic pattern" requires multiple documented incidents. We can either soften the framing or add the other instances.
+    why_it_matters: |-
+      A "pattern" claim invites the institutional response and we lose the room if we can only point to one example.
+    fix_suggestion: |-
+      Either change to "in at least one documented case" or add specifics on the other instances the reporting found.
+    replacement: null
+    severity: high
+- source: 'no right-to-reply on the specific allegation'
+  article: |-
+    Reached for comment, the company said it "does not comment on personnel matters."
+  critiques:
+  - agent: investigations_editor
+    text_quote: Reached for comment, the company said it "does not comment on personnel matters."
+    span: [0, 82]
+    issue_label: no specific-allegation right of reply
+    question: |-
+      "Reached for comment" without disclosing what specific allegations we put to the company is a thin record. The story has six distinct accusations; we need to show we put them.
+    why_it_matters: |-
+      Without a specific-allegation request, the company's lawyer can later say they never had a chance to respond to the actual claims.
+    fix_suggestion: |-
+      Add: "The company was sent a written list of the specific allegations described in this story on [date] and given [X] days to respond."
+    replacement: null
+    severity: high
+- source: 'inferential leap via "essentially"'
+  article: |-
+    These three contracts, combined with the timing of the meeting, essentially amount to an undisclosed kickback arrangement.
+  critiques:
+  - agent: investigations_editor
+    text_quote: essentially amount to an undisclosed kickback arrangement
+    span: [60, 117]
+    issue_label: inferential leap via "essentially"
+    question: |-
+      "Essentially" is doing the work of an evidentiary claim. Either show the explicit kickback agreement or soften the characterization.
+    why_it_matters: |-
+      "Essentially," "in effect," and "amounts to" are the words reporters reach for when the inference exceeds the evidence.
+    fix_suggestion: |-
+      Lay out the explicit chain: contract A, meeting B, payment C, with what each document says. Let the reader make the inference. If you don't have a kickback record, change the framing to "raises questions about whether..."
+    replacement: null
+    severity: medium
+- source: 'document referenced without provenance'
+  article: |-
+    Internal emails reviewed by the Tribune show that the warning was raised three months before the incident.
+  critiques:
+  - agent: investigations_editor
+    text_quote: Internal emails reviewed by the Tribune
+    span: [0, 39]
+    issue_label: document provenance vague
+    question: |-
+      "Internal emails reviewed" tells the reader nothing about whether we hold these documents or just saw them, and from how many sources. Reviewers will ask.
+    why_it_matters: |-
+      Document-provenance vagueness is exactly the thread the subject's lawyer pulls on first.
+    fix_suggestion: |-
+      Specify: "Internal emails obtained by the Tribune from two sources" or "Internal emails the Tribune was permitted to view but does not possess."
+    replacement: null
+    severity: medium
+- source: 'methods note absent on complex investigation'
+  article: |-
+    Our six-month investigation reveals a previously unreported network of relationships between the agency and three private contractors.
+  critiques:
+  - agent: investigations_editor
+    text_quote: Our six-month investigation reveals a previously unreported network
+    span: [0, 65]
+    issue_label: no methods note on complex investigation
+    question: |-
+      "Six-month investigation" is a strong claim that earns nothing without a methods note. How many documents? How many interviews? What did we exclude?
+    why_it_matters: |-
+      Methods notes are how reviewers and other reporters judge the strength of an investigation; their absence reads as either oversight or evasion.
+    fix_suggestion: |-
+      Add a sidebar or end-note: "This story is based on review of [X] documents obtained via [method], [Y] interviews with [class of source], and [Z] public records requests filed between [dates]."
+    replacement: null
+    severity: medium

@@ -1,169 +1,294 @@
 # Exemplars for prose_style
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
-- source: 'Williams, Style, Lesson 2: ''Actions in verbs, not nouns'''
+- source: 'PERSUADE_2.0 (score 3/6): false dichotomy + comma splice'
   article: |-
-    After three months of review, the committee made the determination that the proposal was unworkable and recommended it be sent back for redrafting.
-  critiques:
-  - agent: prose_style
-    text_quote: made the determination
-    span: [44, 66]
-    issue_label: nominalization
-    question: |-
-      The verb is hiding inside the noun 'made the determination.' The working form is 'determined.'
-    why_it_matters: |-
-      Three words doing one word's work, and the reader has to assemble the action from the abstraction.
-    fix_suggestion: Swap the nominalization for its verb form.
-    replacement: determined
-    severity: medium
-- source: 'Williams, Style, Lesson 2: ''Actions in verbs, not nouns'''
-  article: |-
-    The new tariff policy had an impact on small manufacturers who source their components from overseas suppliers.
-  critiques:
-  - agent: prose_style
-    text_quote: had an impact on
-    span: [22, 38]
-    issue_label: nominalization
-    question: |-
-      'Had an impact on' is the verb 'affect' or 'hit' is buried inside the noun 'impact.' Pick the verb that says what the policy actually did.
-    why_it_matters: |-
-      Four words for one, and 'impact' is so generic the reader still does not know what happened to the manufacturers.
-    fix_suggestion: |-
-      Replace with a verb that names the effect: 'hurt,' 'raised costs for,' 'squeezed.'
-    replacement: squeezed
-    severity: medium
-- source: 'Williams, Style, Lesson 3: ''Characters as subjects'''
-  article: |-
-    It is the belief of many historians of the antebellum period that the economic incentives of cotton drove the political logic of secession.
-  critiques:
-  - agent: prose_style
-    text_quote: It is the belief of many historians of the antebellum period that
-    span: [0, 65]
-    issue_label: buried subject
-    question: |-
-      The real actors, the historians, are stuffed into a prepositional phrase while 'it' takes the subject slot. Put the people back in front of their verb.
-    why_it_matters: |-
-      The reader spends the opening clause finding out who is doing what; by the time the cotton arrives the sentence has lost its spine.
-    fix_suggestion: |-
-      Start with the actor and the verb: 'Many historians of the antebellum period believe.'
-    replacement: Many historians of the antebellum period believe that
-    severity: high
-- source: 'Williams, Style, Lesson 9: ''Concision'' (on hedges)'
-  article: |-
-    It could perhaps be argued that, in some sense, the data might possibly suggest a relationship between screen time and adolescent attention.
-  critiques:
-  - agent: prose_style
-    text_quote: It could perhaps be argued that, in some sense, the data might possibly
-      suggest
-    span: [0, 79]
-    issue_label: hedge stack
-    question: |-
-      Five hedges in one clause: 'could,' 'perhaps,' 'be argued,' 'in some sense,' 'might possibly.' Each hedge alone is fine. Stacked, they confess no confidence in the claim that follows.
-    why_it_matters: |-
-      By the time the reader reaches 'a relationship,' the writer has disowned the sentence in advance.
-    fix_suggestion: |-
-      Pick one hedge and commit. If the data show a relationship, say so; if they only suggest one, 'the data suggest' is enough.
-    replacement: The data suggest
-    severity: high
-- source: |-
-    Orwell, Politics and the English Language, Rule 5: 'Never use a long word where a short one will do'; Strunk and White, Rule 17: 'Omit needless words'
-  article: |-
-    In today's society, the question of how we treat strangers has become a defining moral problem for democratic citizens.
-  critiques:
-  - agent: prose_style
-    text_quote: In today's society,
-    span: [0, 19]
-    issue_label: throat-clearing opener
-    question: |-
-      'In today's society' is throat-clearing. Never use a phrase whose meaning you cannot pin down. Cut and the sentence starts working immediately.
-    why_it_matters: |-
-      Three wasted words at the front of the essay before the reader gets to a single specific claim.
-    fix_suggestion: Delete the opener. Start with 'The question.'
-    replacement: ''
-    severity: medium
-- source: 'Williams, Style, Lesson 7: ''The active and passive voice'''
-  article: |-
-    In the months leading up to the collapse of the fund, mistakes were made and warning signs were ignored.
-  critiques:
-  - agent: prose_style
-    text_quote: mistakes were made and warning signs were ignored
-    span: [54, 103]
-    issue_label: accountability-dodging passive
-    question: |-
-      Name the actor. Two passives in a row, neither one tells the reader who made the mistakes or who ignored the warnings. If the essay's argument depends on responsibility, the passives are hiding it.
-    why_it_matters: |-
-      Passive voice in this register reads as evasion; the reader cannot assign blame, which is usually the point of the paragraph.
-    fix_suggestion: |-
-      Name the actors. 'The fund managers made the mistakes; the board ignored the warnings.'
-    replacement: the fund managers made mistakes and the board ignored warning signs
-    severity: high
-- source: |-
-    Williams, Style, Lesson 5: 'Cohesion and coherence'; Strunk and White, Rule 13: 'Make the paragraph the unit of composition'
-  article: |-
-    The novel begins in a small coastal town and follows a young woman who has just lost her father and who decides to leave the family business and travel inland to find her estranged brother, and along the way she meets a former priest who is also looking for someone, and the two of them end up at a farmhouse where a stranger is waiting.
+    Unlike those people who sit at home doing nothing you could help out your country.
   critiques:
   - agent: prose_style
     text_quote: |-
-      The novel begins in a small coastal town and follows a young woman who has just lost her father and who decides to leave the family business and travel inland to find her estranged brother, and along the way she meets a former priest who is also looking for someone, and the two of them end up at a farmhouse where a stranger is waiting.
-    span: [0, 337]
-    issue_label: long shapeless sentence
+      Unlike those people who sit at home doing nothing you could help out your country.
+    span:
+    - 0
+    - 82
+    issue_label: false dichotomy + comma splice
     question: |-
-      One sentence, seven 'and's, no main spine. By the farmhouse the reader has lost which character lost which parent. What is the version that breaks at the natural beats?
+      This sentence sets up a false choice—either you join the Seagoing Cowboys or you're doing nothing—and it runs two independent clauses together without a conjunction or period. Split it, and soften the either/or.
     why_it_matters: |-
-      Strung-together clauses with no shape force the reader to back-track; the plot summary should not feel like a chase.
-    fix_suggestion: Three sentences, each ending on a turn. The loss, the journey,
-      the arrival.
-    replacement: |-
-      The novel begins in a small coastal town. A young woman, having just lost her father, leaves the family business and travels inland to find her estranged brother. Along the way she meets a former priest, and the two arrive at a farmhouse where a stranger is waiting.
+      The harsh, unsupported claim undermines your credibility, and the comma splice is a sentence-level error that distracts readers.
+    fix_suggestion: |-
+      Try: 'By joining the Seagoing Cowboys, you contribute meaningfully to your country. Others who stay home miss this chance to serve.' This avoids the strawman and fixes the splice.
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 3/6): wordiness, repetition, weak construction'
+  article: |-
+    This simple way is a easy grade raiser. These low grades could easily be raised by studying. All we have to do is do thirty minutes of studying and we could raise our grades and test scores instead of practicing for that game.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      This simple way is a easy grade raiser. These low grades could easily be raised by studying. All we have to do is do thirty minutes of studying and we could raise our grades and test scores instead of practicing for that game.
+    span:
+    - 0
+    - 226
+    issue_label: wordiness, repetition, weak construction
+    question: |-
+      You're saying the same thing three times in a row—'easy grade raiser,' 'easily be raised,' 'All we have to do is do'—and the sentence structure is clunky ('do is do'). Where's the punch? Cut the repetition and tighten the claim.
+    why_it_matters: |-
+      The reader stops trusting your voice; it sounds like you're padding to hit a word count rather than thinking clearly.
+    fix_suggestion: |-
+      Combine into one strong sentence: 'Thirty minutes of daily studying would raise test scores more effectively than an extra practice session.' Then move on to your next piece of evidence.
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 3/6): run-on sentences, grammatical confusion'
+  article: |-
+    when the people i learned a attend classes from home is good idea why not more excuse for not study and get your diplom and have a best work what help economic .whe recive online classes have opportunity from work in study .and myselt iis good idea what have program what distance learning because i have a baby what i need my company every day this option is good for my .
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      when the people i learned a attend classes from home is good idea why not more excuse for not study and get your diplom and have a best work what help economic .whe recive online classes have opportunity from work in study .and myselt iis good idea what have program what distance learning because i have a baby what i need my company every day this option is good for my .
+    span:
+    - 0
+    - 373
+    issue_label: run-on sentences, grammatical confusion
+    question: |-
+      This is three or four sentences stitched together with 'and' and 'what'—I can't tell where one idea ends and the next begins. Also: 'people i learned a attend'? 'work what help economic'? 'i need my company every day this option is good for my'? These need to be broken apart and rewritten with a subject-verb-object structure.
+    why_it_matters: |-
+      Readers lose the thread completely; even if you had strong ideas, they're buried in grammatical tangles.
+    fix_suggestion: |-
+      Break into short, clear sentences: 'When people attend classes from home, they have opportunity to work and study simultaneously. For myself, distance learning is necessary because I have a baby who needs my attention. This option works for my situation.' Check each sentence has a clear subject and verb.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): wordiness, comma splice'
+  article: |-
+    Despite the fact that we use vehicles as our primary source of transportation, cars are actually polluting the air, and causing danger in our lives.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      Despite the fact that we use vehicles as our primary source of transportation, cars are actually polluting the air, and causing danger in our lives.
+    span:
+    - 0
+    - 148
+    issue_label: wordiness, comma splice
+    question: |-
+      This sentence buries the main idea under 'Despite the fact that'—that's five words doing the work of one ('Although'). Also, you've got a comma splice: 'polluting the air, and causing danger' needs a coordinating conjunction between those two ideas, or split it into two sentences.
+    why_it_matters: |-
+      The sentence sounds bloated and reads awkwardly, weakening the force of your opening claim.
+    fix_suggestion: |-
+      'Although we rely on cars for transportation, they pollute the air and endanger our safety.' (Or: split into two sentences.)
+    replacement: null
+    severity: medium
+- source: 'AES2 (score 2/6): run-on sentence, unclear pronoun reference'
+  article: |-
+    We dont vote for electors ... so many people can vote on one paticular person to be head of our state and president and the other person can only get 3 votes but in ellectoral collage he/she can have more electoral votes and they win the election .. even tho the other canidate has more popular votes.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      We dont vote for electors ... so many people can vote on one paticular person to be head of our state and president and the other person can only get 3 votes but in ellectoral collage he/she can have more electoral votes and they win the election .. even tho the other canidate has more popular votes.
+    span:
+    - 0
+    - 301
+    issue_label: run-on sentence, unclear pronoun reference
+    question: |-
+      This sentence does about five jobs at once. 'So many people can vote on one particular person'—what does that mean? And who is 'they'? Split this into 2–3 sentences so each claim gets air.
+    why_it_matters: |-
+      The logic gets lost in the tangle; your best concrete example (candidate A wins popular vote but loses Electoral vote) doesn't land because readers are parsing grammar instead of following the argument.
+    fix_suggestion: |-
+      Try: 'We don't vote for electors directly. In a state, millions may vote for Candidate A, but a few electors can still cast their votes for Candidate B. This means Candidate B can win the presidency despite losing the popular vote.'
+    replacement: null
     severity: high
 - source: |-
-    Strunk and White, Rule 17: 'Omit needless words'; specifically the entry on 'rather, very, little, pretty'
+    Feedback_Prize_ELL (score 3.143386438739405/5): unclear pronoun reference, awkward phrasing
   article: |-
-    The court's ruling was very surprising, really unprecedented, and extremely consequential for future First Amendment cases.
+    Even if your friend said something very bad you should tell them anyways because they will probably help your friend that is need of help.
   critiques:
   - agent: prose_style
-    text_quote: very surprising, really unprecedented, and extremely consequential
-    span: [23, 89]
-    issue_label: empty intensifier stack
+    text_quote: |-
+      Even if your friend said something very bad you should tell them anyways because they will probably help your friend that is need of help.
+    span:
+    - 0
+    - 138
+    issue_label: unclear pronoun reference, awkward phrasing
     question: |-
-      'Very'' is the leech that infects the pond. Three intensifiers on three adjectives that already do the work. 'Unprecedented' cannot be more unprecedented.
+      Who is 'them' — your parents? And 'your friend that is need of help' — is that the same friend who said something bad, or a different person? The sentence tangles multiple people together so I lose the logic.
     why_it_matters: |-
-      The intensifiers add length and subtract force; the reader registers hedging where the writer meant emphasis.
-    fix_suggestion: Strip the intensifiers. Let the adjectives carry their own weight.
-    replacement: surprising, unprecedented, and consequential
+      Confused syntax forces the reader to stop and untangle meaning, breaking the flow of argument.
+    fix_suggestion: |-
+      Try: 'If your friend does something wrong, you should tell your parents, because they can help your friend.' Clearer subjects and objects.
+    replacement: null
     severity: medium
-- source: |-
-    Orwell, Politics and the English Language, Rule 2: 'Never use a long word where a short one will do'
+- source: 'PERSUADE_2.0 (score 2/6): weak verb, awkward phrasing'
   article: |-
-    Due to the fact that the laboratory was unable to utilize the new equipment, the researchers had to postpone the experiment.
+    To begin with, manufacturers have tinkered on this project for many years by several strategies such as General Motors and their concept car that ran on a unique test track.
   critiques:
   - agent: prose_style
-    text_quote: Due to the fact that the laboratory was unable to utilize
-    span: [0, 57]
-    issue_label: pretentious diction
+    text_quote: |-
+      To begin with, manufacturers have tinkered on this project for many years by several strategies such as General Motors and their concept car that ran on a unique test track.
+    span:
+    - 0
+    - 173
+    issue_label: weak verb, awkward phrasing
     question: |-
-      Two of classic offenders in one clause: 'due to the fact that' is 'because,' and 'utilize' is 'use.' Neither long form means anything more than its short one.
+      What does 'tinkered on this project by several strategies' mean? And 'their concept car that ran on a unique test track'—is the test track the strategy, or is it separate? Tighten this up.
     why_it_matters: |-
-      Eight words doing the work of four; the reader senses the writer reaching for officialese.
-    fix_suggestion: '''Because the laboratory could not use.'''
-    replacement: Because the laboratory could not use
+      The reader has to pause and parse what you mean, which breaks momentum and makes your evidence feel imprecise.
+    fix_suggestion: |-
+      Try: 'Manufacturers have spent years developing driverless technology—General Motors, for example, tested a concept car on a specialized track.'
+    replacement: null
     severity: medium
-- source: |-
-    Orwell, Politics and the English Language, Rule 1: 'Never use a metaphor you are used to seeing in print'
+- source: 'PERSUADE_2.0 (score 3/6): mangled syntax, missing verb'
   article: |-
-    The recent congressional report sheds light on the lobbying practices that, at the end of the day, shape who actually writes federal regulations.
+    Even as the text says Who are the electors, they can someone not holding a public State office, who picks them , and we cant even vote on who the electors should be.
   critiques:
   - agent: prose_style
-    text_quote: sheds light on
-    span: [32, 46]
-    issue_label: dead metaphor
+    text_quote: |-
+      Even as the text says Who are the electors, they can someone not holding a public State office, who picks them , and we cant even vote on who the electors should be.
+    span:
+    - 0
+    - 165
+    issue_label: mangled syntax, missing verb
     question: |-
-      'Sheds light on' is made literal: a metaphor so worn it no longer means anything. What does the report actually do, document, name, expose?
+      This sentence has no main verb. 'They can someone not holding a public State office'—what's the verb? And you've got three questions crammed into one thought with no punctuation separating them. Break this into two or three sentences, each with a subject and a clear predicate.
     why_it_matters: |-
-      The cliché tells the reader the writer stopped thinking at the exact moment the verb was due to do real work.
-    fix_suggestion: Replace with the specific verb. 'Documents,' 'names,' 'traces.'
-    replacement: documents
+      The reader has to work to decode what you mean, and it signals carelessness, which makes them less likely to trust your argument.
+    fix_suggestion: |-
+      'The texts ask: Who are the electors? They can be private citizens who don't hold public office. And voters have no say in choosing them.' Now each idea stands on its own.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): vague, colloquial phrasing'
+  article: |-
+    Yes, that may be true, but again, when the people vote, they only want what they want, no jokes.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      Yes, that may be true, but again, when the people vote, they only want what they want, no jokes.
+    span:
+    - 0
+    - 96
+    issue_label: vague, colloquial phrasing
+    question: |-
+      What does 'they only want what they want, no jokes' mean? This sounds like something you'd say in conversation, but in an essay arguing for the Electoral College, you need to say what you actually mean. Do you mean voters are acting in self-interest? That they're decisive? You can't ask the reader to guess.
+    why_it_matters: |-
+      Vague language makes your argument sound unserious and gives readers no clear claim to evaluate or push back on.
+    fix_suggestion: |-
+      Try: 'When citizens vote, they are expressing a clear preference, and that preference should be honored by their state's electors' or whatever your real point is.
+    replacement: null
     severity: medium
+- source: 'PERSUADE_2.0 (score 3/6): run-on sentence, weak verb choice, grammar error'
+  article: |-
+    The students would be able to work all day long without having any fear of getting up early in the morning to came to school, whenever they have time such after work at night they can access online a take the classes.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      The students would be able to work all day long without having any fear of getting up early in the morning to came to school, whenever they have time such after work at night they can access online a take the classes.
+    span:
+    - 0
+    - 217
+    issue_label: run-on sentence, weak verb choice, grammar error
+    question: |-
+      This is two complete ideas jammed together with a comma, and "came" should be "come." More importantly — "without having any fear of getting up early" is a clunky way to say something simple. What's the actual benefit here?
+    why_it_matters: |-
+      The sentence obscures your point instead of clarifying it, and the grammatical error signals carelessness to the reader.
+    fix_suggestion: |-
+      Split it: "Students could work during the day and attend classes at night through online access." That's clearer and stronger.
+    replacement: null
+    severity: medium
+- source: 'AES2 (score 2/6): redundant phrasing, weak construction'
+  article: |-
+    car usage should be be limited because of many reasons. so i propose a law to all of man kind that car usage should be limited for the better of the eniorment and for all people.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      car usage should be be limited because of many reasons. so i propose a law to all of man kind that car usage should be limited for the better of the eniorment and for all people.
+    span:
+    - 0
+    - 178
+    issue_label: redundant phrasing, weak construction
+    question: |-
+      You repeat 'car usage should be limited' twice in two sentences. And 'a law to all of mankind'—who proposes laws to all mankind? This sounds vague and grandiose. What are you actually proposing?
+    why_it_matters: |-
+      Repetition and overreach weaken your credibility; a reader sees filler instead of conviction.
+    fix_suggestion: |-
+      Replace with: 'Governments should implement car-free zones in suburbs and incentivize public transit, as Vauban's success demonstrates.' Name the *specific* action.
+    replacement: null
+    severity: medium
+- source: 'AES2 (score 4/6): fragment, passive voice, vague verb'
+  article: |-
+    Even though a few scientest believe the Face was an alien artifact, photos show otherwise. On April 5, 1998 they snapped a picture and discovered it was simply a natural landform, not an alien monument. At first the photos weren't very convincing to either side, but once they were able to enhance technology the photo came out clearer. Which allowed scientests at NASA to examine it further and finally classify it.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      Even though a few scientest believe the Face was an alien artifact, photos show otherwise. On April 5, 1998 they snapped a picture and discovered it was simply a natural landform, not an alien monument. At first the photos weren't very convincing to either side, but once they were able to enhance technology the photo came out clearer. Which allowed scientests at NASA to examine it further and finally classify it.
+    span:
+    - 0
+    - 416
+    issue_label: fragment, passive voice, vague verb
+    question: |-
+      You have a sentence fragment starting with 'Which'—that's a comma splice waiting to happen. Also, 'they were able to enhance technology' is passive and vague. Who enhanced it? What specifically did they do?
+    why_it_matters: |-
+      Fragments and vague phrasing make you sound less authoritative on a technical topic where precision matters.
+    fix_suggestion: |-
+      Revise: 'On April 5, 1998, NASA captured a high-resolution image that revealed the Face as a natural landform. Early photos had been unconvincing to both skeptics and believers, but as NASA enhanced imaging technology, the details became clear enough for scientists to classify it definitively.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 4/6): vague word choice; awkward phrasing'
+  article: |-
+    The search for life in space has been one outrageously demanded by the public and Venus may very well be the place to look, after we can penetrate the bounderies it has in store.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      The search for life in space has been one outrageously demanded by the public and Venus may very well be the place to look, after we can penetrate the bounderies it has in store.
+    span:
+    - 0
+    - 178
+    issue_label: vague word choice; awkward phrasing
+    question: |-
+      What does 'outrageously demanded' mean? Do you mean 'urgently demanded' or 'passionately demanded'? And 'penetrate the bounderies'—do you mean 'overcome the barriers' or 'breach its defenses'? The phrasing is murky.
+    why_it_matters: |-
+      Vague language undermines the persuasiveness of your argument; a reader has to guess your meaning.
+    fix_suggestion: |-
+      Revise: 'The public has long demanded that we search for extraterrestrial life, and Venus—once we overcome its atmospheric and thermal barriers—may finally provide answers.'
+    replacement: null
+    severity: medium
+- source: 'AES2 (score 4/6): weak verb, redundant phrasing'
+  article: |-
+    If this is brought into classrooms, this could be a gamebreaker. This is a plus for kids that may not have access to computers at home, to give them technology at school.
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      If this is brought into classrooms, this could be a gamebreaker. This is a plus for kids that may not have access to computers at home, to give them technology at school.
+    span:
+    - 0
+    - 170
+    issue_label: weak verb, redundant phrasing
+    question: |-
+      What does 'gamebreaker' mean here? And you've said the same thing twice—first 'a plus for kids that may not have access to computers,' then 'to give them technology at school.' Pick one and make it specific.
+    why_it_matters: |-
+      Repetition dilutes your point and 'gamebreaker' is too casual and vague for an academic argument.
+    fix_suggestion: |-
+      Try: 'Students without home computers gain hands-on access to cutting-edge facial-recognition software—a learning opportunity that levels the field.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 1/6): Run-on sentences; subject-verb errors'
+  article: |-
+    I think we should be able to use are phone at lunch periods and in the morning in case of a emergency or in case if you left something at school and we should be able to have phone or ipod in the class to listen if it is like a Friday or free time we already use them for book on ipod so why cant we are
+  critiques:
+  - agent: prose_style
+    text_quote: |-
+      I think we should be able to use are phone at lunch periods and in the morning in case of a emergency or in case if you left something at school and we should be able to have phone or ipod in the class to listen if it is like a Friday or free time we already use them for book on ipod so why cant we are
+    span:
+    - 0
+    - 303
+    issue_label: Run-on sentences; subject-verb errors
+    question: |-
+      This is one sentence that tries to do seven things at once—and 'use are phone' and 'why cant we are' aren't even grammatically complete. Where's the subject and verb? Try reading it aloud.
+    why_it_matters: |-
+      Your argument gets lost in the grammar mistakes, and your principal stops trusting your credibility immediately.
+    fix_suggestion: |-
+      Break this into three or four separate sentences, each with one clear idea: 'We should be able to use our phones during lunch and in the morning. This is important in case of an emergency. We already use iPods for audiobooks, so allowing phones during free time is consistent.'
+    replacement: null
+    severity: high

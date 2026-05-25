@@ -2,8 +2,11 @@
 # Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
 # NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
 # field 200-2500 words, must reference a specific anchor like
-# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
-# and the top 10 by quality score selected.
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku;
+# top 15 selected with a diversity constraint (round-robin
+# across distinct sub-issue buckets) so the exemplars cover the lane's
+# full failure-mode range rather than 15 variants of the
+# same critique.
 #
 - source: |-
     NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): cherry-picked qualitative example
@@ -80,26 +83,6 @@
     replacement: null
     severity: medium
 - source: |-
-    ICLR.cc/2025/Conference OpenReview review (rating 10/10, confidence 5/5): figure 2(b-d) overly complex with crossing lines
-  article: |-
-    There are too many crossing lines in Fig. 2 (b-d), which makes it very difficult to understand.
-  critiques:
-  - agent: figure_table_editor
-    text_quote: |-
-      There are too many crossing lines in Fig. 2 (b-d), which makes it very difficult to understand.
-    span:
-    - 0
-    - 95
-    issue_label: figure 2(b-d) overly complex with crossing lines
-    question: |-
-      Figure 2(b-d) has excessive crossing lines that hinder comprehension. Can it be simplified?
-    why_it_matters: |-
-      Readers cannot easily understand the architecture or message the figure is meant to convey.
-    fix_suggestion: |-
-      Simplify Figure 2(b-d) by reducing line crossings—consider splitting into multiple sub-figures, using spatial layout improvements, or removing non-essential connections.
-    replacement: null
-    severity: low
-- source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): Figure 1 readability poor
   article: Figure 1 is not easily readable
   critiques:
@@ -115,6 +98,60 @@
       Poor visualization of the core algorithmic concept (the query set Q_t) makes it harder for readers to understand and verify the method's behavior across iterations.
     fix_suggestion: |-
       Improve Figure 1 typography and readability; add visualizations showing the query set Q_t, importance weights, and how the set evolves over time in the experiments.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): figure lacks differentiation from baseline
+  article: Figure 2, where the method is explained
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Figure 2, where the method is explained
+    span:
+    - 0
+    - 39
+    issue_label: figure lacks differentiation from baseline
+    question: |-
+      Figure 2 should be expanded to highlight what key pieces change from HELMv2; currently readers must infer differences from text alone.
+    why_it_matters: |-
+      A visual comparison would significantly reduce the cognitive load on readers trying to understand the novelty.
+    fix_suggestion: |-
+      Expand Figure 2 to explicitly annotate or contrast changes from HELMv2, or add a separate comparative figure.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): missing color bar scales
+  article: Figure 3D-E color bars.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Figure 3D-E color bars.
+    span:
+    - 0
+    - 23
+    issue_label: missing color bar scales
+    question: |-
+      The color bars in Fig 3D-E should have scales; if the lower bound is not very near zero, some of the associated claims may need to be softened.
+    why_it_matters: |-
+      Without scale information, readers cannot assess the magnitude of effects shown in the figure, potentially inflating the apparent strength of results.
+    fix_suggestion: |-
+      Add scales to the color bars in Fig 3D-E and reassess any claims that depend on lower-bound proximity to zero.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): missing number of extracted triplets column
+  article: Table 1 (retrieval recall evaluation) and Table 3 (QA performance evaluation).
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Table 1 (retrieval recall evaluation) and Table 3 (QA performance evaluation).
+    span:
+    - 0
+    - 78
+    issue_label: missing number of extracted triplets column
+    question: |-
+      It would be better to present the number of extracted triplets in a new column for each baseline to ensure fair comparison. The same for Table 3 to demonstrate the QA performance.
+    why_it_matters: |-
+      Without reporting the number of retrieved triplets per baseline, differences in performance could be confounded by different retrieval set sizes rather than retrieval quality.
+    fix_suggestion: |-
+      Add a column showing the number of extracted triplets for each baseline in Tables 1 and 3.
     replacement: null
     severity: medium
 - source: |-
@@ -138,6 +175,46 @@
     replacement: null
     severity: high
 - source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): figure caption missing method details
+  article: |-
+    Figure 2 does not explicitly state what the training of reconstruction and reconstruction with mask are.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: |-
+      Figure 2 does not explicitly state what the training of reconstruction and reconstruction with mask are.
+    span:
+    - 0
+    - 104
+    issue_label: figure caption missing method details
+    question: |-
+      Figure 2 does not explicitly state what the training of reconstruction and reconstruction with mask are.
+    why_it_matters: |-
+      Without explicit description of these training procedures in the figure, readers cannot understand the method or reproduce the approach.
+    fix_suggestion: |-
+      Add explicit captions or text describing what 'reconstruction' and 'reconstruction with mask' training entail in Figure 2.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): unclear figure distinction and missing context
+  article: |-
+    Figure 1 caption claims the first and second rows represent two different challenges, but the distinction between them is unclear and these challenges are not discussed elsewhere in the paper.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: |-
+      Figure 1 caption claims the first and second rows represent two different challenges, but the distinction between them is unclear and these challenges are not discussed elsewhere in the paper.
+    span:
+    - 0
+    - 192
+    issue_label: unclear figure distinction and missing context
+    question: |-
+      Figure 1: The distinction between the first and second row is unclear, yet the caption claims these represent two different challenges. These two challenges are not discussed elsewhere in the paper and don't seem to be related to the dataset splits. Please clarify this.
+    why_it_matters: |-
+      Figure 1 fails to clearly communicate key challenges motivating the dataset, and the undiscussed challenges in the figure suggest misalignment between the figure and the paper's narrative.
+    fix_suggestion: |-
+      Either clarify the distinction in the figure caption and introduce these challenges in the main text, or revise Figure 1 to accurately represent the paper's actual problem formulation.
+    replacement: null
+    severity: medium
+- source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): inconsistency between Figure 4 and Table 2 results
   article: |-
     Figure 4 shows qualitative rollouts from the proposed method and RT-2-X which seem to indicate that RT-2-X manipulates objects with less precision. However, quantitative results in Table 2 show that RT-2-X outperforms the introduced method in certain tasks.
@@ -155,6 +232,26 @@
       The qualitative narrative in Figure 4 contradicts the quantitative comparison in Table 2, undermining reader confidence in the method's relative performance claims.
     fix_suggestion: |-
       Either provide quantitative metrics for the Figure 4 rollouts to explain the discrepancy, or clarify which tasks and metrics are being compared in Figure 4 vs Table 2.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): figure-text mismatch on model variants
+  article: |-
+    Page 5: Figure 2 mentions SG-, DG-, and FDG- models, but the subsequent 'BrainMAE Variants' section lists only two variants.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: |-
+      Page 5: Figure 2 mentions SG-, DG-, and FDG- models, but the subsequent 'BrainMAE Variants' section lists only two variants.
+    span:
+    - 0
+    - 124
+    issue_label: figure-text mismatch on model variants
+    question: |-
+      Page 5 includes a part that is confusing in terms of readability. We have figure 2 mentioning SG-, DG-, and FDG- models, but right below in 'BrainMAE Variants' only two are mentioned. Technically, they are not connected in the flow of the text, but visually they are together in the paper.
+    why_it_matters: |-
+      Inconsistency between figure and text creates confusion about which variants are actually proposed and evaluated.
+    fix_suggestion: |-
+      Ensure Figure 2 and the 'BrainMAE Variants' section are aligned in the number and naming of proposed models, or clarify their relationship.
     replacement: null
     severity: medium
 - source: |-
@@ -176,22 +273,20 @@
     replacement: null
     severity: medium
 - source: |-
-    NeurIPS.cc/2023/Conference OpenReview review (rating 8/10, confidence 4/5): Missing discussion and baseline comparison for multi-transform robustness
-  article: |-
-    Figure 7 in appendix: robustness under multiple simultaneous transformations appears low (TPR@1%FPR drops below 10% even with two transformations).
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): overlapping points obscure visibility
+  article: Figure 1 f and e
   critiques:
   - agent: figure_table_editor
-    text_quote: |-
-      Figure 7 in appendix: robustness under multiple simultaneous transformations appears low (TPR@1%FPR drops below 10% even with two transformations).
+    text_quote: Figure 1 f and e
     span:
     - 0
-    - 147
-    issue_label: Missing discussion and baseline comparison for multi-transform robustness
+    - 16
+    issue_label: overlapping points obscure visibility
     question: |-
-      Figure 7 shows concerning robustness degradation under multiple simultaneous transformations, but lacks discussion of which transformation combinations are particularly effective or why. Additionally, Figure 7 results are not shown for baseline watermarks in the appendix — this comparison would be instructive.
+      Use some transparency in Figure 1 f and e so that overlapping points are visible. At the moment it is unclear what proportion of the points is hidden behind the first layer and what their distribution is.
     why_it_matters: |-
-      Without discussion of failure modes and baseline comparisons, it is unclear whether the proposed method's robustness under multi-transform attack is actually stronger than existing approaches.
+      Overplotting without transparency prevents accurate assessment of the data distribution and density in the figure.
     fix_suggestion: |-
-      Add analysis of which transformation combinations most effectively break the watermark while maintaining image quality, and include analogous Figure 7 variants for baseline methods.
+      Add transparency/alpha blending to Figures 1e and 1f to reveal overlapping points and their distribution.
     replacement: null
-    severity: medium
+    severity: low

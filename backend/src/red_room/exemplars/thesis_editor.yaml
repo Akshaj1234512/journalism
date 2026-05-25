@@ -1,141 +1,292 @@
 # Exemplars for thesis_editor
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
-- source: 'They Say / I Say, Chapter 1: announcing a topic vs. making a claim'
+- source: 'PERSUADE_2.0 (score 3/6): thesis buried in rhetorical questions'
   article: |-
-    This essay will examine the role of Lady Macbeth in Shakespeare's play. It will look at her relationship with Macbeth, her famous sleepwalking scene, and her eventual death.
-  critiques:
-  - agent: thesis_editor
-    text_quote: This essay will examine the role of Lady Macbeth in Shakespeare's
-      play.
-    span: [0, 71]
-    issue_label: topic not thesis
-    question: |-
-      Your opening announces a topic ('the role of Lady Macbeth') rather than taking a position. Name what 'they say,' then plant your stake. Right now there is no stake a reader could push back on.
-    why_it_matters: |-
-      Without a position, the rest of the essay can describe Lady Macbeth, but it cannot argue anything about her.
-    fix_suggestion: |-
-      Rewrite to take an interpretive position. For example: 'Lady Macbeth's ambition is a masculine performance the play punishes more harshly than her husband's.' Pick whichever reading the body of your essay actually supports.
-    replacement: null
-    severity: high
-- source: 'They Say / I Say, Chapter 1: a thesis must invite disagreement'
-  article: |-
-    The Civil War had many causes, including economic differences, political tensions, and the question of slavery.
+    On May 24, 2001, NASA discovered a large, shadowy figure that resembled the shape of a human face on the surface of Mars. Some are to believe this figure was created by "aliens". Was it? Or is this mysterious likeness just something as normal as a natural landform?
   critiques:
   - agent: thesis_editor
     text_quote: |-
-      The Civil War had many causes, including economic differences, political tensions, and the question of slavery.
-    span: [0, 111]
-    issue_label: fact statement not thesis
+      On May 24, 2001, NASA discovered a large, shadowy figure that resembled the shape of a human face on the surface of Mars. Some are to believe this figure was created by "aliens". Was it? Or is this mysterious likeness just something as normal as a natural landform?
+    span:
+    - 0
+    - 265
+    issue_label: thesis buried in rhetorical questions
     question: |-
-      Every historian agrees the war had multiple causes. They Say / I Say's test for a thesis: who could disagree? If no reasonable reader would push back, the sentence is a fact, not a claim.
+      You're asking two questions here instead of stating your actual position. Why not tell your reader directly: 'The Face on Mars is a natural landform, not an alien construction'? Right now I have to infer your stance from the phrasing.
     why_it_matters: |-
-      A reader cannot tell what argument the essay will defend, only what subject it will discuss.
+      Without a clear thesis statement, your reader doesn't know what you're actually arguing for until the very last paragraph, which weakens your persuasive force.
     fix_suggestion: |-
-      Take a position on the relative weight of the causes, or on which conventional account you intend to challenge. 'The economic interpretation, dominant since Beard, underestimates how decisively the slavery question reframed the political coalitions' is a claim someone could push back on.
+      Replace the rhetorical questions with a direct claim: 'The Face on Mars is simply a natural landform, not evidence of alien construction.'
     replacement: null
     severity: high
-- source: 'Booth, The Craft of Argument: the thesis must promise a defensible claim'
+- source: 'PERSUADE_2.0 (score 3/6): thesis states position but not argument'
   article: |-
-    Toni Morrison's Beloved is a powerful novel. It deals with memory, motherhood, and the legacy of slavery in ways that have moved many readers and won the Pulitzer Prize.
-  critiques:
-  - agent: thesis_editor
-    text_quote: Toni Morrison's Beloved is a powerful novel.
-    span: [0, 44]
-    issue_label: evaluative blur not thesis
-    question: |-
-      'Powerful' is praise without a position. A thesis names what is at stake and how the essay will argue it. 'Powerful' does neither, and the sentence around it is a publisher blurb.
-    why_it_matters: |-
-      The reader knows you admire the novel; they do not know what interpretive argument you will make.
-    fix_suggestion: |-
-      Replace with a claim about how the novel works, e.g. 'Beloved refuses the conventional grammar of trauma narrative by making Sethe's memory bodily, not psychological.'
-    replacement: null
-    severity: high
-- source: 'Standard writing-center diagnostic: thesis-body drift'
-  article: |-
-    This paper argues that the New Deal saved American capitalism by stabilising the banking system in 1933 and 1934. The first body section examines the cultural impact of WPA arts programs on rural communities. The second turns to the long-term legacy of Social Security on American family structure.
+    I agree with your newest policy because of how low our student grades have become.
   critiques:
   - agent: thesis_editor
     text_quote: |-
-      This paper argues that the New Deal saved American capitalism by stabilising the banking system in 1933 and 1934.
-    span: [0, 113]
-    issue_label: thesis-body drift
+      I agree with your newest policy because of how low our student grades have become.
+    span:
+    - 0
+    - 82
+    issue_label: thesis states position but not argument
     question: |-
-      Your thesis is about banking stabilisation. Your body sections are about WPA arts and Social Security family effects. Neither body section is engaged with the banking claim.
+      You tell us you agree, but why? 'Low grades' is a condition, not a reason for the B-average rule. What's the actual claim you're defending—that grades matter more than sports? That this policy will fix the problem? Right now the thesis just announces your side without previewing what you'll actually argue.
     why_it_matters: |-
-      When the body argues a different claim than the thesis names, the reader cannot tell which argument the essay actually defends.
+      A reader doesn't know what logic you're building toward, so the evidence that follows feels scattered rather than purposeful.
     fix_suggestion: |-
-      Either rewrite the thesis to match what the body actually argues (likely something about the New Deal's cultural and social-policy legacy), or rewrite the body to defend the banking claim.
+      Try: 'I support requiring a B average for sports because it will force students to prioritize homework and studying over practice time, directly addressing the root of low grades at our school.' This shows the causal claim you're actually making.
     replacement: null
     severity: high
-- source: 'Standard writing-center diagnostic: hidden thesis'
+- source: 'PERSUADE_2.0 (score 3/6): thesis buried, unclear claim'
   article: |-
-    Hamlet's behaviour after his father's death has puzzled critics for centuries. He delays his revenge, speaks in riddles, treats Ophelia cruelly, and stages a play within the play. There are many ways to read these choices, and scholars have offered competing accounts.
+    i think is good idea because some people not have go to school for different reason .Sometimes people not have car ,by live length of school the is diffucult other because is work for your necessity personal .But is good idea for people learned and have get your diplom of high schools.
   critiques:
   - agent: thesis_editor
     text_quote: |-
-      There are many ways to read these choices, and scholars have offered competing accounts.
-    span: [180, 268]
-    issue_label: no thesis in intro
+      i think is good idea because some people not have go to school for different reason .Sometimes people not have car ,by live length of school the is diffucult other because is work for your necessity personal .But is good idea for people learned and have get your diplom of high schools.
+    span:
+    - 0
+    - 286
+    issue_label: thesis buried, unclear claim
     question: |-
-      Your introduction surveys what other people think about Hamlet's behaviour and stops. The essay's own position is nowhere on the page. After the 'they say,' the writer's stake has to land.
+      What's your actual argument here? You've got several reasons jammed together—transportation, work, and the diploma goal—but I don't see a clear statement of what you believe distance learning should do. Are you arguing schools *should offer* it? That students *would benefit*? Start over with one sentence that answers the prompt directly.
     why_it_matters: |-
-      Without a stake by the end of the intro, the reader does not know what the essay is for.
+      Readers can't follow your argument if they don't know what you're arguing for, so everything that comes after feels unfocused.
     fix_suggestion: |-
-      Add a sentence that takes a side, e.g. 'I argue that Hamlet's apparent indecision is a deliberate moral position, not a flaw of character.'
+      Open with something like: 'Schools should offer distance learning because it allows working adults and students with transportation barriers to earn their diplomas without sacrificing their jobs or family obligations.' Then support that specific claim.
     replacement: null
     severity: high
-- source: 'Booth, The Craft of Argument: scope vs. essay length'
+- source: 'AES2 (score 2/6): thesis as question, no position'
   article: |-
-    This five-page paper will explore the role of religion in shaping Western civilisation from the fall of Rome to the Reformation.
+    But although we use these 4-wheeled machines on a regular basis, would limiting the usage of cars be benefitial?
   critiques:
   - agent: thesis_editor
     text_quote: |-
-      This five-page paper will explore the role of religion in shaping Western civilisation from the fall of Rome to the Reformation.
-    span: [0, 128]
-    issue_label: thesis too broad for length
+      But although we use these 4-wheeled machines on a regular basis, would limiting the usage of cars be benefitial?
+    span:
+    - 0
+    - 112
+    issue_label: thesis as question, no position
     question: |-
-      A thousand-year span across an entire civilisation is a book, not five pages. The thesis has to promise something the essay can actually deliver.
-    why_it_matters: An impossible scope guarantees the body will be a summary tour,
-      not an argument.
+      You're asking a question here, not making a claim. What's your actual argument—that we *should* limit car usage, or that we *shouldn't*? A thesis needs to tell the reader what you believe, not just pose a puzzle.
+    why_it_matters: |-
+      Without a clear position, the reader doesn't know what you're arguing for, so the evidence that follows feels scattered rather than purposeful.
     fix_suggestion: |-
-      Narrow to one specific case, one specific century, or one specific institution. 'The Cluniac reforms of the tenth century reorganised the political economy of Western Europe' is a five-page claim.
+      Replace the question with a declarative statement: 'Limiting car usage in American communities would reduce air pollution, improve public health, and increase social connection—benefits that outweigh the convenience we sacrifice.'
     replacement: null
-    severity: medium
-- source: 'They Say / I Say: ''so what'' and ''who cares'' (Chapter 7)'
+    severity: high
+- source: 'AES2 (score 2/6): vague thesis, no preview of structure'
   article: |-
-    The Great Gatsby uses green light imagery in connection with Daisy throughout the novel. This paper argues that the green light is symbolic of Gatsby's longing for her.
-  critiques:
-  - agent: thesis_editor
-    text_quote: This paper argues that the green light is symbolic of Gatsby's longing
-      for her.
-    span: [89, 168]
-    issue_label: missing stakes
-    question: |-
-      Defensible, but who would push back? A thesis has to do more than name a symbol. What is at stake in reading the light this way rather than as something else?
-    why_it_matters: A thesis nobody would disagree with leaves the essay nowhere to
-      go.
-    fix_suggestion: |-
-      Sharpen the claim so it has a stake. 'The green light is not a symbol of Gatsby's hope but of the failure of American self-invention itself' takes a position other readers would contest.
-    replacement: null
-    severity: medium
-- source: 'Standard writing-center diagnostic: hedge stack erases the thesis'
-  article: |-
-    It could perhaps be argued that, in some sense, the French Revolution might possibly be understood as having had a partial influence on subsequent European political development.
+    I would argue in favor of changing to election by popular vote for the president of the united states and not keeping the ellectoral college. there are many reasons why i say that and will do that.
   critiques:
   - agent: thesis_editor
     text_quote: |-
-      It could perhaps be argued that, in some sense, the French Revolution might possibly be understood as having had a partial influence on subsequent European political development.
-    span: [0, 178]
-    issue_label: thesis hedged into invisibility
+      I would argue in favor of changing to election by popular vote for the president of the united states and not keeping the ellectoral college. there are many reasons why i say that and will do that.
+    span:
+    - 0
+    - 197
+    issue_label: vague thesis, no preview of structure
     question: |-
-      Five hedges in one sentence ('could,' 'perhaps,' 'in some sense,' 'might possibly,' 'partial'). Stacked this hard, they confess no position the essay is willing to defend.
-    why_it_matters: If the writer will not commit, the reader has no thesis to engage
-      with.
+      Your opening tells us what you want but not why it matters or what reasoning you'll actually develop. 'Many reasons' is a placeholder—which reasons? And 'will do that' is filler. What's the stakes of this argument?
+    why_it_matters: |-
+      A reader has no map of where you're going, so each paragraph reads as disconnected assertion rather than unfolding logic.
     fix_suggestion: |-
-      Pick the strongest, most specific claim you actually believe and write it without the qualifiers. 'The French Revolution permanently reshaped the European political vocabulary, especially the language of rights and the nation-state' is a thesis someone could push back on.
+      Rewrite: 'The U.S. should replace the Electoral College with a popular-vote system because it better reflects democratic principles and prevents candidates from winning despite fewer total votes.' This tells us your two main grounds upfront.
     replacement: null
-    severity: medium
+    severity: high
+- source: |-
+    Feedback_Prize_ELL (score 3.143386438739405/5): vague thesis, no position clarity
+  article: Well do you agree with me because I do think you should be honest.
+  critiques:
+  - agent: thesis_editor
+    text_quote: Well do you agree with me because I do think you should be honest.
+    span:
+    - 0
+    - 66
+    issue_label: vague thesis, no position clarity
+    question: |-
+      This is your thesis? It's a question to the reader, not a claim. What exactly are you arguing — that people should *always* be honest, or that honesty is *sometimes* valuable? The essay hints at both, but this sentence doesn't commit to either.
+    why_it_matters: |-
+      Without a clear thesis, readers don't know what you're proving, so the reasons that follow feel scattered rather than building a case.
+    fix_suggestion: |-
+      Try: 'People should be honest with family and close friends, even when the truth is painful, because honesty builds real trust.' That tells us your position and hints at the nuance your essay actually explores.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): vague thesis, no clear position'
+  article: |-
+    Driverless cars seem like they would take over the future in about the next twenty years. When in reality technology is not pregressing as quickly as you think.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      Driverless cars seem like they would take over the future in about the next twenty years. When in reality technology is not pregressing as quickly as you think.
+    span:
+    - 0
+    - 160
+    issue_label: vague thesis, no clear position
+    question: |-
+      What's your actual argument here? That driverless cars won't arrive soon? That they're dangerous? That they're overhyped? Right now you're saying tech is slower than people think—but then your essay argues they're bad for society. These aren't the same claim.
+    why_it_matters: |-
+      Readers don't know what you're defending, so they can't follow whether your evidence supports you.
+    fix_suggestion: |-
+      Pick one claim and lead with it: 'Driverless cars pose serious safety and practical risks that current technology cannot yet solve' or 'Despite the hype, widespread adoption of driverless cars is at least a decade away because of unresolved liability and design issues.' Then build the essay around that.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): thesis buried in subordination, unclear predicate'
+  article: |-
+    Senator i believe the electoral college should be consider changed by congress because of the many people in this great country wouldnt trust electors for voting.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      Senator i believe the electoral college should be consider changed by congress because of the many people in this great country wouldnt trust electors for voting.
+    span:
+    - 0
+    - 162
+    issue_label: thesis buried in subordination, unclear predicate
+    question: |-
+      What are you actually arguing for here? The main claim gets lost in the 'because' clause—is your argument about *distrust of electors*, or about whether the Electoral College should be changed? And 'should be consider changed' isn't a complete thought. Start fresh with a single, declarative sentence that tells me your position and why it matters.
+    why_it_matters: |-
+      A reader can't tell what you're defending, so nothing that follows feels like it's building toward a coherent point.
+    fix_suggestion: |-
+      Try: 'Congress should abolish the Electoral College and adopt a national popular vote because the current system disenfranchises ordinary voters and relies on electors whose loyalties and qualifications we cannot verify.' Now your claim is clear, and everything after should support one of those two reasons.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): thesis is buried and muddled'
+  article: |-
+    Most people might suggest to keep the electoral college work. Yet some other people don't. The method "Winner-Takes-All" is only fair enough, because why should the person who lost earn a reward , the people made their desicions, and whoever lost, goes back home.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      Most people might suggest to keep the electoral college work. Yet some other people don't. The method "Winner-Takes-All" is only fair enough, because why should the person who lost earn a reward , the people made their desicions, and whoever lost, goes back home.
+    span:
+    - 0
+    - 263
+    issue_label: thesis is buried and muddled
+    question: |-
+      What are you actually arguing here? Your opening says some people want to keep the Electoral College and others don't, but that's just describing disagreement, not staking a position. Then you jump to "Winner-Takes-All" and a question about fairness, but you never explain what your argument is or why the reader should care. What claim are you defending?
+    why_it_matters: |-
+      Without a clear thesis, your reader doesn't know what you're defending, so the evidence you pile in later doesn't land—it just looks scattered.
+    fix_suggestion: |-
+      Open with a direct claim: "The Electoral College should be kept because it ensures that electors—the most informed voters—make the final decision" or whatever your actual position is. Then organize your evidence around that claim.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): thesis buried in narrative, no clear position'
+  article: |-
+    In my opinion it would benefit a students whom live by their own. The ones that came to this country by them self, the ones that must have to work full time or have two jobs, because they have job pay rent and others materials things that they must need every day to keep keep moving forward, as a result of working full time or having two jobs they would not have such enough time to attend any school.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      In my opinion it would benefit a students whom live by their own. The ones that came to this country by them self, the ones that must have to work full time or have two jobs, because they have job pay rent and others materials things that they must need every day to keep keep moving forward, as a result of working full time or having two jobs they would not have such enough time to attend any school.
+    span:
+    - 0
+    - 403
+    issue_label: thesis buried in narrative, no clear position
+    question: |-
+      Your first paragraph is really a paragraph-long reason, not a thesis. Where's your claim? What exactly are you arguing — that distance learning should be offered? That it would help working students? That schools should make it free? Pick one thing and state it directly before you explain why.
+    why_it_matters: |-
+      Readers don't know what you're actually arguing for until they've waded through multiple clauses, which makes the whole essay feel unfocused and harder to follow.
+    fix_suggestion: |-
+      Start with: "Schools should offer distance learning because it allows working students to earn income and pursue education simultaneously." Then use the rest of the paragraph to develop that one idea.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): vague, unfocused opening claim'
+  article: |-
+    Humans have a interesting way living in today`s society because we have advanced technology like cars. Just because people have cars the usage should still be limited.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      Humans have a interesting way living in today`s society because we have advanced technology like cars. Just because people have cars the usage should still be limited.
+    span:
+    - 0
+    - 167
+    issue_label: vague, unfocused opening claim
+    question: |-
+      What does 'an interesting way living' mean? And your actual argument—that car usage should be limited—gets buried in sentence two without a clear setup. What's your main point, and why does the reader care?
+    why_it_matters: |-
+      The reader can't tell what you're actually arguing for because your thesis is diffused across two weak sentences with no clear position.
+    fix_suggestion: |-
+      Start with a single, direct claim: 'Limiting car usage in suburban communities reduces pollution, improves public health, and strengthens neighborhoods.' Then your essay can defend that specific position.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): thesis too simple, doesn''t guide argument'
+  article: |-
+    Some may think that the Face was created by aliens, but the true answer is that the Face is just a natural landform.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      Some may think that the Face was created by aliens, but the true answer is that the Face is just a natural landform.
+    span:
+    - 0
+    - 116
+    issue_label: thesis too simple, doesn't guide argument
+    question: |-
+      Your thesis announces the conclusion, but it doesn't tell us what work the essay will do to get there. Are you refuting the alien theory, explaining why people believe it, or showing how we know it's natural? Right now it's just a flat assertion.
+    why_it_matters: |-
+      Readers don't know what claim you're actually defending or what the essay's structure will be, so they can't follow your reasoning.
+    fix_suggestion: |-
+      Revise to something like: 'While popular culture has convinced many that the Face on Mars was built by aliens, high-resolution imaging proves it is simply a natural mesa—a conclusion that also reveals how conspiracy theories thrive in the absence of clear evidence.' This signals both your conclusion and your method.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 4/6): thesis buried in runoff; lacks clarity and structure'
+  article: |-
+    The author would be correct in this statement as we humans know very little about the planet because of numerous factors making it a difficult planet to study, but solving those problems would lead into advancement. Including that becuase the planet is closely related to earth, that could mean it supported life long ago. Lastly that striving to meet the challenge presented, despite the roadblocks, would lead us into many equally intimidating endeavors.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      The author would be correct in this statement as we humans know very little about the planet because of numerous factors making it a difficult planet to study, but solving those problems would lead into advancement. Including that becuase the planet is closely related to earth, that could mean it supported life long ago. Lastly that striving to meet the challenge presented, despite the roadblocks, would lead us into many equally intimidating endeavors.
+    span:
+    - 0
+    - 456
+    issue_label: thesis buried in runoff; lacks clarity and structure
+    question: |-
+      This reads more like three half-formed ideas tacked together than a single evaluative claim. What's your actual position on how well the author supports the idea? Does the author succeed, partially succeed, fail? And what's the order of your evidence—why these three points and not others?
+    why_it_matters: |-
+      A reader can't tell what you're arguing, so the essay has no spine; paragraphs that follow feel reactive rather than purposeful.
+    fix_suggestion: |-
+      Separate your three points into a clean thesis: 'The author effectively supports the idea that studying Venus is worthwhile by demonstrating the scientific value of overcoming its dangers, showing Venus's Earth-like past, and arguing that such challenges prepare us for future exploration.' Then deliver evidence in that order.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 4/6): thesis frames negatives as cause, not argument'
+  article: |-
+    Smog, backed up traffic ways, and stress seem to be the main factor contributing to the decrease in car usage. Although these seem to be very negative factors, there are many advantages to limiting car use including helping our Planet Earth and less costly factors.
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      Smog, backed up traffic ways, and stress seem to be the main factor contributing to the decrease in car usage. Although these seem to be very negative factors, there are many advantages to limiting car use including helping our Planet Earth and less costly factors.
+    span:
+    - 0
+    - 265
+    issue_label: thesis frames negatives as cause, not argument
+    question: |-
+      Your opening sentence treats smog and traffic as *causes* of decreased car usage, but then your thesis pivots to arguing that we *should* limit cars for advantages. Are you explaining what's already happening, or persuading readers that limiting cars is a good idea? Right now these two moves work against each other.
+    why_it_matters: |-
+      The reader can't tell whether you're making an argument or reporting a trend, which weakens the persuasive force of everything that follows.
+    fix_suggestion: |-
+      Rewrite the thesis to make a clear claim: "Limiting car usage offers significant advantages: it reduces air pollution, decreases personal and public spending, and improves public health." Drop the opening framing about what "seems" to be causing decreased usage.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 1/6): No clear thesis; rambling opening'
+  article: |-
+    I think we should be able to use are phone at lunch periods and in the morning in case of a emergency or in case if you left something at school and we should be able to have phone or ipod in the class to listen if it is like a Friday or free time we already use them for book on ipod so why cant we are and the phone thing is bad all 14 year old student should have phone cause what if the school started on fire or you got in trouble and the office doesn't know your parent number...
+  critiques:
+  - agent: thesis_editor
+    text_quote: |-
+      I think we should be able to use are phone at lunch periods and in the morning in case of a emergency or in case if you left something at school and we should be able to have phone or ipod in the class to listen if it is like a Friday or free time we already use them for book on ipod so why cant we are and the phone thing is bad all 14 year old student should have phone cause what if the school started on fire or you got in trouble and the office doesn't know your parent number...
+    span:
+    - 0
+    - 485
+    issue_label: No clear thesis; rambling opening
+    question: |-
+      I count at least four different arguments here—emergency access, listening to iPods during free time, parent-contact backup, and lost-item situations—but no sentence that actually tells your principal which policy you want. What are you asking for? Policy 1 or Policy 2?
+    why_it_matters: |-
+      Your reader has no target; she can't tell what position you're defending, so the whole letter falls apart before it starts.
+    fix_suggestion: |-
+      Start over with a single, clear sentence: 'I believe you should adopt Policy 1 because students need access to phones during lunch and free time for emergencies and important communications.' Then build each paragraph around one reason.
+    replacement: null
+    severity: high

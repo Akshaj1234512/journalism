@@ -1,0 +1,81 @@
+# Exemplars for profile_editor (Pia). Bootstrap synthetic; replaced in Phase 2.
+- source: 'profile reads as official narrative'
+  article: |-
+    Vasquez has long believed that great teams are built on trust. "We've always tried to put people first," she said.
+  critiques:
+  - agent: profile_editor
+    text_quote: '"We''ve always tried to put people first," she said.'
+    span: [60, 109]
+    issue_label: official narrative unchallenged
+    question: |-
+      "Great teams are built on trust" and "we put people first" — these are sentences from her company's About page. Where is the texture that makes this her, not the press release?
+    why_it_matters: |-
+      A profile that the subject's communications team would have written is not a profile; it's PR.
+    fix_suggestion: |-
+      Find one moment where you saw Vasquez act in a way that didn't match her public talking points — or one outside source who'd push back on the "people first" framing. Lead with the tension, not the brand line.
+    replacement: null
+    severity: high
+- source: 'no source other than the subject'
+  article: |-
+    In the kitchen, Chen described his philosophy at length. He has many strong views about Italian cuisine, the modern restaurant industry, and the meaning of hospitality.
+  critiques:
+  - agent: profile_editor
+    text_quote: In the kitchen, Chen described his philosophy at length.
+    span: [0, 55]
+    issue_label: no outside voices
+    question: |-
+      The piece is entirely Chen on Chen. A profile needs at least three or four other voices: a sous chef, a longtime regular, a critic, a former mentor. Where are they?
+    why_it_matters: |-
+      Without outside sources the profile is autobiography, and the reader notices.
+    fix_suggestion: |-
+      Interview at least three people who know Chen from different angles. Quote the ones who disagree with each other.
+    replacement: null
+    severity: high
+- source: 'unspecific flattering adjectives'
+  article: |-
+    Lopez is a visionary leader whose transformative ideas have reshaped the industry. She is widely regarded as brilliant.
+  critiques:
+  - agent: profile_editor
+    text_quote: a visionary leader whose transformative ideas have reshaped the industry
+    span: [10, 79]
+    issue_label: hagiographic adjectives
+    question: |-
+      "Visionary," "transformative," "brilliant" — these are the words you use when you don't have the specific. Show the reader the moment that made you think "visionary" and let them come to the word themselves.
+    why_it_matters: |-
+      Hagiographic adjective stacks are the prose tell of a profile that didn't do the reporting work to earn its take.
+    fix_suggestion: |-
+      Cut the adjectives. Replace with a specific scene or a specific decision Lopez made that exhibited the quality you want to claim.
+    replacement: null
+    severity: medium
+- source: 'no direct-observation moments'
+  article: |-
+    Singh spoke at length about his approach to leadership during a phone call last Tuesday.
+  critiques:
+  - agent: profile_editor
+    text_quote: during a phone call last Tuesday
+    span: [54, 86]
+    issue_label: no direct observation
+    question: |-
+      A phone interview is reporting input, not a profile foundation. We need a scene where you were physically present with Singh — at work, at home, anywhere.
+    why_it_matters: |-
+      Without direct observation the profile has no authority — the reader can't tell what's the subject's self-portrait vs. what's the writer's seeing.
+    fix_suggestion: |-
+      Arrange in-person time. Even an hour at his office gives you the material a phone interview can't: how he greets staff, how his desk looks, what he's reading.
+    replacement: null
+    severity: high
+- source: 'opens with biographical summary'
+  article: |-
+    Born in 1972 in Lima, Peru, Maria Reyes immigrated to the United States with her family at age eight. After graduating from State University in 1994, she worked at three different firms before founding Reyes Capital in 2008.
+  critiques:
+  - agent: profile_editor
+    text_quote: Born in 1972 in Lima, Peru, Maria Reyes immigrated to the United States with her family at age eight.
+    span: [0, 102]
+    issue_label: opens with bio summary
+    question: |-
+      "Born in 19XX in [place]" is the laziest profile opening there is — Wikipedia-style entry instead of putting Reyes in a room with the reader.
+    why_it_matters: |-
+      The opening graf is the most-read part of any profile. Wasting it on biographical summary means the reader never meets the person.
+    fix_suggestion: |-
+      Open with a scene: a specific moment when you were with Reyes. Background can come in graf 4 or 5, braided into scene rather than dumped up front.
+    replacement: null
+    severity: medium

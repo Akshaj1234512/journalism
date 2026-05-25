@@ -26,7 +26,15 @@ export type AgentName =
   | "limitations_editor"
   | "figure_table_editor"
   | "theorem_editor"
-  | "format_editor";
+  | "format_editor"
+  // Journalism type specialists — one runs per article based on article_type
+  | "city_editor"
+  | "investigations_editor"
+  | "opinion_editor"
+  | "features_editor"
+  | "profile_editor"
+  | "reviews_editor"
+  | "explanatory_editor";
 
 export type Severity = "high" | "medium" | "low";
 
@@ -57,6 +65,18 @@ export type EssayType =
   | "narrative"
   | "research"
   | "rhetorical"
+  | "none";
+
+// Article type picks the journalism type specialist that runs alongside the
+// core editors (6 shared craft + Anne). Toggles below control Parker / Peter / Joe.
+export type ArticleType =
+  | "news"
+  | "investigative"
+  | "opinion"
+  | "feature"
+  | "profile"
+  | "review"
+  | "analysis"
   | "none";
 
 export interface Critique {
@@ -529,6 +549,141 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
       "Load-bearing content moved entirely to the appendix",
     ],
   },
+
+  // ----- Journalism type specialists. One runs per article based on article_type. -----
+  city_editor: {
+    label: "Cole — City Editor",
+    shortLabel: "News Desk",
+    firstName: "Cole",
+    brandHex: "#0369A1",
+    highlightHex: "#BAE6FD",
+    borderClass: "border-sky-700",
+    available: true,
+    kind: "flagger",
+    mode: "journalism",
+    tagline:
+      "Reads straight news the way a city editor at a daily paper does. Catches buried ledes, weak attribution ('officials'), missing nut grafs, headline-lede mismatch, soft quantifiers, and 5W gaps.",
+    lookFor: [
+      "Buried lede: news first appears in graf 4 or later",
+      "Vague attribution ('officials', 'sources') when a specific source is available",
+      "No nut graf on a story that needs context",
+      "Headline materially mismatches the lede",
+    ],
+  },
+  investigations_editor: {
+    label: "Iris — Investigations",
+    shortLabel: "Investigations",
+    firstName: "Iris",
+    brandHex: "#9F1239",
+    highlightHex: "#FECDD3",
+    borderClass: "border-rose-800",
+    available: true,
+    kind: "flagger",
+    mode: "journalism",
+    tagline:
+      "Reads investigative drafts the way a serious investigations editor does. Catches single-source allegations, pattern claims from one incident, missing specific-allegation right-to-reply, document provenance vagueness, and inferential leaps via 'essentially' / 'in effect'.",
+    lookFor: [
+      "Material allegation with one anonymous source and no document trail",
+      "Pattern / systemic claim backed by a single incident",
+      "Subject's right-to-reply on the specific allegation absent or vague",
+      "Inferential leap via 'essentially' / 'in effect' / 'amounts to'",
+    ],
+  },
+  opinion_editor: {
+    label: "Otto — Opinion Editor",
+    shortLabel: "Op-Ed",
+    firstName: "Otto",
+    brandHex: "#15803D",
+    highlightHex: "#BBF7D0",
+    borderClass: "border-green-700",
+    available: true,
+    kind: "flagger",
+    mode: "journalism",
+    tagline:
+      "Reads opinion pieces with the bar a serious op-ed editor holds. Catches missing thesis, strawman opposing views, contested facts dressed as opinion, goalpost moves, and closings that just restate.",
+    lookFor: [
+      "No clear argumentative thesis by end of graf 2",
+      "Strawman of the opposing view (no holder would recognize themselves in it)",
+      "Contested factual claim presented as opinion to dodge fact-checking",
+      "Closing that restates the thesis instead of landing somewhere new",
+    ],
+  },
+  features_editor: {
+    label: "Faye — Features Editor",
+    shortLabel: "Features",
+    firstName: "Faye",
+    brandHex: "#A21CAF",
+    highlightHex: "#F5D0FE",
+    borderClass: "border-fuchsia-700",
+    available: true,
+    kind: "flagger",
+    mode: "journalism",
+    tagline:
+      "Reads features for narrative craft. Catches all-summary-no-scene prose, missing narrative arc, abstract sensory adjectives ('charming', 'delicious'), kickers that just summarize, and the 'feature about nothing' trap.",
+    lookFor: [
+      "Entire passage in summary; no scene on the page",
+      "Subject talked about but never doing anything in the moment",
+      "Generic sensory adjectives where specific is available",
+      "Kicker that summarizes ('and so, X had changed forever')",
+    ],
+  },
+  profile_editor: {
+    label: "Pia — Profile Editor",
+    shortLabel: "Profile",
+    firstName: "Pia",
+    brandHex: "#BE185D",
+    highlightHex: "#FBCFE8",
+    borderClass: "border-pink-700",
+    available: true,
+    kind: "flagger",
+    mode: "journalism",
+    tagline:
+      "Reads profiles for what the subject's PR person would hate. Catches official-narrative-only framing, no outside voices, hagiographic adjectives ('visionary', 'transformative'), missing direct observation, and biographical-summary openings.",
+    lookFor: [
+      "Profile reads as the subject's preferred narrative; no tension or paradox",
+      "Subject is the only substantive source; no outside voices",
+      "Unspecific flattering adjectives ('visionary', 'brilliant') doing the work",
+      "Opens with biographical summary instead of a scene with the subject in the room",
+    ],
+  },
+  reviews_editor: {
+    label: "Remy — Reviews Editor",
+    shortLabel: "Reviews",
+    firstName: "Remy",
+    brandHex: "#854D0E",
+    highlightHex: "#FEF3C7",
+    borderClass: "border-yellow-700",
+    available: true,
+    kind: "flagger",
+    mode: "journalism",
+    tagline:
+      "Reads reviews for position clarity and craft. Catches no-position-by-graf-3 hedging, plot summary masquerading as criticism, claims about the work with no specific evidence, missing genre context, and authorial-intent fallacies.",
+    lookFor: [
+      "No identifiable position on the work by end of graf 3",
+      "Mostly plot summary or content description with minimal criticism",
+      "Claims about the work made with no specific evidence drawn from it",
+      "Work treated as if no genre or canonical context exists",
+    ],
+  },
+  explanatory_editor: {
+    label: "Eli — Explanatory Editor",
+    shortLabel: "Explainer",
+    firstName: "Eli",
+    brandHex: "#0F766E",
+    highlightHex: "#99F6E4",
+    borderClass: "border-teal-700",
+    available: true,
+    kind: "flagger",
+    mode: "journalism",
+    tagline:
+      "Reads explainers and analytical pieces with the Vox / Upshot / FiveThirtyEight bar. Catches missing 'why this matters' framing, causation-from-correlation, jargon without definitions, unscoped projections, and abstract concepts without concrete examples.",
+    lookFor: [
+      "No 'why this matters' framing by graf 3",
+      "Causation asserted from correlational evidence only",
+      "Jargon stacked without definitions",
+      "Projection ('by 2040, X will Y') without provenance or assumptions",
+    ],
+  },
 };
 
 // Base roster per mode. For essays, the matching purpose editor (and Sol)
@@ -548,14 +703,18 @@ const SHARED_CRAFT: AgentName[] = [
   "question_master",
 ];
 
+// Journalism core = shared craft + Anne (always on). Type specialist +
+// toggle-driven Parker/Peter/Joe are appended at runtime by
+// getJournalismRoster() based on article_type and the toggle flags.
+const JOURNALISM_CORE: AgentName[] = [
+  ...SHARED_CRAFT,
+  "legal_skeptic",
+];
+
 export const MODE_AGENTS: Record<Mode, AgentName[]> = {
-  journalism: [
-    ...SHARED_CRAFT,
-    "legal_skeptic",
-    "data_expert",
-    "human_rights",
-    "partisan",
-  ],
+  // Journalism roster shown in the rail by default. The rest is added by
+  // getJournalismRoster() when the user picks a type or toggle.
+  journalism: [...JOURNALISM_CORE],
   essays: [
     ...SHARED_CRAFT,
     "citation_editor",
@@ -597,7 +756,7 @@ export interface ResearchSectionChoice {
 }
 
 export const RESEARCH_SECTION_CHOICES: ResearchSectionChoice[] = [
-  { value: "full_paper", label: "Full paper" },
+  { value: "full_paper", label: "Full Paper (Recommended)" },
   { value: "abstract", label: "Abstract" },
   { value: "introduction", label: "Introduction" },
   { value: "related_work", label: "Related Work" },
@@ -617,7 +776,7 @@ export interface ResearchSubjectChoice {
 export const RESEARCH_SUBJECT_CHOICES: ResearchSubjectChoice[] = [
   {
     value: "cs_ml",
-    label: "CS / ML",
+    label: "Computer Science / Machine Learning",
     available: true,
     venuesHint: "ICML, NeurIPS, ICLR, AAAI, EMNLP",
   },
@@ -704,5 +863,129 @@ export const ESSAY_TYPE_CHOICES: EssayTypeChoice[] = [
     value: "rhetorical",
     label: "Rhetorical",
     examples: "speech / ad / text breakdown, AP English Lang prompt",
+  },
+];
+
+// ----- Journalism roster routing -----
+
+// Article type -> the one type specialist that runs for that type.
+export const TYPE_SPECIALIST_BY_ARTICLE: Partial<Record<
+  Exclude<ArticleType, "none">,
+  AgentName
+>> = {
+  news: "city_editor",
+  investigative: "investigations_editor",
+  opinion: "opinion_editor",
+  feature: "features_editor",
+  profile: "profile_editor",
+  review: "reviews_editor",
+  analysis: "explanatory_editor",
+};
+
+// Sensible default for the toggles given a chosen article type. The user can
+// still flip the toggles manually; this just pre-fills what most stories of
+// that type usually want. Matches the backend roster intuition.
+export interface JournalismToggles {
+  partisan: boolean;
+  hasDataClaims: boolean;
+  hasAnonymousSources: boolean;
+}
+
+export function defaultTogglesFor(type: ArticleType): JournalismToggles {
+  switch (type) {
+    case "investigative":
+      return { partisan: false, hasDataClaims: true, hasAnonymousSources: true };
+    case "opinion":
+      return { partisan: true, hasDataClaims: false, hasAnonymousSources: false };
+    case "news":
+      return { partisan: false, hasDataClaims: false, hasAnonymousSources: true };
+    case "feature":
+    case "profile":
+      return { partisan: false, hasDataClaims: false, hasAnonymousSources: false };
+    case "analysis":
+      return { partisan: false, hasDataClaims: true, hasAnonymousSources: false };
+    case "review":
+    case "none":
+    default:
+      return { partisan: false, hasDataClaims: false, hasAnonymousSources: false };
+  }
+}
+
+// Build the full journalism roster for the rail. Mirrors the backend's
+// default_agents() routing: when type is "none" AND no toggles are set,
+// fall back to the legacy roster (all 4 specialists). Otherwise return
+// core + type specialist + toggle-driven specialists.
+export function getJournalismRoster(
+  type: ArticleType,
+  toggles: JournalismToggles,
+): AgentName[] {
+  const roster: AgentName[] = [...MODE_AGENTS.journalism];
+
+  const legacyDefault =
+    type === "none" &&
+    !toggles.partisan &&
+    !toggles.hasDataClaims &&
+    !toggles.hasAnonymousSources;
+
+  if (legacyDefault) {
+    return [...roster, "data_expert", "human_rights", "partisan"];
+  }
+
+  if (type !== "none") {
+    const specialist = TYPE_SPECIALIST_BY_ARTICLE[type];
+    if (specialist) roster.push(specialist);
+  }
+  if (toggles.hasDataClaims) roster.push("data_expert");
+  if (toggles.hasAnonymousSources) roster.push("human_rights");
+  if (toggles.partisan) roster.push("partisan");
+  return roster;
+}
+
+export interface ArticleTypeChoice {
+  value: ArticleType;
+  label: string;
+  examples: string;
+}
+
+export const ARTICLE_TYPE_CHOICES: ArticleTypeChoice[] = [
+  {
+    value: "none",
+    label: "Not sure / skip",
+    examples: "every journalism editor runs (legacy default)",
+  },
+  {
+    value: "news",
+    label: "News",
+    examples: "breaking, beat reporting, daily desk, inverted pyramid",
+  },
+  {
+    value: "investigative",
+    label: "Investigative",
+    examples: "accountability, document-driven, multi-source allegation",
+  },
+  {
+    value: "opinion",
+    label: "Opinion / Editorial",
+    examples: "op-ed, editorial, column, persuasive argument",
+  },
+  {
+    value: "feature",
+    label: "Feature",
+    examples: "weekend section, narrative reporting, longform piece",
+  },
+  {
+    value: "profile",
+    label: "Profile",
+    examples: "magazine profile, sit-down with a person, biographical sketch",
+  },
+  {
+    value: "review",
+    label: "Review",
+    examples: "book / film / food / theater / album review",
+  },
+  {
+    value: "analysis",
+    label: "Analysis / Explainer",
+    examples: "Vox-style explainer, NYT Upshot piece, FiveThirtyEight analysis",
   },
 ];

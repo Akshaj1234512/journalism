@@ -1,209 +1,294 @@
 # Exemplars for logic_auditor
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
+- source: 'PERSUADE_2.0 (score 3/6): assumption without evidence'
+  article: |-
+    Most of the students at this school could be doing extra credit instead of going to a game. They can easily ask all their teachers for this simple way to raise their grades. Most of our teachers give extra credit and most of the time it is substantial!
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      Most of the students at this school could be doing extra credit instead of going to a game. They can easily ask all their teachers for this simple way to raise their grades. Most of our teachers give extra credit and most of the time it is substantial!
+    span:
+    - 0
+    - 252
+    issue_label: assumption without evidence
+    question: |-
+      You're assuming extra credit is always available and always substantial, but you haven't shown that. Do all teachers offer it? Can all students realistically do it *and* stay on a team? You're treating your hopes as facts.
+    why_it_matters: |-
+      Your whole argument hinges on the idea that students have easy access to grade recovery—if that's not true, the B-average policy might just lock out struggling students who *do* care about sports and improvement.
+    fix_suggestion: |-
+      Acknowledge the assumption: 'If teachers continue to offer extra credit and tutoring opportunities, students can raise their grades without losing sports.' Or survey whether extra credit is actually available across departments.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): claim contradicts logic'
+  article: |-
+    why not more excuse for not study and get your diplom and have a best work what help economic
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      why not more excuse for not study and get your diplom and have a best work what help economic
+    span:
+    - 0
+    - 93
+    issue_label: claim contradicts logic
+    question: |-
+      You're saying distance learning will help people study—but then you ask 'why not more excuse for not study'? Are you worried it will give people *excuses* to skip? That's the opposite of your argument. Clarify what you actually mean.
+    why_it_matters: |-
+      The reader can't tell if you're for or against distance learning in this moment, which undermines your persuasiveness.
+    fix_suggestion: |-
+      Rethink this sentence. If you mean distance learning removes barriers, say: 'Distance learning removes excuses not to study by bringing classes home.' If you're worried about excuses, that's a counter-argument you need to address elsewhere.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): causation not established'
+  article: |-
+    In a sense of taking away stress and trying to lower air pollution, residents of Bogota, Colombia and Vauban, Germany have been biking, hiking, and skating to work. Residents have claimed to have been happier, and less tense since the car free environment came about.
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      In a sense of taking away stress and trying to lower air pollution, residents of Bogota, Colombia and Vauban, Germany have been biking, hiking, and skating to work. Residents have claimed to have been happier, and less tense since the car free environment came about.
+    span:
+    - 0
+    - 267
+    issue_label: causation not established
+    question: |-
+      You're showing that residents are happier in car-free zones, but what's actually making them happier? Is it the lack of cars, the exercise, the community feel, or something else? The sentence treats happiness as a direct result of no cars, but you haven't proven that connection.
+    why_it_matters: |-
+      Without establishing causation, the evidence doesn't actually support the claim that limiting cars improves wellbeing—it just shows correlation.
+    fix_suggestion: |-
+      Add analysis: 'Residents report reduced stress partly because they exercise more while commuting, and partly because car-free zones create pedestrian-friendly streets where neighbors interact more often.'
+    replacement: null
+    severity: medium
+- source: 'AES2 (score 2/6): claim and reasoning misaligned'
+  article: |-
+    in my opinion i think we should change the election by popular votes instead of ellectoral college, because we the people .. vote for who we think should be head or our state and who we think is going to be in charge and do they thiing and make our a state a better and safier place to live.
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      in my opinion i think we should change the election by popular votes instead of ellectoral college, because we the people .. vote for who we think should be head or our state and who we think is going to be in charge and do they thiing and make our a state a better and safier place to live.
+    span:
+    - 0
+    - 291
+    issue_label: claim and reasoning misaligned
+    question: |-
+      You say we should use popular vote because we vote for who we think should be president—but that's just restating what 'popular vote' means. Where's the reason it's *better*? Why does 'voting for who we think should lead' argue against the Electoral College specifically?
+    why_it_matters: |-
+      This is circular: you're explaining your conclusion instead of proving it. A reader learns nothing about why the Electoral College fails or why popular vote fixes it.
+    fix_suggestion: |-
+      Replace the vague outcome clause with a concrete reason: 'because under the Electoral College, a candidate can lose the popular vote but win the presidency, meaning many voters' preferences are ignored.'
+    replacement: null
+    severity: high
 - source: |-
-    Weston, A Rulebook for Arguments, Rule 9: generalize from more than a few examples
+    Feedback_Prize_ELL (score 3.143386438739405/5): claim-evidence mismatch, tangent undermines argument
   article: |-
-    Many critics see Hamlet as fundamentally indecisive. A.C. Bradley, in his 1904 Shakespearean Tragedy, describes the prince as 'paralysed by reflection.'
-  critiques:
-  - agent: logic_auditor
-    text_quote: Many critics see Hamlet as fundamentally indecisive.
-    span: [0, 52]
-    issue_label: one example, sweeping claim
-    question: |-
-      You quote one critic (Bradley) to support 'many critics.' One example does not warrant a generalization. The 'many' is doing rhetorical work the evidence does not earn.
-    why_it_matters: |-
-      A claim about consensus that rests on a single source is not a claim about consensus.
-    fix_suggestion: |-
-      Either narrow the claim to 'Bradley reads Hamlet as fundamentally indecisive,' or cite two or three other critics across different periods who hold the same view.
-    replacement: Bradley reads Hamlet as fundamentally indecisive.
-    severity: medium
-- source: 'Hurley, A Concise Introduction to Logic: post hoc reasoning'
-  article: |-
-    After the Treaty of Versailles in 1919, German nationalism rose sharply through the 1920s. The treaty therefore caused the rise of National Socialism.
-  critiques:
-  - agent: logic_auditor
-    text_quote: The treaty therefore caused the rise of National Socialism.
-    span: [91, 150]
-    issue_label: sequence read as cause
-    question: |-
-      The treaty came first; the nationalism rose afterward. The argument reads that order as a causal mechanism. Sequence is not causation, and you have not shown the mechanism (reparations economics, war-guilt clause, occupation of the Ruhr) that would close the gap.
-    why_it_matters: |-
-      Sequence dressed as cause is one of the most easily challenged moves in a history paper.
-    fix_suggestion: |-
-      Either show the mechanism that links treaty to outcome, or weaken the verb to 'shaped' or 'contributed to' and identify the specific clause or consequence you mean.
-    replacement: |-
-      The treaty's war-guilt clause and reparations regime contributed to the rise of National Socialism.
-    severity: high
-- source: 'Weston, A Rulebook for Arguments, Rule 11: avoid false dilemmas'
-  article: |-
-    Either Reconstruction was a moral triumph that the South ungratefully rejected, or it was a Northern occupation that failed on its own terms.
+    Your friends will buy things for you like shoes,shirts,and shorts. Some times friends don't like that much honest because they might feel sad and stress out like when my sister came back from Generic_City from college.
   critiques:
   - agent: logic_auditor
     text_quote: |-
-      Either Reconstruction was a moral triumph that the South ungratefully rejected, or it was a Northern occupation that failed on its own terms.
-    span: [0, 141]
-    issue_label: false dichotomy
+      Your friends will buy things for you like shoes,shirts,and shorts. Some times friends don't like that much honest because they might feel sad and stress out like when my sister came back from Generic_City from college.
+    span:
+    - 0
+    - 218
+    issue_label: claim-evidence mismatch, tangent undermines argument
     question: |-
-      These are not the only two options. Eric Foner's reading (Reconstruction as a serious, partly successful experiment in interracial democracy that was rolled back by violence and federal abandonment) is the standard third position and the strongest one to engage.
+      Hold on — you're arguing friends will trust you more if you're honest, but then you give an example of honesty causing hurt feelings. The sister example actually *contradicts* your claim, not supports it. What's the connection between friends buying you clothes and honesty?
     why_it_matters: |-
-      Framing the question as two extremes forecloses the analysis that would actually answer it.
+      This passage confuses the reader because the evidence works against your thesis, making the paragraph incoherent.
     fix_suggestion: |-
-      Rewrite to name at least three positions, or argue against the strongest available reading (Foner's) rather than against the two weakest.
+      Either remove the sister example, or acknowledge the tension: 'Sometimes honesty makes friends uncomfortable, but real friendship means being truthful anyway.' Then explain why that's worth it.
     replacement: null
     severity: high
-- source: 'Mill, On Liberty, Chapter 2: steel-man the opposing view'
+- source: 'PERSUADE_2.0 (score 2/6): timeline confusion, unclear causality'
   article: |-
-    Defenders of the war argue that it was necessary because the regime was evil. This is obviously wrong because regimes the United States has tolerated have also been evil.
-  critiques:
-  - agent: logic_auditor
-    text_quote: Defenders of the war argue that it was necessary because the regime
-      was evil.
-    span: [0, 77]
-    issue_label: straw counter
-    question: |-
-      No serious defender of the war argued from 'the regime was evil' as the load-bearing premise. The strongest defenses turned on WMD intelligence and on regional containment. Argue against the strongest version, not the weakest.
-    why_it_matters: |-
-      Defeating the weak version leaves the strong version untouched and the reader unconvinced.
-    fix_suggestion: |-
-      Replace this counter with the strongest available defense (intelligence assessments at the time, regional containment doctrine), then argue against it.
-    replacement: null
-    severity: high
-- source: 'Aristotle, Rhetoric: the hidden premise (the enthymeme)'
-  article: |-
-    The play's anti-feminist message is clear because Shakespeare consistently portrays women negatively.
+    It began in the 1950s, using binary code to alert the car system. Unfortunately, upgrades in that period of time were too expensive to be used widespread.
   critiques:
   - agent: logic_auditor
     text_quote: |-
-      The play's anti-feminist message is clear because Shakespeare consistently portrays women negatively.
-    span: [0, 101]
-    issue_label: premise contains conclusion
+      It began in the 1950s, using binary code to alert the car system. Unfortunately, upgrades in that period of time were too expensive to be used widespread.
+    span:
+    - 0
+    - 154
+    issue_label: timeline confusion, unclear causality
     question: |-
-      The 'anti-feminist message' is what the essay is supposed to be arguing. The premise ('Shakespeare portrays women negatively') already assumes the reading. When the premise smuggles the conclusion in, the argument moves in a circle.
+      Wait—if driverless-car development began in the 1950s with binary code, and upgrades were too expensive then, what happened between the 1950s and now? You jump to modern cars (BMW) without explaining how the technology got from 'too expensive' to viable.
     why_it_matters: |-
-      An argument that assumes what it tries to prove does no work the reader has to follow.
+      The historical arc you're building doesn't actually support your argument that driverless cars are ready now—it just says they used to be expensive.
     fix_suggestion: |-
-      Either argue first that the portrayals are negative (with specific evidence the reader could contest), then derive the message from that, or rewrite the premise so it is something a reasonable reader could grant without already agreeing with you.
-    replacement: null
-    severity: high
-- source: Williams, Style, on key terms that shift meaning
-  article: |-
-    Lady Macbeth's power over her husband is the engine of the play's first half. By the sleepwalking scene, that power has collapsed, and the audience sees her as a woman the king's power has destroyed.
-  critiques:
-  - agent: logic_auditor
-    text_quote: the king's power has destroyed
-    span: [168, 198]
-    issue_label: key term shifts meaning
-    question: |-
-      'Power' in your first sentence means personal influence over Macbeth. 'Power' in your second sentence means political and gendered subjection. The argument treats them as one term doing the same work, which conceals the move you are making.
-    why_it_matters: |-
-      When a key term shifts under the argument, the conclusion seems to follow but does not.
-    fix_suggestion: |-
-      Either use two different words for the two ideas (e.g. 'influence' and 'authority'), or name the shift explicitly: 'her personal influence collapses in proportion as the play's political order reasserts itself.'
+      Either cut the 1950s detail (it's not doing work), or add a sentence: 'Decades later, advances in computing power and artificial intelligence made the technology affordable and reliable enough for real-world testing.'
     replacement: null
     severity: medium
-- source: 'Standard writing-center diagnostic: wrong-domain authority'
-  article: As Freud noted, capitalism alienates the worker from the product of his
-    labour.
-  critiques:
-  - agent: logic_auditor
-    text_quote: As Freud noted, capitalism alienates the worker from the product of
-      his labour.
-    span: [0, 79]
-    issue_label: wrong-domain attribution
-    question: |-
-      Freud did not write that. Marx did, in the 1844 Manuscripts. Even setting attribution aside: Freud is not the authority on the labour theory of alienation. Wrong author and wrong domain in one sentence.
-    why_it_matters: A wrong-domain citation is the easiest line for a grader or critic
-      to discredit.
-    fix_suggestion: |-
-      Attribute the claim to Marx (1844 Manuscripts), or, if you mean a related Freudian idea (the analyst's reading of alienation as a psychic process), name that claim instead.
-    replacement: |-
-      As Marx argued in the 1844 Manuscripts, capitalism alienates the worker from the product of his labour.
-    severity: high
-- source: 'Weston, A Rulebook for Arguments: scope and counterexamples'
+- source: 'PERSUADE_2.0 (score 3/6): speculative claim without evidence'
   article: |-
-    Every reader of Pride and Prejudice recognises that Mr. Darcy's first proposal is humiliating to Elizabeth.
+    Out of the 538 elector it would be a lie not to think one of them had a favorite or been bribed or rigged elections i think its hard to trust a bunch of men and women who a majority of the states no nothing about.
   critiques:
   - agent: logic_auditor
     text_quote: |-
-      Every reader of Pride and Prejudice recognises that Mr. Darcy's first proposal is humiliating to Elizabeth.
-    span: [0, 107]
-    issue_label: sweeping claim without scope
+      Out of the 538 elector it would be a lie not to think one of them had a favorite or been bribed or rigged elections i think its hard to trust a bunch of men and women who a majority of the states no nothing about.
+    span:
+    - 0
+    - 213
+    issue_label: speculative claim without evidence
     question: |-
-      'Every reader' is the widest scope the language allows. A counterexample exists almost anywhere a real essay looks: at least one reading tradition emphasises the proposal scene as awkward sincerity rather than insult. A claim at maximum scope invites a counterexample at minimum cost.
+      You're claiming electors are probably corrupt or have hidden agendas, but you're offering no example or documented case. 'It would be a lie not to think' is just speculation dressed up as logic. If you're going to accuse electors of bias or bribery, show me an instance from the texts or history.
     why_it_matters: |-
-      Universal claims are easiest to falsify, which makes them the weakest form of a real argument.
+      Without evidence, this sounds like conspiracy thinking rather than reasoned argument, which undermines your credibility on the whole issue.
     fix_suggestion: |-
-      Narrow the scope to a defensible level: 'Most twentieth-century readings,' or 'the dominant reading in feminist criticism since Gilbert and Gubar,' or simply 'I read this scene as.'
-    replacement: |-
-      Most readers since Gilbert and Gubar have read Mr. Darcy's first proposal as humiliating to Elizabeth.
-    severity: medium
-- source: 'They Say / I Say, Chapter 6: planting a naysayer'
+      Either cite a specific instance of an elector voting against their state's majority, or reframe: 'Electors are largely unknown to voters and represent an unnecessary intermediary layer between popular will and outcome.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): logical leap without support'
   article: |-
-    This essay argues that Lady Macbeth is the play's true villain, the figure whose ambition sets the murders in motion and whose collapse arrives only after she has already wrecked the kingdom. Across five sections I trace her speeches, her appeals to her husband, and the staging conventions that frame her in shadow.
+    The method "Winner-Takes-All" is only fair enough, because why should the person who lost earn a reward , the people made their desicions, and whoever lost, goes back home.
   critiques:
   - agent: logic_auditor
     text_quote: |-
-      This essay argues that Lady Macbeth is the play's true villain, the figure whose ambition sets the murders in motion and whose collapse arrives only after she has already wrecked the kingdom.
-    span: [0, 191]
-    issue_label: no naysayer for a contested thesis
+      The method "Winner-Takes-All" is only fair enough, because why should the person who lost earn a reward , the people made their desicions, and whoever lost, goes back home.
+    span:
+    - 0
+    - 172
+    issue_label: logical leap without support
     question: |-
-      Your thesis is a contested reading and you let no opposing voice into the essay. Janet Adelman's Suffocating Mothers reads Lady Macbeth's ambition as a forced masculine performance the play punishes more harshly than her husband's. A reader who took that reading seriously is who you have to convince.
+      You're saying it's unfair for the loser to 'earn a reward'—but what reward are you talking about? And how does 'the people made their decisions' prove that Winner-Takes-All is fair? These aren't connected. You need to explain the logic, not just assert it.
     why_it_matters: |-
-      Without the strongest opposing reading on the page, the essay never argues against the position it most needs to defeat.
+      Readers can't follow your reasoning when you skip steps, so your argument feels like assertion rather than persuasion.
     fix_suggestion: |-
-      Add a paragraph that names the Adelman reading at its strongest, then argues against it. Concede what is right about it; show why your reading still holds.
+      Try: "Winner-Takes-All is fair because it respects the vote of the majority in each state. If the majority in a state votes one way, that state's electors should reflect that choice entirely—not split it." That's a defendable logic.
     replacement: null
     severity: high
-- source: 'They Say / I Say, Chapter 6: avoid the empty rebuttal'
+- source: 'PERSUADE_2.0 (score 3/6): logical leap, unsupported claim chain'
   article: |-
-    While some might disagree, the evidence is clear that the Glass-Steagall repeal in 1999 was the direct cause of the 2008 financial crisis.
-  critiques:
-  - agent: logic_auditor
-    text_quote: While some might disagree, the evidence is clear that
-    span: [0, 53]
-    issue_label: hand-wave rebuttal
-    question: |-
-      'While some might disagree' followed by 'the evidence is clear' asserts a rebuttal without arguing one. The strongest critics of this causal story (Calomiris, Admati, the Financial Crisis Inquiry Commission's own dissent) argue that securitisation, capital requirements, and shadow banking were the mechanisms; Glass-Steagall is at most one factor. Your sentence does not engage them.
-    why_it_matters: Asserting that the evidence is clear is not the same as showing
-      it is.
-    fix_suggestion: |-
-      Either cite which evidence settles the question and acknowledge the strongest competing accounts (FCIC majority vs. Dissent, for example), or weaken the verb to 'contributed to' and treat the causation as a live question.
-    replacement: null
-    severity: medium
-- source: 'Standard writing-center diagnostic: concession without integration'
-  article: |-
-    Admittedly, the New Deal did not end the Great Depression; wartime spending did. Nevertheless, the New Deal saved American capitalism.
+    As a result to this program teenagers from other countries would notice about this schools programs and they will have more reasons to be triumphant in having a better job. Unpleasantly they don't want to spend their hole life working at restaurants having they paid rate of $ 8.00 per hour, that's why this program will help students to create life's terms less stressful.
   critiques:
   - agent: logic_auditor
     text_quote: |-
-      Admittedly, the New Deal did not end the Great Depression; wartime spending did. Nevertheless, the New Deal saved American capitalism.
-    span: [0, 134]
-    issue_label: concession not integrated
+      As a result to this program teenagers from other countries would notice about this schools programs and they will have more reasons to be triumphant in having a better job. Unpleasantly they don't want to spend their hole life working at restaurants having they paid rate of $ 8.00 per hour, that's why this program will help students to create life's terms less stressful.
+    span:
+    - 0
+    - 373
+    issue_label: logical leap, unsupported claim chain
     question: |-
-      You concede the most damaging point (the New Deal did not end the Depression) and then proceed as if the concession had no consequences. If wartime spending did the heavy lifting, what work is the 'saved capitalism' thesis still doing? The concession needs to reshape the claim, not just sit beside it.
-    why_it_matters: A concession that is not integrated reads as a checkbox, not an
-      argument.
+      How does distance learning *cause* international teenagers to notice the school, or to get better jobs? You're connecting three things — visibility, opportunity, and wages — without showing how distance learning leads to each. The logic just isn't there.
+    why_it_matters: |-
+      Even sympathetic readers will feel the argument collapsing here; you're asserting benefits rather than proving them.
     fix_suggestion: |-
-      Either narrow the thesis to what the concession leaves intact ('the New Deal stabilised the financial system and the political coalition that won the war'), or take the concession seriously and abandon the broader claim.
+      Stick to what you can show: "Distance learning would let working students complete a degree, which could qualify them for better-paying jobs than restaurant work." That's a chain you can actually defend.
     replacement: null
     severity: high
-- source: 'Standard writing-center diagnostic: false unity'
-  article: Feminist critics argue that the novel reinforces patriarchal norms.
+- source: 'AES2 (score 2/6): non-sequitur, missing causal link'
+  article: |-
+    the numer of cars driven was 9% below nor so that was a huge win for the limiting car usage car usage should be be limited because of many reasons.
   critiques:
   - agent: logic_auditor
-    text_quote: Feminist critics argue that the novel reinforces patriarchal norms.
-    span: [0, 67]
-    issue_label: false unity in the opposing camp
+    text_quote: |-
+      the numer of cars driven was 9% below nor so that was a huge win for the limiting car usage car usage should be be limited because of many reasons.
+    span:
+    - 0
+    - 147
+    issue_label: non-sequitur, missing causal link
     question: |-
-      'Feminist critics' is not one position. Gilbert and Gubar, bell hooks, and Judith Butler would read this novel in three different ways, and at least one of them would side with you. Flattening the camp into one voice hides the disagreements you could be using.
+      A 9% decrease in cars *is* limiting usage—but you're trying to argue that car usage *should be* limited. Are you saying the decrease happened because of a policy, or just that it happened? If a policy caused it, show that. If it just happened, it doesn't prove your argument.
     why_it_matters: |-
-      Treating a divided opposing camp as a monolith makes the rebuttal too easy and the engagement too shallow.
+      You're citing a fact (cars decreased) as evidence for a policy claim (we should limit cars), but you haven't established that one caused the other.
     fix_suggestion: |-
-      Name the specific critic or tradition (e.g. 'second-wave readings since Gilbert and Gubar') and identify a counter-reading inside the same broad tradition that supports your claim.
-    replacement: |-
-      Second-wave readings since Gilbert and Gubar argue that the novel reinforces patriarchal norms.
+      Clarify: 'When Paris temporarily banned driving due to smog, car usage dropped 9%, proving that enforcement works. This suggests that formal car-restriction policies achieve real results.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): non-sequitur, argument unaddressed'
+  article: |-
+    The theorists claim that NASA is hiding the "true" way it was made so they don't frighten citizens, but NASA exclaims that they wish there was an ancient civilization on Mars to fund their budget.
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      The theorists claim that NASA is hiding the "true" way it was made so they don't frighten citizens, but NASA exclaims that they wish there was an ancient civilization on Mars to fund their budget.
+    span:
+    - 0
+    - 196
+    issue_label: non-sequitur, argument unaddressed
+    question: |-
+      You mention the conspiracy claim about NASA hiding the truth, then counter with the fact that NASA would actually benefit from finding alien evidence. But you don't explain why that refutes the *hiding* claim—a conspiracy theorist could say NASA is lying about wanting funding. You're not actually addressing their argument.
+    why_it_matters: |-
+      You sidestep the harder logical question and make it look like you're not thinking carefully about opposing views.
+    fix_suggestion: |-
+      Either directly address the hiding claim ('If NASA were hiding evidence, we'd expect to see a unified cover-up across multiple space agencies, yet China and India have also confirmed the mesa explanation') or drop this counter-argument and stick with stronger evidence.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 4/6): circular reasoning; vague cause-effect'
+  article: |-
+    By surpassing the challenge of Venus, we will have the technology an wisdom to surpass other difficult challenges we may encounter, overall gaining the knowledge and power to gain more knowledge and power.
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      By surpassing the challenge of Venus, we will have the technology an wisdom to surpass other difficult challenges we may encounter, overall gaining the knowledge and power to gain more knowledge and power.
+    span:
+    - 0
+    - 205
+    issue_label: circular reasoning; vague cause-effect
+    question: |-
+      How exactly does studying Venus give us technology and wisdom to face other challenges? You're asserting the connection without explaining it. And 'gaining knowledge and power to gain more knowledge and power' is circular—it says the same thing twice.
+    why_it_matters: |-
+      This is the essay's climactic claim, but it collapses under scrutiny because you haven't established the logical link.
+    fix_suggestion: |-
+      Replace with specificity: 'By developing instruments that withstand Venus's heat and pressure, we'd create technology applicable to deep-sea or polar exploration; by studying Venus's atmospheric composition, we'd understand planetary evolution—knowledge transferable to exoplanet research.' Show the chain, don't assert it.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): claim-evidence mismatch, unsupported inference'
+  article: |-
+    The United States is one of the leading countries in the world for car pollution. Peaking in miles driven in 2005, President Barack Obama took a stand. President Obama set high goals to curb the United States' greenhouse gas emissions. Recent studies have shown that the yearly average of miles driven is decreasing and it is believed that if this trend continues, it will benefit the rest of the country.
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      The United States is one of the leading countries in the world for car pollution. Peaking in miles driven in 2005, President Barack Obama took a stand. President Obama set high goals to curb the United States' greenhouse gas emissions. Recent studies have shown that the yearly average of miles driven is decreasing and it is believed that if this trend continues, it will benefit the rest of the country.
+    span:
+    - 0
+    - 405
+    issue_label: claim-evidence mismatch, unsupported inference
+    question: |-
+      You say miles driven are decreasing and claim it will benefit the country—but you don't explain *why* or show what caused the decrease. Did people limit cars voluntarily? Did policy drive it? Did gas prices rise? Without that warrant, the decrease proves nothing about the *argument* for limiting car usage.
+    why_it_matters: |-
+      The connection between evidence (miles down) and your claim (limiting cars is good) is missing; the reader can't verify the logic.
+    fix_suggestion: |-
+      Add: 'This decline correlates with policies like fuel-efficiency standards and public transit investment—showing that deliberate limits on car use, not accident, drive cleaner air.' That closes the logical gap.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 1/6): Circular logic; unclear claim'
+  article: |-
+    The teacher unusual never let us use there phone to us so that we can call and some people at the school don't have your parents number then what do u do cause i know a lot of people who can remember number with out there phone or phone books.
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      The teacher unusual never let us use there phone to us so that we can call and some people at the school don't have your parents number then what do u do cause i know a lot of people who can remember number with out there phone or phone books.
+    span:
+    - 0
+    - 243
+    issue_label: Circular logic; unclear claim
+    question: |-
+      You're saying teachers won't let you use their phones, so you should have yours? And then you jump to 'people can't remember numbers'—which actually supports the argument *for* having your own phone, not against it. What's your point?
+    why_it_matters: |-
+      The logic contradicts itself, so the reader can't follow your reasoning or tell whether you're making a case for or against phone access.
+    fix_suggestion: |-
+      Pick one claim and stick with it. If your argument is 'students need phones because adults can't always reach parents,' say that directly: 'In emergencies, students should be able to call home themselves rather than depend on office staff who may have left for the day.'
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 2/6): claim doesn''t support the argument; logical gap'
+  article: |-
+    Venus has the highets ground temp even tho Murcary is closer to the sun than Venus.
+  critiques:
+  - agent: logic_auditor
+    text_quote: |-
+      Venus has the highets ground temp even tho Murcary is closer to the sun than Venus.
+    span:
+    - 0
+    - 83
+    issue_label: claim doesn't support the argument; logical gap
+    question: |-
+      I see you're noting that Venus has the highest ground temperature—but why is that relevant to evaluating whether the author makes a good case for studying Venus? Does the author use this fact to support his argument, or are you just restating something from the article?
+    why_it_matters: |-
+      You're listing details from the source rather than analyzing whether and how the author uses them persuasively.
+    fix_suggestion: |-
+      Either cut this detail, or explain it: 'The author emphasizes Venus's extreme temperature to show how dangerous it is, which makes the scientists' proposed solutions seem even more impressive.'
+    replacement: null
     severity: medium

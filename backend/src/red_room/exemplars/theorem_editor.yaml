@@ -2,29 +2,12 @@
 # Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
 # NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
 # field 200-2500 words, must reference a specific anchor like
-# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
-# and the top 10 by quality score selected.
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku;
+# top 15 selected with a diversity constraint (round-robin
+# across distinct sub-issue buckets) so the exemplars cover the lane's
+# full failure-mode range rather than 15 variants of the
+# same critique.
 #
-- source: |-
-    ICLR.cc/2025/Conference OpenReview review (rating 10/10, confidence 5/5): rotation matrix notation and parity factor omitted
-  article: |-
-    The rotation matrix R in Line 879 should be the Wigner-D matrix D^(l)(r). In addition, the inversion factor should be multiplied according to the parity of the vector itself.
-  critiques:
-  - agent: theorem_editor
-    text_quote: |-
-      The rotation matrix R in Line 879 should be the Wigner-D matrix D^(l)(r). In addition, the inversion factor should be multiplied according to the parity of the vector itself.
-    span:
-    - 0
-    - 174
-    issue_label: rotation matrix notation and parity factor omitted
-    question: |-
-      Line 879: R should be explicitly the Wigner-D matrix D^(l)(r), and inversion factors must be multiplied according to vector parity (per e3nn documentation). Why are these details missing?
-    why_it_matters: |-
-      Without correct Wigner-D notation and parity handling, the equivariance properties are not rigorously stated and reproducibility is compromised.
-    fix_suggestion: |-
-      Replace R with D^(l)(r) and explicitly handle parity-dependent inversion factors. Reference e3nn documentation for the correct formulation.
-    replacement: null
-    severity: high
 - source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): informal binary compression formulation
   article: Section 3.3 mathematical notations and the formula for binary compression
@@ -82,6 +65,26 @@
     replacement: null
     severity: high
 - source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 10/10, confidence 5/5): rotation matrix notation and parity factor omitted
+  article: |-
+    The rotation matrix R in Line 879 should be the Wigner-D matrix D^(l)(r). In addition, the inversion factor should be multiplied according to the parity of the vector itself.
+  critiques:
+  - agent: theorem_editor
+    text_quote: |-
+      The rotation matrix R in Line 879 should be the Wigner-D matrix D^(l)(r). In addition, the inversion factor should be multiplied according to the parity of the vector itself.
+    span:
+    - 0
+    - 174
+    issue_label: rotation matrix notation and parity factor omitted
+    question: |-
+      Line 879: R should be explicitly the Wigner-D matrix D^(l)(r), and inversion factors must be multiplied according to vector parity (per e3nn documentation). Why are these details missing?
+    why_it_matters: |-
+      Without correct Wigner-D notation and parity handling, the equivariance properties are not rigorously stated and reproducibility is compromised.
+    fix_suggestion: |-
+      Replace R with D^(l)(r) and explicitly handle parity-dependent inversion factors. Reference e3nn documentation for the correct formulation.
+    replacement: null
+    severity: high
+- source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): unexplained gradient-based edge operations
   article: Equation (6) describes graph perturbation operations (flip, add, delete)
   critiques:
@@ -118,6 +121,82 @@
     replacement: null
     severity: high
 - source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): Theorem without proof or clear purpose
+  article: |-
+    Theorem 3.1 and Equation (3): the authors present rates expressed in a certain manner but the proof is not presented, even in the appendix, and the theorem is not referred to anywhere. Equation (3) is not used anywhere as well.
+  critiques:
+  - agent: theorem_editor
+    text_quote: |-
+      Theorem 3.1 and Equation (3): the authors present rates expressed in a certain manner but the proof is not presented, even in the appendix, and the theorem is not referred to anywhere. Equation (3) is not used anywhere as well.
+    span:
+    - 0
+    - 227
+    issue_label: Theorem without proof or clear purpose
+    question: |-
+      What is the purpose of Theorem 3.1? Its proof is not presented, even in the appendix. Also, it is not referred to anywhere. Why are rates expressed in the manner of Equation (3) if it is not used?
+    why_it_matters: |-
+      Without a proof or clear purpose, the theorem adds no value to the paper and confuses readers about the theoretical grounding of the approach.
+    fix_suggestion: |-
+      Either remove Theorem 3.1 and Equation (3) if they are not central to the method, or provide a proof in the appendix and clearly explain how the theorem justifies a key step in the derivation.
+    replacement: null
+    severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): notation inconsistency, unclear gradient flow
+  article: Equation 7
+  critiques:
+  - agent: theorem_editor
+    text_quote: Equation 7
+    span:
+    - 0
+    - 10
+    issue_label: notation inconsistency, unclear gradient flow
+    question: |-
+      There appears to be a typo in equation 7, it should likely be $\pi_b$ instead of $\pi$ (inferred from equation 6). Additionally, it is unclear whether the gradients flow through the discriminator (since $\pi_b$ is an input to the discriminator) when computing the gradient of equation 7.
+    why_it_matters: |-
+      Unclear notation and unspecified gradient flow makes it difficult to verify the correctness of the optimization and reproduce the algorithm.
+    fix_suggestion: |-
+      Correct the notation in equation 7 and clarify whether gradients flow through the discriminator when computing the gradient of equation 7.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): missing theoretical analysis of approximation quality
+  article: |-
+    Equation (1) approximating the true global KNN objective in FL setting without global data view
+  critiques:
+  - agent: theorem_editor
+    text_quote: |-
+      Equation (1) approximating the true global KNN objective in FL setting without global data view
+    span:
+    - 0
+    - 95
+    issue_label: missing theoretical analysis of approximation quality
+    question: |-
+      How good is the approximation in Equation (1), and what are the costs by not having a global view? A good clustering for each local agent does not mean they are good from a global point of view—this needs in-depth theoretic studies.
+    why_it_matters: |-
+      Without theoretical justification, it is unclear whether the NNC approximation scheme is sound, making the core contribution appear empirically motivated rather than principled.
+    fix_suggestion: |-
+      Provide theoretical analysis of the approximation error incurred by decomposing global operators into local neural approximations, with explicit bounds or convergence guarantees.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): ambiguous notation violating FL privacy constraint
+  article: 'Equation (1): notation D_{i,j} undefined—does it stand for cdist(X_i, X_j)?'
+  critiques:
+  - agent: theorem_editor
+    text_quote: 'Equation (1): notation D_{i,j} undefined—does it stand for cdist(X_i, X_j)?'
+    span:
+    - 0
+    - 75
+    issue_label: ambiguous notation violating FL privacy constraint
+    question: |-
+      In equation 1, D_{i,j} is ambiguous, does it stand for D_{i,j} = cdist(X_i, X_j)? Which violates the data preservation constraint of FL.
+    why_it_matters: |-
+      The notation ambiguity raises concerns about whether the formulation inadvertently assumes cross-agent distance computations, which would require sharing local data and break the FL privacy model.
+    fix_suggestion: |-
+      Clarify the definition of D_{i,j} and explicitly verify that the computation does not require sharing raw data between agents.
+    replacement: null
+    severity: high
+- source: |-
     ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): anecdotal claim lacking proof in Theorem 3.1
   article: |-
     Theorem 3.1, last paragraph: claim that slight changes in network parameters could cause discontinuity in the tree structure.
@@ -138,59 +217,80 @@
     replacement: null
     severity: high
 - source: |-
-    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): ambiguous proof rigor and additional assumptions
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): inconsistent notation for time-dependent parameters
   article: |-
-    Appendix G.4 contains 'heuristic' proofs stated to be rigorous under non-trivial technical conditions, but the relationship to the rigorous theory in Section 5 is unclear.
+    In the different derivations, the authors switch back and forth between different notations (for example dropping or not the dependency on $t$ of $\lambda$). For example in equation (5), lambda is used both with and without $t$.
   critiques:
   - agent: theorem_editor
     text_quote: |-
-      Appendix G.4 contains 'heuristic' proofs stated to be rigorous under non-trivial technical conditions, but the relationship to the rigorous theory in Section 5 is unclear.
+      In the different derivations, the authors switch back and forth between different notations (for example dropping or not the dependency on $t$ of $\lambda$). For example in equation (5), lambda is used both with and without $t$.
     span:
     - 0
-    - 171
-    issue_label: ambiguous proof rigor and additional assumptions
+    - 228
+    issue_label: inconsistent notation for time-dependent parameters
     question: |-
-      What are the additional assumptions beyond those in the rigorous theory of Section 5 needed to make the heuristic proofs in Appendix G.4 rigorous?
+      Why is $\lambda$ sometimes written as $\lambda(t)$ and sometimes as $\lambda$ in equation (5)? This notational inconsistency makes the derivations confusing.
     why_it_matters: |-
-      Readers cannot assess the technical validity of key results without clear delineation of which claims are fully rigorous and what additional conditions are required.
+      Inconsistent notation obscures whether parameters are time-dependent, making it difficult to verify the mathematical correctness of subsequent steps.
     fix_suggestion: |-
-      Clearly state which results in Section 5 are fully rigorous and which in Appendix G.4 require additional technical conditions; explicitly list those conditions.
+      Adopt a consistent notation convention throughout the paper: either always write time dependence explicitly (e.g., $\lambda(t)$) or clearly define the scope of each notation when introduced.
     replacement: null
     severity: medium
 - source: |-
-    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): Unexplained variance formula derivation
-  article: Section 4, Equation 9 regarding variance of the gradient estimator
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): undefined variable $x_t$ in equation
+  article: |-
+    The paper contains typos, like in the equation under line 138 where the term $x_t$ is never defined.
   critiques:
   - agent: theorem_editor
-    text_quote: Section 4, Equation 9 regarding variance of the gradient estimator
+    text_quote: |-
+      The paper contains typos, like in the equation under line 138 where the term $x_t$ is never defined.
     span:
     - 0
-    - 66
-    issue_label: Unexplained variance formula derivation
+    - 100
+    issue_label: undefined variable $x_t$ in equation
     question: |-
-      Why does the variance of the gradient estimator have the formula in Eq. 9, and why does extreme masking lead to poor variance? This is not very clear and needs sounder reformulation.
+      In the equation under line 138, the term $x_t$ appears but is never defined. What does this variable represent?
     why_it_matters: |-
-      Without clear justification of the variance analysis, readers cannot evaluate the theoretical soundness of the gradient estimation strategy or understand the design choices behind masking schedules.
+      Undefined variables in key equations prevent readers from understanding and verifying the mathematical derivations.
     fix_suggestion: |-
-      Authors should re-formulate Sections 4 and 5 in a more sound way with explicit derivations or intuitive explanations for the variance formula and its dependence on masking patterns.
+      Define all variables at their first appearance, or add a notation table at the beginning of the paper.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): non-rigorous derivation with undefined time index set
+  article: |-
+    The derivation under line 173 is not rigorous: the set of time indices is never properly defined. Even the related proofs in Appendix C do not use a proper mathematical language.
+  critiques:
+  - agent: theorem_editor
+    text_quote: |-
+      The derivation under line 173 is not rigorous: the set of time indices is never properly defined. Even the related proofs in Appendix C do not use a proper mathematical language.
+    span:
+    - 0
+    - 178
+    issue_label: non-rigorous derivation with undefined time index set
+    question: |-
+      The derivation under line 173 lacks rigor due to the undefined time index set, and Appendix C proofs similarly lack proper mathematical language. How are these key results formally justified?
+    why_it_matters: |-
+      Core mathematical results lack rigorous justification, undermining the paper's technical contributions.
+    fix_suggestion: |-
+      Rewrite the derivation and appendix proofs using formal measure-theoretic notation and explicitly define the time index space at the outset.
     replacement: null
     severity: high
 - source: |-
-    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): inconsistent timestep notation (t vs l vs k)
-  article: |-
-    Line 266: The variable "t" is used for timestep, but it was defined as "l" or "k" on line 204.
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): typos in proof bounds and Markov inequality conclusion
+  article: Equation (S.1) and line 538 in the appendix proof
   critiques:
   - agent: theorem_editor
-    text_quote: |-
-      Line 266: The variable "t" is used for timestep, but it was defined as "l" or "k" on line 204.
+    text_quote: Equation (S.1) and line 538 in the appendix proof
     span:
     - 0
-    - 94
-    issue_label: inconsistent timestep notation (t vs l vs k)
-    question: Why use "t" for timestep when it was defined as "l" (or maybe "k") on line 204 ?
+    - 49
+    issue_label: typos in proof bounds and Markov inequality conclusion
+    question: |-
+      In equation (S.1), should the $2\epsilon$ term be $\epsilon$ (or should $\epsilon < \frac{1}{2}(\kappa_{1/10} - \kappa_{1/8})$ be added to the definition of $\epsilon$)? In line 538, Markov's inequality concludes that $D^c$, not $D$, has mass less than $1/64$.
     why_it_matters: |-
-      Notation inconsistency makes the mathematical formulation hard to follow and suggests imprecise technical exposition.
+      Errors in the proof's bounds and inequality conclusions undermine confidence in the correctness of the theoretical results and minimax rate claims.
     fix_suggestion: |-
-      Use consistent notation for the same concept throughout (e.g., always use t, l, or k for time/frame indices); clarify the distinction if different symbols are intentional.
+      Correct the $2\epsilon$ term to $\epsilon$ in equation (S.1) and verify the definition of $\epsilon$ accordingly. Fix line 538 to correctly state that $D^c$ (not $D$) has mass less than $1/64$ in the Markov inequality conclusion.
     replacement: null
-    severity: medium
+    severity: high

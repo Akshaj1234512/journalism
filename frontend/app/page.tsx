@@ -15,17 +15,22 @@ import { PLANS, countWords } from "@/lib/plans";
 import { streamResearchCritique } from "@/lib/stream";
 import {
   AgentName,
+  ARTICLE_TYPE_CHOICES,
+  ArticleType,
   CitationStyle,
   Critique,
   ESSAY_TYPE_CHOICES,
   EssayType,
+  JournalismToggles,
   MODE_AGENTS,
   Mode,
   RESEARCH_SECTION_CHOICES,
   RESEARCH_SUBJECT_CHOICES,
   ResearchSection,
   ResearchSubject,
+  defaultTogglesFor,
   getEssaysRoster,
+  getJournalismRoster,
   getResearchRoster,
 } from "@/lib/types";
 import { extractTextFromFile } from "@/lib/upload";
@@ -46,6 +51,9 @@ const ESSAY_PROMPT_KEY = "redroom:essay-prompt";
 const RESEARCH_SECTION_KEY = "redroom:research-section";
 const RESEARCH_SUBJECT_KEY = "redroom:research-subject";
 const RESEARCH_VENUE_KEY = "redroom:research-venue";
+const ARTICLE_TYPE_KEY = "redroom:article-type";
+const JOURNALISM_TOGGLES_KEY = "redroom:journalism-toggles";
+const SUBJECT_CONTEXT_KEY = "redroom:subject-context";
 
 export default function Page() {
   const [article, setArticle] = useState(SAMPLE_DRAFT);
@@ -56,6 +64,16 @@ export default function Page() {
   // Research-mode state. The PDF stays in memory only; section / subject /
   // venue persist in localStorage so the writer doesn't reset their setup
   // when they reload.
+  // Journalism-mode state: article type, three toggles, and an optional
+  // subject-context box. Type drives which type-specialist runs; toggles
+  // independently add Parker / Peter / Joe.
+  const [articleType, setArticleType] = useState<ArticleType>("none");
+  const [journalismToggles, setJournalismToggles] = useState<JournalismToggles>({
+    partisan: false,
+    hasDataClaims: false,
+    hasAnonymousSources: false,
+  });
+  const [subjectContext, setSubjectContext] = useState<string>("");
   const [researchPdf, setResearchPdf] = useState<File | null>(null);
   const [researchSection, setResearchSection] = useState<ResearchSection>("full_paper");
   const [researchSubject, setResearchSubject] = useState<ResearchSubject>("cs_ml");
@@ -140,6 +158,32 @@ export default function Page() {
       if (ep) setEssayPrompt(ep);
     } catch {}
     try {
+      const at = localStorage.getItem(ARTICLE_TYPE_KEY);
+      if (
+        at &&
+        ["news", "investigative", "opinion", "feature", "profile", "review", "analysis", "none"].includes(at)
+      ) {
+        setArticleType(at as ArticleType);
+      }
+    } catch {}
+    try {
+      const raw = localStorage.getItem(JOURNALISM_TOGGLES_KEY);
+      if (raw) {
+        const obj = JSON.parse(raw);
+        if (obj && typeof obj === "object") {
+          setJournalismToggles({
+            partisan: !!obj.partisan,
+            hasDataClaims: !!obj.hasDataClaims,
+            hasAnonymousSources: !!obj.hasAnonymousSources,
+          });
+        }
+      }
+    } catch {}
+    try {
+      const sc = localStorage.getItem(SUBJECT_CONTEXT_KEY);
+      if (sc) setSubjectContext(sc);
+    } catch {}
+    try {
       const seen = localStorage.getItem(TUTORIAL_SEEN_KEY);
       if (!seen) setTutorialOpen(true);
     } catch {}
@@ -160,6 +204,18 @@ export default function Page() {
   useEffect(() => {
     try { localStorage.setItem(ESSAY_PROMPT_KEY, essayPrompt); } catch {}
   }, [essayPrompt]);
+
+  useEffect(() => {
+    try { localStorage.setItem(ARTICLE_TYPE_KEY, articleType); } catch {}
+  }, [articleType]);
+
+  useEffect(() => {
+    try { localStorage.setItem(JOURNALISM_TOGGLES_KEY, JSON.stringify(journalismToggles)); } catch {}
+  }, [journalismToggles]);
+
+  useEffect(() => {
+    try { localStorage.setItem(SUBJECT_CONTEXT_KEY, subjectContext); } catch {}
+  }, [subjectContext]);
 
   useEffect(() => {
     try { localStorage.setItem(RESEARCH_SECTION_KEY, researchSection); } catch {}
@@ -261,6 +317,11 @@ export default function Page() {
         citationStyle,
         essayType,
         essayPrompt: essayPrompt.trim(),
+        articleType,
+        partisan: journalismToggles.partisan,
+        hasDataClaims: journalismToggles.hasDataClaims,
+        hasAnonymousSources: journalismToggles.hasAnonymousSources,
+        subjectContext: subjectContext.trim(),
       },
     );
   }, [
@@ -274,6 +335,9 @@ export default function Page() {
     researchSection,
     researchSubject,
     researchVenue,
+    articleType,
+    journalismToggles,
+    subjectContext,
   ]);
 
   const onSelectCritique = useCallback(
@@ -386,13 +450,14 @@ export default function Page() {
   );
 
   // The essays rail grows when an essay type is picked (Sol + the matching
-  // Purpose Editor are appended). Journalism rail is fixed.
+  // Purpose Editor appended). Journalism rail mirrors essays: core +
+  // article-type specialist + toggle-driven Parker/Peter/Joe.
   const modeRoster =
     mode === "research"
       ? getResearchRoster(researchSubject)
       : mode === "essays"
         ? getEssaysRoster(essayType)
-        : MODE_AGENTS.journalism;
+        : getJournalismRoster(articleType, journalismToggles);
   const totalAgents = modeRoster.length;
   const enabledCount = modeRoster.filter((a) => !disabledAgents.has(a)).length;
 
@@ -491,6 +556,59 @@ export default function Page() {
             <CitationStylePicker value={citationStyle} onChange={setCitationStyle} />
           </div>
           <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] text-neutral-500 lg:hidden">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+            {enabledCount} of {totalAgents} editors active
+          </span>
+        </div>
+      )}
+
+      {/* Journalism-mode sub-toolbar. Article type picker + toggle chips
+          for partisan / data claims / anonymous sources + an optional
+          subject-context box. */}
+      {mode === "journalism" && (
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-neutral-200 bg-stone-50 px-7 py-2">
+          <div data-tutorial="article-type">
+            <ArticleTypePicker
+              value={articleType}
+              onChange={(v) => {
+                setArticleType(v);
+                // Pre-fill toggles with sensible defaults for this type.
+                // The user can still flip individual chips.
+                setJournalismToggles(defaultTogglesFor(v));
+              }}
+            />
+          </div>
+          <JournalismToggleChip
+            label="Partisan"
+            on={journalismToggles.partisan}
+            onChange={(on) =>
+              setJournalismToggles((t) => ({ ...t, partisan: on }))
+            }
+            color="#EF4444"
+            title="Activates Parker (Fairness / Partisan Checker)"
+          />
+          <JournalismToggleChip
+            label="Data claims"
+            on={journalismToggles.hasDataClaims}
+            onChange={(on) =>
+              setJournalismToggles((t) => ({ ...t, hasDataClaims: on }))
+            }
+            color="#0F172A"
+            title="Activates Peter (Data Expert)"
+          />
+          <JournalismToggleChip
+            label="Anonymous sources"
+            on={journalismToggles.hasAnonymousSources}
+            onChange={(on) =>
+              setJournalismToggles((t) => ({ ...t, hasAnonymousSources: on }))
+            }
+            color="#6366F1"
+            title="Activates Joe (Source Privacy)"
+          />
+          <div data-tutorial="subject-context">
+            <SubjectContextButton value={subjectContext} onChange={setSubjectContext} />
+          </div>
+          <span className="ml-auto inline-flex items-center gap-1.5 text-[11px] text-neutral-500">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             {enabledCount} of {totalAgents} editors active
           </span>
@@ -896,6 +1014,192 @@ function PromptBoxButton({
               onClick={() => {
                 onChange("");
               }}
+              className="text-[11px] font-medium text-neutral-500 hover:text-neutral-800 hover:underline"
+            >
+              Clear
+            </button>
+            <button
+              onClick={() => setOpen(false)}
+              className="rounded-lg bg-neutral-900 px-3 py-1.5 text-[11.5px] font-semibold text-white hover:bg-neutral-700"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ArticleTypePicker({
+  value,
+  onChange,
+}: {
+  value: ArticleType;
+  onChange: (v: ArticleType) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const choice =
+    ARTICLE_TYPE_CHOICES.find((c) => c.value === value) ?? ARTICLE_TYPE_CHOICES[0];
+
+  useEffect(() => {
+    if (!open) return;
+    const onMouse = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
+    document.addEventListener("mousedown", onMouse);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onMouse);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  return (
+    <div ref={ref} className="relative inline-flex">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800 transition hover:bg-neutral-50"
+      >
+        <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
+          Article
+        </span>
+        <span className="font-medium">{choice.label}</span>
+        <span aria-hidden className="text-neutral-400">▾</span>
+      </button>
+      {open && (
+        <div
+          role="listbox"
+          className="absolute left-0 top-[calc(100%+6px)] z-40 w-[340px] overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-xl"
+        >
+          {ARTICLE_TYPE_CHOICES.map((c) => {
+            const active = c.value === value;
+            return (
+              <button
+                key={c.value}
+                role="option"
+                aria-selected={active}
+                onClick={() => { onChange(c.value); setOpen(false); }}
+                className={[
+                  "block w-full px-3 py-2 text-left transition",
+                  active ? "bg-neutral-100" : "hover:bg-neutral-50",
+                ].join(" ")}
+              >
+                <div className="text-[12.5px] font-semibold text-neutral-900">
+                  {c.label}
+                  {active && <span className="ml-1.5 text-emerald-600">✓</span>}
+                </div>
+                <div className="mt-0.5 text-[11px] leading-snug text-neutral-500">
+                  {c.examples}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function JournalismToggleChip({
+  label,
+  on,
+  onChange,
+  color,
+  title,
+}: {
+  label: string;
+  on: boolean;
+  onChange: (on: boolean) => void;
+  color: string;
+  title?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!on)}
+      title={title}
+      aria-pressed={on}
+      className={[
+        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-medium transition",
+        on
+          ? "border-neutral-300 bg-white text-neutral-900 shadow-sm"
+          : "border-transparent bg-neutral-100 text-neutral-500 hover:bg-neutral-200",
+      ].join(" ")}
+    >
+      <span
+        aria-hidden
+        className="h-1.5 w-1.5 rounded-full"
+        style={{ backgroundColor: on ? color : "#cbd5e1" }}
+      />
+      {label}
+    </button>
+  );
+}
+
+function SubjectContextButton({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const has = value.trim().length > 0;
+  return (
+    <div className="relative inline-flex">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        title={
+          has
+            ? "Edit the story context. Threaded into the type specialist's user message."
+            : "Optional. Paste a short note: who the story is about, the key claim, the venue. The type specialist will use this."
+        }
+        className={[
+          "inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-[11.5px] font-medium transition",
+          has
+            ? "border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+            : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50",
+        ].join(" ")}
+      >
+        <span aria-hidden>{has ? "✓" : "+"}</span>
+        {has ? "Context added" : "Add context"}
+      </button>
+      {open && (
+        <div
+          role="dialog"
+          className="absolute left-0 top-[calc(100%+6px)] z-50 w-[360px] max-w-[calc(100vw-32px)] rounded-2xl border border-neutral-200 bg-white p-4 shadow-xl"
+        >
+          <div className="mb-1.5 flex items-start justify-between">
+            <div className="leading-tight">
+              <div className="text-[12px] font-semibold text-neutral-900">
+                Story context
+              </div>
+              <div className="text-[10.5px] text-neutral-500">
+                Optional. Who the story is about, the angle, the venue. Goes only to the type specialist.
+              </div>
+            </div>
+            <button
+              onClick={() => setOpen(false)}
+              aria-label="Close"
+              className="-mr-1 -mt-1 rounded-full p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700"
+            >
+              ✕
+            </button>
+          </div>
+          <textarea
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="e.g. Profile of NYC councilwoman Maria Cortez ahead of her primary; venue is the local paper."
+            className="mt-1 h-32 w-full resize-none rounded-lg border border-neutral-200 bg-stone-50 p-2 text-[12px] leading-snug text-neutral-800 focus:border-neutral-400 focus:outline-none"
+          />
+          <div className="mt-2 flex items-center justify-between">
+            <button
+              onClick={() => onChange("")}
               className="text-[11px] font-medium text-neutral-500 hover:text-neutral-800 hover:underline"
             >
               Clear

@@ -1,0 +1,85 @@
+# Exemplars for features_editor (Faye)
+# Bootstrap synthetic exemplars in features-editor voice. Will be replaced
+# by real-data ingestion (Pulitzer-feature methodology essays, Nieman
+# Storyboard analyses, CJR long-form criticism) in Phase 2.
+#
+- source: 'entire piece in summary, no scenes'
+  article: |-
+    Over the next eight months, Hassan would build the bakery into one of the most popular small businesses in the neighborhood. Customers came from across the city. The local paper wrote about it. Hassan was even featured on a podcast.
+  critiques:
+  - agent: features_editor
+    text_quote: Over the next eight months, Hassan would build the bakery
+    span: [0, 56]
+    issue_label: all summary, no scene
+    question: |-
+      Eight months in two sentences and nothing on the page. We need to be in a moment — one morning at the bakery, one customer, one specific thing that happened.
+    why_it_matters: |-
+      Summary tells the reader what happened. Scene lets them watch it happen. The difference is the entire form.
+    fix_suggestion: |-
+      Pick one specific morning from your reporting. Open it: who was there, what was on the counter, what Hassan said to which regular. Let one scene carry what the summary tries to do in two sentences.
+    replacement: null
+    severity: high
+- source: 'feature about nothing — no one-sentence summary possible'
+  article: |-
+    Lin reflects on her years in the industry, the changes she's seen, the people who have come and gone. She has many thoughts about what makes a meaningful career and the value of resilience.
+  critiques:
+  - agent: features_editor
+    text_quote: Lin reflects on her years in the industry, the changes she's seen
+    span: [0, 64]
+    issue_label: feature about nothing
+    question: |-
+      What is this story actually about? "Career reflections" and "the value of resilience" are not a story; they're a vibe. Strong features can be summed up in one sentence — what's the sentence here?
+    why_it_matters: |-
+      Features without a center read as well-written essays adrift from any reason for the reader to be in them.
+    fix_suggestion: |-
+      Find the one specific tension that's driving this piece. Then rewrite the lede around that — not "Lin reflects" but "Lin had to decide whether to..."
+    replacement: null
+    severity: high
+- source: 'sensory detail abstracted into generic adjectives'
+  article: |-
+    The restaurant was charming and the food was delicious. The decor was beautiful and the staff was friendly.
+  critiques:
+  - agent: features_editor
+    text_quote: The restaurant was charming and the food was delicious.
+    span: [0, 55]
+    issue_label: abstract not specific
+    question: |-
+      "Charming," "delicious," "beautiful," "friendly" — these are the words you write when you weren't taking notes. What did the room actually look like? What did one dish taste like?
+    why_it_matters: |-
+      Generic sensory adjectives are the prose equivalent of stock photos. They tell the reader the writer wasn't paying attention.
+    fix_suggestion: |-
+      Pick one specific detail per sense for one scene: the green tile floor, the smell of cardamom from the kitchen, the song that was playing, the bowl of pickled turnips on the counter.
+    replacement: null
+    severity: medium
+- source: 'subject talked about but never on the page'
+  article: |-
+    Colleagues describe Wright as a perfectionist. Her former students remember her as demanding but fair. Industry observers say her influence on the field has been profound.
+  critiques:
+  - agent: features_editor
+    text_quote: Colleagues describe Wright as a perfectionist.
+    span: [0, 46]
+    issue_label: subject not present on page
+    question: |-
+      Three secondhand characterizations in a row. Where is Wright herself? What is she doing on the page? A feature where the subject is only described by other people reads as a dossier.
+    why_it_matters: |-
+      The reader wants to see the subject, not just read what other people said about them.
+    fix_suggestion: |-
+      Find one moment from your time with Wright — a gesture, a remark, the way she ran a meeting, the way she took a phone call. Open the next section with her doing something.
+    replacement: null
+    severity: high
+- source: 'kicker that just summarizes'
+  article: |-
+    And so, the village had changed forever, but its spirit remained.
+  critiques:
+  - agent: features_editor
+    text_quote: And so, the village had changed forever, but its spirit remained.
+    span: [0, 65]
+    issue_label: kicker just summarizes
+    question: |-
+      "And so, X had changed forever but its Y remained" is the canonical bad-feature ending. It's the writer's commentary on the meaning of the piece, not a moment that lets the reader feel it.
+    why_it_matters: |-
+      The kicker is the part the reader remembers. A summary kicker tells the reader the writer didn't trust them to feel anything on their own.
+    fix_suggestion: |-
+      End with a small specific moment instead. A gesture, an image, a single line of dialogue. The shopkeeper closing the shutters at the end of the day, the schoolchildren walking past the empty lot, the smell of bread from the new bakery in the old building.
+    replacement: null
+    severity: medium

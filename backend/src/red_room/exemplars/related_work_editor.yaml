@@ -2,8 +2,11 @@
 # Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
 # NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
 # field 200-2500 words, must reference a specific anchor like
-# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
-# and the top 10 by quality score selected.
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku;
+# top 15 selected with a diversity constraint (round-robin
+# across distinct sub-issue buckets) so the exemplars cover the lane's
+# full failure-mode range rather than 15 variants of the
+# same critique.
 #
 - source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): weak limitation of prior work justification
@@ -26,26 +29,6 @@
     replacement: null
     severity: high
 - source: |-
-    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 5/5): missing cross-disciplinary citations
-  article: |-
-    Section 4.1 claims 'users might find it difficult to express tradeoffs' without citing relevant work from marketing or recommender systems literature.
-  critiques:
-  - agent: related_work_editor
-    text_quote: |-
-      Section 4.1 claims 'users might find it difficult to express tradeoffs' without citing relevant work from marketing or recommender systems literature.
-    span:
-    - 0
-    - 150
-    issue_label: missing cross-disciplinary citations
-    question: |-
-      It would be nice if you could refer to papers from other fields more (e.g. marketing or recommender system) when making some claims (e.g. section 4.1 'users might find it difficult to express tradeoffs…')
-    why_it_matters: |-
-      Claims about user behavior lack grounding in established literature from adjacent fields, weakening the motivation for the approach.
-    fix_suggestion: |-
-      Cite relevant work from marketing and recommender systems literature when discussing user preference elicitation challenges.
-    replacement: null
-    severity: low
-- source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): Unclear novelty relative to prior theorems
   article: |-
     Theorem 4 seems to be an adaptation of the CF approach in (Newey et al., 1999), and Theorem 6 seems to be an adaptation of the IV approach in (D'Haultfoeuille, 2011).
@@ -66,25 +49,25 @@
     replacement: null
     severity: medium
 - source: |-
-    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): Missing classical ML benchmarks (AutoML Benchmark Suite, TabRepo)
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 5/5): missing cross-disciplinary citations
   article: |-
-    Table 1 claims to show 'the landscape of existing tabular machine learning benchmarks compared to TabReD', but only covers deep learning vs. classical ML benchmarks.
+    Section 4.1 claims 'users might find it difficult to express tradeoffs' without citing relevant work from marketing or recommender systems literature.
   critiques:
   - agent: related_work_editor
     text_quote: |-
-      Table 1 claims to show 'the landscape of existing tabular machine learning benchmarks compared to TabReD', but only covers deep learning vs. classical ML benchmarks.
+      Section 4.1 claims 'users might find it difficult to express tradeoffs' without citing relevant work from marketing or recommender systems literature.
     span:
     - 0
-    - 165
-    issue_label: Missing classical ML benchmarks (AutoML Benchmark Suite, TabRepo)
+    - 150
+    issue_label: missing cross-disciplinary citations
     question: |-
-      Table 1 is categorically wrong in claiming to represent 'tabular machine learning benchmarks'—it only covers deep learning vs. classical ML benchmarks. You omit major classical ML benchmarking efforts like the AutoML Benchmark Suite and TabRepo, which are better curated and more relevant to your claims.
+      It would be nice if you could refer to papers from other fields more (e.g. marketing or recommender system) when making some claims (e.g. section 4.1 'users might find it difficult to express tradeoffs…')
     why_it_matters: |-
-      Omitting key benchmarks undermines the paper's framing as an analysis of the existing landscape and makes it unclear how TabReD relates to or advances beyond prior curation efforts in tabular benchmarking.
+      Claims about user behavior lack grounding in established literature from adjacent fields, weakening the motivation for the approach.
     fix_suggestion: |-
-      Either incorporate AutoML Benchmark Suite and TabRepo into Table 1 and your analysis, or relabel Table 1 as 'deep learning vs. classical ML benchmarks' and clarify how your work differs from classical ML-focused benchmarking efforts.
+      Cite relevant work from marketing and recommender systems literature when discussing user preference elicitation challenges.
     replacement: null
-    severity: high
+    severity: low
 - source: |-
     NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): undefined quality terminology
   article: |-
@@ -166,6 +149,26 @@
     replacement: null
     severity: medium
 - source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): Missing classical ML benchmarks (AutoML Benchmark Suite, TabRepo)
+  article: |-
+    Table 1 claims to show 'the landscape of existing tabular machine learning benchmarks compared to TabReD', but only covers deep learning vs. classical ML benchmarks.
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Table 1 claims to show 'the landscape of existing tabular machine learning benchmarks compared to TabReD', but only covers deep learning vs. classical ML benchmarks.
+    span:
+    - 0
+    - 165
+    issue_label: Missing classical ML benchmarks (AutoML Benchmark Suite, TabRepo)
+    question: |-
+      Table 1 is categorically wrong in claiming to represent 'tabular machine learning benchmarks'—it only covers deep learning vs. classical ML benchmarks. You omit major classical ML benchmarking efforts like the AutoML Benchmark Suite and TabRepo, which are better curated and more relevant to your claims.
+    why_it_matters: |-
+      Omitting key benchmarks undermines the paper's framing as an analysis of the existing landscape and makes it unclear how TabReD relates to or advances beyond prior curation efforts in tabular benchmarking.
+    fix_suggestion: |-
+      Either incorporate AutoML Benchmark Suite and TabRepo into Table 1 and your analysis, or relabel Table 1 as 'deep learning vs. classical ML benchmarks' and clarify how your work differs from classical ML-focused benchmarking efforts.
+    replacement: null
+    severity: high
+- source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): unclear definition of FM fields
   article: |-
     Authors state fields are 'past interactions between users and items' (page 1 bottom) but elsewhere language suggests fields are often 'descriptors of the item and/or user'.
@@ -203,3 +206,101 @@
       Expand the related work discussion in Section 1 to include recent work in the field, using prior survey work as a reference.
     replacement: null
     severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 3/10, confidence 5/5): missing related benchmarks in comparison table
+  article: |-
+    Table 1's comparison between SWE-bench M and other repository-level coding benchmarks is incomplete, notably missing comparisons with important related works such as DevEval, CrossCodeEval, and RepoExec.
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Table 1's comparison between SWE-bench M and other repository-level coding benchmarks is incomplete, notably missing comparisons with important related works such as DevEval, CrossCodeEval, and RepoExec.
+    span:
+    - 0
+    - 203
+    issue_label: missing related benchmarks in comparison table
+    question: |-
+      Table 1 omits DevEval, CrossCodeEval, and RepoExec—why were these important repository-level benchmarks excluded from the comparison?
+    why_it_matters: |-
+      Readers cannot assess how SWE-bench M's scope and design choices compare to closely related contemporaneous work, weakening the positioning of novelty.
+    fix_suggestion: |-
+      Extend Table 1 to include DevEval, CrossCodeEval, and RepoExec with relevant dimensions (task count, language coverage, multimodality, etc.).
+    replacement: null
+    severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): mischaracterized prior work
+  article: 'Line 67: Wang et al. (2020) cited as example dealing with unbalanced data'
+  critiques:
+  - agent: related_work_editor
+    text_quote: 'Line 67: Wang et al. (2020) cited as example dealing with unbalanced data'
+    span:
+    - 0
+    - 73
+    issue_label: mischaracterized prior work
+    question: |-
+      Line 67: Wang et al. (2020) is indicated as dealing with unbalanced data, but does it not rather address unbalanced computation?
+    why_it_matters: |-
+      Mischaracterization of prior work suggests the authors did not engage carefully with the reference.
+    fix_suggestion: |-
+      Correct the characterization of Wang et al. (2020) to accurately reflect whether it addresses data or computation imbalance.
+    replacement: null
+    severity: low
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 5/5): questionable novelty claim re: benchmarks
+  article: |-
+    Section 2.2 asserts that 'RCA is a critical step in the software development lifecycle but often lacks practical benchmarks'
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Section 2.2 asserts that 'RCA is a critical step in the software development lifecycle but often lacks practical benchmarks'
+    span:
+    - 0
+    - 124
+    issue_label: 'questionable novelty claim re: benchmarks'
+    question: |-
+      The assertion that 'RCA is a critical step in the software development lifecycle but often lacks practical benchmarks' may not fully reflect the current state of research. There are existing benchmarks and tools for RCA in software engineering.
+    why_it_matters: |-
+      The core novelty claim appears overstated if existing RCA benchmarks already exist, and the paper does not clearly differentiate its contribution.
+    fix_suggestion: |-
+      Expand the literature review to include a comprehensive analysis of existing RCA benchmarks and tools. Discuss works like the MIMIC dataset in healthcare analytics or other RCA frameworks in software engineering to highlight how OpenRCA differentiates itself and fills existing gaps.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): MC loss function novelty unclear, prior work not attributed
+  article: |-
+    Section 4.2, the authors proposed the MC loss function. However, as far as I understand, the MC loss function is not presented in this paper and has been described in detail in reference [1].
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Section 4.2, the authors proposed the MC loss function. However, as far as I understand, the MC loss function is not presented in this paper and has been described in detail in reference [1].
+    span:
+    - 0
+    - 191
+    issue_label: MC loss function novelty unclear, prior work not attributed
+    question: |-
+      The MC loss function appears to be from prior work [Wisdom et al. ICASSP 2019], not novel to this paper. Is the MC loss function an innovation from [1], or is it adopted as-is? If adopted, where exactly is the innovation?
+    why_it_matters: |-
+      Unclear attribution of the MC loss function obscures which components are novel to UNSSOR versus borrowed from prior work.
+    fix_suggestion: |-
+      Explicitly state whether the MC loss is from [1] or a novel contribution, and if novel, clarify the exact innovation relative to [1].
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 3/10, confidence 5/5): mischaracterized prior work on root cause
+  article: |-
+    Section 2.2: 'Several prior works have empirically demonstrated this result in which existing empowerment approaches tend to learn skillsets that do not change much from initialization.'
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Section 2.2: 'Several prior works have empirically demonstrated this result in which existing empowerment approaches tend to learn skillsets that do not change much from initialization.'
+    span:
+    - 0
+    - 186
+    issue_label: mischaracterized prior work on root cause
+    question: |-
+      The previous empirical findings cannot justify that the issues are caused by the loose lower bound approximation (this paper's focus). Instead, [1][2] consider the issues are implicit for I(S;Z) objective because it can be optimized by skillsets close to initialization. Your paper contributes only to the approximation level of the I(S;Z) objective, so it also suffers the same implicit issue shown in Figure 16 (the torso positions of Ant remain close to initialization).
+    why_it_matters: |-
+      The paper misattributes the root cause of prior failures to loose bounds when the fundamental issue is inherent to the I(S;Z) objective itself, undermining the core motivation.
+    fix_suggestion: |-
+      Clarify that your contribution addresses approximation tightness, not the fundamental limitations of the I(S;Z) objective. Acknowledge that Figure 16 demonstrates your method does not solve the implicit problem that [1][2] identified.
+    replacement: null
+    severity: high

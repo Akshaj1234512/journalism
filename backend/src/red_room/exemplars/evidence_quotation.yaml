@@ -1,184 +1,293 @@
 # Exemplars for evidence_quotation
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
-- source: |-
-    They Say / I Say, Chapter 3: introducing quotations with signal phrases (the 'hit and run' quotation pattern)
+- source: 'AES2 (score 2/6): dropped quote, no warrant'
   article: |-
-    Hamlet is paralyzed by his own thought. 'To be, or not to be, that is the question.' He cannot act because he keeps reasoning about action.
-  critiques:
-  - agent: evidence_quotation
-    text_quote: '''To be, or not to be, that is the question.'''
-    span: [40, 84]
-    issue_label: dropped quotation
-    question: |-
-      The Hamlet line lands cold between two of your sentences with no signal phrase, no act and scene, no speaker. The writer drops the words and runs. Who is speaking, where, and why is it in your paragraph?
-    why_it_matters: |-
-      A reader who does not already know the soliloquy has no idea whose voice this is or what work it is doing in your argument, and the claim about paralysis floats free of the text.
-    fix_suggestion: |-
-      Introduce the quotation with a signal phrase that names the speaker and locates the moment, then explain in your own words why this particular line shows the paralysis you are describing.
-    replacement: |-
-      Alone on stage in Act 3, Scene 1, Hamlet opens his most famous soliloquy with the question 'To be, or not to be, that is the question.'
-    severity: medium
-- source: |-
-    MLA Handbook 9th ed., section 1.3 on integrating sources; the quote-sandwich teaching pattern (Graff/Birkenstein)
-  article: |-
-    The framers feared concentrated power above all else. 'Ambition must be made to counteract ambition.' This is why the Constitution divides authority among three branches.
-  critiques:
-  - agent: evidence_quotation
-    text_quote: '''Ambition must be made to counteract ambition.'''
-    span: [55, 102]
-    issue_label: dropped quotation
-    question: |-
-      The line from Federalist No. 51 appears with no attribution, no Madison, no number, no context. Introduce, quote, unpack. Right now you have only the middle slice.
-    why_it_matters: |-
-      Without the signal phrase the reader cannot tell whether this is your formulation, a framer's, or a modern commentator's, and the authority your argument is borrowing disappears.
-    fix_suggestion: |-
-      Name Madison and the paper, then quote, then explain how 'ambition counteracting ambition' becomes the structural argument for separation of powers.
-    replacement: |-
-      Madison made the logic explicit in Federalist No. 51: 'Ambition must be made to counteract ambition.'
-    severity: medium
-- source: |-
-    Documented misuse pattern: claim asserts X, quote supports Y (writing-center handout on quotation-claim mismatch)
-  article: |-
-    Toni Morrison presents Sethe's killing of her daughter as an unambiguous act of maternal love. As Morrison writes, 'The best thing she was, was her children.' Sethe acts purely out of love, and the novel endorses that love.
-  critiques:
-  - agent: evidence_quotation
-    text_quote: '''The best thing she was, was her children.'''
-    span: [108, 151]
-    issue_label: quote mismatched to claim
-    question: |-
-      Your paragraph claims Beloved presents Sethe's killing as unambiguous maternal love. The line you quote is about how Sethe defined her own worth through her children. It is a claim about identity, not a defense of the killing, and the novel itself is far from unambiguous on the act.
-    why_it_matters: |-
-      When the evidence supports an adjacent claim, identity, and not the stated claim, endorsement of the killing, the paragraph reads as if you reached for the first Sethe quote that fit thematically and trusted the reader not to notice.
-    fix_suggestion: |-
-      Either change the claim to match what the quote actually says (Sethe defines herself through motherhood) or find a passage that addresses the killing itself, such as Paul D's reaction or Sethe's own retelling in the second half.
-    replacement: null
-    severity: high
-- source: |-
-    Documented misuse pattern: evidence supports an adjacent claim, not the stated one
-  article: |-
-    Reconstruction failed primarily because of Northern apathy: the white North simply lost interest in protecting freedmen. Frederick Douglass himself put it plainly in his 1879 speech, 'The hour is one of deep solicitude to the whole country. The future of the freedmen is full of peril.' Douglass saw exactly what we now see in hindsight.
+    To begin with, in the passage "in german suburb, llife goes on without cars" ms. rosenthal clearly states that 70% of Vauban`s families dont have cars. They think that this is less tense without one. But not only that. 5,500 residents within a rectanglar square mile may be the most advanced expirement iun low-car surburban life.
   critiques:
   - agent: evidence_quotation
     text_quote: |-
-      'The hour is one of deep solicitude to the whole country. The future of the freedmen is full of peril.'
-    span: [127, 230]
-    issue_label: quote mismatched to claim
+      To begin with, in the passage "in german suburb, llife goes on without cars" ms. rosenthal clearly states that 70% of Vauban`s families dont have cars. They think that this is less tense without one. But not only that. 5,500 residents within a rectanglar square mile may be the most advanced expirement iun low-car surburban life.
+    span:
+    - 0
+    - 330
+    issue_label: dropped quote, no warrant
     question: |-
-      Your thesis is that Reconstruction failed because of Northern apathy. The Douglass lines you quote name the peril facing freedmen but say nothing about Northern attitudes. He is describing the threat, not diagnosing its cause, and elsewhere in that same address he points at Southern violence and federal retreat, not Northern indifference.
+      You cite the statistic that 70% of families don't have cars and then say they 'think this is less tense'—but where's the evidence of that claim? And more importantly, *why* does this support your argument that car usage *should* be limited? The statistic and your conclusion aren't connected.
     why_it_matters: |-
-      Pinning a causal claim about Northern apathy on a quote that only names danger lets a careful reader pull the entire paragraph apart, because the citation does not support the verb the thesis depends on.
+      The reader sees data but doesn't understand how it proves your point, so the evidence feels like decoration rather than proof.
     fix_suggestion: |-
-      Find a Douglass passage that names the Northern cause directly, his 1888 'Lessons of the Hour' has stronger language on white Northern fatigue, or weaken the thesis to what this quote can carry.
+      Explain the warrant: 'Because 70% of families chose not to own cars and reported lower stress, this shows that people actively benefit from car-free living—suggesting that policy-driven limits could yield the same benefit.'
     replacement: null
     severity: high
-- source: |-
-    Quote-mining (phrase extracted from context that reverses its meaning); writing-center pattern on irony missed in primary sources
+- source: 'PERSUADE_2.0 (score 3/6): example lacks specific detail'
   article: |-
-    Even Mr. Collins, no friend of independent women, recognizes Elizabeth's intelligence. He calls her 'one of the most accomplished young women in the neighbourhood,' a striking admission from a man so devoted to convention.
-  critiques:
-  - agent: evidence_quotation
-    text_quote: '''one of the most accomplished young women in the neighbourhood,'''
-    span: [82, 145]
-    issue_label: quote mined from ironic context
-    question: |-
-      Mr. Collins says this kind of thing about every Bennet sister and about Lady Catherine's pug. Austen frames his compliments as the marker of his sycophancy, not as honest praise; the surrounding narration is openly mocking him. Lifted clean, the line sounds like a real assessment. In the novel it is the opposite.
-    why_it_matters: |-
-      Treating an Austen character's empty flattery as sincere evidence of Elizabeth's mind misreads the irony that organizes the entire scene, and a reader who knows the book will see the misuse immediately.
-    fix_suggestion: |-
-      Use a line from a character Austen credits, Darcy's eventual concession or the narrator's free indirect commentary, or keep Collins but read his praise as the satire it is.
-    replacement: null
-    severity: high
-- source: |-
-    The quote-sandwich teaching pattern (Graff/Birkenstein): introduce, quote, unpack. Step three is missing.
-  article: |-
-    Nick Carraway insists he is reliable, but the novel undermines him from the first page. As Nick says, 'I am one of the few honest people that I have ever known.' Fitzgerald uses the green light to symbolize Gatsby's unreachable dream of Daisy, which connects to the broader theme of the American Dream.
+    my mom is an example of this option she i need leerned inglish and this option is good because she work in the morning and the nignt she have learning english an online or video conferencing .
   critiques:
   - agent: evidence_quotation
     text_quote: |-
-      'I am one of the few honest people that I have ever known.' Fitzgerald uses the green light
-    span: [80, 173]
-    issue_label: quotation without analysis
+      my mom is an example of this option she i need leerned inglish and this option is good because she work in the morning and the nignt she have learning english an online or video conferencing .
+    span:
+    - 0
+    - 192
+    issue_label: example lacks specific detail
     question: |-
-      You drop one of the most analyzed lines in American fiction and then pivot to the green light in the next sentence. Asks for the third slice: how does Nick's self-declaration of honesty undercut him? Without that unpacking, the quote is decorative.
+      You mention your mom learning English online, which is relevant, but you don't show *how* it helped her or *what changed* because of it. Did she pass a test? Get a job? Find community? Right now it's just a statement that she uses the service—not proof the service worked.
     why_it_matters: |-
-      A quotation that is not analyzed cannot do argumentative work, and your reader is left to perform the interpretation you promised to perform.
+      Without concrete outcome or detail, the example just repeats your claim instead of supporting it.
     fix_suggestion: |-
-      Before you move on, spend two or three sentences on why a narrator who has to insist on his own honesty is already suspect, and tie that to a second moment in the novel where Nick's account contradicts itself.
+      Add a result: 'My mom works mornings at a restaurant and takes English classes online at night. After six months, she passed the citizenship exam and got promoted because she could communicate better with customers.'
     replacement: null
     severity: medium
-- source: |-
-    Cherry-picked evidence (the obvious counter-passage in the same text ignored); standard literary-essay critique
+- source: 'PERSUADE_2.0 (score 3/6): dropped quote, no analysis'
   article: |-
-    Zora Neale Hurston shows Janie finally finding her voice through Tea Cake, who treats her as an equal. 'He done taught me de maiden language all over,' Janie tells Pheoby, evidence that this third marriage is the one that lets her speak freely.
-  critiques:
-  - agent: evidence_quotation
-    text_quote: '''He done taught me de maiden language all over,'''
-    span: [99, 147]
-    issue_label: cherry-picked evidence
-    question: |-
-      You quote the romantic line and stop. The same novel has Tea Cake taking Janie's money in Jacksonville and beating her in Chapter 17 to show Mrs. Turner's brother 'who is boss.' If Tea Cake is the marriage that lets Janie speak freely, the beating scene has to be in the paragraph, not avoided.
-    why_it_matters: |-
-      Ignoring the obvious counter-passage in the same text is the move that lets a reader dismiss the entire reading, because the strongest counter-evidence sits a few chapters away.
-    fix_suggestion: |-
-      Bring the beating scene into the paragraph and argue with it, either by complicating the 'equal partner' reading or by showing how Janie's voice survives despite it. The argument gets stronger when it acknowledges what it has to overcome.
-    replacement: null
-    severity: high
-- source: |-
-    Paraphrase that distorts the source (the silent twin of misquotation); writing-center handout on faithful paraphrase
-  article: |-
-    In his House Divided speech, Lincoln predicted that the country would soon become entirely slave or entirely free, and that civil war was inevitable to settle the question.
+    In the article, they say driverless cars will do the driving 90 percnt of the time. The only time the people will really have to drive is if there is tricky traffic or roads, and pulling in and out of driveways.
   critiques:
   - agent: evidence_quotation
     text_quote: |-
-      predicted that the country would soon become entirely slave or entirely free, and that civil war was inevitable to settle the question
-    span: [31, 165]
-    issue_label: paraphrase distorts the source
+      In the article, they say driverless cars will do the driving 90 percnt of the time. The only time the people will really have to drive is if there is tricky traffic or roads, and pulling in and out of driveways.
+    span:
+    - 0
+    - 211
+    issue_label: dropped quote, no analysis
     question: |-
-      Lincoln's actual line is 'I do not expect the Union to be dissolved, I do not expect the house to fall, but I do expect it will cease to be divided.' He explicitly did not predict dissolution, and he never said civil war was inevitable in that speech. Your paraphrase adds two claims he was at pains not to make.
+      You're dropping a statistic (90 percent) but not doing any work with it. Why is that number important to your argument? How does it support your position that driverless cars *should* be developed?
     why_it_matters: |-
-      A paraphrase that makes a source say more than it said is the silent twin of misquotation, and on a document this scrutinized any historian reader will catch the addition immediately.
+      Evidence without analysis reads like note-taking, not argumentation — you're just listing facts instead of using them to persuade.
     fix_suggestion: |-
-      Quote the actual sentence and paraphrase only what is in it: Lincoln expected the division to end, one way or the other, but he did not predict war in the speech itself. If you want the war prediction, find it in a later document and cite that one.
-    replacement: |-
-      predicted that the house divided against itself could not stand, and that the country would become 'all one thing, or all the other'
-    severity: high
-- source: |-
-    Overquotation; the textbook 'stitched anthology' pattern (Graff/Birkenstein on the writer's voice disappearing between quotes)
-  article: |-
-    Madison argues that factions are inevitable. 'The latent causes of faction are thus sown in the nature of man.' He also notes that a republic can manage them. 'A republic, by which I mean a government in which the scheme of representation takes place, opens a different prospect, and promises the cure for which we are seeking.' And further: 'Extend the sphere, and you take in a greater variety of parties and interests.' The size of the republic is therefore the key.
-  critiques:
-  - agent: evidence_quotation
-    text_quote: |-
-      'A republic, by which I mean a government in which the scheme of representation takes place, opens a different prospect, and promises the cure for which we are seeking.' And further: 'Extend the sphere, and you take in a greater variety of parties and interests.'
-    span: [144, 411]
-    issue_label: overquotation
-    question: |-
-      Three Madison quotes in four sentences, stitched together with one-line bridges. The paragraph stitched together into an anthology: the source's voice has crowded out yours. Whose argument is this paragraph making, Madison's or yours?
-    why_it_matters: |-
-      When the writer's voice disappears between block quotes the essay stops being analysis and becomes curation, and the reader cannot tell what you think Madison's argument adds up to.
-    fix_suggestion: |-
-      Keep the strongest quote, paraphrase the other two in your own words, and use the space you save to explain how Madison's three moves connect: faction is inherent, representation filters it, scale dilutes it. The argument is the connection, not the quotes.
+      Add a sentence after the statistic: "This means drivers can reclaim hours of their day, which is especially valuable for people with long commutes or multiple jobs."
     replacement: null
     severity: medium
-- source: |-
-    Underquotation on a load-bearing claim (writing-center handout: strong assertion with no textual support)
+- source: 'AES2 (score 2/6): unsupported claim, vague example'
   article: |-
-    Hamlet's madness is entirely performed. From his first encounter with the ghost to the final duel, every appearance of derangement is calculated, and Shakespeare makes this calculation visible to the audience throughout the play.
+    The other reason why i might want to change rhe election by popular votes instead of ellectoral college is becauise of the "disaster factor". Which the state legislature are responsible for picking electors..... and the electors would/could always defy the will of the poeple.
   critiques:
   - agent: evidence_quotation
     text_quote: |-
-      every appearance of derangement is calculated, and Shakespeare makes this calculation visible to the audience throughout the play
-    span: [105, 233]
-    issue_label: load-bearing claim with no evidence
+      The other reason why i might want to change rhe election by popular votes instead of ellectoral college is becauise of the "disaster factor". Which the state legislature are responsible for picking electors..... and the electors would/could always defy the will of the poeple.
+    span:
+    - 0
+    - 276
+    issue_label: unsupported claim, vague example
     question: |-
-      This is the thesis of the paragraph and there is no quotation under it. Hamlet's 'antic disposition' line in Act 1, Scene 5 is the one piece of text that directly supports the 'performed madness' reading, and it is the standard citation for it. Without that line, or any line, the claim is an assertion.
+      What is the 'disaster factor'? You name it but don't explain it. And 'would/could always defy'—is there evidence of this? Has it happened? One real case would be more persuasive than hedging.
     why_it_matters: |-
-      A load-bearing interpretive claim with zero textual support is exactly the paragraph a reader marks for 'where is the evidence,' and the essay loses its grip on the play.
+      Without concrete evidence (a historical instance of faithless electors or legislative overreach), the 'disaster factor' reads as speculation, not argument.
     fix_suggestion: |-
-      Quote Hamlet telling Horatio he will 'put an antic disposition on,' then point to a second moment where the mask slips in private (the soliloquies) versus holds in public (with Polonius). Two cited moments will carry the claim the assertion cannot.
+      Give a specific example: 'For instance, in 2016, seven electors voted against their state's popular-vote winner, showing that the Electoral College can override voters' intent.' Then explain why this risk matters.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 2/6): no warrant, claim-evidence mismatch'
+  article: |-
+    For example, the BMW 'Traffic Jam Assistant,' is one of the many cars that can preform driverless to a certain extent, allowing for a human driver to access the controls if necessary. This evidence concludes that driverless cars are potential as a wonderful tool to help in the saftey of others in a vehicle.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      For example, the BMW 'Traffic Jam Assistant,' is one of the many cars that can preform driverless to a certain extent, allowing for a human driver to access the controls if necessary. This evidence concludes that driverless cars are potential as a wonderful tool to help in the saftey of others in a vehicle.
+    span:
+    - 0
+    - 308
+    issue_label: no warrant, claim-evidence mismatch
+    question: |-
+      How does the BMW Traffic Jam Assistant prove that driverless cars will save lives and are worth developing? The car can assist 'to a certain extent'—but you haven't explained why partial automation supports your argument. What's the leap from 'this car exists' to 'therefore we should build driverless cars'?
+    why_it_matters: |-
+      The evidence sits there without you doing the analytical work to connect it to your thesis, so it feels like proof-by-example rather than proof-by-reasoning.
+    fix_suggestion: |-
+      Add analysis: 'The Traffic Jam Assistant demonstrates that even limited driverless features can reduce driver error in heavy traffic—the most accident-prone driving conditions. This shows the safety potential of fuller automation.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): quote-and-dismiss pattern; no warrant'
+  article: |-
+    when election comes and the citizens vote, "They are likely to be most thoughtful voters, on average(and for the further reasom that they will have recived the most information and attention from the candidiates), and the most thoughtful voters should be the ones to decide the election." (source#3, paragraph 20). Although people may disagree and say "Candidates don't spend time in states they know they have no chance of winning, focusing only on the tight races in the"swing" states."(source#2, paragraph 13). Yes, that may be true, but again, when the people vote, they only want what they want, no jokes.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      when election comes and the citizens vote, "They are likely to be most thoughtful voters, on average(and for the further reasom that they will have recived the most information and attention from the candidiates), and the most thoughtful voters should be the ones to decide the election." (source#3, paragraph 20). Although people may disagree and say "Candidates don't spend time in states they know they have no chance of winning, focusing only on the tight races in the"swing" states."(source#2, paragraph 13). Yes, that may be true, but again, when the people vote, they only want what they want, no jokes.
+    span:
+    - 0
+    - 610
+    issue_label: quote-and-dismiss pattern; no warrant
+    question: |-
+      You quote a source saying thoughtful voters should decide the election, then immediately quote a counter-argument about swing states, then dismiss it with 'yes, that may be true, but... they only want what they want.' What does 'they only want what they want' mean? How does that respond to the swing-state critique? You're not actually defending your position here—you're just moving past the hard question.
+    why_it_matters: |-
+      Your essay looks like it's engaging with opposing views, but you're actually dodging them, which weakens your credibility and leaves your argument incomplete.
+    fix_suggestion: |-
+      Either explain how electors being more thoughtful *prevents* the swing-state problem, or concede that swing states *are* a problem but argue it's worth the trade-off for having informed electors. Right now you're straddling both sides without committing.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): dropped example, no concrete evidence'
+  article: |-
+    For example. The students would be able to work all day long without having any fear of getting up early in the morning to came to school, whenever they have time such after work at night they can access online a take the classes.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      For example. The students would be able to work all day long without having any fear of getting up early in the morning to came to school, whenever they have time such after work at night they can access online a take the classes.
+    span:
+    - 0
+    - 230
+    issue_label: dropped example, no concrete evidence
+    question: |-
+      You write "for example" and then offer a general statement about students, not an actual example. A real example would be: a specific student's schedule, a real school program, a statistic. What are you pointing to?
+    why_it_matters: |-
+      Without concrete examples, your argument remains abstract and unpersuasive — just assertions.
+    fix_suggestion: |-
+      Replace with a real case: "For example, a student working 8am–5pm at a restaurant could attend an online class at 8pm, earning wages while earning credits." Or cite an actual distance-learning program's success rate.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): quote dropped, claim unwarranted'
+  article: |-
+    NASA decribes the Face as a " huge rock formation...which resembles a human head...formed by shadows giving the illusion of eyes,nose, and mouth." The big reason why some may believe that the Face was created by aliens is because of all the film, books, magazines, and talk shows it has appeared in.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      NASA decribes the Face as a " huge rock formation...which resembles a human head...formed by shadows giving the illusion of eyes,nose, and mouth." The big reason why some may believe that the Face was created by aliens is because of all the film, books, magazines, and talk shows it has appeared in.
+    span:
+    - 0
+    - 299
+    issue_label: quote dropped, claim unwarranted
+    question: |-
+      You quote NASA's description, then immediately pivot to pop culture without explaining the connection. How does the fact that it's a rock formation formed by shadows address why pop culture made people believe in aliens? These are two different arguments sitting next to each other.
+    why_it_matters: |-
+      The reader has to guess the logical link you're making, which weakens your credibility and makes the argument feel scattered.
+    fix_suggestion: |-
+      Add a warrant: 'Because the Face's appearance is entirely caused by shadows and lighting—not intentional design—people looking at poor-quality images could easily see a face and imagine alien intent. That's where pop culture stepped in: it amplified and dramatized an optical illusion.'
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 4/6): warrant missing; evidence doesn''t reach claim'
+  article: |-
+    Elisabeth Rosenthal solidifies this in the article The End of Car Culture when she includes "recent studies suggest that Americans are buying fewer cars, driving less and getting fewer licenses as each year goes by." This clear and simple states that people are not considering their cars as such an extreme item and more considering it as a means of transportation only when absolutely necessary such as when "Bay Area Rapid Transit doesn't work."
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      Elisabeth Rosenthal solidifies this in the article The End of Car Culture when she includes "recent studies suggest that Americans are buying fewer cars, driving less and getting fewer licenses as each year goes by." This clear and simple states that people are not considering their cars as such an extreme item and more considering it as a means of transportation only when absolutely necessary such as when "Bay Area Rapid Transit doesn't work."
+    span:
+    - 0
+    - 448
+    issue_label: warrant missing; evidence doesn't reach claim
+    question: |-
+      The quote from Rosenthal says Americans are buying and driving fewer cars. But then you claim this shows people view cars as necessary only when transit fails — and that's a *different* claim. Where's the evidence that people are making a *choice* to limit cars for economic or environmental reasons, versus just buying fewer cars for other reasons?
+    why_it_matters: |-
+      You're using the same data to support two different ideas without explaining how the evidence actually proves either one, which makes the argument feel slippery.
+    fix_suggestion: |-
+      Either find a quote that explicitly links fewer car purchases to cost-saving or environmental concern, or reframe your claim to match what Rosenthal actually says. Don't make the reader guess the connection.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 2/6): evidence presented without analysis or warrant'
+  article: |-
+    Scientist have made a cilicin that can go trew the rought terain and weather of Venus,they tested this with a special chamber simutlation,The rover lasted up to three weeks.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      Scientist have made a cilicin that can go trew the rought terain and weather of Venus,they tested this with a special chamber simutlation,The rover lasted up to three weeks.
+    span:
+    - 0
+    - 173
+    issue_label: evidence presented without analysis or warrant
+    question: |-
+      You've told me what the scientists did—tested a rover for three weeks—but why does this matter for the author's argument that studying Venus is worthwhile *despite* the dangers? What work does this evidence do?
+    why_it_matters: |-
+      Without connecting the evidence to your claim about how well the author supports his position, the detail just sits there and doesn't prove anything about the author's persuasiveness.
+    fix_suggestion: |-
+      Add a sentence explaining: 'This shows the author supports his claim because it proves scientists have realistic solutions to the temperature and atmospheric problems, making the mission less of a fantasy.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): dropped quote, missing analysis'
+  article: |-
+    It says in "The End of Car Culture", "...transportation is the second largest source of America's emissions, just behind power plants. Therfore if the use of cars decre4ases as it has then carbon emmisions will also decrease along with it and will in turn cause the greenhouse effect to ripidly slow."
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      It says in "The End of Car Culture", "...transportation is the second largest source of America's emissions, just behind power plants. Therfore if the use of cars decre4ases as it has then carbon emmisions will also decrease along with it and will in turn cause the greenhouse effect to ripidly slow."
+    span:
+    - 0
+    - 301
+    issue_label: dropped quote, missing analysis
+    question: |-
+      You drop this quote and then immediately extend it with your own logic ('Therefore if cars decrease...'), but you don't do the work of explaining *why* this matters or connecting it to your argument. What's the threshold for meaningful carbon reduction? Is slowing the greenhouse effect enough? The quote and your follow-up are doing the same thing—just stating the obvious.
+    why_it_matters: |-
+      The reader has a fact but no insight; you're summarizing the source rather than analyzing what it means for your argument.
+    fix_suggestion: |-
+      After the quote, add a sentence that weighs this against the essay's other concerns: "While the environmental payoff is real, this data assumes the transition will happen smoothly—but what happens to workers in the auto industry in the meantime?" This moves from fact to analysis.
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): no warrant, claim unsupported by detail'
+  article: |-
+    The new image first appeared on the JPL web site, revealing that the Face was in fact a natural landform, not an acient alien civilization. However, conspiracy theorists were still not satisfied due to the fact that it was a cloudy time of the year on Mars.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      The new image first appeared on the JPL web site, revealing that the Face was in fact a natural landform, not an acient alien civilization. However, conspiracy theorists were still not satisfied due to the fact that it was a cloudy time of the year on Mars.
+    span:
+    - 0
+    - 257
+    issue_label: no warrant, claim unsupported by detail
+    question: |-
+      You cite the 1998 image and say it 'revealed' the Face was natural, but you never explain *how* or *why* the image revealed that. What did Malin's camera show? What details changed? The cloudiness excuse is interesting—is that actually in your source, or are you inferring it? Give us the specifics that prove it's a mesa.
+    why_it_matters: |-
+      Readers can't evaluate your evidence if you don't show them what the evidence actually says or depicts.
+    fix_suggestion: |-
+      Describe what the sharper image showed: the irregular ridges, the erosion patterns, the lack of geometric symmetry—whatever details in the article prove it's geology, not architecture.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): quote dropped without analysis'
+  article: |-
+    In the article it states that, " If the technology fails and someone is injured, who is at fault--- the driver or the manufaturer?". This is why I think it is unsafe if the car as some type of disfunction or mishap while on the road with other human controlled cars it could hurt someone really bad or maybe even kill a person.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      In the article it states that, " If the technology fails and someone is injured, who is at fault--- the driver or the manufaturer?". This is why I think it is unsafe if the car as some type of disfunction or mishap while on the road with other human controlled cars it could hurt someone really bad or maybe even kill a person.
+    span:
+    - 0
+    - 327
+    issue_label: quote dropped without analysis
+    question: |-
+      You drop the quote, but then your explanation just restates the problem instead of explaining *why* the liability question makes these cars unsafe. What's the actual risk? Who bears the cost of that ambiguity?
+    why_it_matters: |-
+      The evidence sits inert—it becomes decoration rather than proof, and your argument stays at the surface level of "bad things could happen."
+    fix_suggestion: |-
+      After the quote, explain: "Because manufacturers and drivers are unsure who is legally responsible for accidents, there's no clear incentive for either party to ensure the technology is truly safe before deployment. This gap in accountability puts passengers and pedestrians at risk."
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): vague examples, no specifics'
+  article: |-
+    Finally, although driverless cars are considered "smart cars", they may not be as smart as the manufacturers claim they are. Driverless cars aren't perfect and there could be accidents in which a "smart car" goes into a one-way street or drives off a bridge.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      Finally, although driverless cars are considered "smart cars", they may not be as smart as the manufacturers claim they are. Driverless cars aren't perfect and there could be accidents in which a "smart car" goes into a one-way street or drives off a bridge.
+    span:
+    - 0
+    - 258
+    issue_label: vague examples, no specifics
+    question: |-
+      Going into a one-way street or off a bridge — are these real incidents you've read about, or hypotheticals? If they're real, name them. If they're hypothetical, say so and ask: what's the actual evidence that driverless cars fail in these ways?
+    why_it_matters: |-
+      Generic, worst-case scenarios don't persuade; readers wonder if you've actually researched the technology or if you're just imagining dangers.
+    fix_suggestion: |-
+      Reference a specific incident (Tesla Autopilot failure, Uber autonomous vehicle crash in Phoenix, etc.) or cite a study showing failure rates in particular conditions. One concrete example beats three vague ones.
+    replacement: null
+    severity: high
+- source: 'GRE_Argument (score 2/6): conclusion restates without synthesis'
+  article: |-
+    In summary, the statement is not logical because there are some errors in it. The supporting setences are not strong enough to support this issue.
+  critiques:
+  - agent: evidence_quotation
+    text_quote: |-
+      In summary, the statement is not logical because there are some errors in it. The supporting setences are not strong enough to support this issue.
+    span:
+    - 0
+    - 146
+    issue_label: conclusion restates without synthesis
+    question: |-
+      Your conclusion just repeats 'the argument has errors' — but you never synthesize *which assumptions* those errors depend on, or why those assumptions are unjustified. You've identified the problem but not analyzed it.
+    why_it_matters: |-
+      A GRE argument analysis must go beyond listing flaws; you need to show how the argument's unstated assumptions are the root of the logical problem.
+    fix_suggestion: |-
+      End with: 'Ultimately, the argument fails because it rests on the unsupported assumption that improving river conditions is sufficient to restore water sports participation—ignoring other factors that may be keeping residents away.'
     replacement: null
     severity: high

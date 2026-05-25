@@ -7,6 +7,14 @@ AgentName = Literal[
     "data_expert",
     "human_rights",
     "partisan",
+    # Journalism type specialists — one runs per article based on article_type.
+    "city_editor",          # News
+    "investigations_editor", # Investigative
+    "opinion_editor",        # Opinion / Editorial
+    "features_editor",       # Feature
+    "profile_editor",        # Profile
+    "reviews_editor",        # Review
+    "explanatory_editor",    # Analysis / Explainer
     # Shared craft editors (run in BOTH journalism + essays).
     "thesis_editor",
     "prose_style",
@@ -63,6 +71,20 @@ EssayType = Literal[
     "narrative",
     "research",
     "rhetorical",
+    "none",
+]
+
+# Article type picks the journalism type specialist that runs alongside
+# the core editors (6 shared craft + Anne). Toggle flags below control
+# the activation of Parker/Peter/Joe.
+ArticleType = Literal[
+    "news",          # straight reporting, inverted pyramid → City Editor (Cole)
+    "investigative", # accusations + paper trail → Investigations Editor (Iris)
+    "opinion",       # editorial / opinion → Opinion Editor (Otto)
+    "feature",       # narrative reporting → Features Editor (Faye)
+    "profile",       # about a person → Profile Editor (Pia)
+    "review",        # review of a work → Reviews Editor (Remy)
+    "analysis",      # explainer / analysis → Explanatory Editor (Eli)
     "none",
 ]
 
@@ -137,6 +159,34 @@ class CritiqueRequest(BaseModel):
         default=None,
         description="Optional target venue name (e.g. 'ICML 2026', 'Nature Methods'). "
         "Threaded into the subject specialist's user context so it tunes to that venue's bar.",
+    )
+    article_type: ArticleType = Field(
+        default="none",
+        description="Which kind of journalism piece. Routes to the matching type "
+        "specialist: 'news' -> Cole, 'investigative' -> Iris, 'opinion' -> Otto, "
+        "'feature' -> Faye, 'profile' -> Pia, 'review' -> Remy, 'analysis' -> Eli. "
+        "'none' runs no type specialist (back-compat with the old fixed roster).",
+    )
+    partisan: bool = Field(
+        default=False,
+        description="True if the story is politically partisan / takes a side; "
+        "activates Parker (Fairness / Partisan Checker).",
+    )
+    has_data_claims: bool = Field(
+        default=False,
+        description="True if the story contains statistics or quantitative claims; "
+        "activates Peter (Data Expert).",
+    )
+    has_anonymous_sources: bool = Field(
+        default=False,
+        description="True if the story uses anonymous or unnamed sources; "
+        "activates Joe (Source Privacy).",
+    )
+    subject_context: str | None = Field(
+        default=None,
+        description="Optional short context the reporter pastes in: who the story "
+        "is about, the key claim, the publication venue. Threaded into the type "
+        "specialist's user context. Core craft editors ignore it.",
     )
     disabled_agents: list[str] | None = Field(
         default=None,

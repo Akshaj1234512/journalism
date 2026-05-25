@@ -1,176 +1,294 @@
 # Exemplars for argumentative_editor
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
-- source: 'Toulmin, The Uses of Argument: claim, data, warrant, qualifier'
+- source: 'PERSUADE_2.0 (score 3/6): vague benefit, no specific argument'
   article: |-
-    The voting age should be lowered to sixteen. Sixteen-year-olds are mature enough to vote because they can drive in most states.
+    You are going to learn so much. You could rome around excavated castles like Luke in passage five. You would learn about other countries. Their goverment, economy, and lifestyle. Their past,present, and future. Could you imagine how fun that would be? Can you imagine all the good you would be for your country?
   critiques:
   - agent: argumentative_editor
     text_quote: |-
-      Sixteen-year-olds are mature enough to vote because they can drive in most states.
-    span: [45, 127]
-    issue_label: hidden warrant
+      You are going to learn so much. You could rome around excavated castles like Luke in passage five. You would learn about other countries. Their goverment, economy, and lifestyle. Their past,present, and future. Could you imagine how fun that would be? Can you imagine all the good you would be for your country?
+    span:
+    - 0
+    - 311
+    issue_label: vague benefit, no specific argument
     question: |-
-      Your claim moves from 'can drive' to 'mature enough to vote.' The warrant connecting driving fitness to voting fitness is the exact contested premise. You have not made it visible, which means the argument moves in a circle for anyone who does not already agree.
+      You list things Luke saw—castles, countries—but why does *learning about government, economy, and lifestyle* persuade someone to join? What's the actual argument—that travel makes you smarter? A better citizen? That's never clarified.
     why_it_matters: |-
-      When the warrant is hidden, only a reader who already grants it will be persuaded.
+      Without a clear link between the details and the benefit, the paragraph reads as decoration, not persuasion.
     fix_suggestion: |-
-      State the warrant and defend it: 'driving requires the same kind of risk-assessment and civic accountability that voting requires, which is why I treat it as evidence.' Then a skeptical reader can engage.
+      Pick one concrete benefit and argue it: 'Learning about other economies and governments prepares you to be a more informed American voter and leader.' Then anchor Luke's castle-visit to that claim.
     replacement: null
     severity: high
-- source: 'Aristotle, Rhetoric: the three appeals (ethos, pathos, logos)'
+- source: 'PERSUADE_2.0 (score 3/6): unaddressed counter-argument'
   article: |-
-    Climate change is destroying our planet. Polar bears are dying. Wildfires are getting worse. Our children deserve a future. We must act now before it is too late.
+    All the students an our school could have good grades and participate in sports and yet most don't. Your new policy will get them in line and doing extra credit, studying, and doing all of their homework to stay on the team.
   critiques:
   - agent: argumentative_editor
     text_quote: |-
-      Climate change is destroying our planet. Polar bears are dying. Wildfires are getting worse. Our children deserve a future. We must act now before it is too late.
-    span: [0, 162]
-    issue_label: pathos without logos
+      All the students an our school could have good grades and participate in sports and yet most don't. Your new policy will get them in line and doing extra credit, studying, and doing all of their homework to stay on the team.
+    span:
+    - 0
+    - 224
+    issue_label: unaddressed counter-argument
     question: |-
-      The whole paragraph runs on emotional appeal: dying bears, wildfires, our children. There is no logos here, no specific evidence, no quantified comparison, no scientific source. A reader who is open but skeptical has been given no reason to be moved.
+      You're assuming the B-average policy will motivate students to study harder. But what if it just kicks struggling students off teams entirely? You haven't considered whether the policy actually *helps* low-performing students improve or just removes them from an activity that might keep them engaged in school. That's a big counterargument you're ignoring.
     why_it_matters: |-
-      Pathos alone moves the already-convinced and steels the opposed; persuading the undecided requires logos under the pathos.
+      Your argument only works if you believe students will respond to the consequence by studying more—but you don't defend that assumption against the obvious objection that they might just give up.
     fix_suggestion: |-
-      Keep the emotional weight, but anchor each claim to specific evidence: a temperature change, a wildfire-acreage figure, an IPCC finding. Let the data carry the indignation.
+      Address it directly: 'Some might worry the policy is too harsh, but if paired with mandatory tutoring and study periods, it sends a clear message that grades come first—which struggling students need to hear.'
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): emotional claim without logic'
+  article: |-
+    By changing the voting system to popular vote i think makes people feel more involved in whats actually happening instead of just one measly vote.
+  critiques:
+  - agent: argumentative_editor
+    text_quote: |-
+      By changing the voting system to popular vote i think makes people feel more involved in whats actually happening instead of just one measly vote.
+    span:
+    - 0
+    - 146
+    issue_label: emotional claim without logic
+    question: |-
+      You're saying people will *feel* more involved—but is that actually true, and does it matter? Feeling involved isn't the same as the system being more democratic. And why is a popular vote less 'measly' than an Electoral vote? You need a logical reason, not a feeling.
+    why_it_matters: |-
+      Your argument relies on sentiment instead of substance, which won't persuade a skeptical reader or someone who might argue that individual votes are equally 'measly' in a 130-million-person election.
+    fix_suggestion: |-
+      Reframe: 'A popular vote system would ensure that every vote counts equally toward the outcome, regardless of state. Under the Electoral College, a vote in a non-competitive state effectively doesn't matter.' This is logic, not psychology.
     replacement: null
     severity: medium
-- source: 'They Say / I Say, Chapter 6: the naysayer and concession'
+- source: 'AES2 (score 2/6): garbled evidence, missing counter-argument'
   article: |-
-    Critics argue that raising the minimum wage will cost jobs. Admittedly, some small businesses may struggle initially. However, the minimum wage should still be raised to fifteen dollars an hour because workers deserve a living wage.
+    secondly, in the last passage ms. rosenthal says "obamas gaol about the green house gas will be asisted so thats meaning the people will need to limit their car usage or he will.
   critiques:
   - agent: argumentative_editor
     text_quote: |-
-      Admittedly, some small businesses may struggle initially. However, the minimum wage should still be raised to fifteen dollars an hour because workers deserve a living wage.
-    span: [60, 232]
-    issue_label: concession not integrated
+      secondly, in the last passage ms. rosenthal says "obamas gaol about the green house gas will be asisted so thats meaning the people will need to limit their car usage or he will.
+    span:
+    - 0
+    - 178
+    issue_label: garbled evidence, missing counter-argument
     question: |-
-      You concede that small businesses may struggle, then proceed as if the concession had no consequences for your claim. Real concession reshapes the argument. If the concession is true, the policy proposal has to address it (phase-in, small-business exemption, offset). Right now the concession reads as a checkbox.
+      What is Obama's goal, and how does it support your argument? This sentence is hard to parse, but more importantly: you cite authority (Obama's goal) without explaining how it proves that limiting car usage is the *right* policy. What if someone argues that people shouldn't be forced to limit car usage? You never address that.
     why_it_matters: |-
-      A concession that does not modify the claim signals to the reader that the writer is not actually listening.
+      Without a counter-argument, your essay reads as one-sided assertion rather than reasoned argument.
     fix_suggestion: |-
-      Either narrow the proposal to address the concession (phase-in by business size, tax credit for small employers), or argue specifically why the small-business cost is worth paying.
+      Acknowledge the counter: 'Some argue cars provide freedom and convenience. But climate data shows that voluntary limits fail; enforced restrictions, as in Vauban, succeed.' Then explain why success matters more than individual choice.
     replacement: null
     severity: high
-- source: 'Booth, Colomb & Williams, The Craft of Research: claims that compound'
+- source: 'PERSUADE_2.0 (score 3/6): counter-argument acknowledged but not refuted'
   article: |-
-    First, school uniforms reduce bullying. Second, school uniforms save parents money. Third, school uniforms create unity. Fourth, school uniforms improve focus. Therefore, all public schools should require uniforms.
+    Now I know you may say that a student should try to be better than average and study a little harder in order to earn B average and to play sports. However some kids study every day as best as they can and still earn a C average which is passing.
   critiques:
   - agent: argumentative_editor
     text_quote: |-
-      First, school uniforms reduce bullying. Second, school uniforms save parents money. Third, school uniforms create unity. Fourth, school uniforms improve focus. Therefore, all public schools should require uniforms.
-    span: [0, 214]
-    issue_label: claims list, do not compound
+      Now I know you may say that a student should try to be better than average and study a little harder in order to earn B average and to play sports. However some kids study every day as best as they can and still earn a C average which is passing.
+    span:
+    - 0
+    - 246
+    issue_label: counter-argument acknowledged but not refuted
     question: |-
-      Four claims, each defended in isolation, then a 'therefore.' Lists do not compound into cases. A real argument shows how the points build on each other: cost-savings strengthens the equity argument, which strengthens the unity argument. Right now the reader has a bullet list, not a case.
+      You name the counter-argument — 'students should work harder' — but your response is just 'some kids try their best and still get C's.' That doesn't actually *address* the principal's concern. Why should effort alone count more than results? If the principal's goal is to tie academic performance to privileges, saying 'they tried hard' doesn't explain why the B threshold is unfair.
     why_it_matters: |-
-      Lists let the reader pick off the weakest point and dismiss the whole; compounded arguments do not have one weakest point.
+      You're showing awareness of the opposing view but not genuinely contending with it, which makes your argument feel incomplete and unconvincing.
     fix_suggestion: |-
-      Rewrite the body so each section builds on the last. Lead with the strongest claim, show how the next one strengthens it, end with the move that requires the others to be in place.
+      Either argue that a C *is* sufficient academic performance (defining what 'passing' should mean for sports eligibility), or argue that effort matters more than GPA for determining who deserves support — but make the claim explicit and defend it.
     replacement: null
     severity: high
-- source: 'Aristotle, Rhetoric: kairos and audience fit'
+- source: 'AES2 (score 3/6): vague, hedged conclusion; no real claim'
   article: |-
-    Anyone who has read the constitutional scholarship knows that the originalist position on the Second Amendment is incoherent. The textual ambiguity is obvious to any serious reader.
+    if you were wanting to try making it, good luck, but based on the information it seems like it is not recomended. so stay home on earth.
   critiques:
   - agent: argumentative_editor
     text_quote: |-
-      Anyone who has read the constitutional scholarship knows that the originalist position on the Second Amendment is incoherent.
-    span: [0, 125]
-    issue_label: wrong audience
+      if you were wanting to try making it, good luck, but based on the information it seems like it is not recomended. so stay home on earth.
+    span:
+    - 0
+    - 136
+    issue_label: vague, hedged conclusion; no real claim
     question: |-
-      The phrasing presumes the reader already agrees ('anyone who has read,' 'obvious to any serious reader'). Persuasion writes to the reader who is open but skeptical, not to the already-convinced or the dismissed. The originalist reader you most need to persuade is exactly the one this sentence sneers at.
-    why_it_matters: Insulting the reader you are trying to persuade guarantees they
-      stop reading.
+      You hedge with 'seems like' and 'not recommended.' By whom? Recommended by whom? And 'stay home'—are you arguing that humans *shouldn't* explore Venus, or just that it's hard? Give us a real position, not a shrug.
+    why_it_matters: |-
+      The conclusion feels wishy-washy. An argument needs a clear stance. Readers should finish knowing what you actually believe should happen.
     fix_suggestion: |-
-      Address the strongest originalist argument by name (Scalia in Heller, or the militia-clause reading), then argue against it. The reader you want to move has to feel heard before they can move.
+      Try: 'Given these lethal conditions, we should abandon crewed Venus missions and invest in robotic exploration instead.' That's specific and arguable.
     replacement: null
     severity: high
-- source: 'Standard rhetorical diagnostic: conclusion overreaches the evidence'
+- source: 'PERSUADE_2.0 (score 2/6): counter-argument unaddressed'
   article: |-
-    The body of this paper has shown that some studies find a correlation between social media use and teen depression. Therefore, social media must be banned for minors.
-  critiques:
-  - agent: argumentative_editor
-    text_quote: Therefore, social media must be banned for minors.
-    span: [116, 166]
-    issue_label: conclusion overreaches the evidence
-    question: |-
-      Your body said 'some studies find a correlation.' Your conclusion proposes a ban. A correlation in some studies does not ground a categorical prohibition. The reader feels the gap between what the case supports and what the conclusion claims.
-    why_it_matters: |-
-      An overreaching conclusion lets a fair-minded reader dismiss the whole case as advocacy disguised as argument.
-    fix_suggestion: |-
-      Either weaken the conclusion to match the evidence ('the evidence justifies new platform restrictions on minors,' a softer policy), or build a stronger body that earns a categorical claim.
-    replacement: null
-    severity: high
-- source: 'Standard rhetorical diagnostic: conclusion underreaches the evidence'
-  article: |-
-    The body of this essay has shown, with three converging lines of evidence (longitudinal studies in two countries, mechanism research from neuroscience, and survey data from the affected teens themselves), that smartphone-based social media use is a substantial driver of the post-2012 adolescent depression rise. In conclusion, this is an important topic that warrants further discussion.
-  critiques:
-  - agent: argumentative_editor
-    text_quote: In conclusion, this is an important topic that warrants further discussion.
-    span: [313, 388]
-    issue_label: conclusion underreaches the evidence
-    question: |-
-      Your body built a strong case across three converging evidence types. Your conclusion retreats to 'an important topic.' If the body is right, the conclusion has to land the claim. Underreaching after a strong case is its own kind of failure: it wastes the work the essay did.
-    why_it_matters: |-
-      Hedging at the end leaves the reader uncertain whether the writer actually believes their own case.
-    fix_suggestion: |-
-      Land the claim the body earned: 'the convergence across these three evidence types makes the smartphone-driven story the strongest available explanation, and policy should follow.' Hedge specifics, not the central claim.
-    replacement: |-
-      In conclusion, the convergence across these three evidence types makes the smartphone-driven story the strongest available explanation, and policy should follow.
-    severity: high
-- source: 'Standard rhetorical diagnostic: ethos earned vs. asserted'
-  article: |-
-    As someone who has thought deeply about this issue, I can say with confidence that affirmative action is no longer necessary in American higher education.
+    some people think you can play or be in teams if you were and did not have good grades in middle and high school it will not work like that. You have to have had a' s and b' s or they don't wont you on there teams.
   critiques:
   - agent: argumentative_editor
     text_quote: |-
-      As someone who has thought deeply about this issue, I can say with confidence that affirmative action is no longer necessary in American higher education.
-    span: [0, 154]
-    issue_label: ethos asserted, not earned
+      some people think you can play or be in teams if you were and did not have good grades in middle and high school it will not work like that. You have to have had a' s and b' s or they don't wont you on there teams.
+    span:
+    - 0
+    - 214
+    issue_label: counter-argument unaddressed
     question: |-
-      Ethos is the writer's credibility, and you cannot give it to yourself by claiming it. 'I have thought deeply' and 'I can say with confidence' are asserted authority. The reader earns trust in your judgment through the specifics, citations, and steel-manned counters of the paragraphs that follow, not through your opening claim about yourself.
+      You introduce an opposing view—that people think you can play with C grades—but you don't actually rebut it or explain *why* good grades are necessary for sports. You just restate the rule. What's the deeper reason students should accept this policy? Does it prepare them for college? Does it teach responsibility?
     why_it_matters: |-
-      Asserted ethos signals to the reader that the writer is asking for credit they have not yet earned.
+      Without engaging the counter-argument meaningfully, your letter feels like you're just parroting the policy rather than defending it with your own reasoning.
     fix_suggestion: |-
-      Cut the self-credential and let the next two pages earn the trust: name the strongest case for affirmative action, engage Bakke and Fisher with care, then make your move.
-    replacement: Affirmative action is no longer necessary in American higher education.
+      Add one sentence explaining the logic: 'Some students think grades shouldn't matter for sports, but colleges and employers expect both athletic skill *and* academic performance, so the policy prepares us for what's ahead.'
+    replacement: null
     severity: medium
 - source: |-
-    Aristotle, Rhetoric, on trajectory: the reader at the end is not the reader at the beginning
+    Feedback_Prize_ELL (score 2.154434690031884/5): claim without warrant, confusing evidence
   article: |-
-    The death penalty is wrong. This essay will explain why. The death penalty kills innocent people sometimes. It is racially biased. It is expensive. It does not deter crime. For these reasons, the death penalty is wrong.
-  critiques:
-  - agent: argumentative_editor
-    text_quote: The death penalty is wrong. This essay will explain why.
-    span: [0, 56]
-    issue_label: missing trajectory
-    question: |-
-      The essay opens at the conclusion and ends at the conclusion. The reader is in the same emotional and intellectual place at the end as at the beginning. A real argument has a build: each paragraph leaves the reader slightly more convinced, or more troubled, than the last.
-    why_it_matters: Without trajectory, the reader carries away nothing they did not
-      have on entry.
-    fix_suggestion: |-
-      Reorder so the essay opens with a case the reader on the fence has heard ('the death penalty is final, and we get verdicts wrong'), then builds toward the structural reasons (bias, cost, deterrence failure), and lands on a claim the body has earned.
-    replacement: null
-    severity: medium
-- source: 'They Say / I Say, Chapter 5: distinguishing what they say from what you
-    say'
-  article: |-
-    Many people argue that school choice harms public education. School choice does not harm public education.
+    Some Student take all the class with a good credit and they pass a another good class because they ready pass them you good, because you are sect to go in universities
   critiques:
   - agent: argumentative_editor
     text_quote: |-
-      Many people argue that school choice harms public education. School choice does not harm public education.
-    span: [0, 106]
-    issue_label: naysayer flattened, not engaged
+      Some Student take all the class with a good credit and they pass a another good class because they ready pass them you good, because you are sect to go in universities
+    span:
+    - 0
+    - 167
+    issue_label: claim without warrant, confusing evidence
     question: |-
-      You raise the opposing view ('many people argue') and immediately negate it in the next sentence. No engagement, no specifics about who argues this, no acknowledgment of what is right about the concern. A naysayer raised and dismissed in one breath is structurally worse than no naysayer at all, because it signals to the reader you would rather not engage.
+      You're saying that students who take classes with good credit can go to universities — but why? What's the connection? Taking classes with good grades and being selected for university aren't the same thing.
     why_it_matters: |-
-      A flat dismissal of the opposing view tells the reader you are arguing past them, not with them.
+      The reader sees a claim (you can go to university) and a vague observation (you took classes) but no real reason to believe one follows from the other.
     fix_suggestion: |-
-      Name the strongest version of the school-choice critique (resource drain from already-underfunded districts, the Cleveland and Milwaukee data), then argue against it specifically.
+      Make the warrant explicit: 'Students who earn good grades in rigorous classes are more likely to be admitted to universities because admissions committees view strong academic performance as evidence of readiness.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): vague, unsupported final claim'
+  article: |-
+    Striving to meet the challenge presented by Venus has value, not only because of the insight to be gained on the planet itself, but also because human curiousity will likely lead us into many equally imtimidating endeavors.
+  critiques:
+  - agent: argumentative_editor
+    text_quote: |-
+      Striving to meet the challenge presented by Venus has value, not only because of the insight to be gained on the planet itself, but also because human curiousity will likely lead us into many equally imtimidating endeavors.
+    span:
+    - 0
+    - 223
+    issue_label: vague, unsupported final claim
+    question: |-
+      What does this actually mean? You're saying studying Venus is valuable because it will lead us into other hard things — but that's circular. Why is *that* valuable? And how does it support your original argument about why we should study Venus specifically? This feels like a conclusion that doesn't land.
+    why_it_matters: |-
+      Your essay ends without a clear payoff or final insight; the reader is left wondering what you proved.
+    fix_suggestion: |-
+      End with a concrete stakes claim tied to your opening: 'Understanding Venus's atmospheric collapse offers crucial lessons for protecting Earth's climate and justifies the investment in robotic innovation.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 2/6): rhetorical question replaces evidence, vague benefit'
+  article: |-
+    Another thing is that you can help people and make someone happy. Don't you just love the joy you get when you help someone in need? Well you can have that feeling all the time if you volunteer because you are always helping people in need by giving them animals to eat.
+  critiques:
+  - agent: argumentative_editor
+    text_quote: |-
+      Another thing is that you can help people and make someone happy. Don't you just love the joy you get when you help someone in need? Well you can have that feeling all the time if you volunteer because you are always helping people in need by giving them animals to eat.
+    span:
+    - 0
+    - 270
+    issue_label: rhetorical question replaces evidence, vague benefit
+    question: |-
+      The rhetorical question ('Don't you love...?') assumes I care about *feeling good*—but so what? And 'giving animals to eat' is vague. Which people? What animals? Why is this better than other ways to help?
+    why_it_matters: |-
+      You're appealing to sentiment instead of making a reasoned case; readers can dismiss it as emotional manipulation without engaging your actual argument.
+    fix_suggestion: |-
+      Replace the question with specifics: 'Unlike charity work at home, seagoing cowboys deliver livestock directly to war-torn Europe, saving entire families from starvation—a tangible difference you won't see elsewhere.'
     replacement: null
     severity: medium
+- source: 'AES2 (score 2/6): fun-as-reason undermines humanitarian appeal'
+  article: |-
+    You can have a lot of fun while all of this is happening aboard when all the animals are all gone. You can play baseball, volleyball, tabletennisand boxing tournements. and you get free food. you can have alot of fun aboard the ship.
+  critiques:
+  - agent: argumentative_editor
+    text_quote: |-
+      You can have a lot of fun while all of this is happening aboard when all the animals are all gone. You can play baseball, volleyball, tabletennisand boxing tournements. and you get free food. you can have alot of fun aboard the ship.
+    span:
+    - 0
+    - 233
+    issue_label: fun-as-reason undermines humanitarian appeal
+    question: |-
+      You're asking people to volunteer to help starving countries, but then you spend a whole paragraph on games and free food. What's your actual argument — is this about service or recreation? The reader can feel the disconnect.
+    why_it_matters: |-
+      Emphasizing fun trivializes the humanitarian mission and makes the essay sound like a sales pitch for a cruise, not a call to purposeful action.
+    fix_suggestion: |-
+      Either subordinate the recreation point ("While there are recreational activities, the core mission is helping nations rebuild") or cut it entirely and focus on the meaning of the work.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 3/6): weak counter-argument, no refutation'
+  article: |-
+    I see your point of view though, I get that MOC could have gotten the picture wrong, but you see it was ten times as sharper than it had been years before.
+  critiques:
+  - agent: argumentative_editor
+    text_quote: |-
+      I see your point of view though, I get that MOC could have gotten the picture wrong, but you see it was ten times as sharper than it had been years before.
+    span:
+    - 0
+    - 155
+    issue_label: weak counter-argument, no refutation
+    question: |-
+      You acknowledge the counter-argument — that the photo could be wrong — but then just reassert your original claim without actually addressing the objection. Why would a sharper photo prove it's *not* alien-made?
+    why_it_matters: |-
+      The reader sees you dodge the hardest part of your own argument, which undermines your credibility.
+    fix_suggestion: |-
+      Explain the logical step: 'A sharper image revealed fine geological detail consistent with erosion and shadow play, not architectural precision. That's what disproves the alien hypothesis.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 3/6): list of facts instead of argument'
+  article: |-
+    If you join Seagoing Cow boys you will need to treat the workers and the animals with good respect and care for them. When being a Seagoing Cowboy you will need to check on the animals every hour... You can be 17 and older to join Seagoing Cowboys. So join the Seagoing Cowboys.
+  critiques:
+  - agent: argumentative_editor
+    text_quote: |-
+      If you join Seagoing Cow boys you will need to treat the workers and the animals with good respect and care for them. When being a Seagoing Cowboy you will need to check on the animals every hour... You can be 17 and older to join Seagoing Cowboys. So join the Seagoing Cowboys.
+    span:
+    - 0
+    - 278
+    issue_label: list of facts instead of argument
+    question: |-
+      You're telling me what the job *is*, but never making the case for *why* someone should do it. The essay reads like a job description, not a persuasive argument. What's the payoff?
+    why_it_matters: |-
+      An argumentative essay needs to move the reader toward a position; listing duties and requirements just informs them, which is a different task entirely.
+    fix_suggestion: |-
+      Reshape around a real claim: perhaps that the hardship teaches responsibility, or that the adventure builds courage. Then use details like 'checking animals every hour' and 'dangerous ladder work' as *evidence* that it's difficult and character-building, not just facts about the job.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 3/6): unsupported leap; claim without evidence'
+  article: |-
+    Finding another place to substain human life is a nessisary thing because of the growing population on Earth ,and the ever present threat of gobal warming.
+  critiques:
+  - agent: argumentative_editor
+    text_quote: |-
+      Finding another place to substain human life is a nessisary thing because of the growing population on Earth ,and the ever present threat of gobal warming.
+    span:
+    - 0
+    - 155
+    issue_label: unsupported leap; claim without evidence
+    question: |-
+      You're claiming we need a backup planet because of population growth and climate change, but you don't show us why Venus study leads to that outcome. How does studying Venus's atmosphere help us find or sustain life elsewhere? That gap needs bridging.
+    why_it_matters: |-
+      Your argument fragments into separate claims—studying Venus and the need for colonization—without showing how one supports the other, weakening the whole piece.
+    fix_suggestion: |-
+      Explain the causal chain: 'Studying Venus requires us to develop technologies and understand planetary habitability in ways that would directly advance our ability to engineer livable conditions elsewhere. That knowledge pipeline makes Venus research essential, not tangential, to long-term human survival.'
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 4/6): argument cuts both ways, unaddressed counter'
+  article: |-
+    In addition, a large state gets more attention from candidates than a small sate in a campaign. As an example in 2012 Obama, got 29 electoral votes. In Wyoming the winner only had 2 electoral votes in the same marin as Obama. The Electoral College provides some kind of restoration for the weight in the political balance that large states lose by mal-apportionment of the Senate.
+  critiques:
+  - agent: argumentative_editor
+    text_quote: |-
+      In addition, a large state gets more attention from candidates than a small sate in a campaign. As an example in 2012 Obama, got 29 electoral votes. In Wyoming the winner only had 2 electoral votes in the same marin as Obama. The Electoral College provides some kind of restoration for the weight in the political balance that large states lose by mal-apportionment of the Senate.
+    span:
+    - 0
+    - 380
+    issue_label: argument cuts both ways, unaddressed counter
+    question: |-
+      Hold on—you're saying large states get more attention, and that's a *benefit* of the Electoral College? But doesn't that mean candidates ignore Wyoming and Vermont and focus on swing states? How is that 'balancing' the small states? You've just described the opposite of what you claim.
+    why_it_matters: |-
+      This is the core of your third argument, but it's internally contradictory and invites a reader to dismiss your whole case as confused.
+    fix_suggestion: |-
+      Either argue that swing states (regardless of size) are the right place for campaign focus because they're decisive, or drop this point and replace it with a clearer benefit of the Electoral College.
+    replacement: null
+    severity: high

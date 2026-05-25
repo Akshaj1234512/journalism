@@ -32,7 +32,15 @@ from red_room.agents.limitations_editor import LimitationsEditor
 from red_room.agents.figure_table_editor import FigureTableEditor
 from red_room.agents.theorem_editor import TheoremEditor
 from red_room.agents.format_editor import FormatEditor
+from red_room.agents.city_editor import CityEditor
+from red_room.agents.investigations_editor import InvestigationsEditor
+from red_room.agents.opinion_editor import OpinionEditor
+from red_room.agents.features_editor import FeaturesEditor
+from red_room.agents.profile_editor import ProfileEditor
+from red_room.agents.reviews_editor import ReviewsEditor
+from red_room.agents.explanatory_editor import ExplanatoryEditor
 from red_room.schemas import (
+    ArticleType,
     CitationStyle,
     Critique,
     EssayType,
@@ -56,6 +64,18 @@ _PURPOSE_EDITORS = {
     "narrative": NarrativeEditor,
     "research": ResearchEditor,
     "rhetorical": RhetoricalEditor,
+}
+
+# Journalism type specialist: one runs per article based on article_type.
+# Maps to the same shape as essay purpose editors.
+_JOURNALISM_TYPE_SPECIALISTS = {
+    "news":          CityEditor,
+    "investigative": InvestigationsEditor,
+    "opinion":       OpinionEditor,
+    "feature":       FeaturesEditor,
+    "profile":       ProfileEditor,
+    "review":        ReviewsEditor,
+    "analysis":      ExplanatoryEditor,
 }
 
 
@@ -106,6 +126,11 @@ def default_agents(
     research_section: ResearchSection = "full_paper",
     research_subject: ResearchSubject = "none",
     research_venue: str | None = None,
+    article_type: ArticleType = "none",
+    partisan: bool = False,
+    has_data_claims: bool = False,
+    has_anonymous_sources: bool = False,
+    subject_context: str | None = None,
 ) -> list[BaseAgent]:
     """Return the roster for the requested mode.
 
@@ -163,14 +188,42 @@ def default_agents(
         if purpose_cls is not None:
             roster.append(purpose_cls(client=client, essay_prompt=essay_prompt))
         return roster
-    # Journalism mode: shared craft layer + 4 journalism specialists.
-    return [
-        *shared,
-        LegalSkeptic(client=client),
-        DataExpert(client=client),
-        HumanRightsAdvocate(client=client),
-        PartisanChecker(client=client),
-    ]
+    # Journalism mode:
+    #   Core = shared craft (Theo/Will/Stella/Logan/Evan/Sol) + Anne (Legal).
+    #   Type specialist (one of 7) = picked by article_type; "none" skips it.
+    #   Toggle-driven specialists: Parker (partisan flag), Peter (data flag),
+    #     Joe (anon-sources flag).
+    #   Back-compat: if article_type == "none" AND all toggles are false, we
+    #     keep the legacy behavior of running all four journalism specialists
+    #     so existing flows don't break silently.
+    roster: list[BaseAgent] = [*shared, LegalSkeptic(client=client)]
+
+    legacy_default = (
+        article_type == "none"
+        and not partisan
+        and not has_data_claims
+        and not has_anonymous_sources
+    )
+    if legacy_default:
+        # Old behavior: every specialist runs.
+        roster.extend([
+            DataExpert(client=client),
+            HumanRightsAdvocate(client=client),
+            PartisanChecker(client=client),
+        ])
+        return roster
+
+    # New behavior: type specialist + toggle-driven specialists.
+    type_cls = _JOURNALISM_TYPE_SPECIALISTS.get(article_type)
+    if type_cls is not None:
+        roster.append(type_cls(client=client, subject_context=subject_context))
+    if has_data_claims:
+        roster.append(DataExpert(client=client))
+    if has_anonymous_sources:
+        roster.append(HumanRightsAdvocate(client=client))
+    if partisan:
+        roster.append(PartisanChecker(client=client))
+    return roster
 
 
 async def run(

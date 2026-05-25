@@ -1,139 +1,293 @@
 # Exemplars for structure_editor
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
-- source: 'Hayot, The Elements of Academic Style: one job per paragraph'
+- source: 'AES2 (score 2/6): conclusion restates opening, no synthesis'
   article: |-
-    The novel's treatment of race operates on three levels. Economically, the plantation system produces the wealth that buys the family's social standing, and the narrator's father invests heavily in cotton futures in the 1850s. Linguistically, the dialect Faulkner gives the Black characters performs a kind of distancing the reader is meant to register as unjust. Theologically, the family's Episcopal piety functions as moral cover for arrangements they will not name.
-  critiques:
-  - agent: structure_editor
-    text_quote: The novel's treatment of race operates on three levels.
-    span: [0, 55]
-    issue_label: Frankenstein paragraph
-    question: |-
-      Your paragraph carries three distinct arguments (economic, linguistic, theological) under one topic sentence. Three jobs means the reader cannot tell which one to follow.
-    why_it_matters: |-
-      When a paragraph carries three sub-arguments, none of them gets the room to land.
-    fix_suggestion: |-
-      Split into three paragraphs, each with its own claim, evidence, and analysis. Keep the topic sentence as a hinge in the section opener.
-    replacement: null
-    severity: high
-- source: 'Standard writing-center diagnostic: missing topic sentence'
-  article: |-
-    By the time Lincoln signed the Emancipation Proclamation, roughly 500,000 enslaved people had already crossed Union lines. The Confederate planter class had spent eighteen months trying to keep them on the plantations through informal contracts and physical coercion. Federal officers found themselves administering an ad-hoc refugee policy with no central direction from Washington.
+    Cars are used on a daily basis. But if we ease off the gas and start hitting the breaks on the use of cars in modern day, would it make America a happier place?
   critiques:
   - agent: structure_editor
     text_quote: |-
-      By the time Lincoln signed the Emancipation Proclamation, roughly 500,000 enslaved people had already crossed Union lines.
-    span: [0, 122]
-    issue_label: missing topic sentence
+      Cars are used on a daily basis. But if we ease off the gas and start hitting the breaks on the use of cars in modern day, would it make America a happier place?
+    span:
+    - 0
+    - 160
+    issue_label: conclusion restates opening, no synthesis
     question: |-
-      The paragraph opens with a fact, not a claim. The reader has to read four sentences before guessing what argument they are meant to serve.
+      Your closing paragraph repeats your opening question almost word-for-word. Where's your final claim? You've given three examples of car-free or car-reduced communities—what do those examples prove? Do you actually think America *should* limit cars, or not?
     why_it_matters: |-
-      Without a topic sentence, the reader is asked to do the writer's structural work.
+      The essay ends without a landing, leaving the reader uncertain whether you've made an argument or just asked a question twice.
     fix_suggestion: |-
-      Add a topic sentence that names the claim, e.g. 'The legal moment of emancipation followed, rather than caused, the material collapse of slavery on the ground.' Then let the facts in your paragraph do that argument's work.
+      Replace with a conclusive statement: 'The evidence from Bogota, Vauban, and France shows that car-reduced communities report real benefits in air quality and happiness. America should adopt similar policies, starting with car-free zones in major cities.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): weak conclusion, just restates thesis'
+  article: |-
+    The driverless car is a fantastic idea and invention to have. The world needs more cars like them so that the world could be a better and more safe place to drive. Having a driverless car that can use less gas, have better response and control,and notify the driver in case of an emergency is a great car to have. The world could do a lot by having it.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      The driverless car is a fantastic idea and invention to have. The world needs more cars like them so that the world could be a better and more safe place to drive. Having a driverless car that can use less gas, have better response and control,and notify the driver in case of an emergency is a great car to have. The world could do a lot by having it.
+    span:
+    - 0
+    - 352
+    issue_label: weak conclusion, just restates thesis
+    question: |-
+      Your conclusion repeats your opening claim almost word-for-word ('fantastic idea,' 'great car,' 'help the world') but doesn't deepen or synthesize the argument. What's the *consequence* of adopting driverless cars? Why should readers care beyond 'it's a good idea'?
+    why_it_matters: |-
+      A conclusion that just restates leaves the reader feeling like the essay went nowhere—you're back where you started, not moving forward.
+    fix_suggestion: |-
+      End with a forward-looking claim: 'As traffic accidents and emissions remain leading causes of death and environmental harm, driverless cars represent a concrete step toward safer, cleaner cities—but only if we design them with human oversight built in.'
     replacement: null
     severity: medium
-- source: 'Williams, Style, Lesson 5: from old to new information'
+- source: 'PERSUADE_2.0 (score 3/6): conclusion just restates without closure'
   article: |-
-    The court's decision rested on the doctrine of qualified immunity, which the body of this paper will explain in paragraph six. For now, it is enough to note that the doctrine has shaped excessive-force litigation since Pierson v. Ray in 1967, and that the dissent in Harlow v. Fitzgerald argued strongly against its expansion.
-  critiques:
-  - agent: structure_editor
-    text_quote: the body of this paper will explain in paragraph six
-    span: [73, 125]
-    issue_label: paragraph depends on a fact introduced too late
-    question: |-
-      You ask the reader to take qualified immunity on faith here and promise to explain it later. The reader needs the old information before the new. If they need paragraph six to understand paragraph two, the paragraphs are in the wrong order.
-    why_it_matters: Asking the reader to defer understanding breaks the flow of the
-      argument.
-    fix_suggestion: |-
-      Move the doctrine's explanation up to this paragraph, or move this paragraph down to after the explanation. Pick whichever order lets the reader follow without a forward reference.
-    replacement: null
-    severity: high
-- source: 'Standard writing-center diagnostic: buried lede'
-  article: |-
-    Critics have long debated whether Their Eyes Were Watching God is best read as a feminist novel or as a folk-cultural novel. This paper surveys the major positions in this debate. The most useful frame, ultimately, is to read Janie's voice itself as the novel's central argument: by the end she narrates her own life, and the narration is the freedom. Various other readings exist as well, and the rest of the paper examines them.
+    So when i hear the words " driverless cars". An large some of problems come to my mind. I Think of the many problems that come with it, the lack of saftey, the amount of money spent and wasted and the crazy malfunctions. These are just a few reasons why I am against driverless cars.
   critiques:
   - agent: structure_editor
     text_quote: |-
-      The most useful frame, ultimately, is to read Janie's voice itself as the novel's central argument: by the end she narrates her own life, and the narration is the freedom.
-    span: [180, 351]
-    issue_label: buried lede
+      So when i hear the words " driverless cars". An large some of problems come to my mind. I Think of the many problems that come with it, the lack of saftey, the amount of money spent and wasted and the crazy malfunctions. These are just a few reasons why I am against driverless cars.
+    span:
+    - 0
+    - 283
+    issue_label: conclusion just restates without closure
     question: |-
-      Your strongest move (Janie's narration is itself the novel's argument) appears in the middle of the intro and is then dropped for a survey of other readings. The essay should end on what the writer most wants the reader to carry away. This sentence belongs at the load-bearing position.
+      Your conclusion repeats your three reasons and restates your position, but it doesn't *conclude*—it doesn't answer 'so what?' or look forward. Why should the reader care that you're against driverless cars? What's the broader stakes?
     why_it_matters: |-
-      Burying the strongest claim under survey material loses it before the body even begins.
+      The essay ends where it started, leaving no sense of resolution or larger significance.
     fix_suggestion: |-
-      Reorganise so the Janie-as-narrator claim is the thesis. Let the survey of other readings serve as the 'they say' your argument answers.
-    replacement: null
-    severity: high
-- source: 'Standard writing-center diagnostic: intro/conclusion mismatch'
-  article: |-
-    Introduction: This paper will argue that the New Deal saved American capitalism by stabilising the banking system. ... Conclusion: The New Deal's lasting contribution, then, was the cultural shift it produced in how Americans understood the federal government's responsibility for individual welfare.
-  critiques:
-  - agent: structure_editor
-    text_quote: |-
-      Conclusion: The New Deal's lasting contribution, then, was the cultural shift it produced in how Americans understood the federal government's responsibility for individual welfare.
-    span: [119, 300]
-    issue_label: intro and conclusion argue different theses
-    question: |-
-      Your intro promises an argument about banking stabilisation. Your conclusion lands on a cultural-political shift. The reader cannot tell whether to read the intro or the conclusion as the essay's actual claim.
-    why_it_matters: When the two ends of the essay argue different things, neither
-      one lands.
-    fix_suggestion: |-
-      Pick whichever thesis the body actually defends and rewrite the other end to match. If the cultural-shift argument is the real one, rewrite the intro.
-    replacement: null
-    severity: high
-- source: 'Hayot, The Elements of Academic Style: paragraph hinges'
-  article: |-
-    Furthermore, the imagery of water in chapter four operates differently from the imagery of fire in chapter two.
-  critiques:
-  - agent: structure_editor
-    text_quote: Furthermore,
-    span: [0, 12]
-    issue_label: empty hinge
-    question: |-
-      'Furthermore' promises continuity, but the paragraph that follows pivots to a new image and a new chapter without showing the relationship to what came before. An empty 'furthermore' is structure pretending where there is none.
-    why_it_matters: |-
-      A hinge word with no actual hinge tells the reader the connection is your responsibility, not theirs.
-    fix_suggestion: |-
-      Either cut the 'furthermore' and let the new paragraph open on its own, or replace it with a sentence that names the relationship: 'Where chapter two's fire imagery destroys, chapter four's water imagery is more ambivalent.'
-    replacement: Where chapter two's fire imagery is destructive,
-    severity: medium
-- source: 'Standard writing-center diagnostic: orphan paragraph'
-  article: |-
-    Some scholars have argued that Marx's reading of the 1848 revolutions was decisively shaped by his time in Paris. This is a useful corrective to readings that frame his thought as purely abstract. Whether one accepts this biographical reading or not, the analysis in the Eighteenth Brumaire remains compelling on its own terms. The next section returns to the question of class consciousness.
-  critiques:
-  - agent: structure_editor
-    text_quote: |-
-      Some scholars have argued that Marx's reading of the 1848 revolutions was decisively shaped by his time in Paris.
-    span: [0, 113]
-    issue_label: orphan paragraph
-    question: |-
-      This paragraph sits between unrelated sections, opens with a biographical aside, ends by retreating from its own claim, and the next paragraph does not pick up the thread. There is no visible reason for it to be here.
-    why_it_matters: |-
-      An orphan paragraph signals that the writer is not yet sure what role it plays in the argument.
-    fix_suggestion: |-
-      Either cut it (often the right call), or rewrite it so the biographical point does load-bearing work for the surrounding argument, and end with a hinge into the next section.
+      End with something like: 'Until manufacturers can guarantee driver safety without human oversight, protect the jobs of current drivers, and solve the technical problems posed by extreme weather, society should proceed cautiously before investing billions in driverless technology.'
     replacement: null
     severity: medium
-- source: 'Booth, The Craft of Argument: sub-claims must ladder to the thesis'
+- source: 'PERSUADE_2.0 (score 2/6): weak conclusion, off-topic pivot'
   article: |-
-    Thesis: Reconstruction failed because the federal government withdrew its military presence too soon. Body paragraph 1: Black landownership in the South rose during the Freedmen's Bureau years. Body paragraph 2: The 14th Amendment created a new constitutional architecture for citizenship. Body paragraph 3: The Compromise of 1877 ended federal occupation.
+    Driverless cars could be the next common technology among the human population like computers or phones. From this, humanity will continue evolving and strive through conflicts similar to this subject. However, another choice for us, individually is whether or not to accept change.
   critiques:
   - agent: structure_editor
     text_quote: |-
-      Body paragraph 1: Black landownership in the South rose during the Freedmen's Bureau years. Body paragraph 2: The 14th Amendment created a new constitutional architecture for citizenship.
-    span: [102, 289]
-    issue_label: sub-claims do not ladder
+      Driverless cars could be the next common technology among the human population like computers or phones. From this, humanity will continue evolving and strive through conflicts similar to this subject. However, another choice for us, individually is whether or not to accept change.
+    span:
+    - 0
+    - 282
+    issue_label: weak conclusion, off-topic pivot
     question: |-
-      Your first two body paragraphs argue that Reconstruction achieved real things. Only the third connects to your thesis (early withdrawal caused the failure). Every sub-claim has to lift the thesis, or it belongs in a different essay.
+      Your conclusion abandons your safety argument and pivots to vague philosophizing about 'accepting change.' Where's the closing punch? You spent the essay proving driverless cars reduce accidents—why end by saying it's up to individuals whether to accept them?
     why_it_matters: |-
-      When sub-claims do not ladder up, the body looks busy but does not carry the argument.
+      The essay's strongest material (human error kills people; driverless cars prevent that) gets replaced by hand-waving, leaving the reader unsure what you actually want them to believe.
     fix_suggestion: |-
-      Either reframe paragraphs 1 and 2 as evidence of what the early withdrawal abandoned, or cut them and replace with paragraphs that show how the withdrawal specifically caused the rollback you mean to argue.
+      End with something like: 'The evidence is clear: driverless cars have the potential to save thousands of lives annually by eliminating human error. We should prioritize their development.' Reinforce your position, don't retreat into neutrality.
     replacement: null
     severity: high
+- source: 'PERSUADE_2.0 (score 3/6): counterargument conceded without explanation'
+  article: |-
+    now there is only one thing i believe is right in the voting system is that big state (size and population) does deserve the bigger ammount of electoral votes then smaller states like Florida, New York ,California ,Texas and many other states Since the population is so dense
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      now there is only one thing i believe is right in the voting system is that big state (size and population) does deserve the bigger ammount of electoral votes then smaller states like Florida, New York ,California ,Texas and many other states Since the population is so dense
+    span:
+    - 0
+    - 275
+    issue_label: counterargument conceded without explanation
+    question: |-
+      You just admitted that large states *should* have more electoral votes because of population density—but that's actually a defense of the Electoral College, not an argument against it. You're undercutting your own thesis. Do you believe this, or is it a concession? If it's a concession, tell the reader why it doesn't outweigh your other points.
+    why_it_matters: |-
+      You're confusing your argument rather than strengthening it. A reader who agrees with you here will think you're uncertain about your position.
+    fix_suggestion: |-
+      Either cut this sentence and stick to your argument that the Electoral College is antidemocratic, or explicitly address it: 'While large states do receive more electoral votes, this system still means that a candidate can win the presidency while losing the popular vote by millions—a democratic flaw that population weighting doesn't fix.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 3/6): conclusion doesn''t synthesize, vague language'
+  article: |-
+    In summary this program would impetuous and righteous for the generosity that they're giving to the students and the opportunity to have a lifestyle more easily.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      In summary this program would impetuous and righteous for the generosity that they're giving to the students and the opportunity to have a lifestyle more easily.
+    span:
+    - 0
+    - 161
+    issue_label: conclusion doesn't synthesize, vague language
+    question: |-
+      "Impetuous and righteous"? Those words don't fit here, and this conclusion just restates that distance learning is good without revisiting *why* — the reasons you gave in the body. What's the real takeaway?
+    why_it_matters: |-
+      A weak conclusion leaves readers without a sense of what the argument accomplished or why they should care about the claim.
+    fix_suggestion: |-
+      End by circling back to your core argument: "Distance learning would let working immigrants and low-income students graduate without sacrificing necessary wages, transforming their economic futures."
+    replacement: null
+    severity: medium
+- source: 'AES2 (score 3/6): conclusion just restates, no synthesis'
+  article: |-
+    In conclusion, Venus is a very challenging place to see and be. Venus has not been touched in more than 30 years! In the text it says ".. not a singlr spaceship has touched down on Venus in more than three decades." So although Venus is the sister of Earth astronomers know very little about her. So they keep in pursuit to learn more despite the dangers it presents everytime.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      In conclusion, Venus is a very challenging place to see and be. Venus has not been touched in more than 30 years! In the text it says ".. not a singlr spaceship has touched down on Venus in more than three decades." So although Venus is the sister of Earth astronomers know very little about her. So they keep in pursuit to learn more despite the dangers it presents everytime.
+    span:
+    - 0
+    - 377
+    issue_label: conclusion just restates, no synthesis
+    question: |-
+      Your conclusion repeats points you've already made (Venus is hard to explore, no ships have landed recently) but doesn't pull back to show why any of this matters or what you've proven. What do you want us to believe now that we've read your essay?
+    why_it_matters: |-
+      The essay ends without closure or a larger insight, leaving the argument unresolved.
+    fix_suggestion: |-
+      End with a forward-looking claim: 'Despite three decades of silence, the similarities between Venus and Earth make further exploration urgent—not as a curiosity, but as a potential warning system for our own planet's future.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 4/6): conclusion restates + vague moralizing'
+  article: |-
+    Not only are the advantages of limiting car usage subtle however they are also direct and can have immediate positive effects on people. By making sure people do not overdo the amount they utilize their cars, they become less stressed, have a healthier environment, and save money. This issue is worldwide however, the solution is becoming worldwide as well creating exceptional results and care from car drivers and people are really thinking outside of the box to make magic happen.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      Not only are the advantages of limiting car usage subtle however they are also direct and can have immediate positive effects on people. By making sure people do not overdo the amount they utilize their cars, they become less stressed, have a healthier environment, and save money. This issue is worldwide however, the solution is becoming worldwide as well creating exceptional results and care from car drivers and people are really thinking outside of the box to make magic happen.
+    span:
+    - 0
+    - 484
+    issue_label: conclusion restates + vague moralizing
+    question: |-
+      Your conclusion just lists the three advantages you've already covered—stress, environment, money—and then jumps to vague cheerleading ('make magic happen'). Where's the actual payoff or call to action? What do you want readers to *do* with this information?
+    why_it_matters: |-
+      The essay ends on platitudes rather than a clear takeaway, leaving the reader with no sense of why limiting car usage matters beyond the points already made.
+    fix_suggestion: |-
+      End with a concrete statement: "As Paris, Bogota, and German suburbs show, limiting car usage is feasible and yields real benefits. Cities should follow their lead by expanding public transit and creating car-free zones." Give the reader something to hold onto.
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 1/6): Contradictory ideas, no transitions'
+  article: |-
+    I think we should not have them out in class cause it a distraction of what more than important than learning. The teacher unusual never let us use there phone to us so that we can call and some people at the school don't have your parents number then what do u do cause i know a lot of people who can remember number with out there phone or phone books.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      I think we should not have them out in class cause it a distraction of what more than important than learning. The teacher unusual never let us use there phone to us so that we can call and some people at the school don't have your parents number then what do u do cause i know a lot of people who can remember number with out there phone or phone books.
+    span:
+    - 0
+    - 354
+    issue_label: Contradictory ideas, no transitions
+    question: |-
+      One sentence says phones are a distraction in class; the next argues you need access to them for emergencies. These ideas pull in opposite directions. Which one are you actually defending?
+    why_it_matters: |-
+      The reader can't tell what your position is, and it looks like you're arguing against yourself.
+    fix_suggestion: |-
+      Reorganize around two ideas: (1) 'Phones should be off during class because they distract from learning,' and (2) 'But students should have access to phones during lunch and free time for emergencies.' Use a transition like 'However' to show the relationship between them.
+    replacement: null
+    severity: high
+- source: 'ASAP-8 (score 35/60): generic moralizing, disconnected from story'
+  article: |-
+    Every relationship whether its intimate, family, or just friendship needs laughter; or else the tough things in life will bring you down. Laughing is what keeps you bold, and strong. If something embarrassing happens and you don't laugh about it that embarrassing moment can stick with you forever, and it will effect you in the long run. If you were to never laugh in a relationship, then it wouldn't be a relationship at all. That's why laughing is very important in everybody's lives.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      Every relationship whether its intimate, family, or just friendship needs laughter; or else the tough things in life will bring you down. Laughing is what keeps you bold, and strong. If something embarrassing happens and you don't laugh about it that embarrassing moment can stick with you forever, and it will effect you in the long run. If you were to never laugh in a relationship, then it wouldn't be a relationship at all. That's why laughing is very important in everybody's lives.
+    span:
+    - 0
+    - 487
+    issue_label: generic moralizing, disconnected from story
+    question: |-
+      This conclusion generalizes so far from your parade story that it stops being about *your* experience and becomes a advice column. Why should we care about your philosophy when you haven't shown us the specific moment it matters?
+    why_it_matters: |-
+      Your essay ends by leaving the story behind entirely; it loses the power of the lived moment and replaces it with platitudes.
+    fix_suggestion: |-
+      Anchor the conclusion to your specific memory: 'That day, falling off a float could have ruined a friendship. But because @PERSON2 and I laughed instead of blamed, it became the thing that made us unbreakable. That's why I know laughter isn't just nice—it's necessary.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 2/6): topic sentence unclear, paragraph direction shifts'
+  article: |-
+    We 8th graders think that 8 grade is as easy as 7 &8 well guess what its not its way harder and i personally i think work is more imported than sports. So instead of going to connections they should have study hall which will make there grades go up so they can play sports.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      We 8th graders think that 8 grade is as easy as 7 &8 well guess what its not its way harder and i personally i think work is more imported than sports. So instead of going to connections they should have study hall which will make there grades go up so they can play sports.
+    span:
+    - 0
+    - 274
+    issue_label: topic sentence unclear, paragraph direction shifts
+    question: |-
+      What is this paragraph doing? You start by saying 8th grade is hard, then pivot to 'work is more important than sports,' then suddenly propose study hall as a solution. These are three different ideas. What's the main point you want to make here?
+    why_it_matters: |-
+      Readers can't follow your reasoning when each sentence pulls in a new direction; the argument feels disorganized.
+    fix_suggestion: |-
+      Pick one idea per paragraph. If your point is that the B-average policy will work, dedicate a paragraph to why (e.g., 'The policy will motivate students because it ties something they care about—sports—to academic performance'). If it's about study hall, make that a separate paragraph with clear topic sentence.
+    replacement: null
+    severity: medium
+- source: |-
+    Feedback_Prize_ELL (score 3.078073975148188/5): counter-argument buried in conclusion; weak ending
+  article: |-
+    In conclusion high school students should graduate in 3years not 4 years of high school. Some say by graduating early you would not be getting the full experience of the four year high school but there are benefits when you graduate earlier. In the future i think school students should only have to go to high for only 3 years.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      In conclusion high school students should graduate in 3years not 4 years of high school. Some say by graduating early you would not be getting the full experience of the four year high school but there are benefits when you graduate earlier. In the future i think school students should only have to go to high for only 3 years.
+    span:
+    - 0
+    - 328
+    issue_label: counter-argument buried in conclusion; weak ending
+    question: |-
+      You introduce the counter-argument—'some say by graduating early you would not be getting the full experience'—at the very end, after you've already concluded. If people have this objection, shouldn't you address it in the body, not tack it on at the end? And your final sentence just restates your opening with no new insight or force.
+    why_it_matters: |-
+      Burying a real objection at the end makes it look like an afterthought rather than a serious concern you've thought through; it weakens your argument instead of strengthening it.
+    fix_suggestion: |-
+      Move the counter-argument to its own body paragraph earlier in the essay, and respond to it directly with evidence. End with a sentence that *reaches* beyond restatement—e.g., 'Early graduation is not a loss of experience; it is a gain of opportunity.'
+    replacement: null
+    severity: medium
+- source: 'AES2 (score 3/6): conclusion restates without closure'
+  article: |-
+    Exploring Venus is very important to us here on Earth, although it poses many challenges the benefits and things that we could learn outweigh them. Venus could have been just like earth millions of years ago, but the planet was not taken care of. The things that we learn on Venus could be vital to the sucess of our planet and our future.
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      Exploring Venus is very important to us here on Earth, although it poses many challenges the benefits and things that we could learn outweigh them. Venus could have been just like earth millions of years ago, but the planet was not taken care of. The things that we learn on Venus could be vital to the sucess of our planet and our future.
+    span:
+    - 0
+    - 339
+    issue_label: conclusion restates without closure
+    question: |-
+      Your conclusion repeats your main idea three times without ever saying what we actually *do* next. Important to study Venus? Okay — but what does that mean in practice? Should we fund NASA missions? Change climate policy? The reader is left hanging.
+    why_it_matters: |-
+      A conclusion that only echoes the thesis feels incomplete and leaves the reader without a sense of stakes or purpose.
+    fix_suggestion: |-
+      End with a forward-looking claim: 'If we heed Venus's example and reduce atmospheric carbon dioxide now, we still have time to reverse course. If we don't, we may not.' This gives your argument teeth.
+    replacement: null
+    severity: medium
+- source: |-
+    Feedback_Prize_ELL (score 2.154434690031884/5): conclusion repeats earlier points, stray paragraphs after conclusion
+  article: |-
+    Conclusion: Some Student take hart class and them they practice and learning Avery single days in High School they are Smart Student and they try to learning because they wanna prepare in life... Thanks I believe in some Societies...
+  critiques:
+  - agent: structure_editor
+    text_quote: |-
+      Conclusion: Some Student take hart class and them they practice and learning Avery single days in High School they are Smart Student and they try to learning because they wanna prepare in life... Thanks I believe in some Societies...
+    span:
+    - 0
+    - 233
+    issue_label: conclusion repeats earlier points, stray paragraphs after conclusion
+    question: |-
+      Your conclusion restates the idea that students who take hard classes are smart and prepared — but you've already made that point three times. And then you add two more paragraphs after 'Thanks.' Why? Are these new reasons or just loose thoughts?
+    why_it_matters: |-
+      The essay loses force and clarity because it doesn't actually end; it just trails off and adds more.
+    fix_suggestion: |-
+      Delete 'Thanks' and the dangling paragraphs. Rewrite your conclusion to synthesize your three reasons into one final, strong statement about why committing to a career path early matters.
+    replacement: null
+    severity: high
+- source: 'ASAP-7 (score 18/30): fragment, disconnected transition'
+  article: A few weeks later. I got a little better every day. Her name was @PERSON4.
+  critiques:
+  - agent: structure_editor
+    text_quote: A few weeks later. I got a little better every day. Her name was @PERSON4.
+    span:
+    - 0
+    - 74
+    issue_label: fragment, disconnected transition
+    question: |-
+      Why introduce the tutor here, in the middle of the story? 'A few weeks later' as a fragment is abrupt, and you don't explain how the tutor came into the picture. Did you ask for help? Was it assigned? The reader is missing the bridge between failure and improvement.
+    why_it_matters: |-
+      The turning point in your patience story is unclear, so the narrative feels like it jumps around rather than building toward insight.
+    fix_suggestion: |-
+      Connect the events: 'The next week, my teacher offered me tutoring. Her name was @PERSON4, and she was patient and kind. She helped me study a little each day, and slowly I improved.'
+    replacement: null
+    severity: medium

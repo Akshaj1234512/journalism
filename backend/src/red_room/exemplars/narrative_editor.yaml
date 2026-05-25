@@ -1,177 +1,297 @@
 # Exemplars for narrative_editor
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
+- source: 'ASAP-8 (score 35/60): generic scene-setting, no specificity'
+  article: |-
+    It was @CAPS1 @ORGANIZATION1 of @DATE1, the sun was shining and the birds were chirping. It was a great @ORGANIZATION1 to be outside doing something unique to enjoy the nice weather.
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      It was @CAPS1 @ORGANIZATION1 of @DATE1, the sun was shining and the birds were chirping. It was a great @ORGANIZATION1 to be outside doing something unique to enjoy the nice weather.
+    span:
+    - 0
+    - 182
+    issue_label: generic scene-setting, no specificity
+    question: |-
+      You're opening with weather-report details that could describe any summer day. What made *this* parade different? What do you actually remember seeing or feeling in that moment that puts us there instead of reading a postcard?
+    why_it_matters: |-
+      The reader has no sensory foothold or emotional entry point; we're still waiting for the story to start.
+    fix_suggestion: |-
+      Cut the generic setup. Start with a specific, concrete detail from the parade itself—the float moving, the costume your friend wore, the weight of the babies in your arms. Let the setting emerge through action, not description.
+    replacement: null
+    severity: medium
 - source: |-
-    Vivian Gornick, The Situation and the Story: situation is what happened; story is what the writer makes of it
+    ASAP-8 (score 35/60): telling without showing, vague claim about laughter and babies' behavior
   article: |-
-    When I was fourteen, my grandfather got sick and I had to help take care of him. It was hard, but I learned a lot about responsibility and what it means to be there for family.
+    We were carrying the two twin baby's. I cant remember their names. We switched off a few times but for the most part I was holding the boy while she was holding the girl. They were well behaved baby's, they didn't cry often unless we had laughed to hard. Or yelled at the crowd too loudly.
   critiques:
   - agent: narrative_editor
     text_quote: |-
-      When I was fourteen, my grandfather got sick and I had to help take care of him. It was hard, but I learned a lot about responsibility and what it means to be there for family.
-    span: [0, 176]
-    issue_label: situation summarized, no story
+      We were carrying the two twin baby's. I cant remember their names. We switched off a few times but for the most part I was holding the boy while she was holding the girl. They were well behaved baby's, they didn't cry often unless we had laughed to hard. Or yelled at the crowd too loudly.
+    span:
+    - 0
+    - 289
+    issue_label: telling without showing, vague claim about laughter and babies' behavior
     question: |-
-      This is the situation (he got sick, you helped), not the story (what the experience made you, what you came to see, what changed inside you). The reader has the bare facts and a stated lesson. The story is the part you have not written yet, the part where the situation becomes meaning.
+      You tell us the babies didn't cry unless you laughed too hard, but you don't show us a single moment where that happened. What does a baby do when you're laughing and it startles them? Give us one small scene instead of a summary.
     why_it_matters: |-
-      Without the story, the essay reports an experience without revealing the writer; the reader has nothing to carry away.
+      This is supposedly the setup for the eventual fall and the laughter that follows—but we never see the babies react to laughter, so we have no real sense of the dynamic you're describing.
     fix_suggestion: |-
-      Pick one specific moment from those months (the first night he didn't recognize you, the time he asked for water and you didn't hear him) and write it as a scene. Let the moment do the work the summary tried to do.
-    replacement: null
-    severity: high
-- source: 'Anne Lamott, Bird by Bird: show, do not tell'
-  article: |-
-    I felt overwhelmed by everything that was happening. The pressure of school, my parents' divorce, and my friend's accident all hit me at once. It was the hardest year of my life.
-  critiques:
-  - agent: narrative_editor
-    text_quote: I felt overwhelmed by everything that was happening.
-    span: [0, 52]
-    issue_label: telling not showing
-    question: |-
-      'I felt overwhelmed' is the writer telling the reader what to feel. Show the reader the four small concrete details that let them feel it themselves. The cold cereal you ate standing up because you had stopped sitting down to eat. The unread texts piling up. The walk to school where you took a longer route to delay arrival by six minutes.
-    why_it_matters: |-
-      When the writer tells the reader what to feel, the reader feels nothing; specifics earn the emotion.
-    fix_suggestion: |-
-      Cut 'I felt overwhelmed' and write three specific small details from a particular day that week. Let the reader assemble the feeling.
-    replacement: null
-    severity: high
-- source: 'Mary Karr, The Art of Memoir: the earned lesson'
-  article: |-
-    Through this experience, I learned that family is what truly matters in life. I will carry this lesson with me forever.
-  critiques:
-  - agent: narrative_editor
-    text_quote: |-
-      Through this experience, I learned that family is what truly matters in life. I will carry this lesson with me forever.
-    span: [0, 119]
-    issue_label: lesson stated, not earned
-    question: |-
-      The lesson is handed to the reader rather than earned through the writing. If the reader has to take your word that the lesson follows from the experience, the writing has not done its job. The story has to make the lesson inevitable, and then the lesson does not even need to be stated.
-    why_it_matters: |-
-      Stated lessons in personal essays read as the writer reaching past the experience to package it; readers feel managed.
-    fix_suggestion: |-
-      Cut the explicit lesson. Trust the scenes to carry it. If you must state something at the end, name what you are still not sure of, not what you concluded.
-    replacement: null
-    severity: high
-- source: Phillip Lopate, on the wrong moment
-  article: |-
-    I will never forget the day of the championship game. I scored the winning goal in overtime and our team won the state title. The crowd went wild and I felt like a hero.
-  critiques:
-  - agent: narrative_editor
-    text_quote: |-
-      I will never forget the day of the championship game. I scored the winning goal in overtime and our team won the state title. The crowd went wild and I felt like a hero.
-    span: [0, 169]
-    issue_label: wrong moment
-    question: |-
-      You picked the moment that looks largest from outside. Personal essays work better on smaller moments that reveal more. The walk back to the bench between periods. The look your teammate gave you during the third penalty. The text from your mom that you read in the parking lot afterward. The dramatic moment is rarely the revealing one.
-    why_it_matters: |-
-      The big-public moment is what every other essay picks; smaller specific moments are what readers carry away.
-    fix_suggestion: |-
-      Try the same essay built around a smaller moment from that season: a practice, a loss, the day you almost quit. The championship can sit in the background, doing less work than the small moment does.
+      Pick one moment: 'When I laughed at something @PERSON2 said, the boy's eyes went wide and his lip quivered like he might cry, but then he smiled instead.' Show, don't summarize.
     replacement: null
     severity: medium
-- source: 'Standard college-essay diagnostic: false vulnerability'
+- source: 'ASAP-8 (score 35/60): no scene detail, rushed climax'
   article: |-
-    My greatest weakness is that I care too much. I work too hard, sometimes staying up until two in the morning to finish a project, because I cannot accept anything less than my best.
+    We leaned more and more against the rail from exhaustion. We were still laughing and having a good time, but we became more and more relaxed and ended up with all of our weight pushing against the rail. Next thing we knew the rail had broken and we fell.
   critiques:
   - agent: narrative_editor
     text_quote: |-
-      My greatest weakness is that I care too much. I work too hard, sometimes staying up until two in the morning to finish a project, because I cannot accept anything less than my best.
-    span: [0, 181]
-    issue_label: false vulnerability
+      We leaned more and more against the rail from exhaustion. We were still laughing and having a good time, but we became more and more relaxed and ended up with all of our weight pushing against the rail. Next thing we knew the rail had broken and we fell.
+    span:
+    - 0
+    - 254
+    issue_label: no scene detail, rushed climax
     question: |-
-      'I care too much' is the classic false vulnerability: a weakness that is really self-praise. Real vulnerability has a cost. A college-admissions reader has seen this sentence five hundred times this season, and the move is now invisible to them.
+      This is the moment the whole story builds to—the fall—but you skip right past it. What did it *feel* like? Did you hear the wood crack? Did the rail move in slow motion or snap instantly? Did you see @PERSON2's face before you hit the ground?
     why_it_matters: |-
-      False vulnerability signals to the reader that the writer is performing, not revealing.
+      The climactic moment has no texture or immediacy; we're told about the fall rather than experiencing it with you.
     fix_suggestion: |-
-      Try a real weakness, the kind that has a cost: the friendship you lost because you were rigid about being right, the class you avoided because you were afraid you'd fail. Then show what you did with it.
+      Slow down and show the breaking: 'I felt the wood give way under my back—not a sudden snap, but a sickening creak. The rail tilted and I was falling, still holding the girl, the float platform rushing up at us.' Give us one physical sensation.
     replacement: null
     severity: high
-- source: Mary Karr, on voice
+- source: |-
+    ASAP-8 (score 35/60): emotional whiplash, sudden shift to laughter without transition
   article: |-
-    It was during my freshman year that I undertook a transformative journey of personal growth and self-discovery, which profoundly impacted my worldview and shaped the person I have become today.
+    The crowd started to laugh at us and our faces got beat red. Baileys mom came over to us to make sure we were all okay. She handed the baby's off to the @ORGANIZATION1 @ORGANIZATION1 manager who was there. Then @PERSON2's mom helped us up. Then we all burst into laughter.
   critiques:
   - agent: narrative_editor
     text_quote: |-
-      It was during my freshman year that I undertook a transformative journey of personal growth and self-discovery, which profoundly impacted my worldview and shaped the person I have become today.
-    span: [0, 193]
-    issue_label: voice has flattened
+      The crowd started to laugh at us and our faces got beat red. Baileys mom came over to us to make sure we were all okay. She handed the baby's off to the @ORGANIZATION1 @ORGANIZATION1 manager who was there. Then @PERSON2's mom helped us up. Then we all burst into laughter.
+    span:
+    - 0
+    - 272
+    issue_label: emotional whiplash, sudden shift to laughter without transition
     question: |-
-      Voice is the one thing nobody else can imitate, the proof you wrote this. 'Transformative journey of personal growth and self-discovery' is the common college-essay register, the voice every admissions reader has read a thousand times. Your actual voice is somewhere underneath this; the formal register has buried it.
+      One sentence you're humiliated and embarrassed; the next you 'all burst into laughter.' What changed? Did someone say something funny? Did you realize the babies were safe? There's a gap in logic here that makes the shift feel abrupt rather than earned.
     why_it_matters: |-
-      When the voice flattens into the genre's default, the essay disappears into the pile.
+      The moment when laughter saves you from embarrassment—the whole point of your essay—happens off-page, so its power is lost.
     fix_suggestion: |-
-      Rewrite the sentence in the voice you would use to tell a close friend the same thing. Strip the abstractions ('transformative,' 'self-discovery,' 'worldview'). Replace with the specific year-old thing that started the change.
+      Show the pivot: 'Baileys mom checked the babies, and when she looked up and smiled at us instead of panicking, something shifted. @PERSON2 caught my eye and started laughing—not from panic, but relief—and then I couldn't stop either.'
     replacement: null
     severity: high
-- source: Vivian Gornick, on the everyone essay
+- source: |-
+    Feedback_Prize_ELL (score 3.3246998805754875/5): telling without scene detail, telling-not-showing
   article: |-
-    Losing my grandmother was the hardest thing I have ever been through. She had always been there for me, and her death taught me to appreciate the time I have with the people I love.
+    Generic_Name got mad and ran away and started crying he did not like what had happen Generic_Name did not want to tell the teacher because he though it was going to get wars so he just stayed quite.
   critiques:
   - agent: narrative_editor
     text_quote: |-
-      Losing my grandmother was the hardest thing I have ever been through. She had always been there for me, and her death taught me to appreciate the time I have with the people I love.
-    span: [0, 181]
-    issue_label: the everyone essay
+      Generic_Name got mad and ran away and started crying he did not like what had happen Generic_Name did not want to tell the teacher because he though it was going to get wars so he just stayed quite.
+    span:
+    - 0
+    - 198
+    issue_label: telling without scene detail, telling-not-showing
     question: |-
-      This essay could be written by any of fifty thousand applicants this year. The personal essay works when the specifics are nobody else's. What was the specific thing your grandmother said, the specific kitchen, the specific Saturday-morning ritual? Without specifics that could only be yours, the essay is a category, not a story.
+      You're listing emotions and actions—'got mad,' 'ran away,' 'crying'—but we're not *seeing* any of it. What did his face look like? Where did he run to? What was he saying to himself? Right now it reads like a summary of events, not a lived moment.
     why_it_matters: |-
-      Generic loss-of-grandparent essays compete with thousands of others; the reader cannot distinguish you from the form.
+      Narrative loses its power when you only report feelings instead of showing them through concrete detail and dialogue; the reader stays distant from the character's experience.
     fix_suggestion: |-
-      Replace 'always been there for me' with the specific Saturday at her kitchen table. The specifics are what convert a category into a person.
+      Show the moment: 'Generic_Name's face went hot. He turned and walked out of the cafeteria, his eyes burning. In the bathroom, he locked a stall door and sat on the toilet, chest heaving, thinking: if he tells the teacher, it'll only get worse.'
     replacement: null
     severity: high
-- source: 'Standard writing-workshop diagnostic: reflection at the wrong altitude'
+- source: 'ASAP-7 (score 18/30): incoherent syntax, unclear scene'
   article: |-
-    The accident changed my perspective on life. I now understand the importance of resilience and the value of cherishing each moment we are given.
+    When is someone going pinch me go I wake up... I think you should pet on. In my mind I was praying for her not to say the word, she responded, "@CAPS3."
   critiques:
   - agent: narrative_editor
     text_quote: |-
-      I now understand the importance of resilience and the value of cherishing each moment we are given.
-    span: [45, 144]
-    issue_label: reflection at the surface
+      When is someone going pinch me go I wake up... I think you should pet on. In my mind I was praying for her not to say the word, she responded, "@CAPS3."
+    span:
+    - 0
+    - 152
+    issue_label: incoherent syntax, unclear scene
     question: |-
-      The reflection stays at the level of pull-quote abstractions: 'resilience,' 'cherishing each moment.' The scene preceding it deserves a sharper second beat. The reflection has to do the second job, not paraphrase the first. What did the accident actually change in how you make decisions, what specific habit, what you noticed about your father afterward?
-    why_it_matters: Surface reflection wastes the work the scene did; the reader was
-      promised more.
+      I'm lost here—what's actually happening? 'When is someone going pinch me go I wake up' doesn't parse, and 'I think you should pet on' seems unrelated to the moment before it. Are you describing a test being handed back? A conversation? The reader needs to see the scene, not fragments of it.
+    why_it_matters: |-
+      Without a clear, legible narrative sequence, the reader can't access your experience or understand why patience mattered in that moment.
     fix_suggestion: |-
-      Push one altitude lower. Not 'I learned resilience'; rather, 'I learned my father will not say he is afraid, and that I have to read his shoulders to know.' Specific, not abstract.
+      Slow down and reconstruct the scene sentence by sentence. What literally happened? Did the teacher hand back a graded paper? Did she say something critical? Write it as it unfolded: 'My teacher handed back the test with a disappointed look. She said I needed to improve my preparation.' Then show your internal reaction.
+    replacement: null
+    severity: high
+- source: 'ASAP-7 (score 18/30): telling not showing, incoherent'
+  article: |-
+    When I got home my mom mad the letter and agreed with it. Why did I have to fall history. Next week the out or came.
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      When I got home my mom mad the letter and agreed with it. Why did I have to fall history. Next week the out or came.
+    span:
+    - 0
+    - 116
+    issue_label: telling not showing, incoherent
+    question: |-
+      What actually happened here? Did your mom scold you about the grade? Did you feel ashamed? And 'Why did I have to fall history' and 'Next week the out or came' don't make sense—there's a grammatical issue, but more importantly, you're skipping the emotional moment. Show us the conversation or your reaction.
+    why_it_matters: |-
+      You're summarizing events instead of letting the reader experience them, which drains the scene of feeling and makes it hard to follow your growth.
+    fix_suggestion: |-
+      Reconstruct with concrete detail: 'When I got home, my mom read the letter silently. Her face was serious. She set it down and said, "You need to study harder." I felt ashamed, but I didn't argue. I nodded and went to my room.'
+    replacement: null
+    severity: high
+- source: 'ASAP-8 (score 30/60): telling instead of showing'
+  article: |-
+    This first story I'm going to tell you is about @CAPS1 and @LOCATION1. I have been dating @PERSON2 for about a month now and laughter is a big part in our relationship. @PERSON2 and i like to tell jokes to each other and make each other laugh and smile.
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      This first story I'm going to tell you is about @CAPS1 and @LOCATION1. I have been dating @PERSON2 for about a month now and laughter is a big part in our relationship. @PERSON2 and i like to tell jokes to each other and make each other laugh and smile.
+    span:
+    - 0
+    - 253
+    issue_label: telling instead of showing
+    question: |-
+      You keep *reporting* that you laugh together and tell jokes, but I never see or hear a single joke. What did you actually say? What was her response? Give me one real exchange.
+    why_it_matters: |-
+      Without a concrete example, the reader has no reason to believe this — it's just assertion piled on assertion.
+    fix_suggestion: |-
+      Replace the generalization with a specific moment: 'Last Tuesday she texted me a terrible pun about my job. I groaned and sent back...' Show the actual joke or banter.
+    replacement: null
+    severity: high
+- source: 'ASAP-7 (score 18/30): syntax collapse; detail obscured by errors'
+  article: |-
+    I saw a man dressed in where dating walking through and, and when he came out of the mud there was no sitting or did anymore on him. I ran up to him and asked man who are you?
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      I saw a man dressed in where dating walking through and, and when he came out of the mud there was no sitting or did anymore on him. I ran up to him and asked man who are you?
+    span:
+    - 0
+    - 175
+    issue_label: syntax collapse; detail obscured by errors
+    question: |-
+      I'm genuinely unable to picture what this man looked like. 'Dressed in where dating'? 'No sitting or did anymore on him'? These aren't just typos—the sentence structure is broken. What did the angel actually look like when he emerged from the mud?
+    why_it_matters: |-
+      The angel is the emotional center of your story, and we can't see him because the sentences aren't working.
+    fix_suggestion: |-
+      Slow down and rebuild this: 'I saw a man stepping through the mud. When he reached me, his clothes were clean—not a spot of dirt on him. I asked, "Who are you?"'
+    replacement: null
+    severity: high
+- source: 'ASAP-8 (score 30/60): telling not showing, vague action'
+  article: |-
+    After school one day meself and a buddy of mine went to my house for the night. It was alot of fun, we started off playing video games and laugh really hard when one of us would die in the game.
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      After school one day meself and a buddy of mine went to my house for the night. It was alot of fun, we started off playing video games and laugh really hard when one of us would die in the game.
+    span:
+    - 0
+    - 194
+    issue_label: telling not showing, vague action
+    question: |-
+      You're telling me it was fun and they laughed hard, but where's the scene? What game? What did dying in the game actually look like — did your friend throw the controller, trash-talk you, rage-quit? Give me one specific moment I can see.
+    why_it_matters: |-
+      Right now this reads like a summary of the night rather than a lived experience; readers need concrete detail and dialogue to feel present in the moment with you.
+    fix_suggestion: |-
+      Pick one moment from the video game — maybe your friend made a ridiculous mistake or you beat him unexpectedly — and show the actual exchange: what he said, what you said, what you both did. Let that moment stand alone before you move to dinner.
+    replacement: null
+    severity: high
+- source: 'ASAP-7 (score 15/30): telling not showing, no sensory detail'
+  article: |-
+    When my @CAPS1 broke his ear-drum I was about five years old. I had to wait with my brother in the waiting room. It felt like forever. It was winter, I was in my pjs, and so bored but worried about my @CAPS1.
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      When my @CAPS1 broke his ear-drum I was about five years old. I had to wait with my brother in the waiting room. It felt like forever. It was winter, I was in my pjs, and so bored but worried about my @CAPS1.
+    span:
+    - 0
+    - 208
+    issue_label: telling not showing, no sensory detail
+    question: |-
+      You're telling me how you felt ('bored,' 'worried') but I'm not experiencing the waiting room with you. What did it smell like? What sounds? What did you *do* while sitting there? Show me the impatience, don't announce it.
+    why_it_matters: |-
+      Without concrete detail, the reader stays at arm's length from your experience — it's a summary of a memory rather than a moment you're reliving on the page.
+    fix_suggestion: |-
+      Pick one small detail and expand it: 'My feet didn't touch the floor. I swung them against the plastic chair, back and forth, watching the clock hands move like they were stuck in glue. My mom kept checking her watch. I kept checking hers.'
+    replacement: null
+    severity: high
+- source: 'ASAP-8 (score 40/60): weak transition and narrative clarity'
+  article: |-
+    @PERSON3 has always been an early bird. I felt this sharp pain in my back and I shot straight up. Only to quickly realize that it was only her fist.
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      @PERSON3 has always been an early bird. I felt this sharp pain in my back and I shot straight up. Only to quickly realize that it was only her fist.
+    span:
+    - 0
+    - 148
+    issue_label: weak transition and narrative clarity
+    question: |-
+      The jump from 'early bird' to 'I felt a sharp pain' is confusing. Are you saying @PERSON3 hit you because she wakes up early? And 'Only to quickly realize' — that's weak; you shot up *and* realized at the same time. Clarify what's happening and tighten the syntax.
+    why_it_matters: |-
+      The reader has to pause and re-read to understand the sequence of events, breaking the narrative momentum.
+    fix_suggestion: |-
+      Something like: '@PERSON3, always an early riser, woke me with a sharp jab to my back. I shot upright—only to see her grinning at me.' This clarifies cause, tightens the sentence, and keeps the action moving.
     replacement: null
     severity: medium
-- source: 'Standard college-essay diagnostic: the unearned twist'
+- source: 'AES2 (score 2/6): summary narration, no scene'
   article: |-
-    She seemed cold and distant the entire week of the camp. I tried to talk to her but she would only give one-word answers. Then on the last day, she handed me a letter saying I had changed her life.
-  critiques:
-  - agent: narrative_editor
-    text_quote: Then on the last day, she handed me a letter saying I had changed
-      her life.
-    span: [122, 197]
-    issue_label: unearned twist
-    question: |-
-      The turn arrives without the setup that would let the reader believe it. The week's interactions, as you wrote them, do not give the reader any reason to expect this revelation, and the essay does not show how it landed for you. The reader feels handed an ending the essay has not earned.
-    why_it_matters: An unearned twist makes the reader trust the writer less, not
-      more.
-    fix_suggestion: |-
-      Either earn the turn (one specific moment during the week where you saw something the cold front concealed), or change the structure so the letter is the beginning, not the end, and the essay reflects on what you missed.
-    replacement: null
-    severity: medium
-- source: 'Vivian Gornick, on situation vs. story: the small specific moment'
-  article: |-
-    I remember sitting at the kitchen table the morning after my parents told us about the divorce. My mother was making pancakes the way she always did on Saturday, and I realized that the small ritual was the only thing that was still going to be the same.
+    I got of the boat and smelled the fresh air of New York. I had rented a home their to live in while I got some men to participate in the program. I put my stuff in the house, took my keys, got in the car, and rode of into the city.
   critiques:
   - agent: narrative_editor
     text_quote: |-
-      I remember sitting at the kitchen table the morning after my parents told us about the divorce. My mother was making pancakes the way she always did on Saturday, and I realized that the small ritual was the only thing that was still going to be the same.
-    span: [0, 254]
-    issue_label: scene works, lesson could trust itself
+      I got of the boat and smelled the fresh air of New York. I had rented a home their to live in while I got some men to participate in the program. I put my stuff in the house, took my keys, got in the car, and rode of into the city.
+    span:
+    - 0
+    - 231
+    issue_label: summary narration, no scene
     question: |-
-      The scene itself does almost all the work the essay needs: the pancakes, the Saturday, the realization that follows from the specific. The line 'the only thing that was still going to be the same' is doing too much explaining. The reader was already there.
+      You're listing actions—rented a home, put stuff in house, got in car—like a checklist. Where's the scene? What did the city smell like? What was your emotional state walking into the house? Did anything go wrong? Right now you're *telling* me you arrived; you're not *showing* me the arrival.
     why_it_matters: |-
-      Even good essays sometimes over-explain after a scene that has already landed; trust the reader more.
+      Flat summary narration feels hollow and keeps readers at a distance; specific sensory detail and moment-by-moment action make narrative come alive.
     fix_suggestion: |-
-      Try cutting the explanatory clause. End on 'My mother was making pancakes the way she always did on Saturday.' The reader will arrive at the realization on their own, which makes it more theirs.
-    replacement: |-
-      I remember sitting at the kitchen table the morning after my parents told us about the divorce. My mother was making pancakes the way she always did on Saturday.
-    severity: low
+      Pick one moment—walking into the rented house, or stepping out of the car in the city—and write it in real time with sensory detail and internal thought. 'I stepped out of the car and the salt air hit my face. The brownstones loomed above me, and for a moment I forgot why I was here.'
+    replacement: null
+    severity: high
+- source: |-
+    Feedback_Prize_ELL (score 3.3878587775517346/5): vague claim, no concrete example
+  article: |-
+    When teacher are mad they make the student do more classwork and homework. Some time teacher will said stuff behind you. This is why student and teacher fight because the teacher make s up lie that the student did this but they did not do it so now the student get very mad at the teacher.
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      When teacher are mad they make the student do more classwork and homework. Some time teacher will said stuff behind you. This is why student and teacher fight because the teacher make s up lie that the student did this but they did not do it so now the student get very mad at the teacher.
+    span:
+    - 0
+    - 289
+    issue_label: vague claim, no concrete example
+    question: |-
+      You're making a serious claim — that teachers make up lies and create conflict — but you give no specific example. What did a teacher say? When? To whom? Without a scene, this reads as hearsay, not evidence.
+    why_it_matters: |-
+      Without concrete detail, the claim feels unsupported and potentially unfair to teachers. Readers won't believe it.
+    fix_suggestion: |-
+      Either drop the accusation or anchor it: 'I've seen teachers blame students for behavior they didn't do, which damages trust and makes students resentful.' Or give a specific moment you witnessed or experienced.
+    replacement: null
+    severity: medium
+- source: 'ASAP-7 (score 16/30): weak sensory detail, vague action'
+  article: |-
+    She searched the whole house and then found them in the corner. So we were about to walk out and I said girl whats wrong with your har suprised. She felt her head and said o I forgot. So we went back in the house and I tried to put her hair in a ponytail and it wouldnt fit. So I let her do something and she couldnt. So I parted her hair and put it in two ponytails.
+  critiques:
+  - agent: narrative_editor
+    text_quote: |-
+      She searched the whole house and then found them in the corner. So we were about to walk out and I said girl whats wrong with your har suprised. She felt her head and said o I forgot. So we went back in the house and I tried to put her hair in a ponytail and it wouldnt fit. So I let her do something and she couldnt. So I parted her hair and put it in two ponytails.
+    span:
+    - 0
+    - 367
+    issue_label: weak sensory detail, vague action
+    question: |-
+      This sequence moves fast but has almost no texture — 'I tried to put her hair in a ponytail and it wouldn't fit' is vague. Was it tangled? Too thick? Too short? And 'So I let her do something and she couldnt' — what *something*? The reader is lost. Slow down on the hair-braiding moment and *show* the work of helping your sister.
+    why_it_matters: |-
+      Without concrete detail, the scene feels rushed and generic; we don't understand what actually happened or why it mattered that you helped.
+    fix_suggestion: |-
+      Try: 'I pulled the comb through her thick, tangled hair. It wouldn't gather at the back of her head. Her hair kept slipping out of my fingers.' Give us the resistance — make the work visible.
+    replacement: null
+    severity: high

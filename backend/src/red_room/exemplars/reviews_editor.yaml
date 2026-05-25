@@ -1,0 +1,82 @@
+# Exemplars for reviews_editor (Remy). Bootstrap synthetic; replaced in Phase 2.
+- source: 'no position by graf 3'
+  article: |-
+    The film opens in a small town in Montana. The lead character, played by an actor we've seen in many similar roles, gradually becomes entangled in a series of events involving his estranged brother. The cinematography is interesting, and the score is notable.
+  critiques:
+  - agent: reviews_editor
+    text_quote: The cinematography is interesting, and the score is notable.
+    span: [196, 256]
+    issue_label: no position by graf 3
+    question: |-
+      Three grafs in and I still can't tell if you liked this. "Interesting" and "notable" are the words you use when you don't want to commit. What did you think?
+    why_it_matters: |-
+      A review without a position is consumer-confusion, not criticism. Readers come to a review to find out what someone thought.
+    fix_suggestion: |-
+      State your position by the end of graf 2: "This is a serious, slow-moving film that will reward viewers patient enough to..." or whatever your actual take is.
+    replacement: null
+    severity: high
+- source: 'mostly plot summary'
+  article: |-
+    [4 grafs of plot recap] Overall, the book has both strengths and weaknesses, and readers will form their own views.
+  critiques:
+  - agent: reviews_editor
+    text_quote: Overall, the book has both strengths and weaknesses
+    span: [27, 78]
+    issue_label: plot summary masquerading as review
+    question: |-
+      Four grafs of plot, one graf of "well, there are good and bad things." The reader is here for your judgment, not a synopsis.
+    why_it_matters: |-
+      Plot-summary reviews are the lowest form of the craft and the easiest to dismiss.
+    fix_suggestion: |-
+      Compress the plot summary to two sentences. Use the recovered space for what you actually thought — specific scenes, what worked and what didn't, where the book sits relative to its genre.
+    replacement: null
+    severity: high
+- source: 'claims about the work with no evidence from it'
+  article: |-
+    The dialogue is brilliantly written and the characters feel fully realized.
+  critiques:
+  - agent: reviews_editor
+    text_quote: The dialogue is brilliantly written
+    span: [0, 35]
+    issue_label: no specific evidence from the work
+    question: |-
+      "Brilliantly written" without a single quoted line is empty. The reader needs to see what you're seeing.
+    why_it_matters: |-
+      Unsubstantiated craft claims are how reviews lose authority — the reader has no way to evaluate whether your take is supported by the work itself.
+    fix_suggestion: |-
+      Quote one specific line and explain what makes it brilliant. "When the lawyer says X to her daughter, she's saying three things at once: A, B, and C."
+    replacement: null
+    severity: high
+- source: 'work treated as if no genre exists'
+  article: |-
+    This is an entirely fresh take on the concept of memory in fiction.
+  critiques:
+  - agent: reviews_editor
+    text_quote: This is an entirely fresh take on the concept of memory in fiction.
+    span: [0, 66]
+    issue_null: no genre / canon context
+    issue_label: no genre / canon context
+    question: |-
+      "Entirely fresh" — fresh compared to what? Memory in fiction is its own tradition (Proust, Sebald, Atwood). Where does this book sit?
+    why_it_matters: |-
+      Reviews without genre or canon context read as if the reviewer thinks the book exists in a vacuum.
+    fix_suggestion: |-
+      Place the book in a tradition. Comparison can be brief: "Like Sebald and unlike Proust, X uses memory as Y." Pick the writers whose work casts the most light.
+    replacement: null
+    severity: medium
+- source: 'authorial intent fallacy'
+  article: |-
+    The author was clearly trying to make a statement about modern alienation, but the execution falls flat.
+  critiques:
+  - agent: reviews_editor
+    text_quote: The author was clearly trying to make a statement about modern alienation
+    span: [0, 73]
+    issue_label: authorial intent fallacy
+    question: |-
+      You don't know what the author was trying to do unless they told you. Focus on what the book actually does, not what you guess the writer intended.
+    why_it_matters: |-
+      Intent claims invite easy counter-arguments and shift the critique away from the work itself.
+    fix_suggestion: |-
+      Rewrite: "The book reaches for a statement about modern alienation but the execution falls flat — specifically, when [scene] tries to land [point], the prose retreats into [problem]."
+    replacement: null
+    severity: medium

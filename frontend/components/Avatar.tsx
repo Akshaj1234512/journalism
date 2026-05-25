@@ -73,6 +73,13 @@ const AVATARS: Record<AgentName, () => React.ReactNode> = {
   figure_table_editor: FernAvatar,
   theorem_editor: HugoAvatar,
   format_editor: SageAvatar,
+  city_editor: ColeAvatar,
+  investigations_editor: IrisAvatar,
+  opinion_editor: OttoAvatar,
+  features_editor: FayeAvatar,
+  profile_editor: PiaAvatar,
+  reviews_editor: RemyAvatar,
+  explanatory_editor: EliAvatar,
 };
 
 /* Anne — Legal Skeptic. Pink background, sharp dark bob, slight angle. */
@@ -529,6 +536,142 @@ function SageAvatar() {
       <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
       {/* steady, slight smile — chair, not stern */}
       <path d="M35 42 Q 40 44, 45 42" stroke="#B45309" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Cole — City Editor. Sky blue, short cut, reading glasses, news-desk practical. */
+function ColeAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#BAE6FD" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#0369A1" />
+      <rect x="34" y="42" width="12" height="10" fill="#C39A75" />
+      <circle cx="40" cy="34" r="14" fill="#D5B193" />
+      {/* hair — very short, slightly receding */}
+      <path d="M28 28 Q 30 18, 40 18 Q 50 18, 52 28 Q 50 26, 44 26 Q 40 22, 36 26 Q 30 26, 28 28 Z" fill="#4B3621" />
+      {/* small reading glasses, halfway down nose */}
+      <circle cx="34" cy="36" r="3" stroke="#0F172A" strokeWidth="1.1" fill="none" />
+      <circle cx="46" cy="36" r="3" stroke="#0F172A" strokeWidth="1.1" fill="none" />
+      <line x1="37" y1="36" x2="43" y2="36" stroke="#0F172A" strokeWidth="1.1" />
+      {/* mouth — pursed, no nonsense */}
+      <path d="M36 43 L 44 43" stroke="#0369A1" strokeWidth="1.2" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Iris — Investigations. Deep rose, sharp dark hair, intense stare. */
+function IrisAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#FECDD3" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#9F1239" />
+      <rect x="34" y="42" width="12" height="10" fill="#D6A580" />
+      <circle cx="40" cy="34" r="14" fill="#E8C0A0" />
+      {/* hair — sharp jaw-length bob, dark */}
+      <path d="M24 30 Q 22 12, 40 12 Q 58 12, 56 30 L 54 44 Q 50 32, 40 30 Q 30 32, 26 44 Z" fill="#1F0F00" />
+      {/* eyes — narrowed, intense */}
+      <path d="M33 33 L 37 34" stroke="#1F2937" strokeWidth="1.4" strokeLinecap="round" />
+      <path d="M43 34 L 47 33" stroke="#1F2937" strokeWidth="1.4" strokeLinecap="round" />
+      {/* mouth — slight downturn */}
+      <path d="M36 43 Q 40 42, 44 43" stroke="#9F1239" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Otto — Opinion Editor. Forest green, opinionated, slight smirk. */
+function OttoAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#BBF7D0" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#15803D" />
+      <rect x="34" y="42" width="12" height="10" fill="#C39A75" />
+      <circle cx="40" cy="34" r="14" fill="#D5B193" />
+      {/* hair — neat, side-parted, light brown */}
+      <path d="M26 28 Q 28 16, 40 16 Q 52 16, 54 28 Q 50 22, 44 26 Q 40 22, 30 28 Z" fill="#6B4423" />
+      {/* eyes — open, alert */}
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      {/* asymmetric mouth — slight smirk on one side */}
+      <path d="M35 42 Q 40 45, 45 41" stroke="#15803D" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Faye — Features Editor. Fuchsia, long wavy hair, literary feel. */
+function FayeAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#F5D0FE" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#A21CAF" />
+      <rect x="34" y="42" width="12" height="10" fill="#D2A98A" />
+      <circle cx="40" cy="34" r="14" fill="#E5C3A2" />
+      {/* hair — long, wavy, past shoulders */}
+      <path d="M22 30 Q 18 14, 40 12 Q 62 14, 58 30 Q 60 50, 56 60 Q 54 44, 50 36 Q 40 30, 30 36 Q 26 44, 24 60 Q 20 50, 22 30 Z" fill="#7B3A12" />
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      {/* small earring (literary jewelry hint) */}
+      <circle cx="26" cy="36" r="1" fill="#FBBF24" />
+      <path d="M35 42 Q 40 44, 45 42" stroke="#A21CAF" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Pia — Profile Editor. Pink, sharp short cut, observer's gaze. */
+function PiaAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#FBCFE8" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#BE185D" />
+      <rect x="34" y="42" width="12" height="10" fill="#C39A75" />
+      <circle cx="40" cy="34" r="14" fill="#D5B193" />
+      {/* hair — pixie cut, dark with light streak */}
+      <path d="M26 30 Q 24 16, 40 14 Q 56 16, 54 30 Q 52 22, 46 24 Q 40 18, 30 24 Q 26 28, 26 30 Z" fill="#2F1A0A" />
+      <path d="M40 14 L 44 22" stroke="#FBBF24" strokeWidth="1.2" />
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      {/* neutral, observing mouth */}
+      <path d="M36 42 L 44 42" stroke="#BE185D" strokeWidth="1.2" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Remy — Reviews Editor. Mustard, glasses, slightly bohemian. */
+function RemyAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#FEF3C7" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#854D0E" />
+      <rect x="34" y="42" width="12" height="10" fill="#B89074" />
+      <circle cx="40" cy="34" r="14" fill="#CFA887" />
+      {/* hair — medium length, slightly messy, with subtle gray */}
+      <path d="M24 30 Q 22 14, 40 13 Q 58 14, 56 30 Q 56 36, 54 42 L 50 28 Q 40 26, 30 28 L 26 42 Q 24 36, 24 30 Z" fill="#3F2A12" />
+      <path d="M30 18 L 32 22" stroke="#9CA3AF" strokeWidth="0.8" />
+      {/* large round glasses (the reviewer trope) */}
+      <circle cx="34" cy="34" r="4" stroke="#0F172A" strokeWidth="1.3" fill="none" />
+      <circle cx="46" cy="34" r="4" stroke="#0F172A" strokeWidth="1.3" fill="none" />
+      <line x1="38" y1="34" x2="42" y2="34" stroke="#0F172A" strokeWidth="1.3" />
+      <path d="M36 42 Q 40 44, 44 42" stroke="#854D0E" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Eli — Explanatory Editor. Teal, glasses, data-journalism vibe. */
+function EliAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#99F6E4" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#0F766E" />
+      <rect x="34" y="42" width="12" height="10" fill="#B0866A" />
+      <circle cx="40" cy="34" r="14" fill="#C99B7B" />
+      {/* hair — short, neat */}
+      <path d="M26 28 Q 28 16, 40 16 Q 52 16, 54 28 Q 50 24, 44 26 Q 40 22, 36 26 Q 30 24, 26 28 Z" fill="#1F2937" />
+      {/* rectangular glasses */}
+      <rect x="30" y="31" width="8" height="6" rx="1" stroke="#0F172A" strokeWidth="1.2" fill="none" />
+      <rect x="42" y="31" width="8" height="6" rx="1" stroke="#0F172A" strokeWidth="1.2" fill="none" />
+      <line x1="38" y1="34" x2="42" y2="34" stroke="#0F172A" strokeWidth="1.2" />
+      {/* mouth — friendly, explanatory */}
+      <path d="M35 42 Q 40 44, 45 42" stroke="#0F766E" strokeWidth="1.2" fill="none" strokeLinecap="round" />
     </>
   );
 }

@@ -2,8 +2,11 @@
 # Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
 # NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
 # field 200-2500 words, must reference a specific anchor like
-# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
-# and the top 10 by quality score selected.
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku;
+# top 15 selected with a diversity constraint (round-robin
+# across distinct sub-issue buckets) so the exemplars cover the lane's
+# full failure-mode range rather than 15 variants of the
+# same critique.
 #
 - source: |-
     ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 5/5): unsourced financial claims in motivation
@@ -124,24 +127,6 @@
     replacement: null
     severity: medium
 - source: |-
-    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): Hyperparameter selection not grounded in graph properties
-  article: 'Section 3 (assumed): parameters $T_s$ and $T_f$ in the defense mechanism'
-  critiques:
-  - agent: limitations_editor
-    text_quote: 'Section 3 (assumed): parameters $T_s$ and $T_f$ in the defense mechanism'
-    span:
-    - 0
-    - 72
-    issue_label: Hyperparameter selection not grounded in graph properties
-    question: |-
-      How do the authors determine the values for $T_s$ and $T_f$? It would be beneficial if this determination were associated with specific graph properties (e.g., the number of edges, nodes, diameter, path length, clustering coefficient, etc.), as this would guide potential users of this defense strategy in tailoring it to their datasets.
-    why_it_matters: |-
-      Without principled guidance on setting hyperparameters, practitioners cannot effectively tune the defense to their specific graphs, limiting practical applicability.
-    fix_suggestion: |-
-      Provide a sensitivity analysis or principled rule linking $T_s$ and $T_f$ to measurable graph properties, or empirical guidance for selecting these values.
-    replacement: null
-    severity: medium
-- source: |-
     ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): mismatch between intervention modeling and latent representation
   article: |-
     Section 3.1: the authors explain their modeling choice by stating interventions are incorporated 'by ignoring the columns in the dynamics matrix corresponding to the perturbed neuron', but the perturbed neuron is not directly represented in the latent dynamics matrix A but rather 'mixed in' by the nonlinear emission function f.
@@ -182,6 +167,84 @@
     replacement: null
     severity: high
 - source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 5/10, confidence 4/5): unfounded claim about eliminating human bias
+  article: |-
+    Line 50 claims 'to eliminate the human design prior,' which is challenging given that LLMs inherently contain human priors from being trained on human-generated text.
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      Line 50 claims 'to eliminate the human design prior,' which is challenging given that LLMs inherently contain human priors from being trained on human-generated text.
+    span:
+    - 0
+    - 166
+    issue_label: unfounded claim about eliminating human bias
+    question: |-
+      Line 50 claims 'to eliminate the human design prior,' which is challenging given that LLMs inherently contain human priors from being trained on human-generated text.
+    why_it_matters: |-
+      The claim is philosophically incoherent and distracts from genuine contributions; it signals the authors lack critical engagement with the limitations of their approach.
+    fix_suggestion: |-
+      Remove or reframe the claim; acknowledge that prompt engineering operates within the constraints of pre-trained LLM biases rather than eliminating them.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 1/10, confidence 4/5): repetitive regions incorrectly deprioritized
+  article: |-
+    The work treats repetitive background regions as unimportant and allocates coarser encoding to them, resulting in blurred grass and texture details (Fig. 5).
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      The work treats repetitive background regions as unimportant and allocates coarser encoding to them, resulting in blurred grass and texture details (Fig. 5).
+    span:
+    - 0
+    - 157
+    issue_label: repetitive regions incorrectly deprioritized
+    question: |-
+      The work thinks repetitive background regions are not that important, but those details actually matter for visual quality. I personally wouldn't think Fig. 5's blurriness on grass or this kind of repetitive region is non-important.
+    why_it_matters: |-
+      Deprioritizing repetitive textures degrades perceived image quality and contradicts standard rendering priorities; the paper lacks discussion of this failure mode.
+    fix_suggestion: |-
+      Acknowledge that repetitive textures affect perceptual quality and either adjust the importance weighting or discuss when the method is appropriate.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 5/10, confidence 4/5): insufficient background on core method
+  article: |-
+    Section 2 on DNCs and their mechanics, with insufficient explanation for readers unfamiliar with DNCs
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      Section 2 on DNCs and their mechanics, with insufficient explanation for readers unfamiliar with DNCs
+    span:
+    - 0
+    - 101
+    issue_label: insufficient background on core method
+    question: |-
+      For readers unfamiliar with DNCs, this paper would be hard to grasp. More time should be spent on Section 2, including an illustration would greatly help.
+    why_it_matters: |-
+      Insufficient explanation of the core method limits accessibility and makes it difficult for readers to evaluate the empirical results.
+    fix_suggestion: |-
+      Expand Section 2 with an illustration of DNC architecture and mechanics. Reduce Section 3.1 to a single paragraph describing the general inspiration.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 3/10, confidence 4/5): loss function restricted to binary variables
+  article: The loss function in line 268
+  critiques:
+  - agent: limitations_editor
+    text_quote: The loss function in line 268
+    span:
+    - 0
+    - 29
+    issue_label: loss function restricted to binary variables
+    question: |-
+      The loss function in line 268 only works for problems with pure binary variables. An additional explanation for the continuous ones is needed.
+    why_it_matters: |-
+      The method's applicability is claimed without addressing a key limitation, and users with continuous variables are left without guidance.
+    fix_suggestion: |-
+      Either extend the loss function formulation to handle continuous variables or clearly state this as a limitation and explain how practitioners should adapt it.
+    replacement: null
+    severity: medium
+- source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): unrealistic feature semantics assumption
   article: |-
     The example on page 2 assumes features have clean semantics, which is not typical in modern applications.
@@ -198,5 +261,45 @@
     why_it_matters: |-
       The motivating example fails to demonstrate that the approach is relevant to realistic feature distributions and semantics in contemporary ML systems.
     fix_suggestion: null
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 3/10, confidence 4/5): missing dataset statistics and demographics
+  article: |-
+    Line 57 introduces 'comprehensive boxing dataset' but omits key statistics: gender ratio, number of performers, indoor/outdoor background variation, average frame-span per 'fast' action (line 208 states only 'more than one event per second').
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      Line 57 introduces 'comprehensive boxing dataset' but omits key statistics: gender ratio, number of performers, indoor/outdoor background variation, average frame-span per 'fast' action (line 208 states only 'more than one event per second').
+    span:
+    - 0
+    - 242
+    issue_label: missing dataset statistics and demographics
+    question: |-
+      On comprehensive boxing dataset in line 57, the following critical stats of the dataset is missing: The ratio of gender. The number of different performer. The number of different indoor background and outdoor background. The average frame-span per fast boxing actions. Line 208 vaguely states 'more than one event per second'. Yet, the fps of this dataset is 60, so the number of frames per action can still be quite a lot. It is worth clarifying.
+    why_it_matters: |-
+      Dataset bias, generalization, and action-duration analysis remain opaque, hindering reproducibility and fairness assessment.
+    fix_suggestion: |-
+      Report gender/demographic breakdown, unique performer count, background diversity, and histogram of action frame-span (e.g., median/std duration in frames); clarify the frame-count range corresponding to '>1 event/sec' at 60 fps.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 3/10, confidence 4/5): overclaimed generalization from single domain
+  article: |-
+    Line 252 claims 'the model can learn a comprehensive representation of temporal dynamic' from the shadow-boxing dataset.
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      Line 252 claims 'the model can learn a comprehensive representation of temporal dynamic' from the shadow-boxing dataset.
+    span:
+    - 0
+    - 120
+    issue_label: overclaimed generalization from single domain
+    question: |-
+      On 'the model can learn a comprehensive representation of temporal dynamic' in line 252, it is either overstated or missing some context. It is quite impossible to learn a comprehensive temporal dynamic representation based on the shadow-boxing dataset alone, given there exist so many types of temporal dynamics, e.g., daily life actions, professional sport actions, etc.
+    why_it_matters: |-
+      Overstated claims about generality reduce credibility and mask the domain-specific nature of the contribution.
+    fix_suggestion: |-
+      Qualify the claim: 'comprehensive representation of fast/repetitive sports action temporal dynamics' or add experiments demonstrating generalization to other action types.
     replacement: null
     severity: medium

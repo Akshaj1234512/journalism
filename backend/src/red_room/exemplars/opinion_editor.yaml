@@ -1,0 +1,101 @@
+# Exemplars for opinion_editor (Otto)
+# Bootstrap synthetic exemplars in opinion-editor voice. Will be replaced
+# by real-data ingestion (CJR criticism of op-eds, Sulzberger-era Public
+# Editor columns, Poynter feedback) in Phase 2.
+#
+- source: 'no identifiable thesis by graf 3'
+  article: |-
+    Our city is at a crossroads. Many people are talking about housing affordability. Others are worried about safety. The mayor has made several announcements. It is time we had a real conversation about what kind of city we want to be.
+  critiques:
+  - agent: opinion_editor
+    text_quote: It is time we had a real conversation about what kind of city we want to be.
+    span: [153, 230]
+    issue_label: no thesis, just gesturing
+    question: |-
+      Three grafs in and there's still no argument. "Time for a real conversation" is the canonical opinion-piece evasion: it asks for nothing and commits to nothing.
+    why_it_matters: |-
+      Without a thesis, the reader has nothing to engage with — agreement or disagreement is impossible. It's a vibe, not a piece.
+    fix_suggestion: |-
+      State the argument in one sentence at the end of graf 2: "The city should X." Then spend the rest of the piece defending that.
+    replacement: null
+    severity: high
+- source: 'strawman of the opposing view'
+  article: |-
+    Critics of the policy believe we should just do nothing and let the problem solve itself. They have no real plan and no real care for the people affected.
+  critiques:
+  - agent: opinion_editor
+    text_quote: Critics of the policy believe we should just do nothing and let the problem solve itself.
+    span: [0, 89]
+    issue_label: strawman opposing view
+    question: |-
+      No critic has ever argued "do nothing and let it solve itself." This is a strawman, and any reader who actually holds the opposing view will dismiss the entire piece.
+    why_it_matters: |-
+      Steelman-then-refute is the bar. Strawman-then-mock signals to the only readers who needed convincing that you didn't take them seriously.
+    fix_suggestion: |-
+      State the strongest version of the opposing argument fairly, then refute it. "Critics argue that intervention X creates dependency effect Y. The evidence on this is..."
+    replacement: null
+    severity: high
+- source: 'contested fact dressed as opinion'
+  article: |-
+    I believe that tax cuts pay for themselves.
+  critiques:
+  - agent: opinion_editor
+    text_quote: I believe that tax cuts pay for themselves.
+    span: [0, 43]
+    issue_label: fact dressed as opinion
+    question: |-
+      Whether tax cuts pay for themselves is a contested empirical claim, not an opinion. "I believe" is being used here to insulate a factual assertion from fact-checking.
+    why_it_matters: |-
+      Smuggling fact-claims in as opinion is the move that gets opinion pieces called dishonest by their critics.
+    fix_suggestion: |-
+      Either acknowledge it as a contested empirical claim ("The evidence on whether tax cuts pay for themselves is mixed; my reading of the strongest studies is...") or treat your position as opinion about policy values, not opinion about empirical fact.
+    replacement: null
+    severity: high
+- source: 'goalpost move between positions'
+  article: |-
+    The proposal to increase the minimum wage to $20 is reckless. ... [3 grafs of argument against $20] ... So no one should support raising the minimum wage at all.
+  critiques:
+  - agent: opinion_editor
+    text_quote: So no one should support raising the minimum wage at all.
+    span: [120, 177]
+    issue_label: goalpost move
+    question: |-
+      The piece argues against $20 then jumps to opposing any wage increase. Those are two different positions and you've only earned the first one.
+    why_it_matters: |-
+      A goalpost move is the most-cited weakness in op-ed feedback — readers spot it and lose trust.
+    fix_suggestion: |-
+      Either argue against any minimum-wage increase from the start (and address $15, $18, $20 separately), or end with the position the piece actually argued for: against $20 specifically.
+    replacement: null
+    severity: medium
+- source: 'closing that restates instead of landing'
+  article: |-
+    In conclusion, climate change is a serious issue and we should take it seriously.
+  critiques:
+  - agent: opinion_editor
+    text_quote: In conclusion, climate change is a serious issue and we should take it seriously.
+    span: [0, 81]
+    issue_label: closing restates thesis
+    question: |-
+      Your kicker is restating what you opened with. The last graf is the most-remembered slot in the piece. Don't waste it on summary.
+    why_it_matters: |-
+      A wasted kicker is a wasted argument. The reader leaves with no specific action, no sharper formulation, no stake.
+    fix_suggestion: |-
+      End with one specific implication: a call to action, a policy mechanism, a counter-intuitive consequence — something the reader couldn't have anticipated from the opening.
+    replacement: null
+    severity: medium
+- source: '"studies show" with no study named'
+  article: |-
+    Studies show that this approach has been counterproductive in cities where it has been tried.
+  critiques:
+  - agent: opinion_editor
+    text_quote: Studies show that this approach has been counterproductive
+    span: [0, 60]
+    issue_label: unnamed studies
+    question: |-
+      "Studies show" with no study named is the canonical opinion-page tell. Either cite the studies or weaken the claim.
+    why_it_matters: |-
+      Unnamed-studies is the first move a hostile reader screenshots to discredit a piece.
+    fix_suggestion: |-
+      Name at least one specific study with author and year, or rewrite as "Available evidence on cities that have tried this is mixed; the strongest case against is..."
+    replacement: null
+    severity: medium

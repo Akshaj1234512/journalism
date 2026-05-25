@@ -1,174 +1,295 @@
 # Exemplars for analytical_editor
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
-- source: 'Cleanth Brooks, The Well Wrought Urn: paraphrase as the heresy of summary'
+- source: 'PERSUADE_2.0 (score 4/6): summarizing quote without analytical move'
   article: |-
-    In Hamlet's 'To be or not to be' soliloquy, Hamlet considers whether life is worth living. He weighs the suffering of existence against the unknown of death. He concludes that fear of the unknown keeps people alive.
+    The author sugests that studying Venus is a worthy pursuit despite the dangers it presents and supports that when they say, "Striving to meet the challenge presented by Venus has value, not only because of the insight to be gained on the planet itself, but also because human curiosity will likely lead us into many equaly intimidating endeavors."
   critiques:
   - agent: analytical_editor
     text_quote: |-
-      In Hamlet's 'To be or not to be' soliloquy, Hamlet considers whether life is worth living. He weighs the suffering of existence against the unknown of death. He concludes that fear of the unknown keeps people alive.
-    span: [0, 215]
-    issue_label: summary not analysis
+      The author sugests that studying Venus is a worthy pursuit despite the dangers it presents and supports that when they say, "Striving to meet the challenge presented by Venus has value, not only because of the insight to be gained on the planet itself, but also because human curiosity will likely lead us into many equaly intimidating endeavors."
+    span:
+    - 0
+    - 347
+    issue_label: summarizing quote without analytical move
     question: |-
-      The paragraph paraphrases what the soliloquy says. The analytical work has not begun. What does the speech DO that the paraphrase cannot reach: the syntactic suspension across forty lines, the shift from 'I' to 'we,' the way the soliloquy never names suicide directly?
+      You've identified what the author says, but where's your analysis of *how* that statement supports the larger claim? What rhetorical move is the author making here—is this an appeal to human nature, a practical justification, a philosophical argument?
     why_it_matters: |-
-      Summary tells the reader what they already saw on the page; analysis says what they would not have noticed on their own.
+      The paragraph reads as passive summary rather than active evaluation; you're reporting the evidence but not interpreting its persuasive force.
     fix_suggestion: |-
-      Pick one of the formal features (the suspension, the pronoun shift, the unspeakable middle term) and read it as a pattern. What is the speech enacting, not just saying?
-    replacement: null
-    severity: high
-- source: 'I.A. Richards, Practical Criticism: stay close before generalizing'
-  article: |-
-    Fitzgerald's The Great Gatsby is a critique of the American Dream. Throughout the novel, Fitzgerald shows the corruption beneath the surface of wealth, illustrating how the pursuit of money corrupts moral values.
-  critiques:
-  - agent: analytical_editor
-    text_quote: Fitzgerald's The Great Gatsby is a critique of the American Dream.
-    span: [0, 66]
-    issue_label: generalization without close reading
-    question: |-
-      You reach the abstract conclusion in the first sentence and never come down to the words on the page. Where in the novel does the 'critique' actually live? The green-light passage? The valley of ashes description? The catalog of Gatsby's guest list? The conclusion is defensible; the reading has not started.
-    why_it_matters: |-
-      Generalizations without close reading sound like summaries of other people's readings, not your own engagement with the text.
-    fix_suggestion: |-
-      Pick one passage (the green light, Daisy's voice, the valley of ashes) and stay with it for a paragraph. Let the abstract claim emerge from the specifics, not stand in for them.
-    replacement: null
-    severity: high
-- source: 'Standard writing-center diagnostic: the unexamined ''obviously'''
-  article: |-
-    Obviously, the conch in Lord of the Flies represents democracy and civilized order. When the conch breaks, civilization breaks too.
-  critiques:
-  - agent: analytical_editor
-    text_quote: |-
-      Obviously, the conch in Lord of the Flies represents democracy and civilized order.
-    span: [0, 83]
-    issue_label: unearned 'obviously'
-    question: |-
-      Strong analysis earns the reading by tracing the move. 'Obviously' is the word that tries to skip the work. A serious reader could argue the conch represents arbitrary authority, or rule by ritual rather than democracy, or the colonial schoolmaster's bell that the boys are imitating. The reading is contestable; the 'obviously' hides that.
-    why_it_matters: |-
-      An unearned 'obviously' tells the reader you have not considered, or have not noticed, that other readings exist.
-    fix_suggestion: |-
-      Cut 'obviously' and earn the reading: 'I read the conch as a symbol of democratic order because of how it functions in the assembly scenes (chapter 2) and because of what happens to it when Roger acts (chapter 11).' Specifics earn the claim that 'obviously' tried to assume.
-    replacement: 'I read the conch as a symbol of democratic order:'
-    severity: medium
-- source: Helen Vendler, on interpretive risk in literary criticism
-  article: |-
-    Shakespeare's Sonnet 18 ('Shall I compare thee to a summer's day?') is a beautiful love poem in which the speaker compares his beloved to summer and concludes that the beloved is more beautiful and lasting.
-  critiques:
-  - agent: analytical_editor
-    text_quote: |-
-      Shakespeare's Sonnet 18 ('Shall I compare thee to a summer's day?') is a beautiful love poem in which the speaker compares his beloved to summer and concludes that the beloved is more beautiful and lasting.
-    span: [0, 206]
-    issue_label: no interpretive risk
-    question: |-
-      This is the safe reading every reader would already hold. Analytical writing has to say something the poem could push back on, something another smart reader might read differently. A risk reading: the sonnet is not actually about the beloved at all; it is about the speaker's claim to immortalize, and 'thy eternal summer' is the speaker's poem, not the beloved.
-    why_it_matters: |-
-      A reading no one would dispute carries no interpretive weight; the essay is restating the consensus the poem already enacts.
-    fix_suggestion: |-
-      Take a riskier position the poem could falsify. The 'risk reading' above is one; another is that the volta at line 9 shifts from comparison to claim of immortality, and the rest of the poem is about poetry's power, not the beloved's beauty.
-    replacement: null
-    severity: high
-- source: David Lodge, The Art of Fiction, on noticing form (genre, narration)
-  article: |-
-    In The Great Gatsby, Nick Carraway tells us that Gatsby was 'gorgeous' and that there was 'something gorgeous about him.' This shows that Gatsby was a charismatic person who attracted attention.
-  critiques:
-  - agent: analytical_editor
-    text_quote: |-
-      Nick Carraway tells us that Gatsby was 'gorgeous' and that there was 'something gorgeous about him.' This shows that Gatsby was a charismatic person who attracted attention.
-    span: [21, 194]
-    issue_label: form ignored
-    question: |-
-      You quote the description as if it were unmediated information about Gatsby. Lodge: a novel's narration is itself a formal choice. Gatsby is not narrated by Gatsby or by the omniscient narrator; he is narrated by Nick, who is unreliable in specific ways. 'Gorgeous' is Nick's word, not Fitzgerald's, and it tells us as much about Nick's relation to Gatsby as it does about Gatsby.
-    why_it_matters: |-
-      Ignoring the formal choice (who is narrating, in what voice) reads the novel as if it were a transcript instead of a constructed text.
-    fix_suggestion: |-
-      Add the form to the reading: 'Nick calls Gatsby gorgeous. That word is Nick's; we get Gatsby only through this particular narrator's fascination, which is itself part of what the novel is about.'
+      Add after the quote: 'Here the author pivots from danger to purpose, arguing that Venus's challenge isn't a drawback but a feature—it trains human ambition for even greater feats. This reframes risk as opportunity, which is the core of the author's persuasive strategy.'
     replacement: null
     severity: medium
-- source: 'E.H. Carr, What Is History?: anachronism in historical analysis'
+- source: 'AES2 (score 2/6): telling not showing, no analysis'
   article: |-
-    Thomas Jefferson was a hypocrite because he wrote that 'all men are created equal' while owning slaves. He clearly should have known better.
+    Luke was also taking a ride in Venice, Italy, a city with streets of water too. He was looking at a lot of things in Greece. His next stop was at China.
   critiques:
   - agent: analytical_editor
     text_quote: |-
-      Thomas Jefferson was a hypocrite because he wrote that 'all men are created equal' while owning slaves. He clearly should have known better.
-    span: [0, 140]
-    issue_label: anachronism in historical analysis
+      Luke was also taking a ride in Venice, Italy, a city with streets of water too. He was looking at a lot of things in Greece. His next stop was at China.
+    span:
+    - 0
+    - 152
+    issue_label: telling not showing, no analysis
     question: |-
-      To the historian: do not judge the past by present standards without naming the distance. Jefferson's contradiction is a real analytical subject, but the analytical work is what 'all men' could and could not mean in 1776, who was already arguing against slavery (the Quakers, Granville Sharp, Olaudah Equiano), and how Jefferson positioned himself in that argument. 'Should have known better' assumes a 21st-century vantage and stops.
+      You're listing places Luke visited like a checklist ('Venice... Greece... China') but you're not doing anything with them. What did these places mean to Luke? How did they change him? Right now it's just names on a map.
     why_it_matters: |-
-      Modern-projection forecloses the analytical work that would actually explain the contradiction.
+      The essay reads like a travel itinerary, not an argument about Luke's growth or the program's impact.
     fix_suggestion: |-
-      Stay inside the period long enough to see how Jefferson positioned himself: his Notes on the State of Virginia, his correspondence with Banneker, the omitted slavery passage from the Declaration draft. The hypocrisy reading lands harder when it earns itself.
+      Pick one place and develop it: 'When Luke saw the Acropolis in Greece, he realized for the first time that his small-town life had been narrow. He had been looking at ancient history in a textbook; now he was standing in it.' Show the moment; don't just name it.
     replacement: null
     severity: high
-- source: 'Standard writing-center diagnostic: one moment, no pattern'
+- source: 'PERSUADE_2.0 (score 3/6): observation without analysis, misses the point'
   article: |-
-    Toni Morrison's Beloved is about the haunting of memory. In chapter 5, Sethe sees Beloved on the porch and recognizes her dead daughter. This moment shows how the past returns to haunt the present.
+    The only difference is that this landform has unusual shadows that make it look like an Egyptian Pharaoh.
   critiques:
   - agent: analytical_editor
     text_quote: |-
-      In chapter 5, Sethe sees Beloved on the porch and recognizes her dead daughter. This moment shows how the past returns to haunt the present.
-    span: [57, 197]
-    issue_label: one moment, no pattern
+      The only difference is that this landform has unusual shadows that make it look like an Egyptian Pharaoh.
+    span:
+    - 0
+    - 105
+    issue_label: observation without analysis, misses the point
     question: |-
-      You pick one scene and extract a sweeping claim about the whole novel from it. Analytical claims need a pattern: two or three moments that together support the reading. The novel has many returns of the past (Sethe's scarred back, Paul D's tobacco-tin heart, the Sweet Home memories), and they do not all work the same way. Which pattern of return does your reading rest on?
+      You're noting that shadows create an illusion, but you're not *analyzing* why that matters to your argument. This is actually your strongest point—optical illusion explains everything—but you've buried it and left it hanging. Why do shadows fool us? What does this tell us about pareidolia or how our brains interpret familiar shapes? Make the insight explicit.
     why_it_matters: |-
-      A claim about the whole novel that rests on one moment can be defeated by any second moment that complicates it.
+      You've identified the mechanism that kills the alien theory, but you don't unpack it, so the reader doesn't feel the weight of your conclusion.
     fix_suggestion: |-
-      Find the second moment. Does the pattern hold across Paul D's memory work? Does Denver's relation to the past extend it or complicate it? Use the second moment to specify what kind of haunting your reading actually claims.
-    replacement: null
-    severity: high
-- source: 'Standard writing-center diagnostic: misreading'
-  article: |-
-    In 'The Road Not Taken,' Robert Frost argues that taking the unconventional path is what makes a meaningful life. He famously concludes 'I took the one less traveled by, / And that has made all the difference.'
-  critiques:
-  - agent: analytical_editor
-    text_quote: |-
-      In 'The Road Not Taken,' Robert Frost argues that taking the unconventional path is what makes a meaningful life.
-    span: [0, 113]
-    issue_label: 'misreading: the poem says the opposite'
-    question: |-
-      The poem says the opposite of the standard reading. Frost's speaker writes that 'the passing there / Had worn them really about the same' (lines 9-10) and that he 'shall be telling this with a sigh' (line 16). The 'less traveled' claim is what the speaker will later tell himself, ironically; the poem is about the stories we construct to justify the choices we already made. Frost himself called it a 'tricky poem.'
-    why_it_matters: |-
-      An interpretive claim that the text directly contradicts is the line a careful reader (or grader) will catch first.
-    fix_suggestion: |-
-      Re-read the second and fourth stanzas with the misreading in mind. The poem's actual claim ('two roads about the same, and I will tell myself otherwise later') is more interesting than the popular reading; build the analysis on what the poem actually does.
-    replacement: null
-    severity: high
-- source: I.A. Richards, on quote-and-restate
-  article: |-
-    When Lincoln says 'four score and seven years ago,' he means 87 years ago. This shows that he is being formal.
-  critiques:
-  - agent: analytical_editor
-    text_quote: |-
-      When Lincoln says 'four score and seven years ago,' he means 87 years ago. This shows that he is being formal.
-    span: [0, 110]
-    issue_label: quote and restate
-    question: |-
-      You quote the line and restate its arithmetic meaning. That is decoding, not analysis. The analytical work would be: why 'four score and seven' rather than '87'? The biblical cadence (Psalm 90:10), the way it places the founding in epic time rather than calendar time, the rhetorical effect on a Civil War audience standing on a battlefield. The line is doing several things; restating its surface arithmetic misses all of them.
-    why_it_matters: Restatement burns the chance the quote gave you to read what it
-      actually does.
-    fix_suggestion: |-
-      Pick one of the things the phrasing does (biblical register, epic time-frame, the cadence) and read it: 'the phrasing places 1776 in epic time. To an 1863 audience standing where seven thousand men had died three days before, the cadence offers a frame larger than the calendar.'
+      Expand: 'The Face is a classic case of pareidolia—our brains' tendency to see familiar patterns, especially faces, in random shapes. The mesa's shadows happen to align in a way that triggers this illusion, which is why it resembled a human face to Viking 1's lower-resolution camera. Higher resolution erases the illusion because it reveals the actual, jagged geological features underneath.'
     replacement: null
     severity: medium
-- source: 'Standard writing-center diagnostic: pattern, no through-line'
+- source: |-
+    Feedback_Prize_ELL (score 3.3246998805754875/5): conclusion restates without insight
   article: |-
-    The Great Gatsby is full of color symbolism. Daisy wears white. The light at the end of her dock is green. The valley of ashes is gray. Gatsby's car is yellow. These colors create a vivid atmosphere.
+    Generic_Name was happy that he talked to his mom because he could not do it alone and he was happy that Generic_Name gave him that advise and he was happy that Generic_Name even help Generic_Name with work.
   critiques:
   - agent: analytical_editor
-    text_quote: These colors create a vivid atmosphere.
-    span: [160, 199]
-    issue_label: pattern noted, no through-line
+    text_quote: |-
+      Generic_Name was happy that he talked to his mom because he could not do it alone and he was happy that Generic_Name gave him that advise and he was happy that Generic_Name even help Generic_Name with work.
+    span:
+    - 0
+    - 206
+    issue_label: conclusion restates without insight
     question: |-
-      You notice four color details, which is genuine observation. Then the analysis lands on 'vivid atmosphere,' which does not say what the colors together do. The through-line that pulls observation into interpretation has not been drawn. Do the colors organize a moral geography (white for the unattainable, gray for what wealth produces, green for unreachable longing)? Does Gatsby's yellow place him in the ashes despite his striving? Pattern needs a claim.
+      Your conclusion just lists what happened ('he talked to his mom,' 'he got advice,' 'they became friends') without actually explaining *why* this matters to your argument. How does Generic_Name's happiness prove that people need guidance? What does his experience teach your reader about the original debate?
     why_it_matters: |-
-      Without a through-line, observations are decoration; the essay has not earned an interpretive reading.
+      The essay ends by summarizing the story instead of using it to reinforce the thesis, leaving the argument unfinished and the narrative's point unclear.
     fix_suggestion: |-
-      Pick the strongest through-line your details could support and argue it. The 'moral geography' reading is one option; the 'colors that organize money' reading is another. Either is stronger than 'vivid atmosphere.'
+      Conclude with analysis: 'Generic_Name's story shows that asking for help isn't weakness—it's wisdom. Without his mother's intervention and his friend's advice, he would have kept suffering in silence. The people who succeed in life aren't those who refuse all guidance; they're the ones brave enough to ask for it.'
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): summary without analysis, dropped warrant'
+  article: |-
+    In the concluding paragraph of "The Challenge of exploring Venus," the author breifly talks about how studying the planet of Venus can benefit the intellingence of our world. The author states in paragraph 8, "Striving to meet the challenge presented by Venus has value, not only because of the insight to be gained on the planet itself, but also because human curiosity will likely lead us into many equally intimidating endeavors."
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      In the concluding paragraph of "The Challenge of exploring Venus," the author breifly talks about how studying the planet of Venus can benefit the intellingence of our world. The author states in paragraph 8, "Striving to meet the challenge presented by Venus has value, not only because of the insight to be gained on the planet itself, but also because human curiosity will likely lead us into many equally intimidating endeavors."
+    span:
+    - 0
+    - 433
+    issue_label: summary without analysis, dropped warrant
+    question: |-
+      You've told me what the author said, but where's your analysis of *why* the author makes this argument or *how* it supports your position? You've quoted someone else's conclusion—but what do *you* think it means?
+    why_it_matters: |-
+      The paragraph reads as filler rather than your own reasoning, weakening your voice and argument.
+    fix_suggestion: |-
+      After the quote, add: "This point is crucial: the value of Venus exploration isn't just scientific discovery but the innovations developed along the way. Those technological advances ripple outward to benefit industries on Earth." This shows you're synthesizing the source into your own argument.
+    replacement: null
+    severity: high
+- source: |-
+    ASAP-7 (score 18/30): stated without earned; no connection to patience definition
+  article: And that was the time I needed to have patience to hear @CAPS4 voice.
+  critiques:
+  - agent: analytical_editor
+    text_quote: And that was the time I needed to have patience to hear @CAPS4 voice.
+    span:
+    - 0
+    - 69
+    issue_label: stated without earned; no connection to patience definition
+    question: |-
+      How did waiting for your parents or praying teach you patience? The prompt says a patient person 'experiences difficulties without complaining'—but you don't show that happening. You prayed, fell asleep, and had a comforting dream. Where's the patience work?
+    why_it_matters: |-
+      You've written a touching dream narrative but haven't actually shown what patience *is* or how you practiced it—the essay doesn't address the prompt.
+    fix_suggestion: |-
+      Revise the conclusion to be honest: either show what you learned about patience from this experience, or reconsider whether this story actually demonstrates patience in the way the prompt asks.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 4/6): observation without insight, summary as analysis'
+  article: |-
+    The author understands the dangers of trying to research Venus up close. He mentions the dangers of how hot is is, "On the planet's surface, temperatures average over 800 degrees Farenheit", and how dense and thick it is, "A thick atomsphere of almost 97 percent carbon dioxide blankets Venus.", but he believes that Venus should still be explored, despite all these risks that could kill humans if they got too close and melt spacecrafts, which is a quite a lot of money lost.
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      The author understands the dangers of trying to research Venus up close. He mentions the dangers of how hot is is, "On the planet's surface, temperatures average over 800 degrees Farenheit", and how dense and thick it is, "A thick atomsphere of almost 97 percent carbon dioxide blankets Venus.", but he believes that Venus should still be explored, despite all these risks that could kill humans if they got too close and melt spacecrafts, which is a quite a lot of money lost.
+    span:
+    - 0
+    - 477
+    issue_label: observation without insight, summary as analysis
+    question: |-
+      You've spotted that the author acknowledges dangers and still advocates exploration—that's correct—but you don't analyze *how* or *why* he makes that move persuasive. Does he minimize the risks? Reframe them as acceptable costs? Show readers why acknowledging danger actually *strengthens* his credibility here.
+    why_it_matters: |-
+      You're summarizing the author's move instead of examining its rhetorical effect, which means you're not actually analyzing the text.
+    fix_suggestion: |-
+      Revise: 'By conceding the extreme risks—800-degree temperatures, crushing atmosphere—the author establishes credibility; he's not hiding dangers. He then asks readers to weigh those costs against the proximity advantage, implying that proximity *justifies* the expense. This turns an objection into a reason to explore.'
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): summary masquerading as analysis'
+  article: |-
+    In paragraph 4 it says "Astronomers are fascinated by Venus because it may have once been the most earth-like planet in our solar sytem" which is another reason why scientists want to reserch Venus is because Venus is somehwhat alike our planet the earth. Venus was covered largely with oceans and could have supported various froms of life it's just like earth. So they want to explore Venus because it's almost just like earth.
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      In paragraph 4 it says "Astronomers are fascinated by Venus because it may have once been the most earth-like planet in our solar sytem" which is another reason why scientists want to reserch Venus is because Venus is somehwhat alike our planet the earth. Venus was covered largely with oceans and could have supported various froms of life it's just like earth. So they want to explore Venus because it's almost just like earth.
+    span:
+    - 0
+    - 429
+    issue_label: summary masquerading as analysis
+    question: |-
+      You're just restating the quote three times in a row. I already read the article. What *analytical move* are you making here? How does this evidence support the author's argument that Venus exploration is worthwhile *despite the dangers*?
+    why_it_matters: |-
+      The paragraph does no interpretive work; it treats the evidence as self-explanatory rather than explaining how it builds the author's case.
+    fix_suggestion: |-
+      Try: 'By emphasizing Venus's earth-like past, the author gives the dangers a context—we're not just chasing abstract science, but trying to understand what happened to a once-habitable world. This makes the risk feel purposeful.'
+    replacement: null
+    severity: high
+- source: 'GRE_Issue (score 4/6): observation without insight'
+  article: |-
+    Think of the brain power and genius that was used to come up with that single invention that has changed the way we move across this globe.
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      Think of the brain power and genius that was used to come up with that single invention that has changed the way we move across this globe.
+    span:
+    - 0
+    - 139
+    issue_label: observation without insight
+    question: |-
+      You're noting that cars required genius to invent, but so what? You haven't connected this to your argument about whether technology expands *our* thinking capacity. Are you saying we become genius-like by using technology others invented, or that inventing technology makes us smarter? The analysis stops at recognition.
+    why_it_matters: |-
+      This reads as a placeholder observation rather than a developed argument point. It doesn't deepen the reader's understanding of your thesis.
+    fix_suggestion: |-
+      Add the analytical move: 'The fact that we can now leverage that genius—understanding and improving upon these inventions—shows that technology raises the floor for human learning and capability.'
+    replacement: null
+    severity: medium
+- source: |-
+    Feedback_Prize_ELL (score 2.910210346337401/5): telling without evidence or insight
+  article: |-
+    You can develop new skills or make them so other peolpe can see it and do it or you can be even famous if you create a talent that know one has done or create the most best skill's that people haven't seen in the world and you can break world records that people have try to do it but faild.
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      You can develop new skills or make them so other peolpe can see it and do it or you can be even famous if you create a talent that know one has done or create the most best skill's that people haven't seen in the world and you can break world records that people have try to do it but faild.
+    span:
+    - 0
+    - 291
+    issue_label: telling without evidence or insight
+    question: |-
+      You're listing outcomes ('become famous,' 'break records') but you're not explaining *why* or *how* finding a talent leads to these outcomes. What's the actual mechanism? You're asserting, not analyzing.
+    why_it_matters: |-
+      Without explanation or examples, these claims feel like wishes rather than arguments — the reader has no reason to believe the chain of cause and effect.
+    fix_suggestion: |-
+      Pick one outcome and explain it: 'When you develop a skill others lack, you become valuable — whether in sports, music, or innovation. That uniqueness is what draws attention and opportunity.' That's analysis, not assertion.
+    replacement: null
+    severity: high
+- source: 'AES2 (score 3/6): summary instead of analysis'
+  article: |-
+    The author gives the reader an experiment to try, which is similar to what the coding system does. After the experiment he then asked, "by the way, did making a happy face in this experiment also make you feel slightly happy?" He then provided information about how just using the coding system could make you happy.
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      The author gives the reader an experiment to try, which is similar to what the coding system does. After the experiment he then asked, "by the way, did making a happy face in this experiment also make you feel slightly happy?" He then provided information about how just using the coding system could make you happy.
+    span:
+    - 0
+    - 316
+    issue_label: summary instead of analysis
+    question: |-
+      You're just reporting what the author did—he gave an experiment, he asked a question, he provided information. But *why* does the author include that experiment? What's he trying to persuade the reader to believe by putting that question in? You need to analyze his rhetorical move, not narrate it.
+    why_it_matters: |-
+      You're not actually using the evidence to build your argument; you're just describing the source material, which makes your essay feel passive and dependent.
+    fix_suggestion: |-
+      Reframe: 'The author uses a personal experiment to demonstrate that facial expressions aren't just expressions—they *create* emotions. By asking readers to smile and notice their own mood shift, he's proving that FACS could help students by using their body to regulate their emotions, not just reflect them.'
+    replacement: null
+    severity: medium
+- source: 'ASAP-7 (score 17/30): abstract advice, no analysis, placeholder confusion'
+  article: |-
+    Whether youre a kid or an adult, you must forgive yourself when you do wrong. If you come in late for work, you must brush it off and say to yourself, @CAPS2, dont do it again. @CAPS3 that you forget about everything but what you just said.
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      Whether youre a kid or an adult, you must forgive yourself when you do wrong. If you come in late for work, you must brush it off and say to yourself, @CAPS2, dont do it again. @CAPS3 that you forget about everything but what you just said.
+    span:
+    - 0
+    - 240
+    issue_label: abstract advice, no analysis, placeholder confusion
+    question: |-
+      You're giving instructions ('must forgive,' 'must brush it off') but not analyzing what patience *means* or *does* in these moments. And what are '@CAPS2' and '@CAPS3'? These markers break the argument.
+    why_it_matters: |-
+      The passage reads like a self-help listicle rather than reflection — no insight into why self-patience matters or how it actually works.
+    fix_suggestion: |-
+      Remove the placeholders and replace the instructions with observation: 'When I come in late for work, I used to spiral and beat myself up. But I've learned that patience with myself — brushing it off and moving forward — is what keeps me from making the same mistake again.'
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): fact-stating without analytical purpose'
+  article: |-
+    There are six basic emotions which are happiness,suprise,anger,fear,disgust, and sadness. The article states"the facial expressions for each emotion are universal ".
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      There are six basic emotions which are happiness,suprise,anger,fear,disgust, and sadness. The article states"the facial expressions for each emotion are universal ".
+    span:
+    - 0
+    - 165
+    issue_label: fact-stating without analytical purpose
+    question: |-
+      You're listing emotions and repeating what the article says about them, but why does this matter to your argument? How does the universality of facial expressions strengthen your claim that FACS should be used in classrooms? You need to connect this fact to your thesis.
+    why_it_matters: |-
+      The paragraph feels like filler—you're filling space with article content instead of using the information to build your case.
+    fix_suggestion: |-
+      Explain the relevance: 'Because these emotions are universal, the system can work reliably across different students and cultural backgrounds, making it a practical tool for diverse classrooms.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 3/6): personal opinion without warrant, no analysis'
+  article: |-
+    Student's that take an online class I can call them smarter than me. I feel like if you take an online class you have a greater chance of pasting to the next grade than me.
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      Student's that take an online class I can call them smarter than me. I feel like if you take an online class you have a greater chance of pasting to the next grade than me.
+    span:
+    - 0
+    - 172
+    issue_label: personal opinion without warrant, no analysis
+    question: |-
+      Why would online students be 'smarter'? You're making a claim but offering no reason—'I feel like' is not evidence. What about the structure of online learning actually leads to better grades? You need to explain the *mechanism*, not just assert your impression.
+    why_it_matters: |-
+      This reads as raw opinion without any analytical support, so it doesn't persuade—it just shows you haven't thought through *why* distance learning might help students advance.
+    fix_suggestion: |-
+      Replace with: 'Online students often progress faster because they can move through material at their own pace and get immediate feedback without waiting for whole-class pacing.'
+    replacement: null
+    severity: medium
+- source: |-
+    Feedback_Prize_ELL (score 2.320794416806389/5): vague abstraction, no concrete support
+  article: |-
+    the good look that coming in they future with recompense valuable for that person.
+  critiques:
+  - agent: analytical_editor
+    text_quote: |-
+      the good look that coming in they future with recompense valuable for that person.
+    span:
+    - 0
+    - 82
+    issue_label: vague abstraction, no concrete support
+    question: |-
+      What is 'the good look that coming in they future'? And 'recompense valuable'? These phrases are too abstract and don't explain *how* a positive attitude produces these rewards. Give a concrete example: Does it mean a better job? Stronger relationships? Clearer self-image?
+    why_it_matters: |-
+      Without specificity, your argument stays in the realm of wishful thinking rather than persuasion.
+    fix_suggestion: |-
+      Replace with concrete evidence: 'People with positive attitudes experience tangible benefits: better job opportunities, stronger friendships, and greater personal fulfillment.'
     replacement: null
     severity: medium

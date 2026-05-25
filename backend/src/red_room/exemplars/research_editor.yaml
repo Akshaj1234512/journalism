@@ -1,176 +1,292 @@
 # Exemplars for research_editor
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
-- source: 'Joseph Bizup, BEAM: sources used as Background, Exhibit, Argument, or Method'
+- source: 'PERSUADE_2.0 (score 3/6): Source dropped without synthesis'
   article: |-
-    Smith (2019) argues that minimum-wage increases have small employment effects. In the next section, Jones (2021) finds that minimum-wage increases reduce employment substantially. In a third study, Brown (2017) finds mixed results depending on the local economy.
+    We know from the article, that the driverless cars would use half the amount of fuel than regular cars, which is so helpful to our world today. Also, they have gone more than half a million miles on their own without a single crash.
   critiques:
   - agent: research_editor
     text_quote: |-
-      Smith (2019) argues that minimum-wage increases have small employment effects. In the next section, Jones (2021) finds that minimum-wage increases reduce employment substantially. In a third study, Brown (2017) finds mixed results depending on the local economy.
-    span: [0, 262]
-    issue_label: source-by-source summary, no synthesis
+      We know from the article, that the driverless cars would use half the amount of fuel than regular cars, which is so helpful to our world today. Also, they have gone more than half a million miles on their own without a single crash.
+    span:
+    - 0
+    - 232
+    issue_label: Source dropped without synthesis
     question: |-
-      Three sources, three paragraphs, no conversation. The body of a research paper has to do more than summarize sources sequentially. Smith and Jones directly contradict each other; that contradiction is the analytical opportunity. Brown is the synthesis Jones and Smith both have to confront. The essay treats them as three separate testimonies instead of as a conversation.
-    why_it_matters: |-
-      Source-by-source layout is a bibliography in essay form; the reader gets summaries, not a research contribution.
+      You're citing the article's claims about fuel efficiency and safety, but you're just restating them. What do these facts actually *mean* for your argument? Why should readers care about half a million miles?
+    why_it_matters: Citing evidence isn't enough—you need to explain how it proves your point.
     fix_suggestion: |-
-      Rewrite as a conversation: 'Smith and Jones reach opposite conclusions on the same question, and Brown's local-economy finding is the most likely reconciler. Here is why.' Sources stop being paragraphs and start being voices.
+      After each claim, add a sentence explaining its significance: 'We know from the article that driverless cars would use half the amount of fuel than regular cars, which is so helpful to our world today *because reducing fuel consumption would slow climate change and lower transportation costs for families*.'
     replacement: null
     severity: high
-- source: 'Booth, Colomb & Williams, The Craft of Research: the writer''s contribution'
+- source: 'PERSUADE_2.0 (score 4/6): Speculation presented as evidence'
   article: |-
-    Several studies have examined the relationship between social media use and adolescent depression. Twenge (2017) finds a strong correlation. Orben and Przybylski (2019) find that the effect is small. Haidt (2024) argues that the effect is real and consequential. In conclusion, the relationship between social media and depression is complex.
+    The driver could be asleep at this time and may not be able to hear the alert. The driver could also not get the alert all together.
   critiques:
   - agent: research_editor
-    text_quote: In conclusion, the relationship between social media and depression
-      is complex.
-    span: [263, 342]
-    issue_label: no writer's contribution
+    text_quote: |-
+      The driver could be asleep at this time and may not be able to hear the alert. The driver could also not get the alert all together.
+    span:
+    - 0
+    - 132
+    issue_label: Speculation presented as evidence
     question: |-
-      The essay reports the conversation faithfully and contributes nothing. A research paper has to add a claim, a synthesis, a complication, a way of weighing the sources against each other. 'Complex' is what the field already says; if you stop there, you have summarized without entering. What do you think reconciles Twenge and Orben? Where does Haidt's mechanism account go further than the others, or fall short?
+      Does the article actually discuss scenarios where drivers sleep or fail to hear alerts, or are you inventing these 'could be' scenarios yourself? If you're extrapolating, say so.
     why_it_matters: |-
-      Reporting the disagreement without entering it leaves the essay as a literature review, not a research argument.
+      Your argument loses credibility when readers can't tell if you're working from the source or just brainstorming worst-case scenarios.
     fix_suggestion: |-
-      Take a position on the synthesis. 'The Orben smallness finding is on average effects; Twenge's and Haidt's claims are about distribution effects on heavy users. The disagreement is partly an artifact of which mean is being measured.' Even a partial synthesis counts as a contribution.
+      Either cite what the article says about alert reliability, or rephrase: 'One concern is that...' to signal this is your inference, not the article's claim.
     replacement: null
     severity: high
-- source: 'They Say / I Say, Chapter 4: the art of quoting'
+- source: 'PERSUADE_2.0 (score 4/6): Argument contradicts itself without resolution'
   article: |-
-    According to the World Health Organization, 'Mental health is a state of mental well-being that enables people to cope with the stresses of life, realize their abilities, learn well and work well, and contribute to their community. It is an integral component of health and well-being that underpins our individual and collective abilities to make decisions, build relationships and shape the world we live in. Mental health is a basic human right.'
+    Driverless cars are not a bad idea. There could be many flaws involved with the making of driverless cars... Driverless cars are not perfect, but the idea could be built on.
   critiques:
   - agent: research_editor
     text_quote: |-
-      'Mental health is a state of mental well-being that enables people to cope with the stresses of life, realize their abilities, learn well and work well, and contribute to their community. It is an integral component of health and well-being that underpins our individual and collective abilities to make decisions, build relationships and shape the world we live in. Mental health is a basic human right.'
-    span: [44, 449]
-    issue_label: quote density, no integration
+      Driverless cars are not a bad idea. There could be many flaws involved with the making of driverless cars... Driverless cars are not perfect, but the idea could be built on.
+    span:
+    - 0
+    - 173
+    issue_label: Argument contradicts itself without resolution
     question: |-
-      Eighty-eight words of block quote with no follow-up that does anything with it. A quote is the start of the writer's analytical move, not its replacement. The WHO definition is doing 100% of the work in this paragraph; the writer's voice is absent.
+      Your thesis says driverless cars are 'impractical' and 'potentially dangerous,' but your conclusion says 'the idea could be built on' and comes down to 'personal preference.' Which is your actual position, and how do the article's details support it?
     why_it_matters: |-
-      Long unintegrated quotes hand the analytical work to the source; the writer's contribution disappears.
+      A research-based argument needs a clear, sustained position; readers can't follow an argument that reverses direction without explaining why.
     fix_suggestion: |-
-      Cut the quote to the load-bearing clause ('a basic human right'), then spend the rest of the paragraph in your own voice, arguing what follows from that framing for the policy question the paper is engaging.
-    replacement: null
-    severity: medium
-- source: 'Booth, Colomb & Williams, The Craft of Research: the cherry-pick'
-  article: |-
-    Multiple studies confirm that homeschooling produces strong academic outcomes. Smith (2018), Jones (2019), and Brown (2020) all find that homeschooled students score above the national average on standardized tests. The evidence is clear.
-  critiques:
-  - agent: research_editor
-    text_quote: Multiple studies confirm that homeschooling produces strong academic
-      outcomes.
-    span: [0, 78]
-    issue_label: cherry-picked sources
-    question: |-
-      Three sources cited, all supporting the same conclusion, all from advocacy-adjacent journals. The strongest research engages the strongest contrary source on the question. The Coalition for Responsible Home Education has critiqued the selection-bias problem in the literature you cite; Lubienski's peer-reviewed work argues the comparison is not apples-to-apples. The essay reads only the friendly half of the field.
-    why_it_matters: |-
-      A cherry-picked source base looks confident on first read and dissolves the moment a reader checks the field.
-    fix_suggestion: |-
-      Add the strongest contrary source (Lubienski is the obvious one), engage its critique on the selection-bias issue, then make your synthesis. The argument is stronger when it survives the best counter.
+      Pick one: either they're fundamentally flawed (and shouldn't be pursued) or they're promising but need work. Use the article's details to defend that single claim consistently.
     replacement: null
     severity: high
-- source: 'Bizup, BEAM: wrong source type for the claim'
+- source: 'PERSUADE_2.0 (score 2/6): Weak counter-source treatment'
   article: |-
-    Studies have shown that meditation can rewire the brain to reduce anxiety. According to a 2023 Forbes article, regular meditation practice produces measurable neuroplastic changes in the prefrontal cortex.
+    some people think the face is bona fide evidence of life on Mars. Meanwhile, defenders of the NASA budget wish there was an acient civilization in Mars, although few scientist believed the face was an alien artifact.
   critiques:
   - agent: research_editor
     text_quote: |-
-      According to a 2023 Forbes article, regular meditation practice produces measurable neuroplastic changes in the prefrontal cortex.
-    span: [75, 205]
-    issue_label: wrong source type for technical claim
+      some people think the face is bona fide evidence of life on Mars. Meanwhile, defenders of the NASA budget wish there was an acient civilization in Mars, although few scientist believed the face was an alien artifact.
+    span:
+    - 0
+    - 216
+    issue_label: Weak counter-source treatment
     question: |-
-      A claim about measurable neuroplastic changes in the prefrontal cortex needs the peer-reviewed neuroscience literature (Davidson, Hölzel, the original MBSR fMRI studies) cited directly, not a Forbes article reporting on them. The source's role has to match the weight of the claim. A popular-press source as the citation for a technical neuroscience finding will be the first thing a reviewer flags.
+      You mention the alien-believer side but only dismiss it with 'few scientists believed' this—why did those scientists reject it? What evidence contradicts the alien theory?
     why_it_matters: |-
-      Wrong source type for the claim is the single fastest way to lose credibility in a research paper.
+      Acknowledging an opposing view only matters if you actually refute it with evidence; otherwise it's just window dressing.
     fix_suggestion: |-
-      Replace the Forbes citation with the underlying study (Hölzel et al. 2011 in Social Cognitive and Affective Neuroscience is the standard one). Use Forbes only if your claim is about public coverage of the science, not about the science itself.
+      Replace this with: 'Some people argue the Face shows intentional design, but scientists examined higher-resolution images from later missions that revealed the 'face' disappears from certain angles—proof that the illusion depends entirely on viewing angle and shadow, not deliberate construction.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 3/6): No evidence from source'
+  article: |-
+    Another point is that humans will become way to dependant. Our world is getting very lazy and this wouldn't help. Being too dependant on these driverless cars will make everyone not want to ever do anything for themselves anymore.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      Another point is that humans will become way to dependant. Our world is getting very lazy and this wouldn't help. Being too dependant on these driverless cars will make everyone not want to ever do anything for themselves anymore.
+    span:
+    - 0
+    - 230
+    issue_label: No evidence from source
+    question: |-
+      This is a concern you invented, not something the article presented. Where in 'Driverless Cars are Coming' does it discuss human dependence or laziness?
+    why_it_matters: |-
+      Your argument should be grounded in the article's actual claims, not your personal worries.
+    fix_suggestion: |-
+      Either find a claim in the article about dependence that you can respond to, or acknowledge this is your own concern separate from the source: 'Beyond what the article discusses, I worry that...'
     replacement: null
     severity: high
-- source: 'Standard writing-center diagnostic: the writer''s voice disappears'
+- source: 'PERSUADE_2.0 (score 2/6): Source claim accepted uncritically'
   article: |-
-    As Smith (2018) argues, the policy has been ineffective. Jones (2019) writes that the policy was poorly designed from the start. Brown (2021) notes that the implementation failed. Wilson (2022) concludes that the policy should be repealed.
+    Sensors used in cars are also beneficial because they can give information that can cause the car to apply brakes and reduce power from the engine. Therefore, it allows for a better response and control than a human driver could manage alone.
   critiques:
   - agent: research_editor
     text_quote: |-
-      As Smith (2018) argues, the policy has been ineffective. Jones (2019) writes that the policy was poorly designed from the start. Brown (2021) notes that the implementation failed. Wilson (2022) concludes that the policy should be repealed.
-    span: [0, 239]
-    issue_label: writer's voice missing
+      Sensors used in cars are also beneficial because they can give information that can cause the car to apply brakes and reduce power from the engine. Therefore, it allows for a better response and control than a human driver could manage alone.
+    span:
+    - 0
+    - 242
+    issue_label: Source claim accepted uncritically
     question: |-
-      Four sources, four sentences, no writer. The reader cannot tell what you think, what synthesis you are drawing, or what the four sources together support that no one of them does alone. The paragraph is ventriloquism.
+      You're stating that sensors enable better response than humans, but where does the article actually support this claim? What specific evidence from 'Driverless Cars are Coming' proves this comparison?
     why_it_matters: |-
-      When the writer's voice disappears, the paper reads as a source-list, not a research argument.
+      You need to distinguish between what the source actually says and your own inference—and cite the source explicitly when making factual claims.
     fix_suggestion: |-
-      Add the synthesizing voice: 'Smith, Jones, Brown, and Wilson all converge on a failure diagnosis, but they disagree on whether the failure was design or implementation. That distinction matters for what should follow.' Your job is the conversation among them.
-    replacement: null
-    severity: medium
-- source: They Say / I Say, on signal phrases that do work
-  article: |-
-    Studies show that climate change is real (Smith, 2020; Jones, 2018; Brown, 2019; Wilson, 2021; Davis, 2022).
-  critiques:
-  - agent: research_editor
-    text_quote: (Smith, 2020; Jones, 2018; Brown, 2019; Wilson, 2021; Davis, 2022)
-    span: [41, 107]
-    issue_label: citation thicket
-    question: |-
-      Five citations on one claim with no signal phrase that points the reader to which source actually grounds it. A reader who wants to check the claim cannot tell whether to read Smith, Davis, or all five. A citation has to lead the reader to a specific source they could verify.
-    why_it_matters: |-
-      Citation thickets feel rigorous and are actually unrigorous: the reader cannot verify anything.
-    fix_suggestion: |-
-      Pick the one most authoritative source as the load-bearing citation, mention it by name in the signal phrase, and use the others sparingly: 'The 2023 IPCC Synthesis Report (Lee et al.) Is the standard summary of the evidence.' Save the others for places where their specific contribution is what is being cited.
-    replacement: (Lee et al., 2023, IPCC Synthesis Report)
-    severity: medium
-- source: 'Bizup, BEAM: sources used as Background where they should be Exhibit'
-  article: |-
-    The civil rights movement was a pivotal moment in American history (Branch, 1988). It transformed American politics (Garrow, 1986).
-  critiques:
-  - agent: research_editor
-    text_quote: |-
-      The civil rights movement was a pivotal moment in American history (Branch, 1988). It transformed American politics (Garrow, 1986).
-    span: [0, 131]
-    issue_label: sources as Background only, never Exhibit
-    question: |-
-      Branch's Parting the Waters and Garrow's Bearing the Cross are foundational works in the field, and you are citing them only as Background ('it was pivotal,' 'it transformed politics'). A research paper opens sources up as Exhibit, reading what they actually argue, not just naming them as authorities for uncontroversial claims. What does Branch's narrative reveal that Garrow's does not? Where do their interpretations of King differ?
-    why_it_matters: |-
-      Sources cited only as Background are decoration; the analytical work the paper could do with them is missed.
-    fix_suggestion: |-
-      Open one of them as Exhibit. Quote Branch's reading of a specific moment, then put Garrow next to it. The sources start doing work for the argument instead of dressing it.
-    replacement: null
-    severity: medium
-- source: 'Standard writing-center diagnostic: synthesis confused with summary of
-    synthesis'
-  article: |-
-    There is significant scholarly disagreement about the causes of the 1929 stock market crash. Some scholars emphasize monetary policy; others emphasize structural weaknesses in the banking system; still others emphasize speculation. Many causes are involved.
-  critiques:
-  - agent: research_editor
-    text_quote: |-
-      There is significant scholarly disagreement about the causes of the 1929 stock market crash. Some scholars emphasize monetary policy; others emphasize structural weaknesses in the banking system; still others emphasize speculation. Many causes are involved.
-    span: [0, 257]
-    issue_label: report of disagreement, no synthesis
-    question: |-
-      You name three positions and report that scholars disagree. Reporting the existence of a disagreement is not synthesis; synthesis is entering the disagreement. Friedman and Schwartz's monetary account, Galbraith's speculation account, and Bernanke's banking-fragility account differ on what mattered most and what would have prevented the crash. Take a position on which one carries the most weight, given what you know.
-    why_it_matters: |-
-      Reporting that scholars disagree, without engaging the disagreement, leaves the essay as a literature survey.
-    fix_suggestion: |-
-      Pick the position you find most persuasive (Bernanke's bank-balance-sheet account is the strongest in modern scholarship), say why, and acknowledge what Friedman's and Galbraith's accounts add that yours has to reckon with.
-    replacement: null
-    severity: medium
-- source: 'Standard writing-center diagnostic: source-by-source becomes the structure'
-  article: |-
-    Section II: Smith's Argument. Smith argues that... Section III: Jones's Response. Jones responds that... Section IV: Brown's Synthesis. Brown synthesizes by...
-  critiques:
-  - agent: research_editor
-    text_quote: |-
-      Section II: Smith's Argument. Smith argues that... Section III: Jones's Response. Jones responds that... Section IV: Brown's Synthesis. Brown synthesizes by...
-    span: [0, 159]
-    issue_label: structure is source-by-source
-    question: |-
-      The structure of the paper itself is source-by-source. That is a literature-review structure, not a research-essay structure. A research essay organizes by question or by claim, then brings sources in where they speak to the question. Reorganize around the moves the paper is making, not around the sources it consults.
-    why_it_matters: |-
-      When the structure is source-by-source, the synthesis has nowhere to live because every paragraph is owned by a single source.
-    fix_suggestion: |-
-      Reorganize around the analytical questions: 'What is the disagreement?' 'What evidence is on each side?' 'What does the strongest synthesis look like?' Bring Smith, Jones, and Brown into each section where they have something to say. Sections become moves, not source-summaries.
+      Quote or paraphrase the article's specific evidence about sensor response times, then explain why this matters for your argument.
     replacement: null
     severity: high
+- source: 'PERSUADE_2.0 (score 2/6): Sources cited without synthesis'
+  article: |-
+    GM has developed driver's seats that vibrate when the vehicle is in danger of backing into an object, and the Google car announces when the driver should be prepared to take over. These are both ways that can alert a driver when it is time for them to drive, which can help people to be ready to focus while driving.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      GM has developed driver's seats that vibrate when the vehicle is in danger of backing into an object, and the Google car announces when the driver should be prepared to take over. These are both ways that can alert a driver when it is time for them to drive, which can help people to be ready to focus while driving.
+    span:
+    - 0
+    - 316
+    issue_label: Sources cited without synthesis
+    question: |-
+      You mention both GM and Google examples, but do you explain why you're including both? How do they work together to support your argument, or are they just separate examples you've stacked?
+    why_it_matters: |-
+      Listing examples from different sources looks like research, but readers need to see you actively thinking about how they connect to build your case.
+    fix_suggestion: |-
+      Add a sentence explaining how both examples demonstrate the same principle: 'Both companies recognize that alerting drivers is crucial because...'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 2/6): Source detail not attributed'
+  article: |-
+    Even though driverless cars can do some things on their own, the human driver must still remain alert and be ready to take over when necessary.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      Even though driverless cars can do some things on their own, the human driver must still remain alert and be ready to take over when necessary.
+    span:
+    - 0
+    - 143
+    issue_label: Source detail not attributed
+    question: |-
+      Does the article actually state this requirement about human alertness, or is this your own reasoning about how driverless cars work? If it's from the article, where's the citation?
+    why_it_matters: |-
+      Readers need to know whether you're summarizing the source or making your own inference, so they can evaluate your argument's strength.
+    fix_suggestion: |-
+      Add attribution: 'According to the article, human drivers must...' or 'As the article explains, drivers need to...'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 3/6): Cherry-picked evidence without context'
+  article: |-
+    12 percent of greenhouse gas emissions are from cars in Europe. That number is raised to 50 percent in some parts of the United States.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      12 percent of greenhouse gas emissions are from cars in Europe. That number is raised to 50 percent in some parts of the United States.
+    span:
+    - 0
+    - 135
+    issue_label: Cherry-picked evidence without context
+    question: |-
+      You jump from European stats to US stats without explaining why they're so different or what 'some parts' means. Are you picking the worst case to scare readers, or is this representative?
+    why_it_matters: |-
+      Readers need to understand whether your evidence is typical or extreme to evaluate your claim credibly.
+    fix_suggestion: |-
+      Clarify: 'In the US, car emissions account for 50% of greenhouse gases in dense urban areas, compared to 12% in Europe, which has more robust public transit.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 3/6): No synthesis of sources in conclusion'
+  article: |-
+    Basically what im trying to get across here is that all cars do is make us get to work faster, but if you think about the cons, it pollutes our earth, it dirties our streets, it congests our cities, and it makes everyone unhappy.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      Basically what im trying to get across here is that all cars do is make us get to work faster, but if you think about the cons, it pollutes our earth, it dirties our streets, it congests our cities, and it makes everyone unhappy.
+    span:
+    - 0
+    - 229
+    issue_label: No synthesis of sources in conclusion
+    question: |-
+      You've given three examples (Vauban, Paris, Bogota), but your conclusion just lists generic problems. How do these places together prove that limiting cars is the solution?
+    why_it_matters: |-
+      Your sources should work together to build a unified argument, not sit in separate paragraphs waiting to be connected.
+    fix_suggestion: |-
+      Rewrite as: 'Vauban, Paris, and Bogota all demonstrate that when cities limit cars—through design, policy, or culture—they reduce emissions and improve livability, proving that limiting car usage is feasible and beneficial.'
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 3/6): Source detail without critical analysis'
+  article: |-
+    Public transit however was free during this time, and hybrid cars, electric cars, and cars with 3 or more passengers were allowed.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      Public transit however was free during this time, and hybrid cars, electric cars, and cars with 3 or more passengers were allowed.
+    span:
+    - 0
+    - 130
+    issue_label: Source detail without critical analysis
+    question: |-
+      Why mention that hybrids and carpools were allowed? Does this detail support your main argument, or does it actually complicate it by suggesting cars aren't the real problem—emission levels are?
+    why_it_matters: |-
+      You should evaluate whether source details actually support your thesis rather than just reporting them.
+    fix_suggestion: |-
+      Delete this sentence, or revise to: 'Paris's ban revealed that the real issue isn't cars themselves but emissions levels—allowing low-emission vehicles suggests targeting pollution, not car use broadly.'
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 2/6): Multiple sources cited but not in conversation'
+  article: |-
+    The United States is now thinking about trying this new change. Researches say that since the recession not many people are buying cars now a days. They dont have a need for them as much as they did before. Numbers have been going down steadily since 2005.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      The United States is now thinking about trying this new change. Researches say that since the recession not many people are buying cars now a days. They dont have a need for them as much as they did before. Numbers have been going down steadily since 2005.
+    span:
+    - 0
+    - 256
+    issue_label: Multiple sources cited but not in conversation
+    question: |-
+      You mention declining car purchases since 2005 and then quote Rosenthal about sociologists—are these the same source or different ones? How do these two pieces of evidence connect to your argument about *limiting* cars?
+    why_it_matters: |-
+      Readers need to understand whether you're describing a natural trend or a policy choice, and your sources need to be doing that work for you.
+    fix_suggestion: |-
+      Clarify: is this trend coming from the same Rosenthal article, or a different source? Make explicit whether economic recession is the same as cultural choice to limit cars.
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 2/6): Source claims mixed with unstated inference'
+  article: |-
+    In Vauban, Germany they have given up theirs cars. "Street parking, driveways and home garages are generally forbidden in ths experimental new district" says Elisabeth Rosenthal. According to the article, 70 percent of Vauban's families do not even own a car, and 57 percent sold their car just so they could move into this suburban lifestyle.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      In Vauban, Germany they have given up theirs cars. "Street parking, driveways and home garages are generally forbidden in ths experimental new district" says Elisabeth Rosenthal. According to the article, 70 percent of Vauban's families do not even own a car, and 57 percent sold their car just so they could move into this suburban lifestyle.
+    span:
+    - 0
+    - 343
+    issue_label: Source claims mixed with unstated inference
+    question: |-
+      The quote is from Rosenthal, but is the 70/57 percent data also from that same quote, or from 'the article' you vaguely reference? And how do you know those families sold cars *because* of the policy vs. selecting into it for other reasons?
+    why_it_matters: |-
+      Conflating what the source says with your interpretation of causation weakens your credibility.
+    fix_suggestion: |-
+      Cite each claim separately: attribute the Rosenthal quote, then explicitly cite where the percentages come from, then signal when you're inferring causation.
+    replacement: null
+    severity: medium
+- source: 'PERSUADE_2.0 (score 2/6): Evidence cited but not explained'
+  article: |-
+    In this story he states that he went to greece. I belive that this is a huge part, being able to do things like that. He says that he could go to China, and Europe on his extra time, and that he enjoyed going to those extra places.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      In this story he states that he went to greece. I belive that this is a huge part, being able to do things like that. He says that he could go to China, and Europe on his extra time, and that he enjoyed going to those extra places.
+    span:
+    - 0
+    - 231
+    issue_label: Evidence cited but not explained
+    question: |-
+      Why is travel opportunity a 'huge part'? Of what? You need to connect this detail to your broader argument about why *others* should join.
+    why_it_matters: |-
+      Readers can't see how individual facts support your persuasive goal without you spelling out the connection.
+    fix_suggestion: |-
+      Add a sentence like: 'For a young person from a small town, this exposure to different cultures and continents would broaden their perspective in ways impossible otherwise.'
+    replacement: null
+    severity: high
+- source: 'PERSUADE_2.0 (score 2/6): Cherry-picked without counter-weight'
+  article: |-
+    He also says that one night he was sliding downa latter on his back side and almost fell off the ship. All though he couldn't work for a few days, he satses that he was very thankful to be alive.
+  critiques:
+  - agent: research_editor
+    text_quote: |-
+      He also says that one night he was sliding downa latter on his back side and almost fell off the ship. All though he couldn't work for a few days, he satses that he was very thankful to be alive.
+    span:
+    - 0
+    - 195
+    issue_label: Cherry-picked without counter-weight
+    question: |-
+      You're telling a dramatic danger story—but then what? Does this help your pitch to recruit others, or does it actually work *against* your argument that they should join?
+    why_it_matters: |-
+      If you're using scary moments as evidence, you need to acknowledge and address why someone wouldn't be deterred.
+    fix_suggestion: |-
+      Either cut this anecdote, or follow it with something like: 'Though the work was dangerous, Luke's willingness to return shows the risks were worth the reward.'
+    replacement: null
+    severity: medium

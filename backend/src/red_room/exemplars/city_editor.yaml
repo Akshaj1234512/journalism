@@ -1,0 +1,135 @@
+# Exemplars for city_editor (Cole)
+# Bootstrap synthetic exemplars in city-editor voice, anchored on AP and
+# NYTimes style standards. Will be replaced by real-data ingestion (IPSO
+# rulings, CJR criticism, Poynter feedback) in Phase 2.
+#
+- source: 'buried lede: news appears in graf 4 after long scene-set'
+  article: |-
+    On a damp Wednesday morning in Trenton, the air outside the statehouse smelled of wet asphalt and the cherry trees were just beginning to bud. State Sen. Maria Cortez, wearing a navy suit and a small American flag pin, walked briskly past the press gallery. She has represented the 14th district for eleven years. On Wednesday, Cortez announced she will resign at the end of the month.
+  critiques:
+  - agent: city_editor
+    text_quote: On a damp Wednesday morning in Trenton, the air outside the statehouse smelled of wet asphalt
+    span: [0, 95]
+    issue_label: buried lede
+    question: |-
+      The news (Cortez resigning) is in graf 4 behind weather, scene-set, and biographical filler. Open with the resignation announcement.
+    why_it_matters: |-
+      Three quarters of readers stop before graf 4. They will leave this story not knowing the news.
+    fix_suggestion: |-
+      Open with: "State Sen. Maria Cortez, who has represented New Jersey's 14th district for eleven years, said Wednesday she will resign at the end of the month." Move the scene-set into graf 3 if you want it at all.
+    replacement: null
+    severity: high
+- source: 'weak attribution: "officials" when a named source is available'
+  article: |-
+    Officials said the new policy will take effect in January and is expected to affect roughly 12,000 commuters.
+  critiques:
+  - agent: city_editor
+    text_quote: Officials said
+    span: [0, 14]
+    issue_label: vague attribution
+    question: |-
+      "Officials" is the laziest attribution there is. Who told you this — the transit authority? The mayor's office? Name them.
+    why_it_matters: |-
+      Vague attribution lets a reader (and a competitor) assume we don't actually have a real source.
+    fix_suggestion: |-
+      Replace "Officials said" with the specific spokesperson and agency: "A spokesperson for the Metropolitan Transit Authority, Sarah Chen, said..."
+    replacement: null
+    severity: medium
+- source: 'no nut graf on a story that needs context'
+  article: |-
+    The school board voted 7-2 Tuesday night to adopt the new attendance policy. Members debated the measure for nearly three hours. Supporters cited improved completion rates in three pilot schools last year. Opponents raised concerns about transportation impact for students in the outer wards.
+  critiques:
+  - agent: city_editor
+    text_quote: The school board voted 7-2 Tuesday night to adopt the new attendance policy.
+    span: [0, 77]
+    issue_label: no nut graf
+    question: |-
+      We have a vote, we have the debate, we have positions. We never tell the reader what this attendance policy actually does. A nut graf needs to explain the policy itself.
+    why_it_matters: |-
+      Without it, readers who weren't already following the school-board debate can't follow what changed.
+    fix_suggestion: |-
+      Add a graf two: "The new policy requires schools to flag students after three unexcused absences in a quarter and triggers mandatory parent meetings after five. It replaces the district's previous 10-absence threshold."
+    replacement: null
+    severity: high
+- source: 'soft quantifier when specifics exist'
+  article: |-
+    Several council members raised objections during the public comment period.
+  critiques:
+  - agent: city_editor
+    text_quote: Several council members
+    span: [0, 22]
+    issue_label: soft quantifier
+    question: |-
+      If you know it was three, write three. "Several" is the AP-style soft hedge that signals you didn't count or you don't remember.
+    why_it_matters: |-
+      Soft quantifiers in the body of a news story degrade the reader's trust that we know what we're talking about.
+    fix_suggestion: |-
+      Name the number: "Three council members." Better: name them when there are few enough to list.
+    replacement: Three council members
+    severity: low
+- source: 'lede over 30 words and stuffed with three facts'
+  article: |-
+    The City Council voted Wednesday night to approve a $4.2 million contract with Green Source LLC for the construction of a new emergency response coordination center on the site of the former municipal parking garage on Burnham Avenue.
+  critiques:
+  - agent: city_editor
+    text_quote: The City Council voted Wednesday night to approve a $4.2 million contract with Green Source LLC for the construction of a new emergency response coordination center on the site of the former municipal parking garage on Burnham Avenue.
+    span: [0, 233]
+    issue_label: lede too long, three facts in one sentence
+    question: |-
+      This lede is 38 words and is doing three jobs: contract size, the vendor, and the location. Pick the news, lead with it, and break the rest into graf 2.
+    why_it_matters: |-
+      Long stuffed ledes obscure which fact is the actual news.
+    fix_suggestion: |-
+      Lead with: "The City Council voted Wednesday night to approve a $4.2 million contract for a new emergency response coordination center." Use graf 2 for vendor and site detail.
+    replacement: The City Council voted Wednesday night to approve a $4.2 million contract for a new emergency response coordination center.
+    severity: medium
+- source: 'decorative first quote that restates the lede'
+  article: |-
+    The bond issue passed by a margin of two votes. "It's a great day for the city," Mayor Davis said.
+  critiques:
+  - agent: city_editor
+    text_quote: '"It''s a great day for the city," Mayor Davis said.'
+    span: [50, 100]
+    issue_label: decorative quote, no information
+    question: |-
+      First quote slot is real estate. The mayor's "great day for the city" doesn't move the story; it just restates the result.
+    why_it_matters: |-
+      A wasted first quote signals to the reader that the reporting is thin.
+    fix_suggestion: |-
+      Find a quote that adds something: what the bond money will be spent on first, when residents will see the change, why the vote was so close.
+    replacement: null
+    severity: low
+- source: 'headline-lede mismatch'
+  article: |-
+    Headline: City to slash police budget by 20%
+
+    Lede: The City Council on Tuesday adopted a 2025 budget that reduces police department funding from the prior year's level.
+  critiques:
+  - agent: city_editor
+    text_quote: City to slash police budget by 20%
+    span: [10, 44]
+    issue_label: headline overstates lede
+    question: |-
+      The headline says "slash" and "20%." The lede only says "reduces." Either the headline is wrong or the lede is buried.
+    why_it_matters: |-
+      Headline-lede mismatches are the easiest credibility hit there is and the first thing a hostile reader screenshots.
+    fix_suggestion: |-
+      Verify the actual reduction. If it really is 20%, put the percentage in the lede. If it's smaller, rewrite the headline.
+    replacement: null
+    severity: high
+- source: '5W gap: missing the "why this matters"'
+  article: |-
+    The state Department of Transportation announced Tuesday that the eastbound lanes of Highway 95 between exits 12 and 18 will be closed for repaving from May 5 through May 22.
+  critiques:
+  - agent: city_editor
+    text_quote: between exits 12 and 18 will be closed for repaving from May 5 through May 22
+    span: [78, 159]
+    issue_label: no "why this matters" for the commuter
+    question: |-
+      We have the who, what, when, where. We never say what this means for the 40,000 daily commuters on that stretch — detour route? Expected delay? Best alternate?
+    why_it_matters: |-
+      A road-closure story exists to help readers plan around it. Without the practical impact, it's a press release.
+    fix_suggestion: |-
+      Add a graf: "Drivers will be detoured onto Route 17 and should expect delays of 20 to 40 minutes during peak hours, the agency said."
+    replacement: null
+    severity: medium

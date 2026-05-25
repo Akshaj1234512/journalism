@@ -1,177 +1,291 @@
 # Exemplars for rhetorical_editor
-# Human-editable. Each list item below is one exemplar.
-# To disable an exemplar without deleting it, comment out its lines with #.
-# Field order: source, article, critiques (and per critique: agent, text_quote,
-# span, issue_label, question, why_it_matters, fix_suggestion, replacement, severity).
+# Pulled from real student essays across PERSUADE 2.0, Feedback Prize ELL,
+# AES2, ASAP 7+8 (narrative), and ETS GRE Issue + Argument official samples.
+# Classified per editor lane via Claude Haiku, then top 15
+# selected with a diversity constraint (round-robin across distinct
+# sub-issue buckets) so the exemplars cover the lane's full failure-mode
+# range rather than 15 variants of the same critique.
 #
-- source: 'Aristotle, Rhetoric: device + effect + audience'
+- source: 'GRE_Argument (score 4/6): Device-spotting without effect-analysis'
   article: |-
-    Throughout his speech, Dr. King uses anaphora when he repeats 'I have a dream.' He also uses ethos and pathos. These rhetorical devices help him persuade his audience.
+    The problem with the arguement is the assumption that if the Mason River were cleaned up, that people would use it for water sports and recreation. This is not necessarily true, as people may rank water sports among their favorite recreational activities, but that does not mean that those same people have the financial ability, time or equipment to pursue those interests.
   critiques:
   - agent: rhetorical_editor
     text_quote: |-
-      Throughout his speech, Dr. King uses anaphora when he repeats 'I have a dream.' He also uses ethos and pathos. These rhetorical devices help him persuade his audience.
-    span: [0, 167]
-    issue_label: device-spotting without effect
+      The problem with the arguement is the assumption that if the Mason River were cleaned up, that people would use it for water sports and recreation. This is not necessarily true, as people may rank water sports among their favorite recreational activities, but that does not mean that those same people have the financial ability, time or equipment to pursue those interests.
+    span:
+    - 0
+    - 374
+    issue_label: Device-spotting without effect-analysis
     question: |-
-      You name three devices and stop. Naming is not analysis. The work is what the anaphora DOES at the March on Washington: each repetition pulls the crowd into the same imagined future, making the dream collective rather than individual. The reader should leave the paragraph understanding the device's specific effect on this audience in this moment.
+      You've identified the assumption—good—but what *rhetorical move* is the original argument making that makes this assumption persuasive to its audience? Why does the argument *work* even though the assumption is shaky? You're just listing obstacles; you're not showing how the argument's rhetoric persuades despite them.
     why_it_matters: |-
-      Device-spotting without effect is the line AP English Language readers mark first; it caps the essay at a low score.
+      A rhetorical analysis explains how an argument achieves its persuasive effect, not just what's logically wrong with it.
     fix_suggestion: |-
-      Cut 'he also uses ethos and pathos' (Greek-term inflation). Stay with anaphora: show what the repetition does to a Black audience in 1963, on the steps of the Lincoln Memorial, after a decade of legislative defeat.
+      Try: 'The argument's persuasive force comes from a visual appeal—the implicit image of cleaned waters drawing crowds—without acknowledging that recreational desire doesn't translate to actual participation. The rhetoric relies on readers accepting a leap from preference to behavior.'
     replacement: null
     severity: high
-- source: |-
-    Edward P.J. Corbett, Classical Rhetoric for the Modern Student: kairos and the moment
+- source: 'GRE_Argument (score 4/6): Missing kairos / audience awareness'
   article: |-
-    In his Letter from Birmingham Jail, Martin Luther King uses logical reasoning, emotional appeal, and moral authority to argue that civil disobedience is justified.
+    However, even if the writer of the arguement is correct in assuming that the Mason River will be used more by the city's residents, the arguement does not say why the recreational facilities need more money. If recreational facilities already exist along the Mason River, why should the city allot more money to fund them? If the recreational facilities already in existence will be used more in the coming years, then they will be making more money for themselves, eliminating the need for the city government to devote more money to them.
   critiques:
   - agent: rhetorical_editor
     text_quote: |-
-      In his Letter from Birmingham Jail, Martin Luther King uses logical reasoning, emotional appeal, and moral authority to argue that civil disobedience is justified.
-    span: [0, 163]
-    issue_label: kairos missing
+      However, even if the writer of the arguement is correct in assuming that the Mason River will be used more by the city's residents, the arguement does not say why the recreational facilities need more money. If recreational facilities already exist along the Mason River, why should the city allot more money to fund them? If the recreational facilities already in existence will be used more in the coming years, then they will be making more money for themselves, eliminating the need for the city government to devote more money to them.
+    span:
+    - 0
+    - 540
+    issue_label: Missing kairos / audience awareness
     question: |-
-      You analyze the letter outside its moment. The letter was written in April 1963, from a jail cell, in direct response to a published letter from eight white Birmingham clergymen asking King to wait and to defer to local process. Without the kairos (the specific occasion, the specific audience of clergy, the demand to defer), the analytical work cannot start. Persuasion happens in time, and rhetorical analysis has to name the time.
+      Who is making the original argument, and to whom? Your response treats this as pure logic, but arguments have *rhetorical contexts*. Are you writing to the city council? A skeptical citizen? That shapes what assumptions are even worth attacking.
     why_it_matters: |-
-      Analysis without kairos treats persuasion as if it were static; the letter's force lives in the specific moment it was answering.
-    fix_suggestion: |-
-      Open the analysis with the occasion: the eight clergymen, the call to wait, King's response to a specific charge of timing. The rhetorical moves you analyze then have a target the reader can see.
-    replacement: null
-    severity: high
-- source: 'Aristotle, Rhetoric: ethos has to be constructed on the page'
-  article: |-
-    Lincoln effectively establishes his ethos in the Gettysburg Address by being President.
-  critiques:
-  - agent: rhetorical_editor
-    text_quote: |-
-      Lincoln effectively establishes his ethos in the Gettysburg Address by being President.
-    span: [0, 87]
-    issue_label: ethos misunderstood as office
-    question: |-
-      Ethos is not the speaker's office; it is the credibility constructed on the page through specific choices. Ethos is artistic, made by the speech, not inartistic, derived from prior reputation. Lincoln's ethos in the Address is constructed by the biblical cadence ('four score and seven'), the refusal of self-reference ('we cannot dedicate, we cannot consecrate'), and the placement of the audience as actors ('it is for us the living'). His office gets him to the podium; the speech earns his standing.
-    why_it_matters: |-
-      Treating ethos as inherited rather than constructed misses the analytical work the term exists to do.
-    fix_suggestion: |-
-      Pick one specific Lincoln line and show how the syntax and diction construct ethos. The 'we cannot' repetition is the classic example: refusing the speaker's authority is the move that produces it.
+      Without understanding the rhetorical situation, you're analyzing the argument in a vacuum instead of seeing how it's designed to persuade a specific audience.
+    fix_suggestion: null
     replacement: null
     severity: medium
-- source: 'AP English Language scoring guideline: the architecture of the speech'
+- source: 'GRE_Issue (score 2/6): Conclusion restates instead of lands'
   article: |-
-    The speech uses repetition, parallelism, allusion, and an emotional conclusion. Each of these techniques makes the speech more persuasive.
+    Therefore, humans can not escape from using their brain. In addition, the technology as it is do not vain automatically, the is created by humans. Thus, the more developed tech and the more you want a convenient life, the more you think and emmit your creativity to breakthrough some banal method sarcastically.
   critiques:
   - agent: rhetorical_editor
     text_quote: |-
-      The speech uses repetition, parallelism, allusion, and an emotional conclusion. Each of these techniques makes the speech more persuasive.
-    span: [0, 138]
-    issue_label: list of devices, no architecture
+      Therefore, humans can not escape from using their brain. In addition, the technology as it is do not vain automatically, the is created by humans. Thus, the more developed tech and the more you want a convenient life, the more you think and emmit your creativity to breakthrough some banal method sarcastically.
+    span:
+    - 0
+    - 311
+    issue_label: Conclusion restates instead of lands
     question: |-
-      Four devices listed in parallel, as if each were a separate move. The strongest rhetorical analyses show how the moves build on each other across the speech. Where does the repetition prepare the reader for the allusion? How does the parallelism set up the emotional conclusion so it lands instead of feeling tacked on? The architecture is what the analysis has to reveal.
+      Your ending loops back to 'humans still have to think'—the same point you made three paragraphs ago. Where's the *consequence* of your argument? What should a reader *do* or *believe differently* now?
     why_it_matters: |-
-      A list of devices treats the speech as a bag of techniques; architecture is what makes a speech move a reader from one place to another.
+      A strong conclusion shows readers why your argument matters beyond the essay itself; restating the thesis just confirms you ran out of ideas.
     fix_suggestion: |-
-      Rewrite around the sequence: 'The early repetition establishes a rhythm the audience starts predicting; when the speaker breaks the rhythm at the allusion, the break itself is what carries the emotional weight.' Devices in sequence, not in catalog.
-    replacement: null
-    severity: medium
-- source: 'Standard AP English Language diagnostic: author worship'
-  article: |-
-    In her TED talk, Brene Brown effectively persuades her audience that vulnerability is a strength. She is a very engaging speaker who connects with her audience.
-  critiques:
-  - agent: rhetorical_editor
-    text_quote: |-
-      In her TED talk, Brene Brown effectively persuades her audience that vulnerability is a strength. She is a very engaging speaker who connects with her audience.
-    span: [0, 160]
-    issue_label: author worship, no how
-    question: |-
-      The paragraph asserts that Brown persuades but never analyzes how. 'Engaging,' 'connects with the audience' are surface descriptions of the effect, not the analytical work. The work is: what specific moves construct that engagement? The personal anecdote in the first ninety seconds? The deliberate pauses? The shift from data ('I interviewed thousands') to story ('and I had a breakdown')? Rhetorical analysis is about how, never whether.
-    why_it_matters: |-
-      Author worship is what an essay does when it knows the speaker is good and skips the work of saying why.
-    fix_suggestion: |-
-      Pick one specific moment in the talk (the breakdown story, the data-then-story shift) and analyze the move. The reader should leave understanding one mechanism the talk uses to produce its effect.
+      End with the real stake: 'If we embrace technology as a tool requiring engagement rather than a substitute for thought, we don't lose our minds—we amplify them.' Make it forward-looking.
     replacement: null
     severity: high
-- source: 'Aristotle, Rhetoric: logos confused with logical-argument critique'
+- source: 'GRE_Argument (score 2/6): Vague device-spotting without analysis'
   article: |-
-    The speech's logos is weak because the speaker's argument that all immigrants contribute economically is not supported by the data, which shows mixed results.
+    This statement looks like logical, but there are some wrong sentences in it which is not logical.
   critiques:
   - agent: rhetorical_editor
     text_quote: |-
-      The speech's logos is weak because the speaker's argument that all immigrants contribute economically is not supported by the data, which shows mixed results.
-    span: [0, 158]
-    issue_label: logical critique masquerading as rhetorical analysis
+      This statement looks like logical, but there are some wrong sentences in it which is not logical.
+    span:
+    - 0
+    - 97
+    issue_label: Vague device-spotting without analysis
     question: |-
-      You are critiquing whether the argument is logically sound (Logan's lane) instead of analyzing how it sounds, how it lands, how it works on the audience (your lane). Is the rhetorical appeal to reason, not the propositional soundness of the argument. The question for you is: how does the speaker construct the appearance of logos, and what does that construction do to the audience?
+      What does 'wrong sentences' mean here? You've identified something feels off, but you're not naming the actual rhetorical move or logical gap the argument makes. Are you seeing a logical fallacy? An unsupported assumption? Be specific.
     why_it_matters: |-
-      Rhetorical analysis that becomes argument critique stops doing the work the genre asks for.
+      Naming the device—and explaining *how* it works on readers—is the difference between noticing a problem and analyzing one.
     fix_suggestion: |-
-      Rewrite to analyze the appearance of logos: 'The speaker uses statistical phrasing ("the data shows," "studies confirm") that signals logos without naming a specific source. That construction creates the felt weight of evidence in a sympathetic audience while inviting skepticism from the prepared one.' How, not whether.
+      Instead: 'This argument commits a causal fallacy by assuming that because residents enjoy water sports, cleaning the river will automatically increase participation—without examining whether water quality is actually the barrier.'
     replacement: null
     severity: high
-- source: Edward P.J. Corbett, on quote the text, not the device
+- source: 'GRE_Argument (score 2/6): Identifying fallacy but not the assumption'
   article: |-
-    The author uses vivid imagery throughout the piece to create an emotional response in the reader.
+    However, it seems to have a ralation between the first sentence and the setence which mentions that increase the quality of the river's water and the river's smell. This is a wrong cause and result to solve the problem.
   critiques:
   - agent: rhetorical_editor
     text_quote: |-
-      The author uses vivid imagery throughout the piece to create an emotional response in the reader.
-    span: [0, 97]
-    issue_label: quote the device, not the text
+      However, it seems to have a ralation between the first sentence and the setence which mentions that increase the quality of the river's water and the river's smell. This is a wrong cause and result to solve the problem.
+    span:
+    - 0
+    - 219
+    issue_label: Identifying fallacy but not the assumption
     question: |-
-      You name the device (vivid imagery) and describe its general effect (emotional response) without quoting the line that performs the device. Rhetorical analysis lives on the line. Pick the specific image, quote it, show what it does. 'Vivid imagery' in the abstract is not analysis; the one line that is doing the work is.
+      You've spotted that there's a causal problem here. But what *assumption* is the argument making without stating it? What does the argument take for granted about why people don't do water sports now?
     why_it_matters: |-
-      Without the quoted line, the reader has only the writer's assertion that imagery exists and works.
+      The GRE task asks you to identify unstated assumptions—the hidden premises holding the argument together. Naming the fallacy alone misses that target.
     fix_suggestion: |-
-      Pull the specific line. 'The image of "twenty-seven boys, every one of them dead in the same uniform" pins the cost to the page; the reader cannot move past the number without seeing it.' The line is the analysis.
-    replacement: null
-    severity: medium
-- source: 'AP English Language scoring guideline: conclusion as restatement'
-  article: |-
-    In conclusion, the speaker effectively uses ethos, pathos, and logos to persuade the audience. These rhetorical techniques work together to make a powerful speech.
-  critiques:
-  - agent: rhetorical_editor
-    text_quote: |-
-      In conclusion, the speaker effectively uses ethos, pathos, and logos to persuade the audience. These rhetorical techniques work together to make a powerful speech.
-    span: [0, 163]
-    issue_label: conclusion restates, does not land
-    question: |-
-      The conclusion catalogs the Greek triad and asserts effectiveness. A strong rhetorical-analysis essay lands on a claim about what kind of persuasion the speech is doing, why it works on this specific audience, what cumulative effect the analyzed moves produce. The conclusion has to be the place the analysis arrives, not the place it summarizes.
-    why_it_matters: |-
-      A restating conclusion fails to convert the analytical observations into a final claim about the speech's persuasive work.
-    fix_suggestion: |-
-      Land on a specific claim: 'The speech persuades not by argument but by ritual repetition that lets the audience speak with the speaker. By the close, the listener has been moved from observer to participant, and that is the speech's actual persuasive work.'
-    replacement: null
-    severity: medium
-- source: 'Standard rhetorical-analysis diagnostic: audience missing'
-  article: |-
-    Patrick Henry's 'Give me liberty or give me death' speech uses powerful rhetoric to motivate his listeners to fight for independence.
-  critiques:
-  - agent: rhetorical_editor
-    text_quote: |-
-      Patrick Henry's 'Give me liberty or give me death' speech uses powerful rhetoric to motivate his listeners to fight for independence.
-    span: [0, 133]
-    issue_label: audience missing
-    question: |-
-      You name the speech and describe its general purpose without naming the audience. Patrick Henry spoke on 23 March 1775 to the Second Virginia Convention, a divided body of colonial elites, many of whom owed economic and political loyalty to Britain. The rhetorical analysis depends on who he is moving and from where: hesitant elites toward armed resistance. Without that audience, the analytical work cannot specify what the rhetoric is doing.
-    why_it_matters: |-
-      Rhetorical analysis without an audience analyzes the words in the abstract; persuasion is always to someone specific.
-    fix_suggestion: |-
-      Open with the audience: the Second Virginia Convention, divided, with property interests on the loyalist side. Henry's moves (the religious cadence, the fatalist ending) are calibrated to move that specific room to a specific decision.
+      Dig deeper: 'The argument assumes without evidence that poor water quality is the primary reason residents don't participate in water sports—ignoring other possible barriers like cost, access, or safety concerns.'
     replacement: null
     severity: high
-- source: 'Standard rhetorical-analysis diagnostic: Greek-term inflation'
+- source: 'GRE_Issue (score 2/6): Unclear claim + weak positioning'
   article: |-
-    The speaker establishes ethos by being credible, uses pathos by appealing to emotion, and employs logos by using logic. All three appeals work together effectively.
+    To be lazy for human in some meaning is one of the fashion issues in thesedays. There are many symptoms and resons of it. However, I can not agree with the statement that the technology make humans to be reluctant to thinkng thoroughly.
   critiques:
   - agent: rhetorical_editor
     text_quote: |-
-      The speaker establishes ethos by being credible, uses pathos by appealing to emotion, and employs logos by using logic. All three appeals work together effectively.
-    span: [0, 164]
-    issue_label: Greek-term inflation
+      To be lazy for human in some meaning is one of the fashion issues in thesedays. There are many symptoms and resons of it. However, I can not agree with the statement that the technology make humans to be reluctant to thinkng thoroughly.
+    span:
+    - 0
+    - 236
+    issue_label: Unclear claim + weak positioning
     question: |-
-      You name the three appeals and describe each in a tautology (ethos = credibility, pathos = emotion, logos = logic). This is the move AP English Language readers see most: Greek terms used as if naming them were analysis. The work is to show what the speaker actually does that constructs ethos, what specific emotional move pathos rests on, what particular reasoning logos performs. The vocabulary is not the analysis.
+      What are you actually arguing here? You start with a vague claim about laziness being 'fashionable,' then pivot to disagreeing with the prompt—but we don't see *why* the technology angle matters to your position. What's the rhetorical move?
     why_it_matters: |-
-      Greek-term inflation looks rigorous to the writer and looks empty to the reader; AP rubrics penalize it specifically.
+      Without a clear claim tied to your thesis, readers can't follow your argument or understand what you're trying to persuade them of.
     fix_suggestion: |-
-      Pick ONE of the three appeals and show, with the specific quoted line, how the speech constructs it. Cut the other two from this paragraph; spend their words on the one you analyze well.
+      Open with a direct claim: 'Technology doesn't cause shallow thinking; rather, *how people approach* technology determines whether they think critically.' Then show us what you're disagreeing with in the prompt and why.
+    replacement: null
+    severity: high
+- source: 'GRE_Issue (score 4/6): Ethos-as-label instead of ethos-work'
+  article: |-
+    If it wasn't for the invention of new technological devices, I wouldn't be sitting at this computer trying to philosophize about technology. It would be extremely hard for children in much poorer countries to learn and think for themselves with out the invention of the internet.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      If it wasn't for the invention of new technological devices, I wouldn't be sitting at this computer trying to philosophize about technology. It would be extremely hard for children in much poorer countries to learn and think for themselves with out the invention of the internet.
+    span:
+    - 0
+    - 279
+    issue_label: Ethos-as-label instead of ethos-work
+    question: |-
+      The first sentence centers *you* as proof—why should a GRE grader trust your personal convenience as evidence of humanity's expanded potential? What kairos or audience does this address?
+    why_it_matters: |-
+      Inserting yourself without rhetorical purpose weakens credibility and distracts from the claim you're making about collective human capacity.
+    fix_suggestion: |-
+      Replace self-reference with concrete stakeholder perspective: 'For children in poorer countries, internet access means access to knowledge their geography would otherwise deny them—a direct expansion of human potential.'
+    replacement: null
+    severity: medium
+- source: 'GRE_Issue (score 4/6): Historical example without audience analysis'
+  article: |-
+    Think what an impact the printing press, a technologically superior mackine at the time, had on the ability of the human race to learn and think.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      Think what an impact the printing press, a technologically superior mackine at the time, had on the ability of the human race to learn and think.
+    span:
+    - 0
+    - 145
+    issue_label: Historical example without audience analysis
+    question: |-
+      You invoke the printing press—a strong parallel—but don't explain *why* it proves your point or what it should mean to someone skeptical about technology's effects. What's the rhetorical work here?
+    why_it_matters: |-
+      An analogy only persuades if you spell out the meaningful connection to your claim and your reader's concerns.
+    fix_suggestion: |-
+      Add explanation: 'Like the printing press, which democratized knowledge and sparked the Enlightenment, today's internet does the same—but faster. That's not laziness; it's scaled learning.'
+    replacement: null
+    severity: medium
+- source: 'GRE_Issue (score 3/6): Example without rhetorical work'
+  article: |-
+    For example, the problem of dibilitating illnesses and diseases such as alzheimer's disease is slowing being solved by the technological advancements in stem cell research. The future ability of growing new brain cells and the possibility to reverse the onset of alzheimer's is now becoming a reality.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      For example, the problem of dibilitating illnesses and diseases such as alzheimer's disease is slowing being solved by the technological advancements in stem cell research. The future ability of growing new brain cells and the possibility to reverse the onset of alzheimer's is now becoming a reality.
+    span:
+    - 0
+    - 301
+    issue_label: Example without rhetorical work
+    question: |-
+      You name stem-cell research as proof that tech advances human thinking—but where's the argument? How does curing Alzheimer's prove humans think *better*, not just live longer? What's the actual connection to your claim?
+    why_it_matters: |-
+      Device-spotting (citing an example) isn't the same as rhetorical analysis—you need to show how the example persuades and why it matters to your audience.
+    fix_suggestion: |-
+      Explain the causal chain: stem cells require human creativity/judgment to develop → this creative capacity proves tech enhances rather than replaces human cognition. Then show why *your reader* should believe this matters.
+    replacement: null
+    severity: high
+- source: 'GRE_Issue (score 3/6): Vague problem and solution'
+  article: |-
+    Our reliance on this type of technology can be detrimental if not regulated and regularily substituted for other information sources such as human interactions and hands on learning. I think if humans understand that we should not have such a reliance on computer technology, that we as a species will advance further by utilizing the opportunity of computer technology as well as the other sources of information outside of a computer.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      Our reliance on this type of technology can be detrimental if not regulated and regularily substituted for other information sources such as human interactions and hands on learning. I think if humans understand that we should not have such a reliance on computer technology, that we as a species will advance further by utilizing the opportunity of computer technology as well as the other sources of information outside of a computer.
+    span:
+    - 0
+    - 436
+    issue_label: Vague problem and solution
+    question: |-
+      You claim reliance 'can be detrimental'—but detrimental *how*? And 'if humans understand we shouldn't rely on it'—understand based on what evidence? This reads like a wish, not an argument. Who needs to be convinced, and why would this convince them?
+    why_it_matters: |-
+      Without specifics about consequences or the reasoning that connects the problem to your solution, you're not actually arguing—you're just stating positions.
+    fix_suggestion: |-
+      Pick one concrete consequence (e.g., 'students who only Google answers score lower on synthesis tasks') and trace it: here's what happens, here's why it happens, here's how regulation prevents it, here's why that matters to you/your reader.
+    replacement: null
+    severity: high
+- source: 'GRE_Issue (score 3/6): Claim without logical support'
+  article: |-
+    This shows our initiative as humans to better our health demonstrates greater ability of humans to think.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      This shows our initiative as humans to better our health demonstrates greater ability of humans to think.
+    span:
+    - 0
+    - 105
+    issue_label: Claim without logical support
+    question: |-
+      How does *curing a disease* prove humans have 'greater ability to think'? Couldn't a highly automated system do stem-cell research without humans thinking any harder? You've skipped the logical step that actually matters.
+    why_it_matters: |-
+      You're asserting a rhetorical move (linking tech advancement to human cognition) without explaining why the connection holds—leaving your reader unconvinced.
+    fix_suggestion: null
+    replacement: null
+    severity: medium
+- source: 'GRE_Argument (score 3/6): Assumption spotted, not analyzed'
+  article: |-
+    Surveys are created to speak for the people; however, surveys do not always speak for the whole community. A survey completed by Mason City residents concluded that the residents enjoy water sports as a form of recreation.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      Surveys are created to speak for the people; however, surveys do not always speak for the whole community. A survey completed by Mason City residents concluded that the residents enjoy water sports as a form of recreation.
+    span:
+    - 0
+    - 222
+    issue_label: Assumption spotted, not analyzed
+    question: |-
+      You identify that the survey might not represent the whole community—good instinct. But then what? How could this flaw actually undermine the city's argument? What would need to be true about the survey's design or sample for it to fail?
+    why_it_matters: |-
+      Spotting a logical gap only matters if you explain how and why it breaks the argument.
+    fix_suggestion: |-
+      After naming the assumption, add: 'If the survey only polled residents who already use the river, it would overrepresent people interested in water sports, making the city's proposal rest on skewed data rather than genuine community preference.'
+    replacement: null
+    severity: high
+- source: 'GRE_Argument (score 3/6): Tangent introducing new assumptions'
+  article: |-
+    If the budget is changed to accomodate the clean up of the Mason River, other problems will arise. The residents will then begin to complain about other issues in their city that will be ignored because of the great emphasis being placed on Mason River.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      If the budget is changed to accomodate the clean up of the Mason River, other problems will arise. The residents will then begin to complain about other issues in their city that will be ignored because of the great emphasis being placed on Mason River.
+    span:
+    - 0
+    - 253
+    issue_label: Tangent introducing new assumptions
+    question: |-
+      Whose argument are you analyzing here—the city's, or are you now making your own prediction about resident complaints? This doesn't examine the original argument's unstated assumptions; it adds new ones that aren't your job to defend.
+    why_it_matters: |-
+      An analysis of an argument's flaws should stay tethered to what the argument actually claims and assumes, not drift into speculation about side effects.
+    fix_suggestion: |-
+      Delete or redirect. If you want to use budget trade-offs, connect it to the argument's actual assumption: 'The proposal assumes the city can afford both cleanup and new recreational facilities without naming what gets cut.'
+    replacement: null
+    severity: high
+- source: 'GRE_Argument (score 3/6): Substituting analysis for assertion'
+  article: |-
+    The real issue is not the residents use of the river, but their desire for a more pleasant smell and a more pleasant sight.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      The real issue is not the residents use of the river, but their desire for a more pleasant smell and a more pleasant sight.
+    span:
+    - 0
+    - 123
+    issue_label: Substituting analysis for assertion
+    question: |-
+      How do you know this is the real issue? You're replacing one reading of the evidence with another without showing why the argument's logic breaks under this reframing. What's your evidence?
+    why_it_matters: |-
+      Rhetorical analysis shows *how* an argument fails, not just offer a competing claim.
+    fix_suggestion: |-
+      Reframe as assumption-hunting: 'The argument assumes residents want recreational facilities because of the survey result, but it never addresses whether the river's current state (smell, appearance) would even permit safe recreation—a prior assumption it doesn't justify.'
+    replacement: null
+    severity: medium
+- source: 'GRE_Issue (score 4/6): Device-spotting without effect-analysis'
+  article: |-
+    When we get up there's instant coffee and the microwave and all these great things that help us get ready for our day. But we aren't allowing our minds to deteriorate by using them, we are only making things easier for ourselves and saving time for other important things in our days.
+  critiques:
+  - agent: rhetorical_editor
+    text_quote: |-
+      When we get up there's instant coffee and the microwave and all these great things that help us get ready for our day. But we aren't allowing our minds to deteriorate by using them, we are only making things easier for ourselves and saving time for other important things in our days.
+    span:
+    - 0
+    - 284
+    issue_label: Device-spotting without effect-analysis
+    question: |-
+      You've listed examples (coffee, microwave, cars), but why do these matter rhetorically? What's the logical connection between 'easier' and 'minds not deteriorating'? You're asserting, not arguing.
+    why_it_matters: |-
+      Naming technologies doesn't persuade; you need to show *how* they preserve cognitive capacity or *why* that matters to your audience's concerns about human potential.
+    fix_suggestion: |-
+      Pick one technology and trace its actual cognitive demand: e.g., 'The microwave frees time for learning tasks that require deeper thinking—not mindless convenience, but cognitive redistribution.'
     replacement: null
     severity: high

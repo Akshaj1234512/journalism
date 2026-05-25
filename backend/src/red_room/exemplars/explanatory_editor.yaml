@@ -1,0 +1,81 @@
+# Exemplars for explanatory_editor (Eli). Bootstrap synthetic; replaced in Phase 2.
+- source: 'no "why this matters" framing'
+  article: |-
+    The Federal Reserve raised interest rates by 0.25 percentage points on Wednesday, the fourth such increase this year. The decision was unanimous. The rate is now in the 5.25-5.50% range.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: The Federal Reserve raised interest rates by 0.25 percentage points on Wednesday
+    span: [0, 81]
+    issue_label: no why-this-matters
+    question: |-
+      We have the what, when, and how. We never tell the reader why this matters — what it changes for someone with a mortgage, a credit-card balance, a job search. That's the entire reason this is an explainer and not a news brief.
+    why_it_matters: |-
+      Explainers earn their length by making the practical impact legible. Without it, this is just a press-release rewrite.
+    fix_suggestion: |-
+      Add a graf two: "For someone with a $300,000 mortgage at a variable rate, the new ceiling means roughly $40 more per month. For a small business with a $200,000 line of credit, X."
+    replacement: null
+    severity: high
+- source: 'causation asserted from correlation'
+  article: |-
+    Cities that adopted the new policy saw violent crime drop by 12 percent over two years, demonstrating that the policy works.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: demonstrating that the policy works
+    span: [85, 121]
+    issue_label: causation from correlation
+    question: |-
+      A drop in crime in cities that adopted the policy doesn't demonstrate the policy worked — those cities might differ from non-adopters in other ways (demographics, economics, baseline trends). "Demonstrates" overstates what correlational data can show.
+    why_it_matters: |-
+      Causation-from-correlation is the single most-cited error in explanatory journalism and the easiest one for a skeptical reader to dismiss.
+    fix_suggestion: |-
+      Soften to "is associated with" or cite the specific causal-inference study that controls for the selection effects ("a 2024 difference-in-differences study by X found...").
+    replacement: null
+    severity: high
+- source: 'unscoped projection'
+  article: |-
+    By 2040, the entire industry will be transformed by AI.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: By 2040, the entire industry will be transformed by AI.
+    span: [0, 56]
+    issue_label: unscoped projection
+    question: |-
+      "By 2040 the entire industry will be transformed" — whose projection is that, and what assumptions does it rest on? Projections without provenance read as the writer's own forecast.
+    why_it_matters: |-
+      Unscoped projections are the most-deleted line in any explainer that goes to a careful copy desk.
+    fix_suggestion: |-
+      Attribute and qualify: "A 2024 McKinsey projection estimates that 40% of industry roles could be automated by 2040, assuming current rates of AI capability advancement continue." Or remove the projection if you can't source it.
+    replacement: null
+    severity: medium
+- source: 'jargon stacked without definition'
+  article: |-
+    The bank's tier-one capital ratio fell below the CCAR stress-test threshold, triggering a SIFI re-classification under Dodd-Frank.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: The bank's tier-one capital ratio fell below the CCAR stress-test threshold
+    span: [0, 76]
+    issue_label: jargon without definitions
+    question: |-
+      "Tier-one capital ratio," "CCAR stress test," "SIFI," "Dodd-Frank" — four pieces of regulatory jargon in one sentence with no definitions. A reader who isn't a banking analyst is lost.
+    why_it_matters: |-
+      The whole point of an explainer is to make this accessible. Stacking unexplained jargon defeats the form.
+    fix_suggestion: |-
+      Either define the terms inline ("The bank's tier-one capital ratio — the buffer banks must hold against potential losses — fell below...") or substitute plain English where precision allows.
+    replacement: null
+    severity: high
+- source: 'abstract concept with no concrete example'
+  article: |-
+    The new framework creates a marginal incentive structure that shifts behavior at the decision boundary.
+  critiques:
+  - agent: explanatory_editor
+    text_quote: marginal incentive structure that shifts behavior at the decision boundary
+    span: [29, 102]
+    issue_label: abstract, no concrete case
+    question: |-
+      This is pure framework with no concrete example. What does this look like for one specific person facing one specific decision? Without a case the reader has nothing to hold on to.
+    why_it_matters: |-
+      Abstract-only explainers fail the test of whether the reader actually has a clearer mental model coming out than going in.
+    fix_suggestion: |-
+      Add an example: "Take a small-business owner deciding whether to hire one more employee. Under the old rules, X; under the new framework, Y. The marginal change is the decision boundary the policy is targeting."
+    replacement: null
+    severity: medium

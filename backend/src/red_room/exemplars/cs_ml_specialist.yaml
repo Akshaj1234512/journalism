@@ -2,8 +2,11 @@
 # Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
 # NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
 # field 200-2500 words, must reference a specific anchor like
-# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
-# and the top 10 by quality score selected.
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku;
+# top 15 selected with a diversity constraint (round-robin
+# across distinct sub-issue buckets) so the exemplars cover the lane's
+# full failure-mode range rather than 15 variants of the
+# same critique.
 #
 - source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): missing HSI-specific baseline comparison (MST/MST++)
@@ -43,6 +46,84 @@
       Add experiments with target models GAT and GraphSAGE while keeping the surrogate as SGC, reporting attack success rates for each.
     replacement: null
     severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): Unexplained reaction-diffusion connection
+  article: |-
+    Section 3.4.1: the authors relate GCN with reaction-diffusion models but do not introduce the concept of reaction-diffusion process.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: |-
+      Section 3.4.1: the authors relate GCN with reaction-diffusion models but do not introduce the concept of reaction-diffusion process.
+    span:
+    - 0
+    - 132
+    issue_label: Unexplained reaction-diffusion connection
+    question: |-
+      In Section 3.4.1, the authors seem to relate GCN with reaction-diffusion models. This is not clear at all as the concept is not introduced.
+    why_it_matters: |-
+      Without explaining how reaction-diffusion connects to the GCN architecture, the methodological motivation is opaque.
+    fix_suggestion: |-
+      Introduce and define reaction-diffusion processes before relating them to GCNs, with intuitive explanation of the connection.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 8/10, confidence 4/5): compression results lack external validity
+  article: |-
+    Section 5 experiments on compressed Transformers; authors note 'even with a fairly restrictive compression setup, compressed models may not stay faithful to the original RASP program'.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: |-
+      Section 5 experiments on compressed Transformers; authors note 'even with a fairly restrictive compression setup, compressed models may not stay faithful to the original RASP program'.
+    span:
+    - 0
+    - 184
+    issue_label: compression results lack external validity
+    question: |-
+      Section 5 reads as an entirely different paper with significant limitations. Given that compressed Transformers neither follow the original RASP program, nor is it clear this behavior holds for non-Tracr Transformers, what can be taken away from these results?
+    why_it_matters: |-
+      Without evidence that findings generalize beyond Tracr-compiled Transformers, the compression experiments contribute ambiguous insights that may not inform broader compression technique evaluation.
+    fix_suggestion: |-
+      Either (1) validate compression findings on non-Tracr Transformers to establish generality, or (2) reframe Section 5 as a Tracr-specific case study with limited scope.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): overclaimed application domain, cherry-picked example
+  article: |-
+    Lines 317–319 claim the Navier-Stokes example is 'particularly helpful in understanding turbulent flows,' but Figure 2 presents a simple, non-turbulent example.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: |-
+      Lines 317–319 claim the Navier-Stokes example is 'particularly helpful in understanding turbulent flows,' but Figure 2 presents a simple, non-turbulent example.
+    span:
+    - 0
+    - 160
+    issue_label: overclaimed application domain, cherry-picked example
+    question: |-
+      The Navier-Stokes example seems oversold as relevant to turbulent flows when Figure 2 shows no turbulence. This would be much more compelling if applied to an actual turbulent flow where the algorithm recovers ground truth.
+    why_it_matters: |-
+      The mismatch between the motivating claim (turbulent flows) and the demonstrated example (laminar flow) weakens the credibility of the scientific discovery application.
+    fix_suggestion: |-
+      Apply the method to a real turbulent flow dataset (e.g., from Johns Hopkins turbulence database) and demonstrate recovery of ground truth in that regime.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): unexplained GT WER result
+  article: Table 1 shows GT achieves higher WER than P-Flow, which is unexplained.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: Table 1 shows GT achieves higher WER than P-Flow, which is unexplained.
+    span:
+    - 0
+    - 71
+    issue_label: unexplained GT WER result
+    question: |-
+      In table 1, why does GT achieve higher WER compared to P-Flow? This seems counterintuitive and requires clarification.
+    why_it_matters: |-
+      An unexplained result that contradicts intuition undermines confidence in the evaluation methodology or results.
+    fix_suggestion: |-
+      Explain the WER discrepancy between GT and P-Flow, or verify the evaluation setup.
+    replacement: null
+    severity: medium
 - source: |-
     ICLR.cc/2025/Conference OpenReview review (rating 10/10, confidence 4/5): ambiguous scope—tasks vs inputs vs representations
   article: |-
@@ -104,25 +185,25 @@
     replacement: null
     severity: medium
 - source: |-
-    NeurIPS.cc/2023/Conference OpenReview review (rating 8/10, confidence 4/5): compression results lack external validity
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): unclear whether proposed intervention policy is evaluated
   article: |-
-    Section 5 experiments on compressed Transformers; authors note 'even with a fairly restrictive compression setup, compressed models may not stay faithful to the original RASP program'.
+    Algorithm 1 proposes a new intervention policy for selecting concepts, but the caption of Figure 1 states that concepts are randomly intervened.
   critiques:
   - agent: cs_ml_specialist
     text_quote: |-
-      Section 5 experiments on compressed Transformers; authors note 'even with a fairly restrictive compression setup, compressed models may not stay faithful to the original RASP program'.
+      Algorithm 1 proposes a new intervention policy for selecting concepts, but the caption of Figure 1 states that concepts are randomly intervened.
     span:
     - 0
-    - 184
-    issue_label: compression results lack external validity
+    - 144
+    issue_label: unclear whether proposed intervention policy is evaluated
     question: |-
-      Section 5 reads as an entirely different paper with significant limitations. Given that compressed Transformers neither follow the original RASP program, nor is it clear this behavior holds for non-Tracr Transformers, what can be taken away from these results?
+      Is Algorithm 1 used to select concepts in the results of Figure 1? If yes, it is unfair to compare Coop-CBM with a non-trivial concept selection policy against baselines using random selection. If no, then there is no evaluation of the proposed concept selection policy in the main body.
     why_it_matters: |-
-      Without evidence that findings generalize beyond Tracr-compiled Transformers, the compression experiments contribute ambiguous insights that may not inform broader compression technique evaluation.
+      The evaluation conflates the contribution of the loss design (main contribution) with the contribution of the intervention policy, making it impossible to assess either component fairly.
     fix_suggestion: |-
-      Either (1) validate compression findings on non-Tracr Transformers to establish generality, or (2) reframe Section 5 as a Tracr-specific case study with limited scope.
+      Clarify whether Algorithm 1 is used in Figure 1 and provide a dedicated evaluation of the intervention policy against random selection baselines, or remove this contribution from the main narrative.
     replacement: null
-    severity: medium
+    severity: high
 - source: |-
     NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): non-linear scaling reduces interpretability
   article: |-
@@ -144,60 +225,82 @@
     replacement: null
     severity: medium
 - source: |-
-    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): Unexplained reaction-diffusion connection
+    ICLR.cc/2025/Conference OpenReview review (rating 5/10, confidence 5/5): misleading terminology and visualization
   article: |-
-    Section 3.4.1: the authors relate GCN with reaction-diffusion models but do not introduce the concept of reaction-diffusion process.
+    The paper uses the term 'prompt-based GNNs' to describe a method that is actually an LLM without a GNN module. Figure 2 portrays the work as a combination of GNN and LLM despite the absence of a GNN module.
   critiques:
   - agent: cs_ml_specialist
     text_quote: |-
-      Section 3.4.1: the authors relate GCN with reaction-diffusion models but do not introduce the concept of reaction-diffusion process.
+      The paper uses the term 'prompt-based GNNs' to describe a method that is actually an LLM without a GNN module. Figure 2 portrays the work as a combination of GNN and LLM despite the absence of a GNN module.
     span:
     - 0
-    - 132
-    issue_label: Unexplained reaction-diffusion connection
+    - 206
+    issue_label: misleading terminology and visualization
     question: |-
-      In Section 3.4.1, the authors seem to relate GCN with reaction-diffusion models. This is not clear at all as the concept is not introduced.
+      The term 'prompt-based GNNs' can be misleading, as the underlying model is actually an LLM, not a GNN. Figure 2 compounds this confusion by portraying the work as a GNN-LLM combination despite the absence of a GNN module. Should the method be renamed (e.g., 'prompt-based information propagation') and Figure 2 revised to reflect the model's true nature?
     why_it_matters: |-
-      Without explaining how reaction-diffusion connects to the GCN architecture, the methodological motivation is opaque.
+      Misleading terminology and visualization obscure what the method actually is, hindering accurate understanding and comparison with related work.
     fix_suggestion: |-
-      Introduce and define reaction-diffusion processes before relating them to GCNs, with intuitive explanation of the connection.
+      Rename the method to 'prompt-based information propagation' or similar, and revise Figure 2 to show only the LLM component, removing the misleading GNN block.
     replacement: null
     severity: medium
 - source: |-
-    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): overclaimed application domain, cherry-picked example
+    ICLR.cc/2025/Conference OpenReview review (rating 5/10, confidence 5/5): generality mismatch, framework underutilized
   article: |-
-    Lines 317–319 claim the Navier-Stokes example is 'particularly helpful in understanding turbulent flows,' but Figure 2 presents a simple, non-turbulent example.
+    Section 2: more general theoretical framework...not really used later on in the experiments...simply apply it to ICNN, as expected
   critiques:
   - agent: cs_ml_specialist
     text_quote: |-
-      Lines 317–319 claim the Navier-Stokes example is 'particularly helpful in understanding turbulent flows,' but Figure 2 presents a simple, non-turbulent example.
+      Section 2: more general theoretical framework...not really used later on in the experiments...simply apply it to ICNN, as expected
     span:
     - 0
-    - 160
-    issue_label: overclaimed application domain, cherry-picked example
+    - 130
+    issue_label: generality mismatch, framework underutilized
     question: |-
-      The Navier-Stokes example seems oversold as relevant to turbulent flows when Figure 2 shows no turbulence. This would be much more compelling if applied to an actual turbulent flow where the algorithm recovers ground truth.
+      The general theoretical framework in Section 2 is presented as broadly applicable but only instantiated to ICNNs in experiments—does this framework provide anything beyond standard convex theory, or is it just re-specializing to the ICNN case?
     why_it_matters: |-
-      The mismatch between the motivating claim (turbulent flows) and the demonstrated example (laminar flow) weakens the credibility of the scientific discovery application.
+      Investing reader and space in a general framework that lacks demonstrated breadth or alternative applications dilutes the paper's conceptual contribution.
     fix_suggestion: |-
-      Apply the method to a real turbulent flow dataset (e.g., from Johns Hopkins turbulence database) and demonstrate recovery of ground truth in that regime.
+      Either apply the framework to multiple non-standard regularizer families beyond ICNNs to justify its generality, or streamline Section 2 to focus directly on the ICNN case.
     replacement: null
     severity: medium
 - source: |-
-    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): unexplained GT WER result
-  article: Table 1 shows GT achieves higher WER than P-Flow, which is unexplained.
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): Inference efficiency gap vs. autoregressive baseline
+  article: |-
+    Table 7: SAD3-LM requires 10K diffusion steps vs. 1024 steps for autoregressive decoding; inference speed gains are modest compared to SSD-LM
   critiques:
   - agent: cs_ml_specialist
-    text_quote: Table 1 shows GT achieves higher WER than P-Flow, which is unexplained.
+    text_quote: |-
+      Table 7: SAD3-LM requires 10K diffusion steps vs. 1024 steps for autoregressive decoding; inference speed gains are modest compared to SSD-LM
     span:
     - 0
-    - 71
-    issue_label: unexplained GT WER result
+    - 141
+    issue_label: Inference efficiency gap vs. autoregressive baseline
     question: |-
-      In table 1, why does GT achieve higher WER compared to P-Flow? This seems counterintuitive and requires clarification.
+      One advantage of combining sequential autoregression with parallel decoding [1, 5] is improved inference speed. Here, one does 10K steps instead of 1024 steps (Table 7). What is the point of doing discrete diffusion if there is no gain over standard autoregression? While alternative modalities to autoregression are valuable, improved efficiency over standard autoregressive decoding should be the main goal. Even if direct comparison with [1, 5] is not needed, the authors should at least discuss as future work how to target these efficiency goals, possibly via diffusion distillation methods like consistency models [6].
     why_it_matters: |-
-      An unexplained result that contradicts intuition undermines confidence in the evaluation methodology or results.
+      Without demonstrating or credibly planning a path to inference speedup over autoregressive baselines, the practical motivation for the discrete diffusion approach weakens, especially given its added complexity.
     fix_suggestion: |-
-      Explain the WER discrepancy between GT and P-Flow, or verify the evaluation setup.
+      Add a discussion section on efficiency as future work and how consistency model distillation or other acceleration techniques could reduce the 10K step requirement to competitive regimes, bridging the gap to [1, 5].
     replacement: null
     severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): Reproducibility checklist misrepresentation
+  article: |-
+    Section 4.1 states 'we adopt the same training configuration for all competitors' and claims 'detailed hyperparams are listed in the appendix'; author checklist marked yes for reproducibility
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: |-
+      Section 4.1 states 'we adopt the same training configuration for all competitors' and claims 'detailed hyperparams are listed in the appendix'; author checklist marked yes for reproducibility
+    span:
+    - 0
+    - 191
+    issue_label: Reproducibility checklist misrepresentation
+    question: |-
+      The authors claim yes on the reproducibility checklist for training details, but it is unclear which methods were implemented by the authors versus reported from other works. The appendix lacks hyperparameters, and no code is provided. Which methods were actually re-implemented and which are reported from prior papers?
+    why_it_matters: |-
+      Without clarity on which experiments were author-implemented versus borrowed from papers, and without hyperparameters or code, the reproducibility claim is false and readers cannot verify or build on the results.
+    fix_suggestion: |-
+      Clearly state which baselines were re-implemented vs. reported from prior works, provide full hyperparameter tables in the appendix, and release code to enable reproducibility.
+    replacement: null
+    severity: high

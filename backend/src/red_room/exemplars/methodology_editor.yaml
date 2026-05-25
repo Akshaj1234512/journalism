@@ -2,8 +2,11 @@
 # Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
 # NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
 # field 200-2500 words, must reference a specific anchor like
-# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
-# and the top 10 by quality score selected.
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku;
+# top 15 selected with a diversity constraint (round-robin
+# across distinct sub-issue buckets) so the exemplars cover the lane's
+# full failure-mode range rather than 15 variants of the
+# same critique.
 #
 - source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 5/5): unbalanced microbatch timing regime not tested
@@ -26,6 +29,25 @@
     replacement: null
     severity: medium
 - source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): missing baseline comparison
+  article: |-
+    In Figure 6, MTDIFF-s-single is presented without comparison to existing single task baseline, Synthetic Experience Replay
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      In Figure 6, MTDIFF-s-single is presented without comparison to existing single task baseline, Synthetic Experience Replay
+    span:
+    - 0
+    - 122
+    issue_label: missing baseline comparison
+    question: |-
+      In Figure 6, it would be useful to compare MTDIFF-s-single with the existing single task baseline, Synthetic Experience Replay.
+    why_it_matters: |-
+      Without this comparison, it is unclear whether the synthetic data generation approach is novel relative to prior work on synthetic data in offline RL.
+    fix_suggestion: Add Synthetic Experience Replay [Lu et al.] as a baseline in Figure 6.
+    replacement: null
+    severity: medium
+- source: |-
     ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): single example trajectory used as justification
   article: |-
     claim that even with the addition of noise the failure of exploration could not be corrected (page 8, middle)
@@ -43,25 +65,6 @@
       Using single example trajectories as evidence for broad claims about the robustness or failure modes of the method is insufficient; distributional analysis is needed for rigorous validation.
     fix_suggestion: |-
       Replace single-example justification with quantitative comparisons of exploration metrics across multiple runs and conditions.
-    replacement: null
-    severity: medium
-- source: |-
-    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): missing baseline comparison
-  article: |-
-    In Figure 6, MTDIFF-s-single is presented without comparison to existing single task baseline, Synthetic Experience Replay
-  critiques:
-  - agent: methodology_editor
-    text_quote: |-
-      In Figure 6, MTDIFF-s-single is presented without comparison to existing single task baseline, Synthetic Experience Replay
-    span:
-    - 0
-    - 122
-    issue_label: missing baseline comparison
-    question: |-
-      In Figure 6, it would be useful to compare MTDIFF-s-single with the existing single task baseline, Synthetic Experience Replay.
-    why_it_matters: |-
-      Without this comparison, it is unclear whether the synthetic data generation approach is novel relative to prior work on synthetic data in offline RL.
-    fix_suggestion: Add Synthetic Experience Replay [Lu et al.] as a baseline in Figure 6.
     replacement: null
     severity: medium
 - source: |-
@@ -179,6 +182,26 @@
     replacement: null
     severity: medium
 - source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): unclear what makes representation human-readable
+  article: |-
+    Line 119, discussing memory compression level followed by 'by performing this procedure at every time step, we build up a human-readable representation of the history of the current episode'
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Line 119, discussing memory compression level followed by 'by performing this procedure at every time step, we build up a human-readable representation of the history of the current episode'
+    span:
+    - 0
+    - 190
+    issue_label: unclear what makes representation human-readable
+    question: |-
+      At line 119 you transition from memory compression to claiming a 'human-readable representation of the history' — what specifically makes this representation human-readable, and how does it differ from HELMv2 in this regard?
+    why_it_matters: |-
+      The paper emphasizes interpretability as a key contribution but does not clearly articulate the mechanism that achieves it, leaving the claim unsupported.
+    fix_suggestion: |-
+      Explicitly contrast the human-readability aspect with HELMv2 and clarify which design choices (e.g., token-retrieval, natural language space) enable interpretability.
+    replacement: null
+    severity: medium
+- source: |-
     ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): weak empirical support for diversity-performance link
   article: |-
     Figure 3 shows improved problem solving attributed to improved diversity, but improvements are not very evident and the relationship between diversity and performance is unclear across difficulty levels.
@@ -198,3 +221,83 @@
       Empirically study an inference-time scaling approach (e.g., best-of-N sampling) and demonstrate that diversity actually correlates with better performance. Alternatively, systematically vary temperature and show how best-of-N accuracy responds within DPL.
     replacement: null
     severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): missing competitive baselines in table
+  article: |-
+    Table 4 (ShapeNet Cars) shows the proposed model's performance compared to a limited set of baselines, with several older methods (SRN, CodeNeRF, FE-NVS, VisionNeRF, 3DiM) achieving better PSNR/LPIPS.
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Table 4 (ShapeNet Cars) shows the proposed model's performance compared to a limited set of baselines, with several older methods (SRN, CodeNeRF, FE-NVS, VisionNeRF, 3DiM) achieving better PSNR/LPIPS.
+    span:
+    - 0
+    - 200
+    issue_label: missing competitive baselines in table
+    question: |-
+      The ShapeNet Cars table (Table 4 in the supplementary) shows relatively weak performance, but the table does not include many methods (including very old methods). For example, {SRN, CodeNeRF, FE-NVS, VisionNeRF, 3DiM} all achieve better PSNR/LPIPS than the proposed model.
+    why_it_matters: |-
+      The paper's quantitative results appear weak on a standard benchmark because key competing methods are omitted, making it unclear whether the approach represents genuine progress or simply a narrower comparison.
+    fix_suggestion: |-
+      Expand Table 4 to include these competing methods so the performance gap is transparent.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): unsupported design claim, missing GNN-based ablation
+  article: |-
+    Line 226: "GNNs are known to have limited representation power," which is why GNNs were not chosen for the retriever.
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Line 226: "GNNs are known to have limited representation power," which is why GNNs were not chosen for the retriever.
+    span:
+    - 0
+    - 117
+    issue_label: unsupported design claim, missing GNN-based ablation
+    question: |-
+      The paper claims that GNNs are known to have limited representation power, which is why GNNs were not chosen for the retriever. However, including a GNN-based retrieval method for comparison would strengthen the evaluation, such as RevRea as a GNN-based retriever, especially given that Table 5 already presents various retrieval method variants.
+    why_it_matters: |-
+      The dismissal of GNNs lacks empirical support; including a GNN baseline (e.g., RevRea) would either validate or refute the claim and provide a more complete ablation.
+    fix_suggestion: |-
+      Include a GNN-based retrieval method variant (e.g., RevRea) in Table 5 to empirically justify the exclusion of GNNs.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): missing NL instruction baseline
+  article: |-
+    Table 6 baseline comparison; X-prompt compared against soft prompt tuning without natural language instruction baseline
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Table 6 baseline comparison; X-prompt compared against soft prompt tuning without natural language instruction baseline
+    span:
+    - 0
+    - 119
+    issue_label: missing NL instruction baseline
+    question: |-
+      For table 6, the baseline of using NL instruction is missing. As X-prompt's core objective is to learn the concept which is hard to describe in NL, it is desirable to compare with baselines which use NL descriptions. For example, a baseline which puts some example tweets of a specific user as in-context prompt, can be compared.
+    why_it_matters: |-
+      Without a direct NL baseline, the paper cannot demonstrate that learned imaginary tokens outperform explicit natural language descriptions, which is central to the motivation.
+    fix_suggestion: |-
+      Add a baseline using natural language descriptions (e.g., in-context examples or explicit style prompts) to Table 6 for direct comparison.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): averaging hides per-example sufficiency variation
+  article: |-
+    Figure 3. Left: the experiment tests whether the reconstructions are sufficient by comparing the ratio of the *average* logit difference with and without the intervention.
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Figure 3. Left: the experiment tests whether the reconstructions are sufficient by comparing the ratio of the *average* logit difference with and without the intervention.
+    span:
+    - 0
+    - 171
+    issue_label: averaging hides per-example sufficiency variation
+    question: |-
+      Why report only the ratio of average logit differences (Figure 3 Left) rather than per-example changes, which would reveal whether averaging masks heterogeneous sufficiency across inputs?
+    why_it_matters: |-
+      Averaging across examples may hide large logit-difference drops on some inputs, masking cases where the reconstruction is insufficient.
+    fix_suggestion: |-
+      Show the distribution of absolute changes in logit difference per example (e.g., histogram or summary statistics), and discuss why averaging is appropriate if used.
+    replacement: null
+    severity: medium

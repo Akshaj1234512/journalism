@@ -1,6 +1,7 @@
 """
-Stage 3: take classified critiques and pick the top 10 per lane. Write each
-selection to the corresponding YAML exemplar file in src/red_room/exemplars/.
+Stage 3: take classified critiques and pick the top N per lane with a
+diversity constraint. Write each selection to the corresponding YAML
+exemplar file in src/red_room/exemplars/.
 
 Input:  /tmp/openreview_classified.jsonl (from classify_critiques.py)
 Output: src/red_room/exemplars/*.yaml (overwrites the synthetic versions)
@@ -14,14 +15,19 @@ Selection scoring per critique:
 - severity is high or medium                          +0.5
 - question contains a specific anchor (Table/Fig/Sec)  +1
 
-After scoring, the top 10 per lane are picked. Pairwise near-duplicates
-(by issue_label or by lead 50 chars of question) are dropped before
-selection so we don't end up with ten copies of "missing baseline."
+Diversity constraint:
+- Group candidates by normalized issue_label (so "missing baseline" and
+  "weak baseline choice" go to the same bucket, but "missing ablation"
+  goes to a different one)
+- Round-robin pick from buckets: take the best of each, then the second
+  best of each, etc., until target is reached
+- This guarantees coverage across distinct sub-issues rather than picking
+  N near-duplicates from the most common failure mode
 
 Run:
     .venv/bin/python scripts/build_exemplars.py
         [--in /tmp/openreview_classified.jsonl]
-        [--per-lane 10]
+        [--per-lane 15]
 """
 from __future__ import annotations
 
@@ -80,21 +86,46 @@ def score(critique: dict) -> float:
     return s
 
 
-def dedupe(critiques: list[dict]) -> list[dict]:
-    seen_labels: set[str] = set()
-    seen_leads: set[str] = set()
-    out = []
-    for c in critiques:
-        label = (c.get("issue_label") or "").strip().lower()
-        lead = re.sub(r"\s+", " ", (c.get("question") or "").lower())[:50]
-        if label in seen_labels or lead in seen_leads:
-            continue
-        if label:
-            seen_labels.add(label)
-        if lead:
-            seen_leads.add(lead)
-        out.append(c)
-    return out
+def normalize_label(label: str) -> str:
+    """Normalize issue_label for diversity bucketing: lowercase, strip
+    leading quality qualifiers ("weak", "missing"), collapse whitespace,
+    take leading 4 significant words. So "missing recent baseline" and
+    "weak baseline against SOTA" go to the same bucket; "no error bars"
+    goes to a different one."""
+    s = (label or "").lower().strip()
+    s = re.sub(r"^(weak|missing|vague|unclear|poor|inadequate|insufficient|no)\s+", "", s)
+    s = re.sub(r"[^a-z0-9 ]", " ", s)
+    s = re.sub(r"\s+", " ", s).strip()
+    words = s.split()[:4]
+    return " ".join(words) if words else "uncategorized"
+
+
+def diverse_pick(candidates: list[dict], target: int) -> list[dict]:
+    """Round-robin from issue-label buckets to enforce sub-issue diversity.
+    Within each bucket we sort by quality score. We then walk all buckets
+    in priority order (best-bucket-first by top-score) taking one per pass
+    until target is reached or all buckets are exhausted."""
+    if not candidates:
+        return []
+    buckets: dict[str, list[dict]] = {}
+    for c in candidates:
+        key = normalize_label(c.get("issue_label", ""))
+        buckets.setdefault(key, []).append(c)
+    for k in buckets:
+        buckets[k].sort(key=score, reverse=True)
+    # Walk buckets in order of best representative — so a bucket containing
+    # the single highest-scoring critique gets the first slot.
+    order = sorted(buckets.keys(),
+                   key=lambda k: score(buckets[k][0]) if buckets[k] else 0,
+                   reverse=True)
+    picks: list[dict] = []
+    while len(picks) < target and any(buckets[k] for k in order):
+        for k in order:
+            if buckets[k]:
+                picks.append(buckets[k].pop(0))
+                if len(picks) >= target:
+                    break
+    return picks[:target]
 
 
 def to_yaml_exemplar(c: dict, agent_name: str) -> dict:
@@ -161,7 +192,7 @@ def block_strings(obj):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--in", dest="in_path", default="/tmp/openreview_classified.jsonl")
-    ap.add_argument("--per-lane", type=int, default=10)
+    ap.add_argument("--per-lane", type=int, default=15)
     ap.add_argument("--filtered-reviews", default="/tmp/openreview_filtered.jsonl",
                     help="Source jsonl used to look up venue per review id.")
     args = ap.parse_args()
@@ -204,20 +235,14 @@ def main():
             print(f"  WARN: no candidates for {lane}; leaving existing file alone.",
                   file=sys.stderr)
             continue
-        # Sort by score, then by source rating/confidence as tiebreaker.
-        cs.sort(
-            key=lambda c: (
-                score(c),
-                c.get("_source_rating", 0) or 0,
-                c.get("_source_confidence", 0) or 0,
-            ),
-            reverse=True,
-        )
-        cs = dedupe(cs)
-        top = cs[: args.per_lane]
+        # Diversity-aware selection: round-robin across normalized issue-label
+        # buckets so we cover the lane's distinct sub-issues rather than 15
+        # near-copies of the most common failure mode.
+        top = diverse_pick(cs, args.per_lane)
         if len(top) < args.per_lane:
-            print(f"  WARN: only {len(top)} candidates for {lane} after dedupe.",
+            print(f"  WARN: only {len(top)} candidates for {lane} after diversity selection.",
                   file=sys.stderr)
+        buckets_used = {normalize_label(c.get("issue_label", "")) for c in top}
 
         exemplars = [to_yaml_exemplar(c, agent_name) for c in top]
         exemplars = block_strings(exemplars)
@@ -227,8 +252,11 @@ def main():
             f"# Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /\n"
             f"# NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses\n"
             f"# field 200-2500 words, must reference a specific anchor like\n"
-            f"# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku\n"
-            f"# and the top {args.per_lane} by quality score selected.\n"
+            f"# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku;\n"
+            f"# top {args.per_lane} selected with a diversity constraint (round-robin\n"
+            f"# across distinct sub-issue buckets) so the exemplars cover the lane's\n"
+            f"# full failure-mode range rather than {args.per_lane} variants of the\n"
+            f"# same critique.\n"
             f"#\n"
         )
         out_path = EXEMPLARS_DIR / f"{filename}.yaml"
@@ -242,7 +270,8 @@ def main():
                 width=92,
                 default_flow_style=False,
             )
-        print(f"  wrote {out_path.name}: {len(top)} exemplars", file=sys.stderr)
+        print(f"  wrote {out_path.name}: {len(top)} exemplars across {len(buckets_used)} sub-issues",
+              file=sys.stderr)
 
 
 if __name__ == "__main__":
