@@ -1,0 +1,164 @@
+# Exemplars for limitations_editor (Lina)
+# Anchored on NeurIPS / ICML / ICLR ethics-review patterns and OpenReview
+# rebuttals where authors had to retrofit honest limitations.
+#
+- source: 'common reviewer concern: boilerplate impact statement'
+  article: |-
+    Broader Impact. There are many potential societal consequences of our work, none which we feel must be specifically highlighted here.
+  critiques:
+  - agent: limitations_editor
+    text_quote: There are many potential societal consequences of our work, none which we feel must be specifically highlighted here.
+    span: [0, 117]
+    issue_label: boilerplate impact statement
+    question: |-
+      This is the canonical boilerplate Broader Impact sentence that reviewers and the NeurIPS ethics committee actively flag. A paper proposing a new generative model, a new evaluation method, or a new training procedure always has specific impacts (compute cost, dual-use risk, dataset provenance, downstream applications). Saying none must be highlighted reads as the authors not engaging with the prompt.
+    why_it_matters: |-
+      This sentence alone has triggered ethics-review revision requests at NeurIPS. It is the single most-flagged boilerplate phrase in submission history.
+    fix_suggestion: |-
+      Write three to five concrete sentences naming (a) the most plausible misuse pathway, (b) the population most affected if the method is deployed, (c) the environmental cost of training, and (d) the steps taken or recommended to mitigate the most serious concern.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: dual-use risk silent'
+  article: |-
+    We release a high-fidelity speech synthesis model capable of cloning a target speaker's voice from 30 seconds of reference audio.
+  critiques:
+  - agent: limitations_editor
+    text_quote: a high-fidelity speech synthesis model capable of cloning a target speaker's voice from 30 seconds of reference audio
+    span: [0, 116]
+    issue_label: dual-use risk unaddressed
+    question: |-
+      Voice-cloning models from short reference audio are the canonical fraud-and-disinformation dual-use case (impersonation, vishing attacks, non-consensual audio deepfakes). The paper does not discuss this, propose access controls, or commit to watermarking. Any reviewer with ethics experience will request a substantive discussion before recommending acceptance.
+    why_it_matters: |-
+      Voice-cloning is the dual-use category most likely to trigger an ethics-committee review at top venues. Silence on it reads as either negligence or evasion.
+    fix_suggestion: |-
+      Add a Dual-Use and Mitigation paragraph covering (a) the misuse scenarios you considered, (b) the access-control or release-strategy decision (gated weights, watermarking, detection model, demo-only), and (c) the specific population most at risk (public figures, vulnerable groups targeted by social engineering).
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: dataset bias unacknowledged'
+  article: |-
+    Our training corpus comprises 50 billion tokens of English-language web text collected from Common Crawl. We demonstrate strong performance across a wide range of language tasks.
+  critiques:
+  - agent: limitations_editor
+    text_quote: 50 billion tokens of English-language web text collected from Common Crawl. We demonstrate strong performance across a wide range of language tasks.
+    span: [0, 152]
+    issue_label: dataset bias unacknowledged
+    question: |-
+      Common Crawl is heavily skewed toward US and UK English, has documented overrepresentation of Wikipedia and news-site text, and contains well-documented toxicity, demographic biases, and PII concerns (Dodge et al. 2021, Birhane et al. 2021). The "wide range of language tasks" claim does not engage with what the training data excludes (non-English, low-resource registers, oral language). This is the kind of unstated assumption that a fairness-aware reviewer will flag.
+    why_it_matters: |-
+      A paper claiming general language capability from an English-only Common-Crawl-derived corpus without a limitations sentence on language and demographic coverage is a standard rejection pattern at fairness-aware venues.
+    fix_suggestion: |-
+      Add to Limitations: the specific languages excluded, the dialect and register skew of Common Crawl, the documented bias and toxicity issues, and the implication for downstream-task claims. State explicitly what "wide range of language tasks" excludes.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: failure-mode analysis missing'
+  article: |-
+    We evaluate our method on six visual reasoning benchmarks and outperform the prior best on all six. The method is robust and consistent across diverse problem types.
+  critiques:
+  - agent: limitations_editor
+    text_quote: The method is robust and consistent across diverse problem types.
+    span: [0, 65]
+    issue_label: failure-mode analysis missing
+    question: |-
+      A "robust and consistent" claim with no characterization of when the method fails is the kind of claim a reviewer will not accept on its face. Real systems fail; describing the failure regime is what separates careful work from marketing. Where does this method break (long inputs, abstract reasoning, distribution shift, adversarial inputs)?
+    why_it_matters: |-
+      Reviewers want to see authors thought about failure modes; the absence reads as either the authors not having looked or the failure mode being uncomfortable.
+    fix_suggestion: |-
+      Add a Failure Modes subsection with three to five concrete examples where the method produces a wrong or low-quality output. For each, describe the input class, what went wrong, and your hypothesis about why.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: missing compute / accessibility limitation'
+  article: |-
+    We train the model on 1024 H100 GPUs for 14 days, processing 2 trillion tokens. The resulting checkpoint achieves state-of-the-art performance on standard benchmarks.
+  critiques:
+  - agent: limitations_editor
+    text_quote: 1024 H100 GPUs for 14 days, processing 2 trillion tokens
+    span: [0, 56]
+    issue_label: accessibility limitation unstated
+    question: |-
+      The training requirement (over 14,000 H100-days, on the order of $1M+ in compute) places the contribution out of reach for the vast majority of academic groups and many industrial labs. The Limitations should state explicitly that the result depends on this scale and what the contribution offers to readers who cannot reproduce it (released checkpoint, scaling-law extrapolation, sample-efficient variant).
+    why_it_matters: |-
+      Reviewers and the broader community increasingly expect papers to acknowledge when results depend on compute access most readers do not have.
+    fix_suggestion: |-
+      Add to Limitations: the compute requirement, the estimated cost in dollars and energy (carbon-footprint line is expected), and the specific resources you are releasing to make the work useful for groups that cannot reproduce it.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: missing IRB / consent disclosure'
+  article: |-
+    We collected 4,200 conversational interactions from volunteer participants for the evaluation set. The participants completed three tasks while being recorded.
+  critiques:
+  - agent: limitations_editor
+    text_quote: We collected 4,200 conversational interactions from volunteer participants
+    span: [0, 75]
+    issue_label: IRB / consent disclosure missing
+    question: |-
+      Human-subjects data collection at this scale requires IRB review (or equivalent ethics-board approval), informed consent covering downstream use including model training, and disclosure of compensation. None of this is stated. This is the exact gap that the NeurIPS ethics-review checklist asks about.
+    why_it_matters: |-
+      Missing IRB / consent disclosure on a human-subjects paper is one of the few things that triggers an automatic ethics-committee escalation at NeurIPS-style venues.
+    fix_suggestion: |-
+      Add an Ethics statement covering (a) the IRB or institutional ethics board that approved the protocol, (b) the consent form's coverage of downstream use including model training and dataset release, (c) participant compensation, and (d) any opt-out or data-deletion procedure.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: domain transfer overstated'
+  article: |-
+    We propose a general-purpose evaluation framework for assessing reasoning quality in language models. The framework is broadly applicable across domains and tasks.
+  critiques:
+  - agent: limitations_editor
+    text_quote: a general-purpose evaluation framework for assessing reasoning quality in language models. The framework is broadly applicable across domains and tasks.
+    span: [0, 153]
+    issue_label: generality claim exceeds evaluation
+    question: |-
+      "General-purpose" and "broadly applicable across domains" are strong claims. If the framework was validated only on math word problems and high-school science questions (the typical pattern), the limitation is the gap between the claim and the validation. State explicitly the domains where you validated, the domains where you have not validated, and the assumption a reader should make about transfer.
+    why_it_matters: |-
+      Reviewers in adjacent domains will read an unscoped "general-purpose" claim and conclude the framework probably does not transfer to their domain unless told otherwise.
+    fix_suggestion: |-
+      Add to Limitations: the domains the framework was validated on, the domains where transfer is plausible but unverified, and at least one domain where the framework is expected not to apply (and why). Tighten the abstract and conclusion to match this scope.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: sampling-bias gap'
+  article: |-
+    We evaluate the model on a held-out test set of 10,000 user queries sampled from production traffic. The model achieves 87.3% accuracy.
+  critiques:
+  - agent: limitations_editor
+    text_quote: 10,000 user queries sampled from production traffic
+    span: [0, 50]
+    issue_label: sampling-bias limitation unstated
+    question: |-
+      Production-traffic sampling has systematic selection biases (active users overrepresented, certain query types more frequent, time-of-day effects, geographic skew, the population that did not churn). The 87.3% number is conditional on those biases. A reviewer will ask whether the result transfers to the long tail of less-active users or different geographies.
+    why_it_matters: |-
+      Production-sampling bias is a known gotcha; not naming it as a limitation reads as either oversight or selective evaluation.
+    fix_suggestion: |-
+      Add to Limitations: the selection bias of production traffic (active-user skew, geographic and language distribution, query-type frequency), the implication for the headline accuracy number, and (if possible) a stratified result across the most likely confounding axes.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: environmental cost not reported'
+  article: |-
+    The full training run took 14 days on our distributed cluster.
+  critiques:
+  - agent: limitations_editor
+    text_quote: The full training run took 14 days on our distributed cluster.
+    span: [0, 60]
+    issue_label: training compute / energy unreported
+    question: |-
+      The ML-reproducibility checklist asks for the total training compute (GPU-hours or PF-days), the hardware, and the estimated energy or carbon footprint. None of those are reported. This is a near-mandatory disclosure for large-compute experiments at top venues.
+    why_it_matters: |-
+      Missing the standard compute / energy disclosure will trigger a reviewer or chair comment and is easy to fix.
+    fix_suggestion: |-
+      State the total compute in GPU-hours, the hardware (model and count of GPUs), and the energy or estimated carbon footprint (using the published per-GPU power figures or a tool like ML CO2 Impact).
+    replacement: null
+    severity: low
+- source: 'common reviewer concern: hand-wavy threats to validity'
+  article: |-
+    We acknowledge that confounding factors may influence our results, and we leave a thorough analysis of these factors to future work.
+  critiques:
+  - agent: limitations_editor
+    text_quote: confounding factors may influence our results, and we leave a thorough analysis of these factors to future work
+    span: [0, 114]
+    issue_label: hand-wavy threat to validity
+    question: |-
+      This sentence acknowledges confounding without naming any specific confounder, controlling for it, or explaining why future work is the right place. Reviewers read this as the authors gesturing at a known weakness rather than engaging with it. Name the specific confounders (data leakage, prompt sensitivity, evaluator effects, time-of-collection bias) and state for each what was controlled, what was checked, and what remains open.
+    why_it_matters: |-
+      Hand-wavy threat-to-validity sentences are a common rebuttal trigger; reviewers ask exactly which confounders and how they were addressed.
+    fix_suggestion: |-
+      Rewrite as a list of named confounders with one sentence each: confounder, control or check applied, residual concern. The shape "we controlled for X with method Y; we did not control for Z and this could mean W" is what reviewers want.
+    replacement: null
+    severity: medium

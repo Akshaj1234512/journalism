@@ -21,7 +21,12 @@ export type AgentName =
   | "rhetorical_editor"
   // Research-paper editors (run in research mode)
   | "methodology_editor"
-  | "cs_ml_specialist";
+  | "cs_ml_specialist"
+  | "related_work_editor"
+  | "limitations_editor"
+  | "figure_table_editor"
+  | "theorem_editor"
+  | "format_editor";
 
 export type Severity = "high" | "medium" | "low";
 
@@ -429,6 +434,101 @@ export const AGENTS: Record<AgentName, AgentMeta> = {
       "Conclusion that restates instead of landing a claim",
     ],
   },
+  related_work_editor: {
+    label: "Rita — Related Work",
+    shortLabel: "Related Work",
+    firstName: "Rita",
+    brandHex: "#7C3AED",
+    highlightHex: "#EDE9FE",
+    borderClass: "border-violet-700",
+    available: true,
+    kind: "flagger",
+    mode: "research",
+    tagline:
+      "Reads your paper for citation gaps the way an area chair does. Catches missing seminal citations, concurrent work the authors should know about, overbroad 'first' claims, stale baselines, and mischaracterized prior work — the most-cited rejection vector at top venues.",
+    lookFor: [
+      "Missing seminal citation on a load-bearing technique",
+      "Concurrent paper from the last 18 months not cited",
+      "Overbroad novelty claim a reviewer can falsify",
+      "Stale state-of-the-art used as the comparison bar",
+    ],
+  },
+  limitations_editor: {
+    label: "Lina — Limitations & Impact",
+    shortLabel: "Limitations",
+    firstName: "Lina",
+    brandHex: "#475569",
+    highlightHex: "#E2E8F0",
+    borderClass: "border-slate-700",
+    available: true,
+    kind: "flagger",
+    mode: "research",
+    tagline:
+      "Reads your Limitations and Broader Impact sections the way a NeurIPS ethics reviewer reads them. Catches boilerplate disclaimers, silent dual-use risks, unacknowledged dataset bias, missing IRB or consent disclosure, and generality claims that exceed the design's reach.",
+    lookFor: [
+      "Boilerplate impact statement that flags the ethics committee",
+      "Dual-use / misuse pathway unaddressed",
+      "Failure-mode analysis missing on a 'robust' claim",
+      "Generality claim that exceeds the evaluation",
+    ],
+  },
+  figure_table_editor: {
+    label: "Fern — Figures & Tables",
+    shortLabel: "Figures",
+    firstName: "Fern",
+    brandHex: "#047857",
+    highlightHex: "#D1FAE5",
+    borderClass: "border-emerald-700",
+    available: true,
+    kind: "flagger",
+    mode: "research",
+    tagline:
+      "The only editor in the room who reads the paper's actual figures and tables. Catches truncated y-axes, missing error bars, cherry-picked qualitative examples, bolded winners inside the noise floor, misleading aggregations, color-deficient palettes, and figure / text inconsistency.",
+    lookFor: [
+      "Truncated or non-zero y-axis on a comparison bar chart",
+      "Bolded 'winner' within the variance of the second-best",
+      "'Representative' qualitative example without selection procedure",
+      "Architecture diagram inconsistent with the methods text",
+    ],
+  },
+  theorem_editor: {
+    label: "Hugo — Theorem & Math Precision",
+    shortLabel: "Theorem",
+    firstName: "Hugo",
+    brandHex: "#4338CA",
+    highlightHex: "#E0E7FF",
+    borderClass: "border-indigo-700",
+    available: true,
+    kind: "flagger",
+    mode: "research",
+    tagline:
+      "Reads theorem statements, proofs, and equations the way a theory-track reviewer does. Catches missing assumptions, skipped proof steps, vacuous bounds, notation inconsistency, asymptotic-to-finite gaps, theory-experiment disagreement, and asymptotic-symbol misuse.",
+    lookFor: [
+      "Theorem statement missing a load-bearing assumption (e.g. Lipschitz)",
+      "Proof step that is 'standard' but actually non-trivial",
+      "Vacuous bound (the trivial bound is the same)",
+      "Convergence claim without specified mode (a.s. / in prob. / in L²)",
+    ],
+  },
+  format_editor: {
+    label: "Sage — Structure & Format",
+    shortLabel: "Format",
+    firstName: "Sage",
+    brandHex: "#B45309",
+    highlightHex: "#FEF3C7",
+    borderClass: "border-amber-700",
+    available: true,
+    kind: "flagger",
+    mode: "research",
+    tagline:
+      "Reads your paper the way a venue chair does at the desk-reject stage. Catches reduced-margin template violations, broken anonymization, missing required sections, load-bearing content stranded in the appendix, inverted page-budget shape, and reviewer-navigation failures.",
+    lookFor: [
+      "Reduced-margin or wrong-template tricks (desk-reject risk)",
+      "Anonymization breaks in double-blind submission",
+      "Missing required Limitations or Broader Impact section",
+      "Load-bearing content moved entirely to the appendix",
+    ],
+  },
 };
 
 // Base roster per mode. For essays, the matching purpose editor (and Sol)
@@ -461,9 +561,15 @@ export const MODE_AGENTS: Record<Mode, AgentName[]> = {
     "citation_editor",
   ],
   // Research mode has its own roster (not shared with journalism / essays).
-  // Methodology editor always runs; subject specialist added at runtime.
+  // Six core research editors always run; subject specialist added at runtime
+  // based on research_subject.
   research: [
     "methodology_editor",
+    "related_work_editor",
+    "limitations_editor",
+    "figure_table_editor",
+    "theorem_editor",
+    "format_editor",
   ],
 };
 

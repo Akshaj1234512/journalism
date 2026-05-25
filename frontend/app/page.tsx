@@ -7,6 +7,7 @@ import { AgentRoster } from "@/components/AgentRoster";
 import { CritiqueSidebar } from "@/components/CritiqueSidebar";
 import { Editor, critiqueId } from "@/components/Editor";
 import { PrintView } from "@/components/PrintView";
+import { ResearchPrintView } from "@/components/ResearchPrintView";
 import { SampleDraftsButton } from "@/components/SampleDrafts";
 import { Tutorial } from "@/components/Tutorial";
 import { streamCritique } from "@/lib/stream";
@@ -675,13 +676,34 @@ export default function Page() {
         onSetMode={setMode}
       />
 
-      {/* Hidden print view — visible only when window.print() runs */}
-      <PrintView
-        article={article}
-        critiques={critiques}
-        resolvedIds={resolvedIds}
-        idOf={critiqueId}
-      />
+      {/* Hidden print view — visible only when window.print() runs.
+          Research mode renders pages of the uploaded PDF side-by-side with
+          critique notes anchored to each page; journalism / essays use the
+          plain text-with-highlights view. */}
+      {mode === "research" ? (
+        <ResearchPrintView
+          pdf={researchPdf}
+          critiques={critiques}
+          resolvedIds={resolvedIds}
+          idOf={critiqueId}
+          sectionLabel={
+            RESEARCH_SECTION_CHOICES.find((c) => c.value === researchSection)
+              ?.label ?? researchSection
+          }
+          subjectLabel={
+            RESEARCH_SUBJECT_CHOICES.find((c) => c.value === researchSubject)
+              ?.label ?? researchSubject
+          }
+          venue={researchVenue.trim()}
+        />
+      ) : (
+        <PrintView
+          article={article}
+          critiques={critiques}
+          resolvedIds={resolvedIds}
+          idOf={critiqueId}
+        />
+      )}
     </main>
   );
 }

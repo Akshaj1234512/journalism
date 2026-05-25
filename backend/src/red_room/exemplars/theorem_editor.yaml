@@ -1,0 +1,166 @@
+# Exemplars for theorem_editor (Theo)
+# Anchored on real theory-track reviewer comments at ICML / NeurIPS / ICLR
+# and adjacent venues. Each `article` field is a representative theorem
+# statement or proof step; the critique is in the voice of a careful
+# theory reviewer.
+#
+- source: 'common reviewer concern: missing Lipschitz assumption'
+  article: |-
+    Theorem 1. Let $f$ be a function from $\mathbb{R}^d$ to $\mathbb{R}$. Then gradient descent with step size $\eta$ converges to a stationary point in $O(1/\epsilon^2)$ iterations.
+  critiques:
+  - agent: theorem_editor
+    text_quote: gradient descent with step size $\eta$ converges to a stationary point in $O(1/\epsilon^2)$ iterations
+    span: [0, 102]
+    issue_label: missing Lipschitz / smoothness assumption
+    question: |-
+      Theorem 1 states a convergence rate for gradient descent on an arbitrary function $f$, but the rate $O(1/\epsilon^2)$ holds only under $L$-smoothness (or comparable regularity such as Lipschitz gradient). Without that assumption the theorem is false (consider a non-differentiable or unbounded $f$). The proof almost certainly uses smoothness; it must appear in the statement.
+    why_it_matters: |-
+      A theorem statement that omits a load-bearing assumption is the canonical theory-paper rejection signal; the proof can be entirely correct and the paper still fails review.
+    fix_suggestion: |-
+      Add to the theorem statement: "Suppose $f$ is $L$-smooth, i.e. $\|\nabla f(x) - \nabla f(y)\| \le L \|x-y\|$ for all $x,y$." Then state the step-size choice and the rate's dependence on $L$.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: proof skips non-trivial step'
+  article: |-
+    Proof sketch. By a standard concentration argument, we have $|\hat{\mu} - \mu| \le \epsilon$ with probability at least $1 - \delta$, completing the proof.
+  critiques:
+  - agent: theorem_editor
+    text_quote: By a standard concentration argument, we have $|\hat{\mu} - \mu| \le \epsilon$ with probability at least $1 - \delta$
+    span: [0, 116]
+    issue_label: proof skips a non-trivial step
+    question: |-
+      "Standard concentration argument" is doing real work here: the specific inequality (Hoeffding, Bernstein, Bennett, McDiarmid) and the way it interacts with the dependence structure of $\hat{\mu}$ determine whether the bound has the right dependence on $\epsilon$ and $\delta$. Reviewers will ask which inequality, what assumptions about the random variables it requires, and whether those assumptions are satisfied here.
+    why_it_matters: |-
+      "Standard argument" hand-waves at the most failure-prone step in many proofs; theory reviewers consistently ask for the explicit inequality.
+    fix_suggestion: |-
+      State the concentration inequality being used (e.g. "By Hoeffding's inequality, using that the $X_i$ are bounded in $[0, B]$ and independent..."), verify the assumption set, and give the explicit form of the resulting bound. Move the detail to the appendix if length is the concern, but cite the lemma you are applying.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: vacuous bound'
+  article: |-
+    Theorem 3. Our algorithm achieves a regret bound of $O(T)$ where $T$ is the number of rounds.
+  critiques:
+  - agent: theorem_editor
+    text_quote: Our algorithm achieves a regret bound of $O(T)$
+    span: [0, 49]
+    issue_label: vacuous regret bound
+    question: |-
+      $O(T)$ regret over $T$ rounds is the trivial bound (achievable by any algorithm that incurs constant loss per round) and matches the worst case for an adversarial environment. As stated, Theorem 3 is vacuous. Either the bound should be sublinear in $T$ (e.g. $O(\sqrt{T})$ or $O(\log T)$), or the regime where the linear bound is actually informative needs to be specified.
+    why_it_matters: |-
+      A regret bound of $O(T)$ is the textbook example of a vacuous theorem; a theory reviewer will dismiss the result on sight.
+    fix_suggestion: |-
+      Establish whether the actual rate is sublinear and state it precisely. If the bound is genuinely linear, frame the contribution as an explicit constant or as a result conditional on adversarial assumptions where $\Omega(T)$ is the tight bound.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: convergence mode unspecified'
+  article: |-
+    Lemma 2. Under the conditions of Theorem 1, the iterates $x_t$ converge to the optimum $x^*$ as $t \to \infty$.
+  critiques:
+  - agent: theorem_editor
+    text_quote: the iterates $x_t$ converge to the optimum $x^*$ as $t \to \infty$
+    span: [0, 67]
+    issue_label: convergence mode unspecified
+    question: |-
+      The lemma says "the iterates converge" without specifying the mode. Almost-sure convergence, convergence in probability, convergence in expectation, and convergence in $L^2$ are different claims and require different proofs. Theory reviewers will ask which mode is meant and whether the proof actually establishes that mode.
+    why_it_matters: |-
+      Convergence without a specified mode is a fundamental precision failure that any careful theory reviewer will flag.
+    fix_suggestion: |-
+      Specify the mode: "the iterates converge to $x^*$ almost surely" or "in expectation" or "in probability." Make sure the proof actually establishes the stated mode and not a weaker one.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: notation inconsistency'
+  article: |-
+    In Section 3 we denote the loss function by $L(\theta)$. In Section 4 we analyze the gradient $\nabla \ell(\theta)$ of the empirical loss.
+  critiques:
+  - agent: theorem_editor
+    text_quote: In Section 3 we denote the loss function by $L(\theta)$. In Section 4 we analyze the gradient $\nabla \ell(\theta)$ of the empirical loss.
+    span: [0, 134]
+    issue_label: notation inconsistency across sections
+    question: |-
+      The paper uses $L$ in Section 3 and $\ell$ in Section 4 without explicitly stating whether these are the same object, a related object (population vs. empirical), or distinct losses. A reviewer following the proofs section by section will lose the thread at the notation change. If $L$ and $\ell$ are different, the relationship needs a sentence; if they are the same, pick one symbol.
+    why_it_matters: |-
+      Unstated notation changes are a frequent reviewer complaint and undermine the readability of the formal sections.
+    fix_suggestion: |-
+      Add a notation paragraph at the start of Section 4: "We denote the empirical loss by $\ell(\theta) = (1/n) \sum_i \ell_i(\theta)$ to distinguish it from the population loss $L(\theta)$ used in Section 3." Use the chosen symbols consistently thereafter.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: asymptotic-to-finite gap'
+  article: |-
+    Theorem 2 establishes that our estimator is asymptotically consistent as the sample size $n \to \infty$. Our experiments use $n = 100$ samples per condition.
+  critiques:
+  - agent: theorem_editor
+    text_quote: asymptotically consistent as the sample size $n \to \infty$. Our experiments use $n = 100$ samples per condition.
+    span: [0, 110]
+    issue_label: asymptotic theorem, finite-sample experiments
+    question: |-
+      Theorem 2 is an asymptotic claim ($n \to \infty$); the experiments are at $n = 100$. The connection between the asymptotic regime and the finite-sample regime is not addressed. A reviewer will ask whether the asymptotic rate kicks in at $n = 100$, or whether the finite-sample behavior is governed by the lower-order terms.
+    why_it_matters: |-
+      The asymptotic-to-finite gap is a common theory-empirical disconnect that reviewers consistently call out; the theorem and the experiments should support each other, not talk past each other.
+    fix_suggestion: |-
+      Add either (a) a non-asymptotic bound with explicit constants at $n = 100$, or (b) a finite-sample simulation that shows when the asymptotic regime starts to govern behavior. If neither is available, state explicitly that the theorem is asymptotic and the experiments are in a regime where its predictions may not apply.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: theory contradicts experiment'
+  article: |-
+    Our theoretical analysis predicts that the optimal regularization strength scales as $\lambda^* \propto n^{-1/2}$. In our experiments, the optimal $\lambda$ was insensitive to $n$ across the range tested.
+  critiques:
+  - agent: theorem_editor
+    text_quote: $\lambda^* \propto n^{-1/2}$. In our experiments, the optimal $\lambda$ was insensitive to $n$ across the range tested.
+    span: [0, 110]
+    issue_label: theory contradicts empirical observation
+    question: |-
+      Theorem predicts $\lambda^* \propto n^{-1/2}$; the empirical study finds $\lambda^*$ approximately constant in $n$. This is a direct disagreement between the theory and the experiment and the paper does not address it. A theory reviewer will read this as either the assumptions of the theorem being violated in the experimental setting or the experimental regime being too narrow to see the predicted scaling.
+    why_it_matters: |-
+      An unaddressed theory-experiment disagreement is the kind of issue that gets flagged in every careful theory-track review.
+    fix_suggestion: |-
+      Add a Discussion paragraph that names the disagreement, identifies the most likely cause (assumption violation, regime mismatch, lower-order terms dominating), and either runs the experiment in a regime where the theory's prediction is expected to be visible or revises the theorem statement to scope its empirical reach.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: probability measure unspecified'
+  article: |-
+    Lemma 3. With probability one, the algorithm visits every state infinitely often.
+  critiques:
+  - agent: theorem_editor
+    text_quote: With probability one, the algorithm visits every state infinitely often.
+    span: [0, 73]
+    issue_label: probability space unspecified
+    question: |-
+      "With probability one" requires the underlying probability space to be defined: are we talking about randomness in the algorithm (random initialization, random sampling), in the environment (Markov chain dynamics), or both? The current statement is ambiguous and a reviewer cannot verify the claim without knowing which measure is meant.
+    why_it_matters: |-
+      Sloppy probability-space references are an entry-level theory complaint and a paper making them often has deeper precision issues lurking.
+    fix_suggestion: |-
+      State the underlying probability space explicitly: "Under the probability measure induced by the random sampling at each step (resp. by the Markov chain's transition kernel), the algorithm visits every state infinitely often almost surely." Verify the proof handles the assumed source of randomness consistently.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: definition non-standard without notice'
+  article: |-
+    Throughout the paper, we say that a distribution $P$ is "smooth" if its density is bounded.
+  critiques:
+  - agent: theorem_editor
+    text_quote: a distribution $P$ is "smooth" if its density is bounded
+    span: [0, 56]
+    issue_label: non-standard use of standard term
+    question: |-
+      "Smooth" in the statistics and learning-theory literature almost always means differentiable (and usually $C^1$ or $C^2$), not bounded density. The paper redefines a standard term without flagging the choice, which will mislead any reader who skims the technical definitions. Either use the standard meaning or rename the property (e.g. "bounded-density," "regular," or any name not already in use).
+    why_it_matters: |-
+      Overloading standard terminology is a known source of reader confusion and a frequent reviewer complaint, even when the math is otherwise correct.
+    fix_suggestion: |-
+      Either rename the property (use "bounded-density distribution" or coin a non-overloaded name) or, if you keep "smooth," boldface the definition and state explicitly: "Throughout the paper, we use 'smooth' in the bounded-density sense, not the differentiable sense." Verify no proof step accidentally invokes the differentiability sense.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: Big-O vs Big-Theta misuse'
+  article: |-
+    Theorem 4. The sample complexity of our algorithm is $O(d/\epsilon^2)$.
+  critiques:
+  - agent: theorem_editor
+    text_quote: The sample complexity of our algorithm is $O(d/\epsilon^2)$.
+    span: [0, 58]
+    issue_label: $O$ used where $\Theta$ or both bounds intended
+    question: |-
+      $O(d/\epsilon^2)$ is an upper bound on the sample complexity, not the sample complexity itself. If the paper also proves the matching lower bound, the correct symbol is $\Theta$, and a lower-bound theorem should appear as well. If the paper proves only the upper bound, "the sample complexity is $O(\cdot)$" should be "the sample complexity is at most $O(\cdot)$" or "we give an algorithm with sample complexity $O(\cdot)$."
+    why_it_matters: |-
+      Big-O / Big-Theta precision is the kind of detail theory-track reviewers track closely; misusing the asymptotic symbols on a central result signals less-than-careful theory work.
+    fix_suggestion: |-
+      Either rephrase as "we give an algorithm with sample complexity $O(d/\epsilon^2)$" (claiming only an upper bound), or prove the matching $\Omega(d/\epsilon^2)$ lower bound and restate as $\Theta(d/\epsilon^2)$.
+    replacement: null
+    severity: medium

@@ -1,0 +1,169 @@
+# Exemplars for format_editor (Sage)
+# Anchored on ICML / NeurIPS / ICLR desk-reject patterns and chair feedback
+# threads. Sage flags structural and template-compliance issues.
+#
+- source: 'common chair concern: load-bearing content in appendix'
+  article: |-
+    Due to space constraints, the per-component ablation study and the analysis of failure modes are included in the supplementary material (Appendix C and D).
+  critiques:
+  - agent: format_editor
+    text_quote: the per-component ablation study and the analysis of failure modes are included in the supplementary material
+    span: [0, 110]
+    issue_label: load-bearing content in appendix
+    question: |-
+      The per-component ablation and the failure-mode analysis are the two things a reviewer needs to evaluate the contribution. Moving both to the appendix means a reviewer who reads only the main paper (the typical pattern) cannot evaluate the work. Top venues consistently flag this pattern; the appendix is for supporting detail, not for the load-bearing claims.
+    why_it_matters: |-
+      Reviewers are not obligated to read the appendix. Load-bearing content there is often treated as if it does not exist, which sinks the paper's perceived rigor.
+    fix_suggestion: |-
+      Move at least a summary ablation table and the headline failure-mode analysis into the main paper, even if it requires tightening other sections. Keep the long-form versions in the appendix for completeness.
+    replacement: null
+    severity: high
+- source: 'common chair concern: reduced-margin template violation'
+  article: |-
+    \usepackage[a4paper, margin=0.85in]{geometry}
+  critiques:
+  - agent: format_editor
+    text_quote: \usepackage[a4paper, margin=0.85in]{geometry}
+    span: [0, 47]
+    issue_label: reduced-margin template violation
+    question: |-
+      The submission overrides the venue's required template margins. ICML, NeurIPS, and ICLR all explicitly check for this and the conference scripts flag papers with non-standard margins or fonts at the desk-reject stage. The margin override is the canonical desk-reject trigger.
+    why_it_matters: |-
+      Reduced-margin tricks are an automatic desk-reject category at all three major ML venues; the rule is enforced before the paper reaches a reviewer.
+    fix_suggestion: |-
+      Remove the geometry-override line and let the venue's style file set the margins. Cut content to fit the page limit (typical strategy: tighten Related Work, push some figures to appendix supplementary, restructure long paragraphs).
+    replacement: null
+    severity: high
+- source: 'common chair concern: missing required section'
+  article: |-
+    7 Conclusion
+
+    We have presented a novel method for X, demonstrating improvements across several benchmarks.
+
+    References
+  critiques:
+  - agent: format_editor
+    text_quote: We have presented a novel method for X, demonstrating improvements across several benchmarks.
+    span: [0, 95]
+    issue_label: limitations section missing
+    question: |-
+      The paper goes directly from Conclusion to References with no Limitations section and no Broader Impact statement. ICML and NeurIPS both require these for the main-track submission. A missing required section is a desk-reject risk at the chair stage and an easy reviewer comment otherwise.
+    why_it_matters: |-
+      Required-section omissions are checked against the venue checklist at the chair stage; missing them is a documented desk-reject category.
+    fix_suggestion: |-
+      Add a Limitations section (and Broader Impact / Ethics if the venue requires) before the References. For NeurIPS, follow the official template's Section labels; for ICML, follow the 2024+ structure that requires Impact Statement.
+    replacement: null
+    severity: high
+- source: 'common chair concern: page-budget mis-allocation'
+  article: |-
+    The paper allocates 4 pages to Background and Related Work, 1 page to the Method, and 1.5 pages to Experiments.
+  critiques:
+  - agent: format_editor
+    text_quote: 4 pages to Background and Related Work, 1 page to the Method, and 1.5 pages to Experiments
+    span: [0, 89]
+    issue_label: page budget inverted
+    question: |-
+      Allocating 4 pages to Background and 1 page to the Method is the inverse of what reviewers expect. The shape of the paper should reflect the shape of the contribution: most of the page budget on what is new. Reviewers reading the current draft will conclude either that the contribution is thin or that the Background section is over-explaining for the venue.
+    why_it_matters: |-
+      A reviewer scanning section lengths gets a first impression of where the work is; an inverted budget creates the wrong impression even when the method is strong.
+    fix_suggestion: |-
+      Compress Background and Related Work to 1.5 pages by removing material a reader at this venue can be assumed to know. Expand Method to at least 2 pages with full algorithmic detail and design rationale. Expand Experiments to at least 2.5 pages.
+    replacement: null
+    severity: medium
+- source: 'common chair concern: anonymization break'
+  article: |-
+    Acknowledgments. We thank our colleagues at the Stanford NLP group for valuable discussions.
+  critiques:
+  - agent: format_editor
+    text_quote: Acknowledgments. We thank our colleagues at the Stanford NLP group for valuable discussions.
+    span: [0, 91]
+    issue_label: anonymization broken
+    question: |-
+      For double-blind submissions, the Acknowledgments section reveals the authors' institutional affiliation. This is a documented desk-reject trigger at NeurIPS, ICML, and ICLR. The same issue often hides in self-citations to "our prior work" and in GitHub repository URLs with identifying names.
+    why_it_matters: |-
+      Anonymization breaks are a desk-reject category at all three major double-blind venues; the bar is strict.
+    fix_suggestion: |-
+      Remove the Acknowledgments section for the submission version (add back for the camera-ready). Audit self-citations for "our prior work" phrasing and ensure they read as anonymous citations. Check any released code repository URL for identifying names; use an anonymized fork for the submission.
+    replacement: null
+    severity: high
+- source: 'common chair concern: contribution list missing'
+  article: |-
+    In Section 2 we describe our method. In Section 3 we present experimental results. Section 4 concludes.
+  critiques:
+  - agent: format_editor
+    text_quote: In Section 2 we describe our method. In Section 3 we present experimental results. Section 4 concludes.
+    span: [0, 104]
+    issue_label: contribution list absent
+    question: |-
+      The Introduction ends with a section-pointer paragraph but never states the contributions of the paper. Reviewers form their initial judgment from the contribution list ("we propose X, we show Y, we release Z"); papers without it leave reviewers guessing what to grade against. This is one of the most commonly cited Intro weaknesses in reviewer feedback.
+    why_it_matters: |-
+      The contribution list is the paragraph reviewers anchor their evaluation on; missing it makes a positive review materially harder to write.
+    fix_suggestion: |-
+      Add a paragraph at the end of the Introduction beginning "Our contributions are:" followed by 3-5 numbered, single-sentence claims. Each claim should be specific enough to be evaluable (e.g. "We propose X, the first method to do Y," not "We make a contribution to the literature on Z").
+    replacement: null
+    severity: medium
+- source: 'common chair concern: tables placed far from references'
+  article: |-
+    Our main results are shown in Table 3, which compares our method against four prior baselines across five benchmark suites.
+  critiques:
+  - agent: format_editor
+    text_quote: Our main results are shown in Table 3
+    span: [0, 36]
+    issue_label: table placed far from reference
+    question: |-
+      Table 3 is referenced on page 4 (Section 4) but placed on page 9 (Appendix or end-of-paper). For the main results table this is unusually disruptive; reviewers have to flip pages to verify each claim in the text. LaTeX float placement may have drifted, or the table may have been pushed deliberately for page budget; either way it reads as a navigation failure.
+    why_it_matters: |-
+      A reviewer scanning the main results section who has to flip seven pages to find the table is more likely to skim the analysis; the friction directly costs the paper credit.
+    fix_suggestion: |-
+      Force the table to appear closer to its reference (use `[!ht]` or `[!t]` placement specifiers, or use a `table*` environment if it spans both columns). If the table genuinely cannot fit nearby, summarize the most important rows in an inline mini-table in the body text.
+    replacement: null
+    severity: medium
+- source: 'common chair concern: wrong template'
+  article: |-
+    \documentclass{article}
+    \usepackage{neurips_2023}
+  critiques:
+  - agent: format_editor
+    text_quote: \usepackage{neurips_2023}
+    span: [0, 24]
+    issue_label: wrong template year for venue
+    question: |-
+      The submission uses the NeurIPS 2023 style file. If the target venue is 2026 or any year other than 2023, the format is incorrect and the chair scripts will flag it. Style files are updated yearly with new requirements; using an outdated file commonly produces wrong margins, missing required sections (impact statements, reproducibility checklist), and incorrect line numbering.
+    why_it_matters: |-
+      Wrong-year templates are flagged by the conference desk-check scripts and are a documented desk-reject category.
+    fix_suggestion: |-
+      Replace the style file with the current year's official template (download from the venue's submission page). Re-compile and check that the resulting document matches the template's reference example (title position, abstract format, line numbering, section ordering).
+    replacement: null
+    severity: high
+- source: 'common chair concern: inconsistent citation style'
+  article: |-
+    Recent work \cite{Smith2024} has shown that scaling improves reasoning. Subsequent studies \citep{Jones2024, Liu2025} extend these findings.
+  critiques:
+  - agent: format_editor
+    text_quote: \cite{Smith2024} has shown that scaling improves reasoning. Subsequent studies \citep{Jones2024, Liu2025}
+    span: [0, 102]
+    issue_label: inconsistent citation style
+    question: |-
+      The paper mixes `\cite` (typically inline-style) and `\citep` (parenthetical) in the same paragraph. In most ML-venue templates these render differently, and the inconsistency is visible to a reviewer. Standard practice is to use `\citet` for in-sentence references ("Smith (2024) showed...") and `\citep` for parenthetical references ("(Smith 2024)").
+    why_it_matters: |-
+      Citation-style inconsistency is a small thing that signals carelessness when present throughout the paper.
+    fix_suggestion: |-
+      Replace `\cite{Smith2024} has shown` with `\citet{Smith2024} showed`. Audit the whole paper for `\cite` usage and replace with `\citet` (inline) or `\citep` (parenthetical) based on context. The venue's style file documents the convention.
+    replacement: null
+    severity: low
+- source: 'common chair concern: abstract length'
+  article: |-
+    Abstract. (450 words) ...
+  critiques:
+  - agent: format_editor
+    text_quote: Abstract. (450 words)
+    span: [0, 22]
+    issue_label: abstract exceeds venue length
+    question: |-
+      Most ML venues (NeurIPS, ICML, ICLR) cap the abstract at around 250 words or specify an upper bound in the call for papers. A 450-word abstract is roughly double that and may be auto-truncated when the conference indexes the submission. Reviewers also skim abstracts; the most-cited papers tend to state their contribution in the first three sentences.
+    why_it_matters: |-
+      An over-long abstract may be truncated automatically by the conference indexing, and either way costs the paper attention at the abstract-skim stage.
+    fix_suggestion: |-
+      Tighten to roughly 200-250 words. The shape that works: one sentence on the problem, one on the gap in prior work, two or three on the contribution and headline result, one on the implication. Cut everything else.
+    replacement: null
+    severity: medium

@@ -1,0 +1,164 @@
+# Exemplars for related_work_editor (Rita)
+# Anchored on real OpenReview / NeurIPS / ICML rebuttal patterns where
+# missing-citation or wrong-framing complaints landed.
+#
+- source: 'common reviewer concern: missing concurrent work'
+  article: |-
+    We propose a novel framework for retrieval-augmented generation that combines a dense retriever with a small reranker before the LLM. To the best of our knowledge, this is the first work to apply reranking in a RAG pipeline at production scale.
+  critiques:
+  - agent: related_work_editor
+    text_quote: this is the first work to apply reranking in a RAG pipeline at production scale
+    span: [0, 88]
+    issue_label: overbroad novelty claim
+    question: |-
+      Reranking inside a RAG pipeline is widely deployed (Glass et al. 2022, the public Cohere and Anthropic retrieval stacks, and several 2023-2024 papers including Ma et al.'s zero-shot listwise reranker). The "first at production scale" framing is either incorrect or needs to be scoped very precisely. What exactly is novel here that none of the existing reranking-in-RAG systems do?
+    why_it_matters: |-
+      A reviewer who has seen any of the prior systems will read this as the authors either not knowing the field or pretending not to, and either reading produces a clear rejection vote.
+    fix_suggestion: |-
+      Rewrite the claim to scope it precisely (e.g. "first cross-encoder reranker trained jointly with a retriever in a production RAG system serving X domain"). Add a Related Work paragraph that engages with at least three prior reranking-in-RAG systems and states the specific axis on which your contribution differs.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: missing seminal citation'
+  article: |-
+    We introduce a contrastive auxiliary loss that pulls representations of semantically similar inputs together and pushes dissimilar inputs apart.
+  critiques:
+  - agent: related_work_editor
+    text_quote: a contrastive auxiliary loss that pulls representations of semantically similar inputs together and pushes dissimilar inputs apart
+    span: [0, 130]
+    issue_label: missing seminal citation (SimCLR / contrastive)
+    question: |-
+      This is the standard contrastive loss from SimCLR (Chen et al. 2020) and the earlier triplet / NCE formulations (Sohn 2016, Oord et al. 2018). The paper presents the loss as if it were a new construction. Cite the canonical references and state what is actually new about your version (the negative sampling, the temperature schedule, the joint training, whatever it is).
+    why_it_matters: |-
+      Introducing a 2020-era technique without the canonical citation is the single fastest way to lose a reviewer's trust in the rest of the related-work treatment.
+    fix_suggestion: |-
+      Add SimCLR, MoCo, and SupCon as the anchor citations in the loss-introduction sentence. Move your specific innovation (if any) into a clear contrastive-with-X formulation and explain the delta in one sentence.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: stale SOTA baseline'
+  article: |-
+    We compare against the strongest prior method for code summarization, CodeBERT (Feng et al. 2020), and demonstrate a 4.2 BLEU improvement.
+  critiques:
+  - agent: related_work_editor
+    text_quote: the strongest prior method for code summarization, CodeBERT (Feng et al. 2020)
+    span: [0, 79]
+    issue_label: stale prior-best citation
+    question: |-
+      CodeBERT is not the strongest prior method for code summarization in 2025. CodeT5+ (Wang et al. 2023), StarCoder-Instruct (Li et al. 2024), and the recent DeepSeek-Coder family all post substantially stronger BLEU on the standard benchmarks. A 4.2-point gain over a 2020 model will not be read as state-of-the-art.
+    why_it_matters: |-
+      Calling a five-year-old model the "strongest prior" is the kind of framing that reads to a reviewer as either ignorance of the field or deliberate stale-baseline gaming.
+    fix_suggestion: |-
+      Re-run the comparison against at least one current strong baseline in the same size class (CodeT5+ 770M or DeepSeek-Coder 6.7B at the relevant scale). If your method does not beat them, scope the contribution to a regime where it does (smaller model, lower-resource language, faster inference).
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: missing concurrent paper'
+  article: |-
+    Our approach trains a small policy head on top of a frozen vision encoder, enabling robotic manipulation from a single demonstration.
+  critiques:
+  - agent: related_work_editor
+    text_quote: trains a small policy head on top of a frozen vision encoder, enabling robotic manipulation from a single demonstration
+    span: [0, 119]
+    issue_label: concurrent work not cited
+    question: |-
+      Several recent papers in 2024-2025 do exactly this pattern (frozen vision backbone, small policy head, one-shot or few-shot manipulation): Octo (Mees et al.), OpenVLA (Kim et al.), and RT-2 (Brohan et al.) are the obvious anchors. The Related Work does not engage with any of them. What is the specific axis on which your method differs?
+    why_it_matters: |-
+      A robotics reviewer will know these papers and will read the omission as either unawareness or evasion, both of which sink the paper.
+    fix_suggestion: |-
+      Add a Related Work paragraph that compares against at least Octo and OpenVLA on architecture (what is frozen, what is trained, head size), data (demonstrations, embodiments), and evaluation (manipulation tasks, success metric).
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: buried key citation'
+  article: |-
+    Prior work on chain-of-thought reasoning (Wei et al. 2022; many others) has shown that LLMs perform better with intermediate reasoning steps. We extend this paradigm to multimodal inputs.
+  critiques:
+  - agent: related_work_editor
+    text_quote: Prior work on chain-of-thought reasoning (Wei et al. 2022; many others)
+    span: [0, 71]
+    issue_label: closest prior work cited only in passing
+    question: |-
+      Multimodal chain-of-thought has been studied in the last 18 months (Multimodal-CoT Zhang et al. 2023, MM-ReAct Yang et al. 2023, the work from the Allen Institute). These are the closest prior works to your contribution and they appear nowhere except possibly in the "many others." A serious reviewer will ask why these are not the anchor citations.
+    why_it_matters: |-
+      Citing the closest prior work in passing reads as either oversight or an attempt to inflate the contribution by hiding the comparison.
+    fix_suggestion: |-
+      Add a dedicated paragraph in Related Work titled "Multimodal chain-of-thought" that compares against Multimodal-CoT and MM-ReAct on the specific axes that distinguish your work (modality, dataset, prompting strategy, training procedure).
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: mischaracterization of cited work'
+  article: |-
+    Recent work (Smith et al. 2024) has shown that scaling alone does not improve reasoning ability in large language models.
+  critiques:
+  - agent: related_work_editor
+    text_quote: Recent work (Smith et al. 2024) has shown that scaling alone does not improve reasoning ability in large language models.
+    span: [0, 121]
+    issue_label: prior work mischaracterized
+    question: |-
+      This is a stronger claim than Smith et al. actually make. Their result is that on their specific reasoning benchmark and at their specific scale, the scaling exponent flattens past a certain point. They explicitly say the result may not transfer to other reasoning benchmarks or larger scales. Citing them for the universal "scaling does not improve reasoning" claim will be challenged by any reviewer who has read the paper.
+    why_it_matters: |-
+      Mischaracterizing a citation is one of the few things reviewers consistently call out by name, and it undermines trust in every other citation in the paper.
+    fix_suggestion: |-
+      Soften the claim to match the source (e.g. "Smith et al. 2024 find diminishing returns from scaling on benchmark X at scales up to Y") and either add separate citations that support the broader claim or remove the broader claim.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: missing sub-field'
+  article: |-
+    We propose a new method for generating synthetic training data using LLMs, demonstrating improvements on six downstream classification tasks.
+  critiques:
+  - agent: related_work_editor
+    text_quote: a new method for generating synthetic training data using LLMs
+    span: [0, 64]
+    issue_label: data-distillation sub-field absent
+    question: |-
+      Synthetic-data generation with LLMs sits at the intersection of data augmentation and knowledge distillation. The data-distillation literature (Dai et al. 2023, Liu et al. 2024 on Self-Instruct and its followups, the LLM2LLM line) is not represented in the Related Work. A reviewer from that sub-field will read this as the authors only engaging with the data-augmentation side of the problem.
+    why_it_matters: |-
+      A paper that sits between two sub-fields needs to engage with both; engaging with one is a half-finished literature review.
+    fix_suggestion: |-
+      Add a paragraph on LLM data distillation covering Self-Instruct, Alpaca-style data generation, LLM2LLM, and recent work on filtering and rewriting synthetic data for quality. Position your method against that line, not just data-augmentation methods.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: citation count without engagement'
+  article: |-
+    Many prior works have studied retrieval-augmented generation (Lewis et al. 2020; Karpukhin et al. 2020; Izacard and Grave 2021; Borgeaud et al. 2022; Shi et al. 2023; Asai et al. 2024).
+  critiques:
+  - agent: related_work_editor
+    text_quote: Many prior works have studied retrieval-augmented generation (Lewis et al. 2020; Karpukhin et al. 2020; Izacard and Grave 2021; Borgeaud et al. 2022; Shi et al. 2023; Asai et al. 2024).
+    span: [0, 174]
+    issue_label: citations without engagement
+    question: |-
+      The paper lists six RAG papers in one sentence without explaining how this contribution relates to any of them. Reviewers read this kind of list as the authors having done a search but not having actually positioned themselves. Pick the two or three papers that are most directly comparable and state the specific axis (retriever choice, context-length handling, training-data construction, latency) on which your work differs.
+    why_it_matters: |-
+      A wall of citations satisfies a search-engine check but not a reviewer reading for novelty positioning.
+    fix_suggestion: |-
+      Replace the sentence with two or three substantive paragraphs covering the directly comparable systems (Atlas, REPLUG, Self-RAG) and stating the specific axis on which your method differs from each.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: missing self-citation rival'
+  article: |-
+    Our prior work (Chen et al. 2023, Chen et al. 2024) demonstrated that careful prompt engineering substantially affects LLM evaluation outcomes. In this paper, we extend that result to multilingual settings.
+  critiques:
+  - agent: related_work_editor
+    text_quote: Our prior work (Chen et al. 2023, Chen et al. 2024) demonstrated that careful prompt engineering substantially affects LLM evaluation outcomes.
+    span: [0, 144]
+    issue_label: rival group's relevant work not cited
+    question: |-
+      The prompt-sensitivity result is more commonly associated with the work of Sclar et al. 2023 ("Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design") and Mizrahi et al. 2024. Citing only your own prior work without engaging with the rival group's central result will read as selective citation.
+    why_it_matters: |-
+      Reviewers track who is doing related work in this area and will catch one-sided self-citation in a heartbeat.
+    fix_suggestion: |-
+      Add Sclar et al. and Mizrahi et al. as anchor citations alongside your own prior work, and state the specific multilingual extension that distinguishes this paper from what they have already shown.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: missing canonical survey anchor'
+  article: |-
+    We tackle the open problem of long-context understanding in LLMs, where models must reason over inputs spanning tens of thousands of tokens.
+  critiques:
+  - agent: related_work_editor
+    text_quote: We tackle the open problem of long-context understanding in LLMs
+    span: [0, 64]
+    issue_label: missing survey / position anchor
+    question: |-
+      Long-context LLM research has a recent canonical survey (Pawar et al. 2024, "The What, Why, and How of Context Length Extension Techniques in LLMs"). It is the standard map of the sub-field and anchors most submissions in this area. Not citing it suggests the paper has not surveyed the existing taxonomy of approaches.
+    why_it_matters: |-
+      A paper claiming to tackle an "open problem" in a well-mapped area without acknowledging the existing map looks unanchored.
+    fix_suggestion: |-
+      Cite the canonical survey in the Introduction and use its taxonomy to position your contribution within one of the established branches (position encoding, attention modifications, retrieval-style, memory augmentation).
+    replacement: null
+    severity: low

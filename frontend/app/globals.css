@@ -190,6 +190,136 @@ textarea {
     font-size: 10pt;
   }
 
+  /* ----- Research-mode print layout. Wide / landscape sheet so the page
+       image and its review notes fit side by side. ----- */
+  .red-room-print-research {
+    padding: 14pt 18pt;
+  }
+  .red-room-print-research .rr-print-meta strong { font-weight: 700; }
+  .red-room-print-research .rr-print-meta { font-size: 8.5pt; line-height: 1.45; }
+
+  .red-room-print-research .rr-research-page {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    gap: 14pt;
+    margin: 0 0 18pt 0;
+    page-break-inside: avoid;
+    page-break-after: always;
+    break-inside: avoid;
+    break-after: page;
+    align-items: start;
+  }
+  /* Last page shouldn't force a page break — the Additional Notes /
+     footer should follow on the same physical sheet if there's room. */
+  .red-room-print-research .rr-research-page:last-of-type {
+    page-break-after: auto;
+    break-after: auto;
+  }
+  .red-room-print-research .rr-research-page-image {
+    position: relative;
+    border: 0.5pt solid #ddd;
+    background: #fff;
+    padding: 4pt;
+  }
+  .red-room-print-research .rr-research-page-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .red-room-print-research .rr-research-page-label {
+    position: absolute;
+    bottom: 6pt;
+    right: 8pt;
+    font-family: var(--font-sans);
+    font-size: 8pt;
+    color: #888;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 1pt 5pt;
+    border-radius: 2pt;
+  }
+  .red-room-print-research .rr-research-page-notes h3 {
+    font-family: var(--font-sans);
+    font-size: 10pt;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #555;
+    border-bottom: 0.5pt solid #ddd;
+    padding-bottom: 3pt;
+    margin: 0 0 8pt 0;
+    font-weight: 700;
+  }
+  .red-room-print-research .rr-research-no-notes {
+    font-family: var(--font-sans);
+    color: #999;
+    font-size: 9.5pt;
+    font-style: italic;
+    margin: 0;
+  }
+  /* Critique cards in the right column: tighter typography so several
+     notes can stack within one page's vertical budget. */
+  .red-room-print-research .rr-research-page-notes .rr-print-note {
+    margin: 0 0 8pt 0;
+    padding: 5pt 7pt;
+    border-left: 2pt solid #ccc;
+    background: #fafafa;
+    page-break-inside: avoid;
+  }
+  .red-room-print-research .rr-research-page-notes blockquote {
+    font-style: italic;
+    color: #333;
+    margin: 2pt 0;
+    font-size: 8.5pt;
+    border-left: 1pt solid #ddd;
+    padding-left: 6pt;
+    line-height: 1.35;
+  }
+  .red-room-print-research .rr-research-page-notes .rr-print-q,
+  .red-room-print-research .rr-research-page-notes .rr-print-w,
+  .red-room-print-research .rr-research-page-notes .rr-print-fix {
+    font-size: 8.5pt;
+    margin: 3pt 0;
+    line-height: 1.35;
+  }
+
+  .red-room-print-research .rr-research-unanchored {
+    margin-top: 14pt;
+    page-break-before: auto;
+  }
+  .red-room-print-research .rr-research-unanchored h2 {
+    font-size: 11pt;
+  }
+  .red-room-print-research .rr-research-unanchored-blurb {
+    font-family: var(--font-sans);
+    font-size: 9pt;
+    color: #666;
+    margin: 0 0 8pt 0;
+    line-height: 1.4;
+  }
+
+  .red-room-print-research .rr-print-research-loading,
+  .red-room-print-research .rr-print-research-error {
+    font-family: var(--font-sans);
+    font-size: 10pt;
+    color: #555;
+    padding: 8pt 10pt;
+    border: 0.5pt solid #ddd;
+    background: #f8f8f8;
+    margin: 10pt 0;
+  }
+  .red-room-print-research .rr-print-research-error {
+    color: #991B1B;
+    border-color: #FCA5A5;
+    background: #FEF2F2;
+  }
+
+  /* Force the research print to landscape on US Letter, with tighter
+     margins so the side-by-side layout has breathing room. */
+  @page red-room-research {
+    size: letter landscape;
+    margin: 0.4in;
+  }
+  .red-room-print-research { page: red-room-research; }
+
   /* Avoid any of our app chrome bleeding into the print. */
   header, aside, button, input { display: none !important; }
 }

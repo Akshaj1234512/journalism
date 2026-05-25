@@ -329,38 +329,58 @@ class BaseAgent(ABC):
 
 
 def _extract_json_array(text: str) -> list | None:
-    """Find the first top-level JSON array in the text.
+    """Find the first top-level JSON array of objects in the text.
 
     The model is instructed to return a bare array, but extended thinking can
-    occasionally produce stray prose around it. This pulls the first '[' to
-    its matching ']' and parses that.
+    occasionally produce stray prose around it, and web_search-enabled agents
+    may write inline citations like `[1]` or `[ref 2]` in their reasoning.
+    To avoid mis-parsing those, we only treat `[` as a candidate array start
+    when the next non-whitespace character is `{` (array of objects) or `]`
+    (empty array). Walks each candidate until matching `]` and tries to
+    parse; the first one that parses to a list wins.
     """
-    start = text.find("[")
-    if start == -1:
-        return None
-    depth = 0
-    in_string = False
-    escape = False
-    for i in range(start, len(text)):
-        ch = text[i]
-        if escape:
-            escape = False
+    pos = 0
+    while True:
+        start = text.find("[", pos)
+        if start == -1:
+            return None
+        # Look at the next non-whitespace character to decide whether this
+        # `[` is plausibly the start of our output array (array-of-objects
+        # or empty array). Skip otherwise.
+        next_idx = start + 1
+        while next_idx < len(text) and text[next_idx] in " \t\r\n":
+            next_idx += 1
+        if next_idx >= len(text) or text[next_idx] not in ("{", "]"):
+            pos = start + 1
             continue
-        if ch == "\\":
-            escape = True
-            continue
-        if ch == '"':
-            in_string = not in_string
-            continue
-        if in_string:
-            continue
-        if ch == "[":
-            depth += 1
-        elif ch == "]":
-            depth -= 1
-            if depth == 0:
-                try:
-                    return json.loads(text[start : i + 1])
-                except json.JSONDecodeError:
-                    return None
-    return None
+
+        depth = 0
+        in_string = False
+        escape = False
+        for i in range(start, len(text)):
+            ch = text[i]
+            if escape:
+                escape = False
+                continue
+            if ch == "\\":
+                escape = True
+                continue
+            if ch == '"':
+                in_string = not in_string
+                continue
+            if in_string:
+                continue
+            if ch == "[":
+                depth += 1
+            elif ch == "]":
+                depth -= 1
+                if depth == 0:
+                    try:
+                        parsed = json.loads(text[start : i + 1])
+                        if isinstance(parsed, list):
+                            return parsed
+                    except json.JSONDecodeError:
+                        pass
+                    # This candidate didn't parse; try the next `[` after it.
+                    break
+        pos = start + 1

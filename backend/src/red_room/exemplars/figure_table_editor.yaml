@@ -1,0 +1,167 @@
+# Exemplars for figure_table_editor (Fern)
+# Anchored on real ML / NeurIPS / ICML reviewer comments on figure honesty
+# and table craft. Each `article` field below is the figure/table caption
+# or the body-text reference; the critique would normally come from Fern
+# also looking at the visual itself (multimodal). In exemplar form we
+# describe the figure pattern in the caption.
+#
+- source: 'common reviewer concern: truncated y-axis'
+  article: |-
+    Figure 3. Comparison of accuracy across methods on the benchmark. Our method (red bar) achieves 89.4%, outperforming the strongest prior method (gray bar, 87.1%). The y-axis spans 85% to 92%.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: The y-axis spans 85% to 92%.
+    span: [0, 27]
+    issue_label: truncated y-axis exaggerates gain
+    question: |-
+      Figure 3 uses a y-axis from 85% to 92% on a comparison bar chart. The visual impression is that the proposed method's bar is more than twice as tall as the baseline, while the actual improvement is 2.3 points. Reviewers explicitly flag truncated baselines in bar charts as misleading visual rhetoric.
+    why_it_matters: |-
+      Truncated y-axes on comparison bars is the single most-cited figure honesty issue in ML reviews and will cost the paper credibility even when the underlying result is fine.
+    fix_suggestion: |-
+      Plot the bars from 0 (or from a stated, conventional baseline like random-chance accuracy for the task). If you also want to show the close-up, add a second panel that zooms in, clearly labeled "detail view." Do not let the only view be the truncated one.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: missing error bars'
+  article: |-
+    Figure 5. Validation loss over training steps for our method (blue) and three baselines. Our method converges to a lower final loss across all settings.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Our method converges to a lower final loss across all settings.
+    span: [0, 63]
+    issue_label: missing error bars / confidence bands
+    question: |-
+      Figure 5 plots a single training curve per method, with no shaded confidence band and no per-seed variance visible. "Converges to a lower final loss" is a claim about the gap; without variance the reader cannot judge whether the gap is real or within run-to-run noise. Standard practice is at least three seeds with mean and 95% confidence band.
+    why_it_matters: |-
+      A loss-curve comparison without variance bands is exactly the figure pattern that lets noise look like signal, and reviewers know this.
+    fix_suggestion: |-
+      Re-run each curve for at least three seeds, plot the mean as the line and a shaded band as one standard deviation or 95% confidence. Add seed count and band definition to the caption.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: cherry-picked qualitative example'
+  article: |-
+    Figure 7. Example output from our model on a representative input. The generated text demonstrates the fluency and coherence improvements described in Section 4.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Example output from our model on a representative input.
+    span: [0, 56]
+    issue_label: qualitative example provenance unclear
+    question: |-
+      The caption calls this a "representative" example without saying how it was selected. Reviewers actively look for whether a qualitative figure is the best output cherry-picked, a random sample, or a worst-case stress test. "Representative" is the canonical evasion word.
+    why_it_matters: |-
+      A reviewer who suspects qualitative figures are cherry-picked will discount them entirely, and the caption's vagueness invites that suspicion.
+    fix_suggestion: |-
+      Either (a) sample three outputs uniformly at random from the test set and show all three with their seeds, or (b) explicitly label this as "selected to illustrate the failure mode of the baseline" and add a separate random-sample figure in the appendix. State the selection procedure in the caption.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: bolded winner inside the noise'
+  article: |-
+    Table 2. Accuracy on five benchmarks. Bold indicates the best result per column. Our method (last row) achieves the best result on 4 of 5 benchmarks. Standard deviations across three seeds are reported in parentheses.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Bold indicates the best result per column.
+    span: [0, 42]
+    issue_label: bold winner within noise
+    question: |-
+      In Table 2, the bolded "best" entries in columns 2 and 4 differ from the second-best entries by less than one standard deviation of the reported variance. Bolding within the noise floor visually claims a win that the variance does not support; this is the kind of subtle overclaim reviewers catch in tables.
+    why_it_matters: |-
+      Bolding the apparent winner without checking whether the gap survives the variance is a recurring honesty failure in results tables and reviewers consistently flag it.
+    fix_suggestion: |-
+      Bold only entries that are best by more than one standard deviation over the next-best. Add a footnote in the caption: "Bold = best with margin exceeding one std. dev." For close cases, bold both entries to indicate a tie within noise.
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: misleading aggregation'
+  article: |-
+    Table 4. Average performance across diverse evaluation tasks. Our method achieves an average score of 76.3, outperforming the prior best at 71.8.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Average performance across diverse evaluation tasks. Our method achieves an average score of 76.3
+    span: [0, 100]
+    issue_label: misleading cross-task average
+    question: |-
+      Averaging "diverse" evaluation tasks works only when the tasks share a comparable metric and a comparable scale. If the average mixes accuracy (0-100) with BLEU (0-100 but with very different per-point meaning) or F1 with exact match, the average is not meaningful but reads as if it were. Reviewers from any of the affected sub-fields will challenge it.
+    why_it_matters: |-
+      A cross-task average that mixes scales is one of the most common subtle table honesty issues and reviewers familiar with the underlying metrics will spot it.
+    fix_suggestion: |-
+      Replace the single "average" column with either (a) per-task breakdowns side-by-side, (b) a rank-based or win-rate aggregation across tasks, or (c) a per-metric average where the metrics are actually comparable. If you keep an average, state in the caption how the metrics are normalized to be comparable.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: missing baseline row'
+  article: |-
+    Table 1. Comparison against prior methods. We compare against VanillaNet, ResNet-50, DenseNet-121, and BERT-base.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: We compare against VanillaNet, ResNet-50, DenseNet-121, and BERT-base.
+    span: [0, 67]
+    issue_label: missing strong recent baseline
+    question: |-
+      Table 1 omits the closest recent strong baselines (ConvNeXt-V2, DeiT-III, or the relevant modern transformer in the target size class). Including only older or weaker baselines and omitting the obvious recent comparisons is a known table-construction tell. The omitted methods are the ones a reviewer in this area would expect to see.
+    why_it_matters: |-
+      Reviewers compare your baseline list against the field's current state-of-the-art set; a noticeable omission lands as either ignorance or selective comparison.
+    fix_suggestion: |-
+      Add at least one row each for the strongest recent baseline in the same size and compute class. If your method does not beat them, scope the contribution honestly in the abstract and caption (efficiency, specific regime, etc.).
+    replacement: null
+    severity: high
+- source: 'common reviewer concern: unreadable axis labels / legend'
+  article: |-
+    Figure 6. Performance vs. compute budget for our method and four baselines. The x-axis shows training FLOPs; the y-axis shows downstream accuracy.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Performance vs. compute budget for our method and four baselines.
+    span: [0, 66]
+    issue_label: unreadable figure typography
+    question: |-
+      Figure 6 has 8pt axis labels and a legend that overlaps two of the trend lines. At print size the labels are difficult to read and the legend obscures the data. This is the kind of typography issue that makes a reviewer stop trusting the figure even when the result is fine.
+    why_it_matters: |-
+      Reviewers should not have to zoom into a PDF to read a key figure; if they do, they will mention it.
+    fix_suggestion: |-
+      Increase axis-label and legend font to at least 10pt at print size. Move the legend outside the plot area (right side or bottom). Verify readability at single-column print width.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: caption / figure content mismatch'
+  article: |-
+    Figure 4. Accuracy of our method across six languages, demonstrating consistent multilingual performance.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Accuracy of our method across six languages, demonstrating consistent multilingual performance.
+    span: [0, 97]
+    issue_label: caption mismatches figure content
+    question: |-
+      The caption asserts "consistent multilingual performance" but the figure shows substantial variation across the six languages (the lowest-performing language is roughly 18 points below the highest). The visual contradicts the framing. Either the caption is overstating consistency or the variation needs to be characterized as a finding rather than dismissed.
+    why_it_matters: |-
+      A caption-figure mismatch is the kind of subtle dishonesty that reviewers point to as a reason to discount the paper's broader claims.
+    fix_suggestion: |-
+      Rewrite the caption to reflect what the figure actually shows ("Per-language accuracy across six languages; performance varies from X to Y with a Z-point gap on the lowest-resource language"). Address the per-language variation in the body text as a limitation or as a finding worth analysis.
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: color-deficient inaccessibility'
+  article: |-
+    Figure 2. Comparison of three methods on the validation set. Method A is shown in red, Method B in green, and Method C in blue.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Method A is shown in red, Method B in green, and Method C in blue.
+    span: [0, 65]
+    issue_label: red-green palette fails color-deficient vision
+    question: |-
+      The red / green / blue palette in Figure 2 is the canonical inaccessible choice for the ~8% of male readers with red-green color deficiency, who will see Methods A and B as the same hue. ML-conference style guides increasingly request color-deficient-safe palettes (viridis, blue / orange / green, or paired with shape or pattern).
+    why_it_matters: |-
+      Accessibility failures in figures are easy to fix and have become a standard reviewer comment; they also genuinely block readers.
+    fix_suggestion: |-
+      Switch to a color-deficient-safe palette (viridis for continuous, the Wong color-blind-safe palette for categorical) and add a marker shape or line style per method as a redundant encoding. Verify with a simulator (Color Oracle, Coblis).
+    replacement: null
+    severity: medium
+- source: 'common reviewer concern: architecture diagram inconsistency'
+  article: |-
+    Figure 1. Overview of our framework. The model takes the input through an encoder, a cross-attention block, and a decoder, producing the final output.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: an encoder, a cross-attention block, and a decoder
+    span: [0, 49]
+    issue_label: diagram contradicts methods text
+    question: |-
+      Figure 1 shows three components (encoder, cross-attention, decoder) but Section 3.2 describes four (encoder, retrieval module, cross-attention, decoder). The retrieval module is central to the contribution and missing from the overview figure. Reviewers will use Figure 1 as their mental model and will be confused when the methods section adds a component the diagram does not show.
+    why_it_matters: |-
+      The overview figure is the reader's anchor; a missing component creates persistent confusion that infects every subsequent section.
+    fix_suggestion: |-
+      Redraw Figure 1 to include the retrieval module in the position it sits in the actual pipeline, with arrows showing the data flow. Verify the diagram matches Section 3.2 component by component before submission.
+    replacement: null
+    severity: high

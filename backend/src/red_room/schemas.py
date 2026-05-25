@@ -25,6 +25,11 @@ AgentName = Literal[
     # Research-paper editors (run in research mode).
     "methodology_editor",
     "cs_ml_specialist",
+    "related_work_editor",
+    "limitations_editor",
+    "figure_table_editor",
+    "theorem_editor",
+    "format_editor",
 ]
 
 Mode = Literal["journalism", "essays", "research"]

@@ -27,6 +27,11 @@ from red_room.agents.research_editor import ResearchEditor
 from red_room.agents.rhetorical_editor import RhetoricalEditor
 from red_room.agents.methodology_editor import MethodologyEditor
 from red_room.agents.cs_ml_specialist import CSMLSpecialist
+from red_room.agents.related_work_editor import RelatedWorkEditor
+from red_room.agents.limitations_editor import LimitationsEditor
+from red_room.agents.figure_table_editor import FigureTableEditor
+from red_room.agents.theorem_editor import TheoremEditor
+from red_room.agents.format_editor import FormatEditor
 from red_room.schemas import (
     CitationStyle,
     Critique,
@@ -108,17 +113,30 @@ def default_agents(
     Evan, Sol); journalism adds four press specialists, essays adds Kate +
     one purpose editor.
 
-    Research is its own world: a research-specific roster (Methodology
-    Editor for now; Phase 1B will add the other 8 core research editors)
-    plus a subject-area specialist picked by `research_subject`. The full
-    PDF is passed to each agent in research mode by `run` / `stream`.
+    Research is its own world: six core research editors (Mira, Rita, Lina,
+    Fern, Hugo, Sage) plus a subject-area specialist picked by
+    `research_subject`. The full PDF is passed to each agent in research
+    mode by `run` / `stream`.
     """
     # More retry headroom for transient 529s (see BaseAgent.__init__).
     client = client or AsyncAnthropic(max_retries=6)
 
     if mode == "research":
+        # Core research editors: run on every research review regardless of
+        # subject area. Mira (methodology), Rita (related work), Lina
+        # (limitations), Fern (figures + tables, multimodal), Hugo (theorem
+        # + math precision), Sage (structure + formatting).
         roster: list[BaseAgent] = [
             MethodologyEditor(client=client, section=research_section),
+            RelatedWorkEditor(client=client, section=research_section),
+            LimitationsEditor(client=client, section=research_section),
+            FigureTableEditor(client=client, section=research_section),
+            TheoremEditor(client=client, section=research_section),
+            FormatEditor(
+                client=client,
+                section=research_section,
+                venue=research_venue,
+            ),
         ]
         # One subject specialist runs alongside the core research editors.
         # `none` skips it.

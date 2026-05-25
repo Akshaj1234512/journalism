@@ -68,6 +68,11 @@ const AVATARS: Record<AgentName, () => React.ReactNode> = {
   rhetorical_editor: RheaAvatar,
   methodology_editor: MiraAvatar,
   cs_ml_specialist: CyrilAvatar,
+  related_work_editor: RitaAvatar,
+  limitations_editor: LinaAvatar,
+  figure_table_editor: FernAvatar,
+  theorem_editor: HugoAvatar,
+  format_editor: SageAvatar,
 };
 
 /* Anne — Legal Skeptic. Pink background, sharp dark bob, slight angle. */
@@ -425,6 +430,105 @@ function CyrilAvatar() {
       <rect x="42" y="31" width="8" height="6" rx="1" stroke="#0F172A" strokeWidth="1.2" fill="none" />
       <line x1="38" y1="34" x2="42" y2="34" stroke="#0F172A" strokeWidth="1.2" />
       <path d="M36 41 Q 40 42, 44 41" stroke="#1D4ED8" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Rita — Related Work Editor. Violet, librarian energy, neat updo. */
+function RitaAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#EDE9FE" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#7C3AED" />
+      <rect x="34" y="42" width="12" height="10" fill="#D6B79A" />
+      <circle cx="40" cy="34" r="14" fill="#E8C9A8" />
+      {/* hair — pulled-back bun, with neat sides */}
+      <path d="M26 30 Q 24 16, 40 14 Q 56 16, 54 30 L 50 28 Q 40 24, 30 28 Z" fill="#3B2F44" />
+      <circle cx="40" cy="14" r="4" fill="#3B2F44" />
+      {/* subtle round-glasses hint */}
+      <circle cx="34" cy="34" r="3" stroke="#1F2937" strokeWidth="0.9" fill="none" />
+      <circle cx="46" cy="34" r="3" stroke="#1F2937" strokeWidth="0.9" fill="none" />
+      <line x1="37" y1="34" x2="43" y2="34" stroke="#1F2937" strokeWidth="0.9" />
+      <path d="M36 41 Q 40 43, 44 41" stroke="#7C3AED" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Lina — Limitations & Impact. Slate, calm, thoughtful gaze. */
+function LinaAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#E2E8F0" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#475569" />
+      <rect x="34" y="42" width="12" height="10" fill="#B89074" />
+      <circle cx="40" cy="34" r="14" fill="#D1A98A" />
+      {/* hair — short crop, side parting */}
+      <path d="M26 30 Q 26 16, 40 14 Q 54 14, 54 30 Q 52 24, 46 24 Q 40 20, 30 26 Z" fill="#1E293B" />
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      {/* slight downturn — thoughtful, not sad */}
+      <path d="M36 42 Q 40 41, 44 42" stroke="#475569" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Fern — Figure & Table Editor. Emerald, designer's eye, pencil tucked. */
+function FernAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#D1FAE5" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#047857" />
+      <rect x="34" y="42" width="12" height="10" fill="#C7AB89" />
+      <circle cx="40" cy="34" r="14" fill="#E0BFA0" />
+      {/* hair — curly shoulder-length */}
+      <path d="M24 32 Q 22 18, 30 14 Q 40 10, 50 14 Q 58 18, 56 32 Q 56 38, 54 42 Q 52 30, 50 28 Q 40 24, 30 28 Q 28 30, 26 42 Q 24 38, 24 32 Z" fill="#5B3A1F" />
+      {/* a pencil tucked above ear — designer marker */}
+      <line x1="56" y1="30" x2="60" y2="26" stroke="#FACC15" strokeWidth="1.6" strokeLinecap="round" />
+      <line x1="60" y1="26" x2="61" y2="25" stroke="#1F2937" strokeWidth="1.6" strokeLinecap="round" />
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      <path d="M36 41 Q 40 43, 44 41" stroke="#047857" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Hugo — Theorem & Math Precision. Indigo, slightly older, glasses, sparse. */
+function HugoAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#E0E7FF" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#4338CA" />
+      <rect x="34" y="42" width="12" height="10" fill="#C39A75" />
+      <circle cx="40" cy="34" r="14" fill="#D5B193" />
+      {/* hair — sparse / receding, professorial */}
+      <path d="M28 28 Q 30 18, 40 18 Q 50 18, 52 28 Q 48 24, 40 24 Q 32 24, 28 28 Z" fill="#6B7280" />
+      {/* round glasses */}
+      <circle cx="34" cy="34" r="3.5" stroke="#0F172A" strokeWidth="1.2" fill="none" />
+      <circle cx="46" cy="34" r="3.5" stroke="#0F172A" strokeWidth="1.2" fill="none" />
+      <line x1="37.5" y1="34" x2="42.5" y2="34" stroke="#0F172A" strokeWidth="1.2" />
+      {/* small beard hint */}
+      <path d="M34 44 Q 40 47, 46 44 Q 44 47, 40 47 Q 36 47, 34 44 Z" fill="#9CA3AF" />
+      <path d="M36 42 Q 40 42, 44 42" stroke="#4338CA" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+    </>
+  );
+}
+
+/* Sage — Structure & Format. Amber, chair vibe, neat layered cut. */
+function SageAvatar() {
+  return (
+    <>
+      <circle cx="40" cy="40" r="40" fill="#FEF3C7" />
+      <path d="M10 80 C 14 58, 26 50, 40 50 C 54 50, 66 58, 70 80 Z" fill="#B45309" />
+      {/* collared shirt suggestion */}
+      <path d="M34 50 L 40 56 L 46 50 Z" fill="#FFFBEB" />
+      <rect x="34" y="42" width="12" height="10" fill="#CFA887" />
+      <circle cx="40" cy="34" r="14" fill="#E5C3A2" />
+      {/* hair — neat layered cut, side-swept */}
+      <path d="M24 30 Q 22 14, 40 13 Q 58 14, 56 30 Q 54 22, 48 24 Q 40 19, 30 26 Q 26 32, 24 30 Z" fill="#7B4A21" />
+      <circle cx="35" cy="34" r="1.4" fill="#1F2937" />
+      <circle cx="45" cy="34" r="1.4" fill="#1F2937" />
+      {/* steady, slight smile — chair, not stern */}
+      <path d="M35 42 Q 40 44, 45 42" stroke="#B45309" strokeWidth="1.2" fill="none" strokeLinecap="round" />
     </>
   );
 }

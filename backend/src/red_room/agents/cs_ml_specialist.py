@@ -33,7 +33,17 @@ class CSMLSpecialist(BaseAgent):
         self.venue = (venue or "").strip()
 
     def tools(self) -> list[dict]:
-        return []
+        # web_search lets Cyril verify the current-year venue rules (page
+        # limits, required sections, novelty bar), look up recent benchmark
+        # releases the paper should compare against, and check for concurrent
+        # arXiv preprints. Capped at 3 searches to control cost / latency.
+        return [
+            {
+                "type": "web_search_20250305",
+                "name": "web_search",
+                "max_uses": 3,
+            }
+        ]
 
     def extra_user_context(self) -> str:
         section_labels = {
