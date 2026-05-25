@@ -1,166 +1,200 @@
-# Exemplars for methodology_editor (Mira)
-# Anchored on real ICML/NeurIPS/ICLR reviewer-feedback patterns. The
-# `article` field below is a representative sentence or paragraph the kind
-# you would actually see in a paper; the critique is in the voice of a
-# real conference reviewer.
+# Exemplars for methodology_editor
+# Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
+# NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
+# field 200-2500 words, must reference a specific anchor like
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
+# and the top 10 by quality score selected.
 #
-- source: 'common reviewer concern: missing baseline against recent SOTA'
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 5/5): unbalanced microbatch timing regime not tested
   article: |-
-    We evaluate our method against a standard ResNet-50 trained from scratch and against a vanilla transformer. Our method achieves 71.2% top-1 accuracy on ImageNet, outperforming both baselines.
+    The authors proposed algorithms to schedule unbalanced TF/TB/TW, but experiments use sentence-size=1024 where TF/TB/TW are nearly equal (24h >> 8s in Table 1) across all model sizes.
   critiques:
   - agent: methodology_editor
-    text_quote: outperforming both baselines
-    span: [0, 28]
-    issue_label: missing recent baseline
+    text_quote: |-
+      The authors proposed algorithms to schedule unbalanced TF/TB/TW, but experiments use sentence-size=1024 where TF/TB/TW are nearly equal (24h >> 8s in Table 1) across all model sizes.
+    span:
+    - 0
+    - 182
+    issue_label: unbalanced microbatch timing regime not tested
     question: |-
-      The chosen baselines (vanilla ResNet-50, vanilla transformer) are not the relevant comparisons for this contribution. Recent SOTA on ImageNet sits well above 71.2% and uses techniques (modern data augmentation, distillation, MAE pretraining) the paper does not compare against. Without those comparisons the reader cannot tell whether the improvement is from your method or from a stale baseline.
+      Even though authors proposed two algos to schedule unbalanced TF/TB/TW, the experiments however are not designed to show how their advantages, e.g., with sentence-size = 1024, TF/TB/TW are almost equal (24h >> 8s in table 1) for all model sizes, experiments or roofline analysis with 8s >> 24h (or any models with significantly different T) could be helpful to evaluate the efficacy of these algos.
     why_it_matters: |-
-      An Area Chair will read this as a paper that beats baselines it picked rather than the field's actual bar.
+      Without experiments in regimes where TF, TB, and TW are significantly unbalanced, the value of the unbalanced scheduling algorithms cannot be validated.
     fix_suggestion: |-
-      Add comparison against at least one modern strong baseline at the same compute and data scale (DeiT-III, ConvNeXt-V2, or the current ImageNet leaderboard entry in your size bucket). If your method does not match that bar, frame the contribution honestly (efficiency, simplicity, a specific regime).
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: missing ablation isolating contribution'
-  article: |-
-    Our method combines three innovations: a new attention mechanism, a contrastive auxiliary loss, and a curriculum learning schedule. Together they yield a 4.3 point improvement over the prior method.
-  critiques:
-  - agent: methodology_editor
-    text_quote: Together they yield a 4.3 point improvement
-    span: [0, 44]
-    issue_label: missing per-component ablation
-    question: |-
-      The paper introduces three changes at once and reports only the combined improvement. The reader cannot tell whether the gain comes from the attention mechanism, the auxiliary loss, the curriculum, or some interaction. This is the single most-cited reason for rejection at NeurIPS-style venues.
-    why_it_matters: |-
-      Without per-component ablations, neither reviewers nor practitioners can build on the actual contribution.
-    fix_suggestion: |-
-      Add an ablation table with each component toggled independently and in pairs (at minimum: full method, full minus attention, full minus loss, full minus curriculum, and each component alone over the base). Three runs per cell with mean and standard deviation.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: no error bars'
-  article: |-
-    Table 3 reports our method's accuracy on the five evaluation suites: 88.4, 91.2, 76.5, 82.1, and 94.8. We outperform the strongest prior method by an average of 1.7 points.
-  critiques:
-  - agent: methodology_editor
-    text_quote: We outperform the strongest prior method by an average of 1.7 points.
-    span: [0, 71]
-    issue_label: no error bars on Table 3
-    question: |-
-      Table 3 shows point estimates only. A 1.7-point average improvement is meaningless without the per-suite variance, especially when the smallest of the five gains may be within run-to-run noise. Standard practice on these benchmarks is to report mean and standard deviation over at least three seeds.
-    why_it_matters: |-
-      A reviewer will read the missing variance as either the authors did not measure it or the variance would erase the claim.
-    fix_suggestion: |-
-      Re-run each cell of Table 3 with at least three seeds and report mean and standard deviation. If any per-suite gain is smaller than 1.5 standard deviations, soften the claim about that suite.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: cherry-picked benchmark selection'
-  article: |-
-    We evaluate on four reasoning benchmarks: GSM8K, MATH, MMLU-STEM, and ARC-Challenge. On all four, our method matches or exceeds the prior best.
-  critiques:
-  - agent: methodology_editor
-    text_quote: We evaluate on four reasoning benchmarks
-    span: [0, 39]
-    issue_label: benchmark selection looks cherry-picked
-    question: |-
-      The four chosen benchmarks all weight a similar style of math-and-multiple-choice reasoning. Two standard suites for this class of model (TruthfulQA for hallucination, BBH for compositional reasoning) are absent and tend to expose this method's failure mode. The omission reads as cherry-picked unless the paper explains the choice.
-    why_it_matters: |-
-      Reviewers test claim scope by checking against benchmarks the authors didn't pick.
-    fix_suggestion: |-
-      Either run the additional standard benchmarks and report all results (wins and losses), or include a paragraph in the experimental setup explaining the benchmark choice (what dimension of capability the four picked benchmarks span and which they intentionally exclude).
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: reproducibility gaps'
-  article: |-
-    Models were trained on 8 A100 GPUs using AdamW with a cosine schedule and standard data augmentation. We report results after convergence.
-  critiques:
-  - agent: methodology_editor
-    text_quote: 'AdamW with a cosine schedule and standard data augmentation. We report results after convergence.'
-    span: [0, 100]
-    issue_label: reproducibility gaps in training description
-    question: |-
-      An expert reader cannot reproduce this from the description. Learning rate, batch size, warmup steps, weight decay, the specific augmentation pipeline, and the convergence criterion are all missing. "Standard" is not a specification: standard for ResNets is not standard for vision transformers.
-    why_it_matters: |-
-      The NeurIPS reproducibility checklist specifically requires these be reported; the absence will be flagged in any review.
-    fix_suggestion: |-
-      Add a complete hyperparameter table in the methods or appendix. State the actual augmentation pipeline (RandAugment with what magnitude? MixUp at what alpha?). Define "convergence" (epoch count, early-stopping criterion, or compute budget). Commit to releasing the training script.
+      Add experiments or roofline analysis with model/sequence configurations where TF, TB, TW are significantly imbalanced (e.g., 8s >> 24h) to demonstrate the efficacy of the unbalanced scheduling algorithms.
     replacement: null
     severity: medium
-- source: 'common reviewer concern: test-set leakage / tuning on test'
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): single example trajectory used as justification
   article: |-
-    We selected the final hyperparameter configuration based on performance on the held-out test set, after experimenting with 24 combinations.
+    claim that even with the addition of noise the failure of exploration could not be corrected (page 8, middle)
   critiques:
   - agent: methodology_editor
-    text_quote: We selected the final hyperparameter configuration based on performance on the held-out test set
-    span: [0, 100]
-    issue_label: test-set tuning invalidates test numbers
+    text_quote: |-
+      claim that even with the addition of noise the failure of exploration could not be corrected (page 8, middle)
+    span:
+    - 0
+    - 109
+    issue_label: single example trajectory used as justification
     question: |-
-      Selecting the hyperparameter configuration on the test set, with 24 combinations tried, means the reported test numbers are biased upward by the selection. This is a methodological error, not a presentation issue: the final number is no longer an unbiased estimate of test-set performance.
+      Finally, the claim that even with the addition of noise the failure of exploration could not be corrected (page 8, middle) should be better substantiated with a comparison based on distributions rather than just example trajectories (currently Suppl.Fi. A.1e-f is used as justification).
     why_it_matters: |-
-      Any reviewer who notices this asks for the test numbers to be re-reported with proper holdout discipline; if the gains shrink, the contribution may not hold.
+      Using single example trajectories as evidence for broad claims about the robustness or failure modes of the method is insufficient; distributional analysis is needed for rigorous validation.
     fix_suggestion: |-
-      Split the data into train / validation / test. Tune hyperparameters on validation only. Report final test numbers with the test set used exactly once. If a separate holdout is impossible (small dataset), use nested cross-validation and report that explicitly.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: overclaiming relative to scope'
-  article: |-
-    We have shown that our method outperforms the state of the art across a wide range of natural language tasks.
-  critiques:
-  - agent: methodology_editor
-    text_quote: across a wide range of natural language tasks
-    span: [55, 100]
-    issue_label: claim scope exceeds evidence scope
-    question: |-
-      The paper evaluates on three classification benchmarks. "A wide range of natural language tasks" implies generation, reasoning, structured prediction, and multilinguality; you have shown none of these. A reviewer will mark the claim as unsupported by the evidence presented.
-    why_it_matters: |-
-      Overclaim language is the easiest line in a paper to flag and the easiest reason for an Area Chair to recommend major revisions.
-    fix_suggestion: |-
-      Narrow the claim to what you tested: "across three classification benchmarks." Or add experiments on generation and structured prediction to support the broader claim.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: confounded comparison'
-  article: |-
-    Our 7B-parameter model achieves higher accuracy than the prior 3B-parameter method.
-  critiques:
-  - agent: methodology_editor
-    text_quote: Our 7B-parameter model achieves higher accuracy than the prior 3B-parameter method.
-    span: [0, 90]
-    issue_label: comparison confounded by model scale
-    question: |-
-      A 7B model beating a 3B model is not necessarily a method improvement: it might be a scale improvement, which would also occur if the prior method were scaled up. The fair comparison is at matched parameter count or matched compute budget.
-    why_it_matters: |-
-      Reviewers read scale-confounded comparisons as either negligent or as an attempt to hide that the method does not work at fair scale.
-    fix_suggestion: |-
-      Either scale the prior method to 7B parameters and re-run, or train your method at 3B and compare like-for-like. Report at matched compute budget (FLOPs at training) and matched parameter count.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: known confounder not addressed'
-  article: |-
-    We fine-tune Llama-3-8B on a curated dataset and evaluate on standard QA benchmarks. Our method improves MMLU from 65.3 to 67.1.
-  critiques:
-  - agent: methodology_editor
-    text_quote: improves MMLU from 65.3 to 67.1
-    span: [0, 33]
-    issue_label: benchmark contamination not addressed
-    question: |-
-      MMLU contamination of pretrained LLMs is a well-known confounder: a 1.8-point gain after fine-tuning on a curated dataset cannot be attributed to your method without checking whether your dataset (or any web-scale source it was filtered from) overlaps the MMLU test set. The paper does not report a contamination check.
-    why_it_matters: |-
-      A reviewer who has seen this confounder before will assume the gain is artifactual unless the paper rules it out.
-    fix_suggestion: |-
-      Run a contamination check between your training data and MMLU (n-gram overlap or model-likelihood method, as in the Pythia or BIG-bench contamination analyses). Report the overlap rate. If you can, hold out a MMLU subset that's verified contamination-free and re-evaluate.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: no failure-case analysis'
-  article: |-
-    Our method achieves the strongest reported results to date on the benchmark suite. We discuss the implications in Section 6.
-  critiques:
-  - agent: methodology_editor
-    text_quote: We discuss the implications in Section 6.
-    span: [55, 95]
-    issue_label: failure modes never analysed
-    question: |-
-      The paper reports only wins and a discussion of implications. A reviewer evaluating practical use needs to know when the method fails: on what inputs, in what regime, by how much. The absence of failure analysis suggests either the authors did not look or the failures would weaken the contribution.
-    why_it_matters: |-
-      Practitioners (and reviewers) trust papers that characterise their failure modes more than papers that report only wins.
-    fix_suggestion: |-
-      Add a failure-case section: examples where the method underperforms the baseline, a characterisation of when this happens (input length, domain, class imbalance, whatever predicts failure), and a brief discussion of why. One subsection in Results is sufficient.
+      Replace single-example justification with quantitative comparisons of exploration metrics across multiple runs and conditions.
     replacement: null
     severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): missing baseline comparison
+  article: |-
+    In Figure 6, MTDIFF-s-single is presented without comparison to existing single task baseline, Synthetic Experience Replay
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      In Figure 6, MTDIFF-s-single is presented without comparison to existing single task baseline, Synthetic Experience Replay
+    span:
+    - 0
+    - 122
+    issue_label: missing baseline comparison
+    question: |-
+      In Figure 6, it would be useful to compare MTDIFF-s-single with the existing single task baseline, Synthetic Experience Replay.
+    why_it_matters: |-
+      Without this comparison, it is unclear whether the synthetic data generation approach is novel relative to prior work on synthetic data in offline RL.
+    fix_suggestion: Add Synthetic Experience Replay [Lu et al.] as a baseline in Figure 6.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): results within standard deviations
+  article: Table 1 and Table 2 results
+  critiques:
+  - agent: methodology_editor
+    text_quote: Table 1 and Table 2 results
+    span:
+    - 0
+    - 27
+    issue_label: results within standard deviations
+    question: |-
+      The results of all methods, presented in the Table 1 and Table 2, are usually within their standard deviations. Because of that, I will not support the claim that the presented method is significantly better than others.
+    why_it_matters: |-
+      Without statistical significance, the claimed improvements over baselines cannot be established as genuine rather than noise.
+    fix_suggestion: |-
+      Perform statistical significance testing (e.g., t-tests) or increase dataset size / number of runs to reduce error bars and demonstrate clear separation from baselines.
+    replacement: null
+    severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): imbalanced noise rate ranges
+  article: |-
+    Table 2: asymmetric noise range {0.2, 0.3, 0.4} versus symmetric noise range {0.4, 0.6, 0.8}.
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Table 2: asymmetric noise range {0.2, 0.3, 0.4} versus symmetric noise range {0.4, 0.6, 0.8}.
+    span:
+    - 0
+    - 93
+    issue_label: imbalanced noise rate ranges
+    question: |-
+      The range of asymmetric noise is kept quite small {0.2, 0.3, 0.4} compared to symmetric noise {0.4, 0.6, 0.8} in Table 2. A larger range for asymmetric noise would reveal more insights into method robustness.
+    why_it_matters: |-
+      Asymmetric noise evaluation is incomplete; claims about robustness across noise types are unsupported without comparable stress-testing ranges.
+    fix_suggestion: |-
+      Extend asymmetric noise experiments to match or exceed the range of symmetric noise (e.g., {0.2, 0.4, 0.6, 0.8}) to fairly assess robustness.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 5/5): Confused use of watermarked text for FPR measurement
+  article: |-
+    Line 493: 'Utilizing Alg. 1, we generate 8000 watermarked sentences' to empirically measure FPR under hypothesis H_0.
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Line 493: 'Utilizing Alg. 1, we generate 8000 watermarked sentences' to empirically measure FPR under hypothesis H_0.
+    span:
+    - 0
+    - 117
+    issue_label: Confused use of watermarked text for FPR measurement
+    question: |-
+      To measure FPR (false positive rate under H_0), you need non-watermarked sentences from the null distribution, not watermarked ones generated by Alg. 1. Why are you applying Alg. 1 to measure the null hypothesis?
+    why_it_matters: |-
+      FPR is estimated incorrectly if computed over watermarked sentences, inflating the reported robustness of the detector.
+    fix_suggestion: |-
+      Use independent samples from the non-watermarked null distribution (human text or other baseline LLM) to measure FPR. Reserve Alg. 1 only for TPR measurement.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): missing mechanism for performance preservation
+  article: Equation (1) presents the main optimization objective for FATE
+  critiques:
+  - agent: methodology_editor
+    text_quote: Equation (1) presents the main optimization objective for FATE
+    span:
+    - 0
+    - 62
+    issue_label: missing mechanism for performance preservation
+    question: |-
+      The design for keeping the performance of GNNs is not presented in the equation (1). Authors are suggested to discuss why the proposed method can achieve the performance goal, as presented at the beginning of this paper.
+    why_it_matters: |-
+      A core claim (covert bias amplification without task performance loss) lacks explicit mathematical formulation, making it unclear how the method enforces this constraint.
+    fix_suggestion: |-
+      Add to Equation (1) an explicit term or constraint that enforces downstream task performance maintenance, and explain the mechanism.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): Missing ablation on hidden confounder strength
+  article: |-
+    Experiments use synthetic data with hidden confounding (Eq. 24), but this direction is not examined.
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Experiments use synthetic data with hidden confounding (Eq. 24), but this direction is not examined.
+    span:
+    - 0
+    - 100
+    issue_label: Missing ablation on hidden confounder strength
+    question: |-
+      The ability to deal with unobserved confounders is a strength of the work. So, why not add experiments on this? I know eq24 contains hidden confounding, but this direction is not examined, e.g., by adjusting the strength of confounding and comparing to other methods.
+    why_it_matters: |-
+      A key strength of the method—handling unobserved confounding—is claimed but not empirically validated across varying confounding strengths.
+    fix_suggestion: |-
+      Add experiments adjusting the strength of hidden confounding and compare the method to other approaches across these settings.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): biased evaluation (English-centric corpus) unjustified
+  article: Section p.7 justification that baseline (1) performs biased towards English
+  critiques:
+  - agent: methodology_editor
+    text_quote: Section p.7 justification that baseline (1) performs biased towards English
+    span:
+    - 0
+    - 75
+    issue_label: biased evaluation (English-centric corpus) unjustified
+    question: |-
+      The justification on p.7 that (1) performs much more biased towards English doesn't make much sense as the results in Table 1 only include `X ↔ en` scores and OPUS-100 is an English-centric corpus.
+    why_it_matters: |-
+      The claim about English bias is not substantiated by the evaluation setup; reporting per-language-pair breakdown would clarify whether differences generalize across language pairs.
+    fix_suggestion: |-
+      Add per-language-pair scores for all evaluation directions in the appendix for all methods. Consider a baseline where only the decoder is language-specific for the target language without encoder-level language-specific routing.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): weak empirical support for diversity-performance link
+  article: |-
+    Figure 3 shows improved problem solving attributed to improved diversity, but improvements are not very evident and the relationship between diversity and performance is unclear across difficulty levels.
+  critiques:
+  - agent: methodology_editor
+    text_quote: |-
+      Figure 3 shows improved problem solving attributed to improved diversity, but improvements are not very evident and the relationship between diversity and performance is unclear across difficulty levels.
+    span:
+    - 0
+    - 203
+    issue_label: weak empirical support for diversity-performance link
+    question: |-
+      The authors attribute improved problem solving to improved diversity, but Figure 3 doesn't clearly tell this story. In easy/medium cases, DPO matches or outperforms DPL, and in the hard case the improvement is minimal. If diversity truly leads to better problem solving, why isn't there a clear relationship between temperature and best-of-N accuracy within DPL across Figure 3?
+    why_it_matters: |-
+      The core motivation for the method—that diversity improves inference-time problem solving—lacks convincing empirical evidence, undermining the paper's central claim.
+    fix_suggestion: |-
+      Empirically study an inference-time scaling approach (e.g., best-of-N sampling) and demonstrate that diversity actually correlates with better performance. Alternatively, systematically vary temperature and show how best-of-N accuracy responds within DPL.
+    replacement: null
+    severity: high

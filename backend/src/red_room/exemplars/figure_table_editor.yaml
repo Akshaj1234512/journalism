@@ -1,167 +1,197 @@
-# Exemplars for figure_table_editor (Fern)
-# Anchored on real ML / NeurIPS / ICML reviewer comments on figure honesty
-# and table craft. Each `article` field below is the figure/table caption
-# or the body-text reference; the critique would normally come from Fern
-# also looking at the visual itself (multimodal). In exemplar form we
-# describe the figure pattern in the caption.
+# Exemplars for figure_table_editor
+# Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
+# NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
+# field 200-2500 words, must reference a specific anchor like
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
+# and the top 10 by quality score selected.
 #
-- source: 'common reviewer concern: truncated y-axis'
-  article: |-
-    Figure 3. Comparison of accuracy across methods on the benchmark. Our method (red bar) achieves 89.4%, outperforming the strongest prior method (gray bar, 87.1%). The y-axis spans 85% to 92%.
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): cherry-picked qualitative example
+  article: Figure 4 shows one sampled trajectory for each approach
   critiques:
   - agent: figure_table_editor
-    text_quote: The y-axis spans 85% to 92%.
-    span: [0, 27]
-    issue_label: truncated y-axis exaggerates gain
+    text_quote: Figure 4 shows one sampled trajectory for each approach
+    span:
+    - 0
+    - 55
+    issue_label: cherry-picked qualitative example
     question: |-
-      Figure 3 uses a y-axis from 85% to 92% on a comparison bar chart. The visual impression is that the proposed method's bar is more than twice as tall as the baseline, while the actual improvement is 2.3 points. Reviewers explicitly flag truncated baselines in bar charts as misleading visual rhetoric.
+      Figure 4: choosing one sampled trajectory for each approach is likely cherry-picking, I would suggest rendering N samples.
     why_it_matters: |-
-      Truncated y-axes on comparison bars is the single most-cited figure honesty issue in ML reviews and will cost the paper credibility even when the underlying result is fine.
+      A single trajectory example does not demonstrate that good samples are typical rather than outliers.
     fix_suggestion: |-
-      Plot the bars from 0 (or from a stated, conventional baseline like random-chance accuracy for the task). If you also want to show the close-up, add a second panel that zooms in, clearly labeled "detail view." Do not let the only view be the truncated one.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: missing error bars'
-  article: |-
-    Figure 5. Validation loss over training steps for our method (blue) and three baselines. Our method converges to a lower final loss across all settings.
-  critiques:
-  - agent: figure_table_editor
-    text_quote: Our method converges to a lower final loss across all settings.
-    span: [0, 63]
-    issue_label: missing error bars / confidence bands
-    question: |-
-      Figure 5 plots a single training curve per method, with no shaded confidence band and no per-seed variance visible. "Converges to a lower final loss" is a claim about the gap; without variance the reader cannot judge whether the gap is real or within run-to-run noise. Standard practice is at least three seeds with mean and 95% confidence band.
-    why_it_matters: |-
-      A loss-curve comparison without variance bands is exactly the figure pattern that lets noise look like signal, and reviewers know this.
-    fix_suggestion: |-
-      Re-run each curve for at least three seeds, plot the mean as the line and a shaded band as one standard deviation or 95% confidence. Add seed count and band definition to the caption.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: cherry-picked qualitative example'
-  article: |-
-    Figure 7. Example output from our model on a representative input. The generated text demonstrates the fluency and coherence improvements described in Section 4.
-  critiques:
-  - agent: figure_table_editor
-    text_quote: Example output from our model on a representative input.
-    span: [0, 56]
-    issue_label: qualitative example provenance unclear
-    question: |-
-      The caption calls this a "representative" example without saying how it was selected. Reviewers actively look for whether a qualitative figure is the best output cherry-picked, a random sample, or a worst-case stress test. "Representative" is the canonical evasion word.
-    why_it_matters: |-
-      A reviewer who suspects qualitative figures are cherry-picked will discount them entirely, and the caption's vagueness invites that suspicion.
-    fix_suggestion: |-
-      Either (a) sample three outputs uniformly at random from the test set and show all three with their seeds, or (b) explicitly label this as "selected to illustrate the failure mode of the baseline" and add a separate random-sample figure in the appendix. State the selection procedure in the caption.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: bolded winner inside the noise'
-  article: |-
-    Table 2. Accuracy on five benchmarks. Bold indicates the best result per column. Our method (last row) achieves the best result on 4 of 5 benchmarks. Standard deviations across three seeds are reported in parentheses.
-  critiques:
-  - agent: figure_table_editor
-    text_quote: Bold indicates the best result per column.
-    span: [0, 42]
-    issue_label: bold winner within noise
-    question: |-
-      In Table 2, the bolded "best" entries in columns 2 and 4 differ from the second-best entries by less than one standard deviation of the reported variance. Bolding within the noise floor visually claims a win that the variance does not support; this is the kind of subtle overclaim reviewers catch in tables.
-    why_it_matters: |-
-      Bolding the apparent winner without checking whether the gap survives the variance is a recurring honesty failure in results tables and reviewers consistently flag it.
-    fix_suggestion: |-
-      Bold only entries that are best by more than one standard deviation over the next-best. Add a footnote in the caption: "Bold = best with margin exceeding one std. dev." For close cases, bold both entries to indicate a tie within noise.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: misleading aggregation'
-  article: |-
-    Table 4. Average performance across diverse evaluation tasks. Our method achieves an average score of 76.3, outperforming the prior best at 71.8.
-  critiques:
-  - agent: figure_table_editor
-    text_quote: Average performance across diverse evaluation tasks. Our method achieves an average score of 76.3
-    span: [0, 100]
-    issue_label: misleading cross-task average
-    question: |-
-      Averaging "diverse" evaluation tasks works only when the tasks share a comparable metric and a comparable scale. If the average mixes accuracy (0-100) with BLEU (0-100 but with very different per-point meaning) or F1 with exact match, the average is not meaningful but reads as if it were. Reviewers from any of the affected sub-fields will challenge it.
-    why_it_matters: |-
-      A cross-task average that mixes scales is one of the most common subtle table honesty issues and reviewers familiar with the underlying metrics will spot it.
-    fix_suggestion: |-
-      Replace the single "average" column with either (a) per-task breakdowns side-by-side, (b) a rank-based or win-rate aggregation across tasks, or (c) a per-metric average where the metrics are actually comparable. If you keep an average, state in the caption how the metrics are normalized to be comparable.
+      Render multiple sampled trajectories from each approach to show the distribution of quality.
     replacement: null
     severity: medium
-- source: 'common reviewer concern: missing baseline row'
-  article: |-
-    Table 1. Comparison against prior methods. We compare against VanillaNet, ResNet-50, DenseNet-121, and BERT-base.
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): missing interpretation guidance in uncertainty plots
+  article: Figure 3
   critiques:
   - agent: figure_table_editor
-    text_quote: We compare against VanillaNet, ResNet-50, DenseNet-121, and BERT-base.
-    span: [0, 67]
-    issue_label: missing strong recent baseline
+    text_quote: Figure 3
+    span:
+    - 0
+    - 8
+    issue_label: missing interpretation guidance in uncertainty plots
     question: |-
-      Table 1 omits the closest recent strong baselines (ConvNeXt-V2, DeiT-III, or the relevant modern transformer in the target size class). Including only older or weaker baselines and omitting the obvious recent comparisons is a known table-construction tell. The omitted methods are the ones a reviewer in this area would expect to see.
+      In Figure 3, I believe the paper has to say how to interpret these plots, that in the OOD setting ideally aleatoric uncertainty should be low and epistemic uncertainty should be high, while the in-distribution setting it is the opposite (epistemic low and aleatoric variable depending on samples).
     why_it_matters: |-
-      Reviewers compare your baseline list against the field's current state-of-the-art set; a noticeable omission lands as either ignorance or selective comparison.
+      Without explicit guidance on the expected uncertainty signature for in-distribution vs. OOD samples, readers cannot evaluate whether the results support the paper's claims.
     fix_suggestion: |-
-      Add at least one row each for the strongest recent baseline in the same size and compute class. If your method does not beat them, scope the contribution honestly in the abstract and caption (efficiency, specific regime, etc.).
+      Add a caption or text explaining the ideal behavior: in OOD, epistemic high and aleatoric low; in-distribution, epistemic low and aleatoric variable.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): Inconsistent table formatting and unclear figure labeling
+  article: Tables stating certain scores are bold or underlined; Figure 1
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Tables stating certain scores are bold or underlined; Figure 1
+    span:
+    - 0
+    - 62
+    issue_label: Inconsistent table formatting and unclear figure labeling
+    question: |-
+      Many tables promise bold or underlined formatting in captions but the actual tables lack consistent emphasis, and Figure 1 lacks clear labels for gate locations. Are the formatting descriptions accurate, and is Figure 1 sufficiently annotated?
+    why_it_matters: |-
+      Inconsistent or missing formatting makes it hard for readers to quickly identify key results, and unlabeled figure components reduce clarity of the method presentation.
+    fix_suggestion: |-
+      Ensure table captions match actual formatting in tables, and add clear labels to Figure 1 indicating which gates are located where.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): confusing visualization and analysis of perturbation breakdown
+  article: |-
+    Figure 1-b and related text in Section 6.1 analyze the effect of perturbation rate on delete/add operations across label/attribute combinations
+  critiques:
+  - agent: figure_table_editor
+    text_quote: |-
+      Figure 1-b and related text in Section 6.1 analyze the effect of perturbation rate on delete/add operations across label/attribute combinations
+    span:
+    - 0
+    - 143
+    issue_label: confusing visualization and analysis of perturbation breakdown
+    question: |-
+      Confusing analysis on the effect of the perturbation rate. I understand that the authors attempt to show insights on the adversarial graph. However, it is hard to digest the operation (delete or add) on the same/different label/attribute. The discussion in Figure 1-b is also confusing. I suppose that detailed explanations of what exactly happened on each bar will make a more clear discussion. Authors are suggested to revise the paragraphs related to figures 1 and 2.
+    why_it_matters: |-
+      Unclear figure captions and analysis undermine reader comprehension of the method's behavior across different perturbation rates.
+    fix_suggestion: |-
+      Add detailed legends and extended captions to Figures 1 and 2 explaining each bar (e.g., 'delete within same label', 'add across different attributes'); revise the surrounding text with concrete examples.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 10/10, confidence 5/5): figure 2(b-d) overly complex with crossing lines
+  article: |-
+    There are too many crossing lines in Fig. 2 (b-d), which makes it very difficult to understand.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: |-
+      There are too many crossing lines in Fig. 2 (b-d), which makes it very difficult to understand.
+    span:
+    - 0
+    - 95
+    issue_label: figure 2(b-d) overly complex with crossing lines
+    question: |-
+      Figure 2(b-d) has excessive crossing lines that hinder comprehension. Can it be simplified?
+    why_it_matters: |-
+      Readers cannot easily understand the architecture or message the figure is meant to convey.
+    fix_suggestion: |-
+      Simplify Figure 2(b-d) by reducing line crossings—consider splitting into multiple sub-figures, using spatial layout improvements, or removing non-essential connections.
+    replacement: null
+    severity: low
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): Figure 1 readability poor
+  article: Figure 1 is not easily readable
+  critiques:
+  - agent: figure_table_editor
+    text_quote: Figure 1 is not easily readable
+    span:
+    - 0
+    - 31
+    issue_label: Figure 1 readability poor
+    question: |-
+      Figure 1 is not easily readable in my opinion. It would have been interesting to see an illustration of the set Q_t in the numerical experiments and the computed importance weights, and also to see the evolution of this query set over time.
+    why_it_matters: |-
+      Poor visualization of the core algorithmic concept (the query set Q_t) makes it harder for readers to understand and verify the method's behavior across iterations.
+    fix_suggestion: |-
+      Improve Figure 1 typography and readability; add visualizations showing the query set Q_t, importance weights, and how the set evolves over time in the experiments.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): undefined notation in key definitions and theorems
+  article: |-
+    Definition 4, the indices need more explanation; Theorem 1, how each tensor alk contracts with certain indices (dimensions) of cl1,l2,...,lr should be explained more clearly; Example 1, there should be more explanation of why only the generic elements of the G4 group are used while others are contracted; Lemma 1, the meaning and constraints of ασ need clarification.
+  critiques:
+  - agent: figure_table_editor
+    text_quote: |-
+      Definition 4, the indices need more explanation; Theorem 1, how each tensor alk contracts with certain indices (dimensions) of cl1,l2,...,lr should be explained more clearly; Example 1, there should be more explanation of why only the generic elements of the G4 group are used while others are contracted; Lemma 1, the meaning and constraints of ασ need clarification.
+    span:
+    - 0
+    - 368
+    issue_label: undefined notation in key definitions and theorems
+    question: |-
+      In Definition 4, the indices need more explanation. In Theorem 1, how each tensor alk contracts with certain indices (dimensions) of cl1,l2,...,lr should be explained more clearly. In Example 1, there should be more explanation of why only the generic elements of the G4 group are used while others are contracted. In Lemma 1, the meaning and constraints of ασ need clarification.
+    why_it_matters: |-
+      Poorly explained notation and index conventions make the core theoretical contributions (Definition 4, Theorem 1, Lemma 1) difficult to parse and verify.
+    fix_suggestion: |-
+      Add detailed explanations of all indices and variables at their first use in Definition 4, Theorem 1, Example 1, and Lemma 1; introduce a notation table early in the paper.
     replacement: null
     severity: high
-- source: 'common reviewer concern: unreadable axis labels / legend'
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): inconsistency between Figure 4 and Table 2 results
   article: |-
-    Figure 6. Performance vs. compute budget for our method and four baselines. The x-axis shows training FLOPs; the y-axis shows downstream accuracy.
+    Figure 4 shows qualitative rollouts from the proposed method and RT-2-X which seem to indicate that RT-2-X manipulates objects with less precision. However, quantitative results in Table 2 show that RT-2-X outperforms the introduced method in certain tasks.
   critiques:
   - agent: figure_table_editor
-    text_quote: Performance vs. compute budget for our method and four baselines.
-    span: [0, 66]
-    issue_label: unreadable figure typography
+    text_quote: |-
+      Figure 4 shows qualitative rollouts from the proposed method and RT-2-X which seem to indicate that RT-2-X manipulates objects with less precision. However, quantitative results in Table 2 show that RT-2-X outperforms the introduced method in certain tasks.
+    span:
+    - 0
+    - 257
+    issue_label: inconsistency between Figure 4 and Table 2 results
     question: |-
-      Figure 6 has 8pt axis labels and a legend that overlaps two of the trend lines. At print size the labels are difficult to read and the legend obscures the data. This is the kind of typography issue that makes a reviewer stop trusting the figure even when the result is fine.
+      How are findings from Figure 4 generalizable? It shows qualitative rollouts from the proposed method and RT-2-X which seem to indicate that RT-2-X manipulates objects with less precision. However, quantitative results in Table 2 show that RT-2-X outperforms the introduced method in certain tasks, showing it might be more precise in some cases.
     why_it_matters: |-
-      Reviewers should not have to zoom into a PDF to read a key figure; if they do, they will mention it.
+      The qualitative narrative in Figure 4 contradicts the quantitative comparison in Table 2, undermining reader confidence in the method's relative performance claims.
     fix_suggestion: |-
-      Increase axis-label and legend font to at least 10pt at print size. Move the legend outside the plot area (right side or bottom). Verify readability at single-column print width.
+      Either provide quantitative metrics for the Figure 4 rollouts to explain the discrepancy, or clarify which tasks and metrics are being compared in Figure 4 vs Table 2.
     replacement: null
     severity: medium
-- source: 'common reviewer concern: caption / figure content mismatch'
-  article: |-
-    Figure 4. Accuracy of our method across six languages, demonstrating consistent multilingual performance.
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): Figure 2 labels and clarity
+  article: Figure 2
   critiques:
   - agent: figure_table_editor
-    text_quote: Accuracy of our method across six languages, demonstrating consistent multilingual performance.
-    span: [0, 97]
-    issue_label: caption mismatches figure content
+    text_quote: Figure 2
+    span:
+    - 0
+    - 8
+    issue_label: Figure 2 labels and clarity
     question: |-
-      The caption asserts "consistent multilingual performance" but the figure shows substantial variation across the six languages (the lowest-performing language is roughly 18 points below the highest). The visual contradicts the framing. Either the caption is overstating consistency or the variation needs to be characterized as a finding rather than dismissed.
+      Figure 2 needs to be improved. The icons to the left are different cell types but they should be labeled—I see the neuron in the middle but what are the other two? Also, what does each square represent? The figure is confusing as it stands now.
     why_it_matters: |-
-      A caption-figure mismatch is the kind of subtle dishonesty that reviewers point to as a reason to discount the paper's broader claims.
+      Readers cannot interpret the core methodological diagram without understanding what the cell-type icons represent or the meaning of the visual elements.
     fix_suggestion: |-
-      Rewrite the caption to reflect what the figure actually shows ("Per-language accuracy across six languages; performance varies from X to Y with a Z-point gap on the lowest-resource language"). Address the per-language variation in the body text as a limitation or as a finding worth analysis.
+      Label all cell-type icons clearly and explain what each square represents in the figure caption or legend.
     replacement: null
     severity: medium
-- source: 'common reviewer concern: color-deficient inaccessibility'
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 8/10, confidence 4/5): Missing discussion and baseline comparison for multi-transform robustness
   article: |-
-    Figure 2. Comparison of three methods on the validation set. Method A is shown in red, Method B in green, and Method C in blue.
+    Figure 7 in appendix: robustness under multiple simultaneous transformations appears low (TPR@1%FPR drops below 10% even with two transformations).
   critiques:
   - agent: figure_table_editor
-    text_quote: Method A is shown in red, Method B in green, and Method C in blue.
-    span: [0, 65]
-    issue_label: red-green palette fails color-deficient vision
+    text_quote: |-
+      Figure 7 in appendix: robustness under multiple simultaneous transformations appears low (TPR@1%FPR drops below 10% even with two transformations).
+    span:
+    - 0
+    - 147
+    issue_label: Missing discussion and baseline comparison for multi-transform robustness
     question: |-
-      The red / green / blue palette in Figure 2 is the canonical inaccessible choice for the ~8% of male readers with red-green color deficiency, who will see Methods A and B as the same hue. ML-conference style guides increasingly request color-deficient-safe palettes (viridis, blue / orange / green, or paired with shape or pattern).
+      Figure 7 shows concerning robustness degradation under multiple simultaneous transformations, but lacks discussion of which transformation combinations are particularly effective or why. Additionally, Figure 7 results are not shown for baseline watermarks in the appendix — this comparison would be instructive.
     why_it_matters: |-
-      Accessibility failures in figures are easy to fix and have become a standard reviewer comment; they also genuinely block readers.
+      Without discussion of failure modes and baseline comparisons, it is unclear whether the proposed method's robustness under multi-transform attack is actually stronger than existing approaches.
     fix_suggestion: |-
-      Switch to a color-deficient-safe palette (viridis for continuous, the Wong color-blind-safe palette for categorical) and add a marker shape or line style per method as a redundant encoding. Verify with a simulator (Color Oracle, Coblis).
+      Add analysis of which transformation combinations most effectively break the watermark while maintaining image quality, and include analogous Figure 7 variants for baseline methods.
     replacement: null
     severity: medium
-- source: 'common reviewer concern: architecture diagram inconsistency'
-  article: |-
-    Figure 1. Overview of our framework. The model takes the input through an encoder, a cross-attention block, and a decoder, producing the final output.
-  critiques:
-  - agent: figure_table_editor
-    text_quote: an encoder, a cross-attention block, and a decoder
-    span: [0, 49]
-    issue_label: diagram contradicts methods text
-    question: |-
-      Figure 1 shows three components (encoder, cross-attention, decoder) but Section 3.2 describes four (encoder, retrieval module, cross-attention, decoder). The retrieval module is central to the contribution and missing from the overview figure. Reviewers will use Figure 1 as their mental model and will be confused when the methods section adds a component the diagram does not show.
-    why_it_matters: |-
-      The overview figure is the reader's anchor; a missing component creates persistent confusion that infects every subsequent section.
-    fix_suggestion: |-
-      Redraw Figure 1 to include the retrieval module in the position it sits in the actual pipeline, with arrows showing the data flow. Verify the diagram matches Section 3.2 component by component before submission.
-    replacement: null
-    severity: high

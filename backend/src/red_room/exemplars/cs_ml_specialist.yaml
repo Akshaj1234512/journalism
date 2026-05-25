@@ -1,165 +1,203 @@
-# Exemplars for cs_ml_specialist (Cyril)
-# Anchored on ICML/NeurIPS/ICLR reviewer-feedback patterns and the public
-# NeurIPS reproducibility checklist. Cyril's voice is a working CS / ML
-# conference reviewer's voice.
+# Exemplars for cs_ml_specialist
+# Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
+# NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
+# field 200-2500 words, must reference a specific anchor like
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
+# and the top 10 by quality score selected.
 #
-- source: 'NeurIPS reviewer concern: novelty bar for main track'
-  article: |-
-    In this paper, we benchmark eight existing fine-tuning methods on the new MERIDIAN-Bench evaluation suite and provide a comprehensive analysis of their relative strengths.
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): missing HSI-specific baseline comparison (MST/MST++)
+  article: Figure 5 and backbone choice of ViT variants for comparison
   critiques:
   - agent: cs_ml_specialist
-    text_quote: we benchmark eight existing fine-tuning methods
-    span: [0, 47]
-    issue_label: novelty bar (main track)
+    text_quote: Figure 5 and backbone choice of ViT variants for comparison
+    span:
+    - 0
+    - 59
+    issue_label: missing HSI-specific baseline comparison (MST/MST++)
     question: |-
-      A benchmark study comparing existing methods is a useful contribution, but the NeurIPS main track typically requires a new method, insight, or theoretical result. Without a novel contribution beyond the benchmark itself, the appropriate venue is a workshop track or the Datasets and Benchmarks track. The current framing positions this as a main-conference submission.
+      The backbone is ViT variants. However, the ViT is very computationally expensive because its computational complexity is quadratic to the input spatial size. MST [1] or MST++ [2] are specially designed for HSI processing with linear computational complexity. Thus, it is better to add a comparison with the spectral Transformer in Figure 5.
     why_it_matters: |-
-      An Area Chair reading this for the main track will likely route it to the D&B track or recommend rejection on novelty grounds.
+      Failure to compare against domain-specific, efficient baselines (MST/MST++) tailored to HSI processing undermines the credibility of design choices and performance claims.
     fix_suggestion: |-
-      If the contribution is the benchmark itself, retarget to the NeurIPS Datasets & Benchmarks track or ICLR's similar venue. If the contribution is an empirical insight from the benchmarking, sharpen the Abstract and Intro to name that insight explicitly and show how it changes practice.
+      Add comparison with MST and MST++ methods in Figure 5 to demonstrate computational efficiency and task-specific performance.
     replacement: null
     severity: high
-- source: 'standard scale-confound concern in LLM papers'
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): limited architecture evaluation diversity
   article: |-
-    Our 70B-parameter model fine-tuned with our proposed method outperforms a 13B baseline by 8.4 points on MMLU.
+    Section 3.1 threat model states attackers have only access to graph data; experiments use SGC as surrogate and GCN as target
   critiques:
   - agent: cs_ml_specialist
-    text_quote: outperforms a 13B baseline by 8.4 points on MMLU
-    span: [54, 100]
-    issue_label: scale confound (70B vs 13B)
+    text_quote: |-
+      Section 3.1 threat model states attackers have only access to graph data; experiments use SGC as surrogate and GCN as target
+    span:
+    - 0
+    - 124
+    issue_label: limited architecture evaluation diversity
     question: |-
-      Comparing a 70B model to a 13B baseline does not isolate the contribution of your fine-tuning method: most of the 8.4-point gain may come from the 5.4x parameter scale, which any fine-tuning method (or none) would benefit from. The fair comparison is at matched parameter count, ideally with the same base model family.
+      It is worth noting that the surrogate model is SGC while the target model is GCN, and they almost have extremely similar architecture. Authors are suggested to evaluate the effectiveness of the proposed method on other target GNN architectures (e.g., GAT, GraphSAGE) to follow the attack setting of this paper (section 3.1, attackers have only access to the graph data).
     why_it_matters: |-
-      Reviewers familiar with the LLM-scaling literature will discount this comparison entirely; the result needs to be redone at matched scale.
+      Evaluating only on architecturally similar models (SGC→GCN) does not demonstrate transferability; stronger claims about generality require evaluation on diverse architectures.
     fix_suggestion: |-
-      Add a 70B-vs-70B comparison (apply your method to the 70B and compare to a strong 70B baseline of the same family) or a 13B-vs-13B comparison. If compute is the constraint, run the smaller comparison and frame the larger result as a scaling validation, not the main claim.
+      Add experiments with target models GAT and GraphSAGE while keeping the surrogate as SGC, reporting attack success rates for each.
     replacement: null
     severity: high
-- source: 'NeurIPS / ICLR: reproducibility checklist required'
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 10/10, confidence 4/5): ambiguous scope—tasks vs inputs vs representations
   article: |-
-    All experiments were conducted on a single workstation with consumer-grade GPUs. We release training code and trained checkpoints on GitHub.
+    The work uses 'compositional tasks', 'compositional inputs/datasets', and 'compositional representations of inputs' at various times before Section 3.1, and at times 'input' and 'representation' are used interchangeably.
   critiques:
   - agent: cs_ml_specialist
-    text_quote: All experiments were conducted on a single workstation with consumer-grade GPUs.
-    span: [0, 81]
-    issue_label: compute budget not specified
+    text_quote: |-
+      The work uses 'compositional tasks', 'compositional inputs/datasets', and 'compositional representations of inputs' at various times before Section 3.1, and at times 'input' and 'representation' are used interchangeably.
+    span:
+    - 0
+    - 220
+    issue_label: ambiguous scope—tasks vs inputs vs representations
     question: |-
-      "Consumer-grade GPUs" is not a specification. The NeurIPS reproducibility checklist requires GPU type, training time per experiment, and total compute. A reader cannot estimate the cost of reproducing your results, and reviewers cannot compare your method's efficiency claims against alternatives.
+      It is unclear whether this work is about compositional tasks, compositional inputs/datasets, or compositional representations of inputs. All three are used at various times, causing confusion about the scope being studied, especially before Section 3.1 clarifies that $z$ is the disentangled representation.
     why_it_matters: |-
-      Reviewers flag missing compute information consistently; it's an easy "incomplete" mark on the reproducibility checklist.
+      Readers cannot clearly determine what aspects of compositionality the theory applies to, undermining the clarity and generality claims of the work.
     fix_suggestion: |-
-      Add a table or paragraph listing: GPU model (e.g., RTX 4090, A6000), number of GPUs used, training time per main experiment, and total compute in GPU-hours. Include this in the Methods section, not buried in the appendix.
+      Clarify early and consistently which of compositional tasks, inputs, or representations is the focus. Use 'input' and 'representation' distinctly and avoid using them interchangeably, especially in the discussion section.
     replacement: null
     severity: medium
-- source: 'LLM-eval-specific concern: prompt sensitivity'
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 10/10, confidence 4/5): notation inconsistency and undefined terms
   article: |-
-    We evaluate the model on GSM8K and MATH using few-shot chain-of-thought prompting and report accuracy. Our method improves accuracy by 3.2 points on average.
+    Section 3.2 uses $f_w(x)$ where $z$ might be expected; equation (1) introduces dual coefficients without clarifying their origin; disentanglement is applied to either $z$ or $\phi(z)$ inconsistently.
   critiques:
   - agent: cs_ml_specialist
-    text_quote: few-shot chain-of-thought prompting and report accuracy
-    span: [40, 95]
-    issue_label: prompt sensitivity not addressed
+    text_quote: |-
+      Section 3.2 uses $f_w(x)$ where $z$ might be expected; equation (1) introduces dual coefficients without clarifying their origin; disentanglement is applied to either $z$ or $\phi(z)$ inconsistently.
+    span:
+    - 0
+    - 199
+    issue_label: notation inconsistency and undefined terms
     question: |-
-      LLM evaluation results on GSM8K and MATH are well-documented to be highly prompt-sensitive: changing the few-shot examples, the prompt wording, or the answer extraction regex can swing results by 3+ points. The paper does not report which prompts were used, whether multiple prompts were tried, or how answer extraction was implemented.
+      At times $x$ is used and at other times $z$ is used—are these the same? In equation (1), where do the dual coefficients come from? Are they determined from $w$ and $\phi$ in some way? Which of $z$ or $\phi(z)$ is disentangled in your theory?
     why_it_matters: |-
-      Reviewers familiar with LLM evaluation will read a 3.2-point gain without prompt-sensitivity analysis as potentially noise.
+      Ambiguous notation and undefined quantities hinder understanding of the core technical setup and generalize confidence in the results.
     fix_suggestion: |-
-      Add an appendix section with the exact prompts used (few-shot examples, system message, answer-extraction regex). Run a prompt-sensitivity ablation: 3 different few-shot example sets, report mean and standard deviation. Move the prompts into the released code.
+      Clarify the distinction between input $x$ and representation $z$; explain how dual coefficients in equation (1) are determined; explicitly state which variable (z or φ(z)) is disentangled.
     replacement: null
     severity: high
-- source: 'standard related-work positioning concern'
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 10/10, confidence 4/5): missing intuition for key definition
   article: |-
-    We propose a novel method for steering language model generation through activation editing.
+    Section 4.2 defines conjunction-wise additive functions; the definition is given but intuition is not provided until after the proof.
   critiques:
   - agent: cs_ml_specialist
-    text_quote: a novel method for steering language model generation through activation editing
-    span: [11, 90]
-    issue_label: novelty claim vs concurrent work
+    text_quote: |-
+      Section 4.2 defines conjunction-wise additive functions; the definition is given but intuition is not provided until after the proof.
+    span:
+    - 0
+    - 133
+    issue_label: missing intuition for key definition
     question: |-
-      Activation steering is a well-developed line of work (Hernandez et al. 2023, Turner et al. 2023, ITI by Li et al. 2023, RepE by Zou et al. 2023). "Novel" needs to specify what's new relative to these. The paper's Related Work doesn't position the contribution against this cluster, so the novelty claim reads as unaware of prior work rather than building on it.
+      Section 4.2 defines conjunction-wise additive functions but does not provide intuition for the definition itself—only for the proof. It is difficult to quickly parse the math and understand what these functions are. Please provide more helpful intuition, as well as an example of a conjunction-wise additive function and how it differs from an additive function.
     why_it_matters: |-
-      Reviewers familiar with the activation-steering literature will mark the novelty claim as overstated and the related work as incomplete.
+      Readers cannot quickly grasp the central conceptual contribution without investing significant effort in the definition, reducing the paper's clarity and impact.
     fix_suggestion: |-
-      Rewrite the contribution claim to specify what's new (a new objective? a new layer choice? a new control regime?). Expand the Related Work to acknowledge the steering / RepE line and articulate the specific gap your method addresses.
-    replacement: null
-    severity: high
-- source: 'ICML / NeurIPS theory-claim convention'
-  article: |-
-    Theoretically, our method has better generalization properties than standard approaches because it implicitly regularizes the model.
-  critiques:
-  - agent: cs_ml_specialist
-    text_quote: Theoretically, our method has better generalization properties
-    span: [0, 60]
-    issue_label: theoretical claim without theorem
-    question: |-
-      A theoretical claim about generalization at an ICML / NeurIPS venue is expected to be backed by a theorem, a proof, or at minimum a proof sketch in the appendix. "Implicitly regularizes" is a hypothesis; without a formal statement (Rademacher complexity bound, PAC-Bayes argument, or similar) reviewers will treat the claim as informal hand-waving.
-    why_it_matters: |-
-      The discrepancy between "theoretically" and "no theorem" is a clear flag at ML theory venues and a credibility hit at empirical ones.
-    fix_suggestion: |-
-      Either drop the "theoretical" framing and present this as an empirical observation supported by experiments, or add a formal statement and proof sketch in an appendix. If the latter, name the assumptions and the bound type explicitly.
+      Before the formal definition in Section 4.2, provide an intuitive explanation and a concrete example of a conjunction-wise additive function, and illustrate how it differs from a standard additive function.
     replacement: null
     severity: medium
-- source: 'NeurIPS LLM-eval contamination'
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 8/10, confidence 4/5): compression results lack external validity
   article: |-
-    We evaluate our model on MMLU and report a top-1 accuracy of 71.4%, an improvement of 2.1 points over the baseline.
+    Section 5 experiments on compressed Transformers; authors note 'even with a fairly restrictive compression setup, compressed models may not stay faithful to the original RASP program'.
   critiques:
   - agent: cs_ml_specialist
-    text_quote: 71.4%, an improvement of 2.1 points
-    span: [0, 39]
-    issue_label: MMLU contamination check absent
+    text_quote: |-
+      Section 5 experiments on compressed Transformers; authors note 'even with a fairly restrictive compression setup, compressed models may not stay faithful to the original RASP program'.
+    span:
+    - 0
+    - 184
+    issue_label: compression results lack external validity
     question: |-
-      MMLU is known to be partly contaminated in most open-source pretraining corpora, and the contamination footprint differs by model. A 2.1-point gain on MMLU without a contamination check could be attributable to your training data overlapping the test set rather than to the method. The paper does not report a contamination analysis.
+      Section 5 reads as an entirely different paper with significant limitations. Given that compressed Transformers neither follow the original RASP program, nor is it clear this behavior holds for non-Tracr Transformers, what can be taken away from these results?
     why_it_matters: |-
-      LLM-savvy reviewers expect contamination checks on MMLU-style benchmarks; the absence will be flagged.
+      Without evidence that findings generalize beyond Tracr-compiled Transformers, the compression experiments contribute ambiguous insights that may not inform broader compression technique evaluation.
     fix_suggestion: |-
-      Run an n-gram overlap or model-likelihood contamination check between your training data and MMLU (Pythia-style or Llama-3 paper-style methodology). Report the contamination rate. If feasible, evaluate on a verified-contamination-free subset and re-report the gain.
+      Either (1) validate compression findings on non-Tracr Transformers to establish generality, or (2) reframe Section 5 as a Tracr-specific case study with limited scope.
     replacement: null
     severity: medium
-- source: 'standard ablation-table convention'
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 7/10, confidence 4/5): non-linear scaling reduces interpretability
   article: |-
-    We performed an ablation study showing that each component of our method contributes positively (Table 4).
+    In Fig. 5, FLS is less linear than FID w.r.t. the % of perturbed data, possibly due to adaptive variance leading to complex interactions between samples.
   critiques:
   - agent: cs_ml_specialist
-    text_quote: We performed an ablation study
-    span: [0, 30]
-    issue_label: ablation table format
+    text_quote: |-
+      In Fig. 5, FLS is less linear than FID w.r.t. the % of perturbed data, possibly due to adaptive variance leading to complex interactions between samples.
+    span:
+    - 0
+    - 153
+    issue_label: non-linear scaling reduces interpretability
     question: |-
-      Table 4 lists ablations but doesn't follow the standard ML-paper convention: full method in row 1, then one ablation per row going from least-impactful to most-impactful, then the bare baseline at the bottom. As presented, the reader can't easily see which component is doing the most work. Per-component contribution numbers are also missing standard deviations across seeds.
+      FLS shows non-linear scaling with perturbation level in Fig. 5, whereas FID is linear. Does this non-linearity stem from the adaptive variance computation, and how does this complexity affect intuitive interpretation of FLS scores in practice?
     why_it_matters: |-
-      The hardest reviewer test of an ablation table is "what's the most-stripped version that still beats the baseline?" Your table doesn't make that easy to read.
+      A metric that deviates from expected linear degradation under controlled perturbation is harder to interpret and may lead to misuse if practitioners expect FID-like behavior.
     fix_suggestion: |-
-      Restructure Table 4: row 1 = full method (with mean and standard deviation), then rows that remove one component each, then a "baseline only" row. Order rows by performance impact (smallest drop first, largest drop last). Three seeds per cell.
+      Analyze and explain the source of non-linearity in Fig. 5; consider whether the adaptive variance design is necessary, or provide guidance on when FLS scores should be interpreted non-linearly.
     replacement: null
     severity: medium
-- source: 'evaluation regime vs claim alignment'
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): Unexplained reaction-diffusion connection
   article: |-
-    Our method is particularly well-suited to low-data regimes. We demonstrate this on the SST-2 and CoLA benchmarks.
+    Section 3.4.1: the authors relate GCN with reaction-diffusion models but do not introduce the concept of reaction-diffusion process.
   critiques:
   - agent: cs_ml_specialist
-    text_quote: particularly well-suited to low-data regimes
-    span: [0, 45]
-    issue_label: claim doesn't match evaluation regime
+    text_quote: |-
+      Section 3.4.1: the authors relate GCN with reaction-diffusion models but do not introduce the concept of reaction-diffusion process.
+    span:
+    - 0
+    - 132
+    issue_label: Unexplained reaction-diffusion connection
     question: |-
-      The paper claims the method excels in low-data regimes but evaluates on SST-2 and CoLA at their default training-set sizes (67K and 8.5K examples). The "low-data" claim needs evaluation at intentionally subsampled regimes: typically 16, 64, 256, 1024 examples, possibly more.
+      In Section 3.4.1, the authors seem to relate GCN with reaction-diffusion models. This is not clear at all as the concept is not introduced.
     why_it_matters: |-
-      A reviewer who reads the claim and the experiments will notice the mismatch immediately and ask for the experiments that would actually support the claim.
+      Without explaining how reaction-diffusion connects to the GCN architecture, the methodological motivation is opaque.
     fix_suggestion: |-
-      Add a subsection in Results: subsample the training data to {16, 64, 256, 1024} examples per class. Run your method and the baselines at each setting (5 seeds each). Plot accuracy vs. training-set size. If your method's advantage grows as data shrinks, the claim is supported.
+      Introduce and define reaction-diffusion processes before relating them to GCNs, with intuitive explanation of the connection.
     replacement: null
-    severity: high
-- source: 'standard description-precision concern'
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): overclaimed application domain, cherry-picked example
   article: |-
-    We use a modified attention mechanism that incorporates positional information through learned offsets, similar in spirit to relative position encoding.
+    Lines 317–319 claim the Navier-Stokes example is 'particularly helpful in understanding turbulent flows,' but Figure 2 presents a simple, non-turbulent example.
   critiques:
   - agent: cs_ml_specialist
-    text_quote: 'similar in spirit to relative position encoding'
-    span: [82, 130]
-    issue_label: architecture described too informally
+    text_quote: |-
+      Lines 317–319 claim the Navier-Stokes example is 'particularly helpful in understanding turbulent flows,' but Figure 2 presents a simple, non-turbulent example.
+    span:
+    - 0
+    - 160
+    issue_label: overclaimed application domain, cherry-picked example
     question: |-
-      "Similar in spirit to" is not a specification. An ML paper's attention mechanism needs to be defined precisely: an equation showing how queries, keys, values, and the positional term combine, or pseudocode that an implementer could follow. As written, two competent practitioners would implement two different things.
+      The Navier-Stokes example seems oversold as relevant to turbulent flows when Figure 2 shows no turbulence. This would be much more compelling if applied to an actual turbulent flow where the algorithm recovers ground truth.
     why_it_matters: |-
-      Without precise definition, reviewers cannot judge whether your formulation is novel and practitioners cannot reproduce it.
+      The mismatch between the motivating claim (turbulent flows) and the demonstrated example (laminar flow) weakens the credibility of the scientific discovery application.
     fix_suggestion: |-
-      Add an equation block (or two) showing the exact attention computation. Specify the dimensionality of the learned offset, where in the attention formula it enters (additive on logits? gated on values?), and any normalization. Include pseudocode in the appendix.
+      Apply the method to a real turbulent flow dataset (e.g., from Johns Hopkins turbulence database) and demonstrate recovery of ground truth in that regime.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 4/5): unexplained GT WER result
+  article: Table 1 shows GT achieves higher WER than P-Flow, which is unexplained.
+  critiques:
+  - agent: cs_ml_specialist
+    text_quote: Table 1 shows GT achieves higher WER than P-Flow, which is unexplained.
+    span:
+    - 0
+    - 71
+    issue_label: unexplained GT WER result
+    question: |-
+      In table 1, why does GT achieve higher WER compared to P-Flow? This seems counterintuitive and requires clarification.
+    why_it_matters: |-
+      An unexplained result that contradicts intuition undermines confidence in the evaluation methodology or results.
+    fix_suggestion: |-
+      Explain the WER discrepancy between GT and P-Flow, or verify the evaluation setup.
     replacement: null
     severity: medium

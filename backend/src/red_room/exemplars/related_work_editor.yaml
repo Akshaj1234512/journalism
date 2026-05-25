@@ -1,164 +1,205 @@
-# Exemplars for related_work_editor (Rita)
-# Anchored on real OpenReview / NeurIPS / ICML rebuttal patterns where
-# missing-citation or wrong-framing complaints landed.
+# Exemplars for related_work_editor
+# Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
+# NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
+# field 200-2500 words, must reference a specific anchor like
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
+# and the top 10 by quality score selected.
 #
-- source: 'common reviewer concern: missing concurrent work'
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 5/5): weak limitation of prior work justification
   article: |-
-    We propose a novel framework for retrieval-augmented generation that combines a dense retriever with a small reranker before the LLM. To the best of our knowledge, this is the first work to apply reranking in a RAG pipeline at production scale.
+    Section 2-c discusses limitations of existing works; the paper claims to address limitations 1-3 of prior fairness attacks on graphs
   critiques:
   - agent: related_work_editor
-    text_quote: this is the first work to apply reranking in a RAG pipeline at production scale
-    span: [0, 88]
-    issue_label: overbroad novelty claim
+    text_quote: |-
+      Section 2-c discusses limitations of existing works; the paper claims to address limitations 1-3 of prior fairness attacks on graphs
+    span:
+    - 0
+    - 132
+    issue_label: weak limitation of prior work justification
     question: |-
-      Reranking inside a RAG pipeline is widely deployed (Glass et al. 2022, the public Cohere and Anthropic retrieval stacks, and several 2023-2024 papers including Ma et al.'s zero-shot listwise reranker). The "first at production scale" framing is either incorrect or needs to be scoped very precisely. What exactly is novel here that none of the existing reranking-in-RAG systems do?
+      The limitation of existing works is weak (section 2-c). For limitation 1, this paper still only attacks one fairness concept when generating the adversarial graph. For limitation 2, the operation space depends on the practicality of the attack. For limitation 3, the specially designed module for maintaining performance is not presented in this paper. Authors are suggested to revise this part to highlight the contribution of this paper.
     why_it_matters: |-
-      A reviewer who has seen any of the prior systems will read this as the authors either not knowing the field or pretending not to, and either reading produces a clear rejection vote.
+      Without clearly articulating why existing work is insufficient and how FATE advances beyond it, the novelty claim remains unconvincing.
     fix_suggestion: |-
-      Rewrite the claim to scope it precisely (e.g. "first cross-encoder reranker trained jointly with a retriever in a production RAG system serving X domain"). Add a Related Work paragraph that engages with at least three prior reranking-in-RAG systems and states the specific axis on which your contribution differs.
+      Revise Section 2-c to more sharply delineate what FATE uniquely accomplishes relative to prior work, and clarify which limitations are actually addressed by the present paper.
     replacement: null
     severity: high
-- source: 'common reviewer concern: missing seminal citation'
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 5/5): missing cross-disciplinary citations
   article: |-
-    We introduce a contrastive auxiliary loss that pulls representations of semantically similar inputs together and pushes dissimilar inputs apart.
+    Section 4.1 claims 'users might find it difficult to express tradeoffs' without citing relevant work from marketing or recommender systems literature.
   critiques:
   - agent: related_work_editor
-    text_quote: a contrastive auxiliary loss that pulls representations of semantically similar inputs together and pushes dissimilar inputs apart
-    span: [0, 130]
-    issue_label: missing seminal citation (SimCLR / contrastive)
+    text_quote: |-
+      Section 4.1 claims 'users might find it difficult to express tradeoffs' without citing relevant work from marketing or recommender systems literature.
+    span:
+    - 0
+    - 150
+    issue_label: missing cross-disciplinary citations
     question: |-
-      This is the standard contrastive loss from SimCLR (Chen et al. 2020) and the earlier triplet / NCE formulations (Sohn 2016, Oord et al. 2018). The paper presents the loss as if it were a new construction. Cite the canonical references and state what is actually new about your version (the negative sampling, the temperature schedule, the joint training, whatever it is).
+      It would be nice if you could refer to papers from other fields more (e.g. marketing or recommender system) when making some claims (e.g. section 4.1 'users might find it difficult to express tradeoffs…')
     why_it_matters: |-
-      Introducing a 2020-era technique without the canonical citation is the single fastest way to lose a reviewer's trust in the rest of the related-work treatment.
+      Claims about user behavior lack grounding in established literature from adjacent fields, weakening the motivation for the approach.
     fix_suggestion: |-
-      Add SimCLR, MoCo, and SupCon as the anchor citations in the loss-introduction sentence. Move your specific innovation (if any) into a clear contrastive-with-X formulation and explain the delta in one sentence.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: stale SOTA baseline'
-  article: |-
-    We compare against the strongest prior method for code summarization, CodeBERT (Feng et al. 2020), and demonstrate a 4.2 BLEU improvement.
-  critiques:
-  - agent: related_work_editor
-    text_quote: the strongest prior method for code summarization, CodeBERT (Feng et al. 2020)
-    span: [0, 79]
-    issue_label: stale prior-best citation
-    question: |-
-      CodeBERT is not the strongest prior method for code summarization in 2025. CodeT5+ (Wang et al. 2023), StarCoder-Instruct (Li et al. 2024), and the recent DeepSeek-Coder family all post substantially stronger BLEU on the standard benchmarks. A 4.2-point gain over a 2020 model will not be read as state-of-the-art.
-    why_it_matters: |-
-      Calling a five-year-old model the "strongest prior" is the kind of framing that reads to a reviewer as either ignorance of the field or deliberate stale-baseline gaming.
-    fix_suggestion: |-
-      Re-run the comparison against at least one current strong baseline in the same size class (CodeT5+ 770M or DeepSeek-Coder 6.7B at the relevant scale). If your method does not beat them, scope the contribution to a regime where it does (smaller model, lower-resource language, faster inference).
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: missing concurrent paper'
-  article: |-
-    Our approach trains a small policy head on top of a frozen vision encoder, enabling robotic manipulation from a single demonstration.
-  critiques:
-  - agent: related_work_editor
-    text_quote: trains a small policy head on top of a frozen vision encoder, enabling robotic manipulation from a single demonstration
-    span: [0, 119]
-    issue_label: concurrent work not cited
-    question: |-
-      Several recent papers in 2024-2025 do exactly this pattern (frozen vision backbone, small policy head, one-shot or few-shot manipulation): Octo (Mees et al.), OpenVLA (Kim et al.), and RT-2 (Brohan et al.) are the obvious anchors. The Related Work does not engage with any of them. What is the specific axis on which your method differs?
-    why_it_matters: |-
-      A robotics reviewer will know these papers and will read the omission as either unawareness or evasion, both of which sink the paper.
-    fix_suggestion: |-
-      Add a Related Work paragraph that compares against at least Octo and OpenVLA on architecture (what is frozen, what is trained, head size), data (demonstrations, embodiments), and evaluation (manipulation tasks, success metric).
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: buried key citation'
-  article: |-
-    Prior work on chain-of-thought reasoning (Wei et al. 2022; many others) has shown that LLMs perform better with intermediate reasoning steps. We extend this paradigm to multimodal inputs.
-  critiques:
-  - agent: related_work_editor
-    text_quote: Prior work on chain-of-thought reasoning (Wei et al. 2022; many others)
-    span: [0, 71]
-    issue_label: closest prior work cited only in passing
-    question: |-
-      Multimodal chain-of-thought has been studied in the last 18 months (Multimodal-CoT Zhang et al. 2023, MM-ReAct Yang et al. 2023, the work from the Allen Institute). These are the closest prior works to your contribution and they appear nowhere except possibly in the "many others." A serious reviewer will ask why these are not the anchor citations.
-    why_it_matters: |-
-      Citing the closest prior work in passing reads as either oversight or an attempt to inflate the contribution by hiding the comparison.
-    fix_suggestion: |-
-      Add a dedicated paragraph in Related Work titled "Multimodal chain-of-thought" that compares against Multimodal-CoT and MM-ReAct on the specific axes that distinguish your work (modality, dataset, prompting strategy, training procedure).
-    replacement: null
-    severity: medium
-- source: 'common reviewer concern: mischaracterization of cited work'
-  article: |-
-    Recent work (Smith et al. 2024) has shown that scaling alone does not improve reasoning ability in large language models.
-  critiques:
-  - agent: related_work_editor
-    text_quote: Recent work (Smith et al. 2024) has shown that scaling alone does not improve reasoning ability in large language models.
-    span: [0, 121]
-    issue_label: prior work mischaracterized
-    question: |-
-      This is a stronger claim than Smith et al. actually make. Their result is that on their specific reasoning benchmark and at their specific scale, the scaling exponent flattens past a certain point. They explicitly say the result may not transfer to other reasoning benchmarks or larger scales. Citing them for the universal "scaling does not improve reasoning" claim will be challenged by any reviewer who has read the paper.
-    why_it_matters: |-
-      Mischaracterizing a citation is one of the few things reviewers consistently call out by name, and it undermines trust in every other citation in the paper.
-    fix_suggestion: |-
-      Soften the claim to match the source (e.g. "Smith et al. 2024 find diminishing returns from scaling on benchmark X at scales up to Y") and either add separate citations that support the broader claim or remove the broader claim.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: missing sub-field'
-  article: |-
-    We propose a new method for generating synthetic training data using LLMs, demonstrating improvements on six downstream classification tasks.
-  critiques:
-  - agent: related_work_editor
-    text_quote: a new method for generating synthetic training data using LLMs
-    span: [0, 64]
-    issue_label: data-distillation sub-field absent
-    question: |-
-      Synthetic-data generation with LLMs sits at the intersection of data augmentation and knowledge distillation. The data-distillation literature (Dai et al. 2023, Liu et al. 2024 on Self-Instruct and its followups, the LLM2LLM line) is not represented in the Related Work. A reviewer from that sub-field will read this as the authors only engaging with the data-augmentation side of the problem.
-    why_it_matters: |-
-      A paper that sits between two sub-fields needs to engage with both; engaging with one is a half-finished literature review.
-    fix_suggestion: |-
-      Add a paragraph on LLM data distillation covering Self-Instruct, Alpaca-style data generation, LLM2LLM, and recent work on filtering and rewriting synthetic data for quality. Position your method against that line, not just data-augmentation methods.
-    replacement: null
-    severity: medium
-- source: 'common reviewer concern: citation count without engagement'
-  article: |-
-    Many prior works have studied retrieval-augmented generation (Lewis et al. 2020; Karpukhin et al. 2020; Izacard and Grave 2021; Borgeaud et al. 2022; Shi et al. 2023; Asai et al. 2024).
-  critiques:
-  - agent: related_work_editor
-    text_quote: Many prior works have studied retrieval-augmented generation (Lewis et al. 2020; Karpukhin et al. 2020; Izacard and Grave 2021; Borgeaud et al. 2022; Shi et al. 2023; Asai et al. 2024).
-    span: [0, 174]
-    issue_label: citations without engagement
-    question: |-
-      The paper lists six RAG papers in one sentence without explaining how this contribution relates to any of them. Reviewers read this kind of list as the authors having done a search but not having actually positioned themselves. Pick the two or three papers that are most directly comparable and state the specific axis (retriever choice, context-length handling, training-data construction, latency) on which your work differs.
-    why_it_matters: |-
-      A wall of citations satisfies a search-engine check but not a reviewer reading for novelty positioning.
-    fix_suggestion: |-
-      Replace the sentence with two or three substantive paragraphs covering the directly comparable systems (Atlas, REPLUG, Self-RAG) and stating the specific axis on which your method differs from each.
-    replacement: null
-    severity: medium
-- source: 'common reviewer concern: missing self-citation rival'
-  article: |-
-    Our prior work (Chen et al. 2023, Chen et al. 2024) demonstrated that careful prompt engineering substantially affects LLM evaluation outcomes. In this paper, we extend that result to multilingual settings.
-  critiques:
-  - agent: related_work_editor
-    text_quote: Our prior work (Chen et al. 2023, Chen et al. 2024) demonstrated that careful prompt engineering substantially affects LLM evaluation outcomes.
-    span: [0, 144]
-    issue_label: rival group's relevant work not cited
-    question: |-
-      The prompt-sensitivity result is more commonly associated with the work of Sclar et al. 2023 ("Quantifying Language Models' Sensitivity to Spurious Features in Prompt Design") and Mizrahi et al. 2024. Citing only your own prior work without engaging with the rival group's central result will read as selective citation.
-    why_it_matters: |-
-      Reviewers track who is doing related work in this area and will catch one-sided self-citation in a heartbeat.
-    fix_suggestion: |-
-      Add Sclar et al. and Mizrahi et al. as anchor citations alongside your own prior work, and state the specific multilingual extension that distinguishes this paper from what they have already shown.
-    replacement: null
-    severity: medium
-- source: 'common reviewer concern: missing canonical survey anchor'
-  article: |-
-    We tackle the open problem of long-context understanding in LLMs, where models must reason over inputs spanning tens of thousands of tokens.
-  critiques:
-  - agent: related_work_editor
-    text_quote: We tackle the open problem of long-context understanding in LLMs
-    span: [0, 64]
-    issue_label: missing survey / position anchor
-    question: |-
-      Long-context LLM research has a recent canonical survey (Pawar et al. 2024, "The What, Why, and How of Context Length Extension Techniques in LLMs"). It is the standard map of the sub-field and anchors most submissions in this area. Not citing it suggests the paper has not surveyed the existing taxonomy of approaches.
-    why_it_matters: |-
-      A paper claiming to tackle an "open problem" in a well-mapped area without acknowledging the existing map looks unanchored.
-    fix_suggestion: |-
-      Cite the canonical survey in the Introduction and use its taxonomy to position your contribution within one of the established branches (position encoding, attention modifications, retrieval-style, memory augmentation).
+      Cite relevant work from marketing and recommender systems literature when discussing user preference elicitation challenges.
     replacement: null
     severity: low
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): Unclear novelty relative to prior theorems
+  article: |-
+    Theorem 4 seems to be an adaptation of the CF approach in (Newey et al., 1999), and Theorem 6 seems to be an adaptation of the IV approach in (D'Haultfoeuille, 2011).
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Theorem 4 seems to be an adaptation of the CF approach in (Newey et al., 1999), and Theorem 6 seems to be an adaptation of the IV approach in (D'Haultfoeuille, 2011).
+    span:
+    - 0
+    - 166
+    issue_label: Unclear novelty relative to prior theorems
+    question: |-
+      Theorem 4 seems to be an adaptation of the CF approach in (Newey et al., 1999), and Theorem 6 seems to be an adaptation of the IV approach in (D'Haultfoeuille, 2011). If there are some technical novelties, they should be discussed and compared to the original works; otherwise, I suggest being more explicit about this weakness.
+    why_it_matters: |-
+      Readers cannot assess whether the theoretical contribution is novel or merely re-applies existing techniques without explicit discussion of what is new.
+    fix_suggestion: |-
+      Discuss and compare technical novelties to the original works, or be more explicit about which parts are adaptations.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): Missing classical ML benchmarks (AutoML Benchmark Suite, TabRepo)
+  article: |-
+    Table 1 claims to show 'the landscape of existing tabular machine learning benchmarks compared to TabReD', but only covers deep learning vs. classical ML benchmarks.
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Table 1 claims to show 'the landscape of existing tabular machine learning benchmarks compared to TabReD', but only covers deep learning vs. classical ML benchmarks.
+    span:
+    - 0
+    - 165
+    issue_label: Missing classical ML benchmarks (AutoML Benchmark Suite, TabRepo)
+    question: |-
+      Table 1 is categorically wrong in claiming to represent 'tabular machine learning benchmarks'—it only covers deep learning vs. classical ML benchmarks. You omit major classical ML benchmarking efforts like the AutoML Benchmark Suite and TabRepo, which are better curated and more relevant to your claims.
+    why_it_matters: |-
+      Omitting key benchmarks undermines the paper's framing as an analysis of the existing landscape and makes it unclear how TabReD relates to or advances beyond prior curation efforts in tabular benchmarking.
+    fix_suggestion: |-
+      Either incorporate AutoML Benchmark Suite and TabRepo into Table 1 and your analysis, or relabel Table 1 as 'deep learning vs. classical ML benchmarks' and clarify how your work differs from classical ML-focused benchmarking efforts.
+    replacement: null
+    severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): undefined quality terminology
+  article: |-
+    Line 15 uses terms 'high-quality' and 'low-quality' data without defining them relative to the generative model's behavior
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Line 15 uses terms 'high-quality' and 'low-quality' data without defining them relative to the generative model's behavior
+    span:
+    - 0
+    - 122
+    issue_label: undefined quality terminology
+    question: |-
+      Line 15: Unclear what 'high-quality' and 'low-quality' mean as it seems MTDIFF-s models the original distribution
+    why_it_matters: |-
+      Imprecise terminology obscures whether synthetic data is supposed to be an improvement over the original distribution or merely a realistic sample from it.
+    fix_suggestion: |-
+      Clarify definitions of data quality or rephrase to reflect that MTDIFF-s models the original offline distribution.
+    replacement: null
+    severity: low
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 6/10, confidence 5/5): terminology clarity for practitioners
+  article: |-
+    Line 248 redefines 'near-optimal' and 'sub-optimal' identically to D4RL's 'full-replay' and 'medium-replay'
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Line 248 redefines 'near-optimal' and 'sub-optimal' identically to D4RL's 'full-replay' and 'medium-replay'
+    span:
+    - 0
+    - 107
+    issue_label: terminology clarity for practitioners
+    question: |-
+      Line 248: the author's definition of 'near-optimal' is the same as D4RL 'full-replay' and 'sub-optimal' is the same as D4RL 'medium-replay'. These descriptions may be more clear to offline RL practitioners
+    why_it_matters: |-
+      Using D4RL's established terminology would improve clarity and reduce cognitive load for readers familiar with the benchmark.
+    fix_suggestion: |-
+      Use D4RL terminology ('full-replay', 'medium-replay') directly rather than redefining them.
+    replacement: null
+    severity: low
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): missing recent related work comparison
+  article: |-
+    The paper does not discuss or compare against the O(1/k) tangent residual rate achievable by explicit primal-dual extragradient schemes (e.g., Algorithm 3 in Pethick et al. 2023), which do not require inexact max-oracles.
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      The paper does not discuss or compare against the O(1/k) tangent residual rate achievable by explicit primal-dual extragradient schemes (e.g., Algorithm 3 in Pethick et al. 2023), which do not require inexact max-oracles.
+    span:
+    - 0
+    - 221
+    issue_label: missing recent related work comparison
+    question: |-
+      Pethick et al. 2023 (Algorithm 3) achieves O(1/k) rate for tangent residual using an explicit primal-dual extragradient scheme without inexact max-oracles. How do your results compare, and why is the implicit Bregman approach preferable if simpler explicit schemes exist?
+    why_it_matters: |-
+      Without acknowledging or contrasting against this competing approach, the motivation for the implicit Bregman framework and hyperplane projection variants is unclear and potentially overstated.
+    fix_suggestion: |-
+      Add a detailed comparison to Pethick et al. 2023 Algorithm 3 and discuss computational or convergence advantages of your Bregman approach relative to explicit alternatives.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): stated motivation not pursued
+  article: |-
+    Abstract and page 4 mention 'nonlinear variant of PDHG' as original motivation, but the paper does not develop this; instead it focuses on Bregman divergence for weak Minty VIs.
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Abstract and page 4 mention 'nonlinear variant of PDHG' as original motivation, but the paper does not develop this; instead it focuses on Bregman divergence for weak Minty VIs.
+    span:
+    - 0
+    - 177
+    issue_label: stated motivation not pursued
+    question: |-
+      The abstract and page 4 suggest motivation from a nonlinear PDHG variant, which could be an optimistic variant of the PDEG scheme. Why not directly study this setting instead of Bregman divergence and weak Minty VIs, which seem tangential to the original motivation?
+    why_it_matters: |-
+      Misalignment between stated motivation (nonlinear PDHG) and executed work (Bregman weak Minty VIs) suggests the paper lost focus or overconstrained the problem in a way that limits applicability.
+    fix_suggestion: |-
+      Refocus the paper on the nonlinear PDHG variant mentioned as original motivation, or clarify and justify why the Bregman weak Minty formulation is the right generalization.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): unclear definition of FM fields
+  article: |-
+    Authors state fields are 'past interactions between users and items' (page 1 bottom) but elsewhere language suggests fields are often 'descriptors of the item and/or user'.
+  critiques:
+  - agent: related_work_editor
+    text_quote: |-
+      Authors state fields are 'past interactions between users and items' (page 1 bottom) but elsewhere language suggests fields are often 'descriptors of the item and/or user'.
+    span:
+    - 0
+    - 172
+    issue_label: unclear definition of FM fields
+    question: |-
+      What are concrete examples of the fields used in your factorization machine framework? The language on page 1 suggests 'past interactions between users and items,' but elsewhere it sounds like the fields are item/user descriptors rather than interaction data. This ambiguity makes it hard to understand the actual input representation.
+    why_it_matters: |-
+      Readers cannot fully evaluate whether FM is the right choice without understanding what input fields the method actually processes.
+    fix_suggestion: |-
+      Provide detailed, concrete examples of typical fields in the advertising recommendation setting—e.g., user ID, item category, user historical click count, device type, etc.—to clarify whether these are descriptors or interaction records.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): incomplete related work review
+  article: Section 1, paragraph 2 review of ML-based PDE solvers
+  critiques:
+  - agent: related_work_editor
+    text_quote: Section 1, paragraph 2 review of ML-based PDE solvers
+    span:
+    - 0
+    - 53
+    issue_label: incomplete related work review
+    question: |-
+      The review of ML-based/Physics-Informed PDE solvers in Section 1 seems incomplete, with a lot of recent work missing. The authors should consult Subsection 1.1 in [1] for a more complete review.
+    why_it_matters: |-
+      An incomplete literature review undermines the framing of the paper's contributions and may leave readers unaware of closely related concurrent or recent work.
+    fix_suggestion: |-
+      Expand the related work discussion in Section 1 to include recent work in the field, using prior survey work as a reference.
+    replacement: null
+    severity: medium

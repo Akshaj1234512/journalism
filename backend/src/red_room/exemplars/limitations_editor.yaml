@@ -1,164 +1,202 @@
-# Exemplars for limitations_editor (Lina)
-# Anchored on NeurIPS / ICML / ICLR ethics-review patterns and OpenReview
-# rebuttals where authors had to retrofit honest limitations.
+# Exemplars for limitations_editor
+# Pulled from real OpenReview reviews on ICLR 2024 / ICLR 2025 /
+# NeurIPS 2023 (filtered to confidence>=4 reviewers, weaknesses
+# field 200-2500 words, must reference a specific anchor like
+# Table/Fig/Section/Eq number). Classified by lane via Claude Haiku
+# and the top 10 by quality score selected.
 #
-- source: 'common reviewer concern: boilerplate impact statement'
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 5/5): unsourced financial claims in motivation
   article: |-
-    Broader Impact. There are many potential societal consequences of our work, none which we feel must be specifically highlighted here.
+    The paper mentions that software failures cost 'billions of dollars,' but does not provide specific references or data to substantiate this claim. For instance, Figure 1 cites the financial impact without attributing it to any source.
   critiques:
   - agent: limitations_editor
-    text_quote: There are many potential societal consequences of our work, none which we feel must be specifically highlighted here.
-    span: [0, 117]
-    issue_label: boilerplate impact statement
+    text_quote: |-
+      The paper mentions that software failures cost 'billions of dollars,' but does not provide specific references or data to substantiate this claim. For instance, Figure 1 cites the financial impact without attributing it to any source.
+    span:
+    - 0
+    - 234
+    issue_label: unsourced financial claims in motivation
     question: |-
-      This is the canonical boilerplate Broader Impact sentence that reviewers and the NeurIPS ethics committee actively flag. A paper proposing a new generative model, a new evaluation method, or a new training procedure always has specific impacts (compute cost, dual-use risk, dataset provenance, downstream applications). Saying none must be highlighted reads as the authors not engaging with the prompt.
+      The paper mentions that software failures cost 'billions of dollars,' but does not provide specific references or data to substantiate this claim. For instance, Figure 1 cites the financial impact without attributing it to any source.
     why_it_matters: |-
-      This sentence alone has triggered ethics-review revision requests at NeurIPS. It is the single most-flagged boilerplate phrase in submission history.
+      Unsubstantiated claims about problem importance weaken the motivation and reader confidence in the work's relevance.
     fix_suggestion: |-
-      Write three to five concrete sentences naming (a) the most plausible misuse pathway, (b) the population most affected if the method is deployed, (c) the environmental cost of training, and (d) the steps taken or recommended to mitigate the most serious concern.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: dual-use risk silent'
-  article: |-
-    We release a high-fidelity speech synthesis model capable of cloning a target speaker's voice from 30 seconds of reference audio.
-  critiques:
-  - agent: limitations_editor
-    text_quote: a high-fidelity speech synthesis model capable of cloning a target speaker's voice from 30 seconds of reference audio
-    span: [0, 116]
-    issue_label: dual-use risk unaddressed
-    question: |-
-      Voice-cloning models from short reference audio are the canonical fraud-and-disinformation dual-use case (impersonation, vishing attacks, non-consensual audio deepfakes). The paper does not discuss this, propose access controls, or commit to watermarking. Any reviewer with ethics experience will request a substantive discussion before recommending acceptance.
-    why_it_matters: |-
-      Voice-cloning is the dual-use category most likely to trigger an ethics-committee review at top venues. Silence on it reads as either negligence or evasion.
-    fix_suggestion: |-
-      Add a Dual-Use and Mitigation paragraph covering (a) the misuse scenarios you considered, (b) the access-control or release-strategy decision (gated weights, watermarking, detection model, demo-only), and (c) the specific population most at risk (public figures, vulnerable groups targeted by social engineering).
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: dataset bias unacknowledged'
-  article: |-
-    Our training corpus comprises 50 billion tokens of English-language web text collected from Common Crawl. We demonstrate strong performance across a wide range of language tasks.
-  critiques:
-  - agent: limitations_editor
-    text_quote: 50 billion tokens of English-language web text collected from Common Crawl. We demonstrate strong performance across a wide range of language tasks.
-    span: [0, 152]
-    issue_label: dataset bias unacknowledged
-    question: |-
-      Common Crawl is heavily skewed toward US and UK English, has documented overrepresentation of Wikipedia and news-site text, and contains well-documented toxicity, demographic biases, and PII concerns (Dodge et al. 2021, Birhane et al. 2021). The "wide range of language tasks" claim does not engage with what the training data excludes (non-English, low-resource registers, oral language). This is the kind of unstated assumption that a fairness-aware reviewer will flag.
-    why_it_matters: |-
-      A paper claiming general language capability from an English-only Common-Crawl-derived corpus without a limitations sentence on language and demographic coverage is a standard rejection pattern at fairness-aware venues.
-    fix_suggestion: |-
-      Add to Limitations: the specific languages excluded, the dialect and register skew of Common Crawl, the documented bias and toxicity issues, and the implication for downstream-task claims. State explicitly what "wide range of language tasks" excludes.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: failure-mode analysis missing'
-  article: |-
-    We evaluate our method on six visual reasoning benchmarks and outperform the prior best on all six. The method is robust and consistent across diverse problem types.
-  critiques:
-  - agent: limitations_editor
-    text_quote: The method is robust and consistent across diverse problem types.
-    span: [0, 65]
-    issue_label: failure-mode analysis missing
-    question: |-
-      A "robust and consistent" claim with no characterization of when the method fails is the kind of claim a reviewer will not accept on its face. Real systems fail; describing the failure regime is what separates careful work from marketing. Where does this method break (long inputs, abstract reasoning, distribution shift, adversarial inputs)?
-    why_it_matters: |-
-      Reviewers want to see authors thought about failure modes; the absence reads as either the authors not having looked or the failure mode being uncomfortable.
-    fix_suggestion: |-
-      Add a Failure Modes subsection with three to five concrete examples where the method produces a wrong or low-quality output. For each, describe the input class, what went wrong, and your hypothesis about why.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: missing compute / accessibility limitation'
-  article: |-
-    We train the model on 1024 H100 GPUs for 14 days, processing 2 trillion tokens. The resulting checkpoint achieves state-of-the-art performance on standard benchmarks.
-  critiques:
-  - agent: limitations_editor
-    text_quote: 1024 H100 GPUs for 14 days, processing 2 trillion tokens
-    span: [0, 56]
-    issue_label: accessibility limitation unstated
-    question: |-
-      The training requirement (over 14,000 H100-days, on the order of $1M+ in compute) places the contribution out of reach for the vast majority of academic groups and many industrial labs. The Limitations should state explicitly that the result depends on this scale and what the contribution offers to readers who cannot reproduce it (released checkpoint, scaling-law extrapolation, sample-efficient variant).
-    why_it_matters: |-
-      Reviewers and the broader community increasingly expect papers to acknowledge when results depend on compute access most readers do not have.
-    fix_suggestion: |-
-      Add to Limitations: the compute requirement, the estimated cost in dollars and energy (carbon-footprint line is expected), and the specific resources you are releasing to make the work useful for groups that cannot reproduce it.
-    replacement: null
-    severity: medium
-- source: 'common reviewer concern: missing IRB / consent disclosure'
-  article: |-
-    We collected 4,200 conversational interactions from volunteer participants for the evaluation set. The participants completed three tasks while being recorded.
-  critiques:
-  - agent: limitations_editor
-    text_quote: We collected 4,200 conversational interactions from volunteer participants
-    span: [0, 75]
-    issue_label: IRB / consent disclosure missing
-    question: |-
-      Human-subjects data collection at this scale requires IRB review (or equivalent ethics-board approval), informed consent covering downstream use including model training, and disclosure of compensation. None of this is stated. This is the exact gap that the NeurIPS ethics-review checklist asks about.
-    why_it_matters: |-
-      Missing IRB / consent disclosure on a human-subjects paper is one of the few things that triggers an automatic ethics-committee escalation at NeurIPS-style venues.
-    fix_suggestion: |-
-      Add an Ethics statement covering (a) the IRB or institutional ethics board that approved the protocol, (b) the consent form's coverage of downstream use including model training and dataset release, (c) participant compensation, and (d) any opt-out or data-deletion procedure.
-    replacement: null
-    severity: high
-- source: 'common reviewer concern: domain transfer overstated'
-  article: |-
-    We propose a general-purpose evaluation framework for assessing reasoning quality in language models. The framework is broadly applicable across domains and tasks.
-  critiques:
-  - agent: limitations_editor
-    text_quote: a general-purpose evaluation framework for assessing reasoning quality in language models. The framework is broadly applicable across domains and tasks.
-    span: [0, 153]
-    issue_label: generality claim exceeds evaluation
-    question: |-
-      "General-purpose" and "broadly applicable across domains" are strong claims. If the framework was validated only on math word problems and high-school science questions (the typical pattern), the limitation is the gap between the claim and the validation. State explicitly the domains where you validated, the domains where you have not validated, and the assumption a reader should make about transfer.
-    why_it_matters: |-
-      Reviewers in adjacent domains will read an unscoped "general-purpose" claim and conclude the framework probably does not transfer to their domain unless told otherwise.
-    fix_suggestion: |-
-      Add to Limitations: the domains the framework was validated on, the domains where transfer is plausible but unverified, and at least one domain where the framework is expected not to apply (and why). Tighten the abstract and conclusion to match this scope.
-    replacement: null
-    severity: medium
-- source: 'common reviewer concern: sampling-bias gap'
-  article: |-
-    We evaluate the model on a held-out test set of 10,000 user queries sampled from production traffic. The model achieves 87.3% accuracy.
-  critiques:
-  - agent: limitations_editor
-    text_quote: 10,000 user queries sampled from production traffic
-    span: [0, 50]
-    issue_label: sampling-bias limitation unstated
-    question: |-
-      Production-traffic sampling has systematic selection biases (active users overrepresented, certain query types more frequent, time-of-day effects, geographic skew, the population that did not churn). The 87.3% number is conditional on those biases. A reviewer will ask whether the result transfers to the long tail of less-active users or different geographies.
-    why_it_matters: |-
-      Production-sampling bias is a known gotcha; not naming it as a limitation reads as either oversight or selective evaluation.
-    fix_suggestion: |-
-      Add to Limitations: the selection bias of production traffic (active-user skew, geographic and language distribution, query-type frequency), the implication for the headline accuracy number, and (if possible) a stratified result across the most likely confounding axes.
-    replacement: null
-    severity: medium
-- source: 'common reviewer concern: environmental cost not reported'
-  article: |-
-    The full training run took 14 days on our distributed cluster.
-  critiques:
-  - agent: limitations_editor
-    text_quote: The full training run took 14 days on our distributed cluster.
-    span: [0, 60]
-    issue_label: training compute / energy unreported
-    question: |-
-      The ML-reproducibility checklist asks for the total training compute (GPU-hours or PF-days), the hardware, and the estimated energy or carbon footprint. None of those are reported. This is a near-mandatory disclosure for large-compute experiments at top venues.
-    why_it_matters: |-
-      Missing the standard compute / energy disclosure will trigger a reviewer or chair comment and is easy to fix.
-    fix_suggestion: |-
-      State the total compute in GPU-hours, the hardware (model and count of GPUs), and the energy or estimated carbon footprint (using the published per-GPU power figures or a tool like ML CO2 Impact).
+      Provide concrete data and citations from industry reports or academic studies that quantify the financial and operational impact of software failures. For example, referencing studies from Gartner or IEEE could strengthen the argument and give readers a clearer understanding of the problem's magnitude.
     replacement: null
     severity: low
-- source: 'common reviewer concern: hand-wavy threats to validity'
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): label noise effects unexamined
   article: |-
-    We acknowledge that confounding factors may influence our results, and we leave a thorough analysis of these factors to future work.
+    Figure 2 shows increase in diversity beyond conformity threshold; unclear whether this is due to label noise in generated datasets.
   critiques:
   - agent: limitations_editor
-    text_quote: confounding factors may influence our results, and we leave a thorough analysis of these factors to future work
-    span: [0, 114]
-    issue_label: hand-wavy threat to validity
+    text_quote: |-
+      Figure 2 shows increase in diversity beyond conformity threshold; unclear whether this is due to label noise in generated datasets.
+    span:
+    - 0
+    - 131
+    issue_label: label noise effects unexamined
     question: |-
-      This sentence acknowledges confounding without naming any specific confounder, controlling for it, or explaining why future work is the right place. Reviewers read this as the authors gesturing at a known weakness rather than engaging with it. Name the specific confounders (data leakage, prompt sensitivity, evaluator effects, time-of-collection bias) and state for each what was controlled, what was checked, and what remains open.
+      It is unclear how noise in the datasets (due to inaccurate labels) affects the trends seen in tradeoffs. For example, is the increase in diversity beyond the conformity threshold in Fig 2 simply due to noise? Having humans classify (subsets of) the generated datasets, and introducing the accuracy of the synthetic datasets as an additional metric could make this clearer.
     why_it_matters: |-
-      Hand-wavy threat-to-validity sentences are a common rebuttal trigger; reviewers ask exactly which confounders and how they were addressed.
+      Reported tradeoffs may be artifacts of mislabeled synthetic data rather than genuine diversity-quality relationships, undermining core claims.
     fix_suggestion: |-
-      Rewrite as a list of named confounders with one sentence each: confounder, control or check applied, residual concern. The shape "we controlled for X with method Y; we did not control for Z and this could mean W" is what reviewers want.
+      Conduct human evaluation on a subset of generated datasets to quantify label accuracy, and include this as a metric in tradeoff analysis.
+    replacement: null
+    severity: medium
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 8/10, confidence 4/5): missing caveat on tracing concentration assumption
+  article: Line 353
+  critiques:
+  - agent: limitations_editor
+    text_quote: Line 353
+    span:
+    - 0
+    - 8
+    issue_label: missing caveat on tracing concentration assumption
+    question: |-
+      It might be worth a quick footnote here that not all examples have their tracing effect concentrated at the last subject token index. See Figure 11 of the original ROME paper for some natural instances.
+    why_it_matters: |-
+      The paper's analysis may rely implicitly on a simplifying assumption about token position that does not hold universally, and readers should be aware of this limitation.
+    fix_suggestion: |-
+      Add a footnote acknowledging that not all examples have tracing effects concentrated at the last subject token index, with reference to ROME Figure 11.
+    replacement: null
+    severity: low
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): Gap between theory and practice: global optimization assumption
+  article: |-
+    The paper defines the utility function u_α assuming finding a *global optimizer* of the loss w.r.t. the network weights (p. 3), which is non-convex and NP-hard for deep learning.
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      The paper defines the utility function u_α assuming finding a *global optimizer* of the loss w.r.t. the network weights (p. 3), which is non-convex and NP-hard for deep learning.
+    span:
+    - 0
+    - 178
+    issue_label: 'Gap between theory and practice: global optimization assumption'
+    question: |-
+      Your utility function u_α implicitly assumes finding a global optimizer of the loss, but in practice gradient descent finds local minima. How does this affect your claim that u_α1 > u_α2 implies α1 is a better architectural choice? Without acknowledgment of this subtlety, can you really claim the architecture optimization problem is 'learnable' for deep neural networks?
+    why_it_matters: |-
+      The theoretical setting ignores the core challenge in neural architecture optimization (making improvements that gradient descent can actually find), risking overstating the practical applicability of the bounds.
+    fix_suggestion: |-
+      Either reconsider the phrase 'for deep neural networks' in the title and make clear the setting is farther from practice, or add explicit discussion of how the global optimization assumption relates to the realistic (non-convex) optimization landscape.
+    replacement: null
+    severity: high
+- source: |-
+    NeurIPS.cc/2023/Conference OpenReview review (rating 8/10, confidence 4/5): approximation error not quantified
+  article: |-
+    Line 49: 'Any elementwise operations in RASP can be approximately computed by an MLP layer'; Line 119: MLPs and attention blocks 'approximate arbitrary functions'
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      Line 49: 'Any elementwise operations in RASP can be approximately computed by an MLP layer'; Line 119: MLPs and attention blocks 'approximate arbitrary functions'
+    span:
+    - 0
+    - 162
+    issue_label: approximation error not quantified
+    question: |-
+      The paper does not sufficiently discuss the accuracy of the compiled programs. Having error in the compiled programs is a perfectly reasonable limitation, but it would be very good to know the fidelity of these approximations.
+    why_it_matters: |-
+      Without quantifying approximation errors, readers cannot assess how faithfully Tracr-compiled models preserve the original RASP program semantics.
+    fix_suggestion: |-
+      Measure and report the approximation error across experiments—either as quantitative bounds or empirical error rates on test inputs.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 8/10, confidence 4/5): vague mitigation recommendations lack actionability
+  article: |-
+    Section 4.1 (line 295 onwards) mitigation recommendations: 'fairness researchers should attempt to create metrics and testing regimes that shed light on how GenAI behavior may influence decision-makers' perceptions...' and 'By considering this larger, tailored suite of metrics...'
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      Section 4.1 (line 295 onwards) mitigation recommendations: 'fairness researchers should attempt to create metrics and testing regimes that shed light on how GenAI behavior may influence decision-makers' perceptions...' and 'By considering this larger, tailored suite of metrics...'
+    span:
+    - 0
+    - 281
+    issue_label: vague mitigation recommendations lack actionability
+    question: |-
+      The recommendations are general statements about future work rather than practical, implementable guidance. Claiming they are 'practical' in the abstract is misleading when they amount to 'fairness researchers should develop better metrics' without concrete steps.
+    why_it_matters: |-
+      The paper's value proposition as a practical guide to addressing discrimination in GenAI is undermined if recommendations remain at the level of research directions rather than actionable steps practitioners can take.
+    fix_suggestion: |-
+      Ground recommendations in concrete implementation details, specific metrics to test, or case studies demonstrating how organizations have operationalized similar ideas. Temper abstract claims to match the level of specificity delivered.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 8/10, confidence 4/5): Hyperparameter selection not grounded in graph properties
+  article: 'Section 3 (assumed): parameters $T_s$ and $T_f$ in the defense mechanism'
+  critiques:
+  - agent: limitations_editor
+    text_quote: 'Section 3 (assumed): parameters $T_s$ and $T_f$ in the defense mechanism'
+    span:
+    - 0
+    - 72
+    issue_label: Hyperparameter selection not grounded in graph properties
+    question: |-
+      How do the authors determine the values for $T_s$ and $T_f$? It would be beneficial if this determination were associated with specific graph properties (e.g., the number of edges, nodes, diameter, path length, clustering coefficient, etc.), as this would guide potential users of this defense strategy in tailoring it to their datasets.
+    why_it_matters: |-
+      Without principled guidance on setting hyperparameters, practitioners cannot effectively tune the defense to their specific graphs, limiting practical applicability.
+    fix_suggestion: |-
+      Provide a sensitivity analysis or principled rule linking $T_s$ and $T_f$ to measurable graph properties, or empirical guidance for selecting these values.
+    replacement: null
+    severity: medium
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): mismatch between intervention modeling and latent representation
+  article: |-
+    Section 3.1: the authors explain their modeling choice by stating interventions are incorporated 'by ignoring the columns in the dynamics matrix corresponding to the perturbed neuron', but the perturbed neuron is not directly represented in the latent dynamics matrix A but rather 'mixed in' by the nonlinear emission function f.
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      Section 3.1: the authors explain their modeling choice by stating interventions are incorporated 'by ignoring the columns in the dynamics matrix corresponding to the perturbed neuron', but the perturbed neuron is not directly represented in the latent dynamics matrix A but rather 'mixed in' by the nonlinear emission function f.
+    span:
+    - 0
+    - 329
+    issue_label: mismatch between intervention modeling and latent representation
+    question: |-
+      The switching mechanism applies interventions to latent dimensions rather than individual neurons. Since neurons are not privately represented in specific dimensions of the latent space by design, and the learned model does not isolate dimensions (Figures 3,4), how does this framework actually implement neuron-level interventions when they're applied across all latent dimensions?
+    why_it_matters: |-
+      The core modeling assumption—that interventions on neurons translate to interventions on latent dimensions—appears inconsistent with the actual learned representations, undermining the interpretability and mechanistic validity of the approach for neural data.
+    fix_suggestion: |-
+      Make explicit in the presentation that the model functions as a fully switching linear dynamics model gated by interventional inputs across all dimensions, rather than isolating individual neurons. Discuss the implications for interpretability and circuit-level inference.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2025/Conference OpenReview review (rating 6/10, confidence 4/5): missing discussion of interpretability constraints
+  article: |-
+    Section 3.1: the paper does not discuss whether the framework can bake in known elements of stimulation (e.g., which neurons are targeted based on response selectivity), or whether it can make claims about circuit mechanisms or local neuron-level effects of stimulation.
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      Section 3.1: the paper does not discuss whether the framework can bake in known elements of stimulation (e.g., which neurons are targeted based on response selectivity), or whether it can make claims about circuit mechanisms or local neuron-level effects of stimulation.
+    span:
+    - 0
+    - 270
+    issue_label: missing discussion of interpretability constraints
+    question: |-
+      There is no way to incorporate known elements of stimulation (e.g., stimulus selectivity) into the model. Can this framework be used to analyze or make claims about how individual neurons affect others in a circuit, or to reproduce local neuron-level effects of stimulation?
+    why_it_matters: |-
+      Without such capabilities, the model's utility for mechanistic understanding of neural circuits and intervention effects is severely limited, despite addressing an important problem.
+    fix_suggestion: |-
+      Explicitly discuss whether and how the framework could be extended to incorporate prior knowledge about stimulation targets, and clarify what types of circuit-level inference questions the model can and cannot address.
+    replacement: null
+    severity: high
+- source: |-
+    ICLR.cc/2024/Conference OpenReview review (rating 6/10, confidence 4/5): unrealistic feature semantics assumption
+  article: |-
+    The example on page 2 assumes features have clean semantics, which is not typical in modern applications.
+  critiques:
+  - agent: limitations_editor
+    text_quote: |-
+      The example on page 2 assumes features have clean semantics, which is not typical in modern applications.
+    span:
+    - 0
+    - 105
+    issue_label: unrealistic feature semantics assumption
+    question: |-
+      The example on the top of page 2 does not convince me in the slightest, given that in modern applications features are basically never equipped with clean semantics as assumed here.
+    why_it_matters: |-
+      The motivating example fails to demonstrate that the approach is relevant to realistic feature distributions and semantics in contemporary ML systems.
+    fix_suggestion: null
     replacement: null
     severity: medium
