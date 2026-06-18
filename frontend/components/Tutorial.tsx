@@ -11,10 +11,13 @@ interface Step {
   /** data-tutorial attribute value to anchor the spotlight to.
    *  Omit for centered "intro" cards. */
   target?: string;
+  /** Optional mode-specific anchor when one step maps to different surfaces. */
+  targetByMode?: Partial<Record<Mode, string>>;
   /** Side of the target to place the card on. Defaults to a sensible auto pick. */
   side?: "top" | "bottom" | "left" | "right";
   title: string;
   body: string;
+  bullets?: { label: string; text: string }[];
   /** Optional accent colour for the card's top border. */
   accent?: string;
   /** If set, the tutorial switches the app into this mode before showing
@@ -33,25 +36,40 @@ const MAIN_STEPS: Step[] = [
   {
     title: "Welcome to The Red Room",
     body:
-      "An independent team of AI editors reads your draft and flags what a real newsroom or writing center would catch before you publish or submit. This minute walks through the universals. Each tab has its own quick tour the first time you open it.",
+      "An independent team of AI editors reads your draft and flags what a real newsroom or writing center would catch before you publish. We will walk you through some of our key features. Enjoy!",
     accent: "#DC2626",
   },
   {
     target: "mode",
     side: "bottom",
-    title: "Three modes",
+    title: "Choose your writing type",
     body:
-      "Journalism for news, opinion, features, profiles, reviews, and explainers. Essays for academic writing across five genres. Research for full-paper review of an uploaded PDF. The editor lineup on the left rail swaps when you change modes.",
+      "The editor lineup changes based on what you choose.",
+    bullets: [
+      {
+        label: "Journalism",
+        text: "for news, opinion, features, profiles, reviews, and explainers.",
+      },
+      {
+        label: "Essays",
+        text: "for academic writing, class assignments, argument papers, analysis, and personal narratives.",
+      },
+      {
+        label: "Research",
+        text: "for reviewing full papers from an uploaded PDF.",
+      },
+    ],
   },
   {
     target: "rail",
     side: "right",
-    title: "Meet the editors",
+    title: "Introducing yours editors",
     body:
-      "Each editor specialises in one lane. Click any of them to read what they look for and to turn them off if a lane doesn't apply to your draft. The list updates whenever you switch modes; scroll if you don't see all of them.",
+      "Each editor is a specialist at one writing component. Click on their icons to see how they contribute to your draft. \n Beware, your specialist crew resets when you switch between writing modes! There's many more specialists we haven't introduced, don't forget to scroll down.",
   },
   {
     target: "editor",
+    targetByMode: { research: "research-upload" },
     side: "left",
     title: "Your draft goes here",
     body:
@@ -60,37 +78,22 @@ const MAIN_STEPS: Step[] = [
   {
     target: "run",
     side: "bottom",
-    title: "Run the review",
+    title: "Ready to review?",
     body:
-      "When you're ready, click here. The editors who are turned on read in parallel; the first notes start landing in about twenty seconds. The button shows a count of how many editors will run.",
+      "Your active editors will read your in parallel; the first editor reviews start showing up within twenty seconds.",
   },
   {
     target: "sidebar",
     side: "left",
-    title: "Read the notes",
+    title: "Your editors are working",
     body:
-      "Notes appear here in document order. Click any feedback card to jump to that line in the editor. Click an underlined phrase in the editor to jump back to its card. When two or more editors flag the same passage, a Hotspot badge appears — that's the strongest signal the room produces.",
-  },
-  {
-    target: "signin",
-    side: "bottom",
-    title: "Save your work and try Pro free",
-    body:
-      "Create a free account to save your drafts and track your reviews. New accounts get a 7-day free trial of the Pro plan — all 16 editors, 20 reviews per week, no credit card required.",
-    accent: "#DC2626",
-  },
-  {
-    title: "One last thing",
-    body:
-      "The agents are grounded in real press-regulator rulings, editorial standards, and writing-center research, but they're still AI. Treat every note as a suggestion to consider, not an instruction you must follow. When you open a tab for the first time, a quick tour of THAT tab's specific controls will pop up.",
-    accent: "#DC2626",
+      "Your team of editors will leave notes in top to bottom in the order of your draft. Clicking on any feedback will shift your focus to that specific line in your draft. Click an underlined phrase in the editor to jump back to its card. When two or more editors flag the same passage, a Hotspot badge appears — that's the strongest signal the room produces.",
   },
 ];
 
 // ────────────────────────────────────────────────────────────────────────────
-// Track 2: JOURNALISM mini-tutorial. Fires the first time the user is in
-// journalism mode (typically right after the main tour, since journalism is
-// the default mode). 3 steps + an intro.
+// Track 2: JOURNALISM mini-tutorial. Shown only when the writer opens the
+// help tour while journalism mode is active.
 // ────────────────────────────────────────────────────────────────────────────
 const JOURNALISM_STEPS: Step[] = [
   {
@@ -127,7 +130,8 @@ const JOURNALISM_STEPS: Step[] = [
 ];
 
 // ────────────────────────────────────────────────────────────────────────────
-// Track 3: ESSAYS mini-tutorial. Fires on first entry to essays mode.
+// Track 3: ESSAYS mini-tutorial. Shown only when the writer opens the help
+// tour while essays mode is active.
 // ────────────────────────────────────────────────────────────────────────────
 const ESSAYS_STEPS: Step[] = [
   {
@@ -164,7 +168,8 @@ const ESSAYS_STEPS: Step[] = [
 ];
 
 // ────────────────────────────────────────────────────────────────────────────
-// Track 4: RESEARCH mini-tutorial. Fires on first entry to research mode.
+// Track 4: RESEARCH mini-tutorial. Shown only when the writer opens the help
+// tour while research mode is active.
 // Different from journalism / essays because the input is a PDF.
 // ────────────────────────────────────────────────────────────────────────────
 const RESEARCH_STEPS: Step[] = [
@@ -259,8 +264,10 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
     const current = STEPS[step];
     if (!current) return;
 
+    const target = current.targetByMode?.[mode] ?? current.target;
+
     // Centered cards (welcome / final): no target, no spotlight.
-    if (!current.target) {
+    if (!target) {
       setRect(null);
       setCardPos({
         top: window.innerHeight / 2 - 130,
@@ -270,7 +277,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
       return;
     }
 
-    const el = document.querySelector<HTMLElement>(`[data-tutorial="${current.target}"]`);
+    const el = document.querySelector<HTMLElement>(`[data-tutorial="${target}"]`);
     if (!el) {
       // Target missing — usually because a mode-switch in the previous
       // effect tick hasn't rendered the new toolbar yet. Show a centered
@@ -323,8 +330,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
   if (!open || typeof document === "undefined") return null;
   if (!STEPS || STEPS.length === 0) return null;
 
-  // When the track changes (e.g. main tour chains into a mode-mini tour),
-  // there is one render between the new track being applied and the
+  // When the track changes, there is one render between the new track being applied and the
   // step-reset useEffect firing. During that render `step` may be out of
   // bounds for the new STEPS array, which would crash `current.target`
   // below. Skip rendering until the reset effect catches up.
@@ -334,7 +340,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
   if (!current) return null;
   const isLast = step === STEPS.length - 1;
   const isFirst = step === 0;
-  const passThrough = !!current.target;
+  const passThrough = !!(current.targetByMode?.[mode] ?? current.target);
 
   const trackLabel: Record<TutorialTrack, string> = {
     main: "Quick tour",
@@ -400,9 +406,22 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
             <h2 className="font-serif text-[19px] italic leading-tight tracking-tight text-neutral-900">
               {current.title}
             </h2>
-            <p className="mt-2 text-[13px] leading-snug text-neutral-700">
+            <p className="mt-2 whitespace-pre-line text-[13px] leading-snug text-neutral-700">
               {current.body}
             </p>
+            {current.bullets && (
+              <ul className="mt-3 space-y-1.5 text-[13px] leading-snug text-neutral-700">
+                {current.bullets.map((item) => (
+                  <li key={item.label} className="flex gap-2">
+                    <span className="mt-[0.4em] h-1.5 w-1.5 shrink-0 rounded-full bg-rose-600" />
+                    <span>
+                      <span className="font-semibold text-neutral-900">{item.label}</span>{" "}
+                      {item.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             <div className="mt-4 flex items-center justify-between">
               <div className="flex items-center gap-1.5">

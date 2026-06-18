@@ -46,7 +46,6 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:800
 const DISABLED_KEY = "redroom:disabled-agents";
 const ARTICLE_KEY = "redroom:article";
 const TUTORIAL_SEEN_KEY = "redroom:tutorial-seen";
-const TUTORIAL_MODE_SEEN_KEY = (m: Mode | "main") => `redroom:tutorial-seen:${m}`;
 const MODE_KEY = "redroom:mode";
 const CITATION_KEY = "redroom:citation-style";
 const ESSAY_TYPE_KEY = "redroom:essay-type";
@@ -100,18 +99,12 @@ export default function Page() {
   // not flicker as the cursor crosses between the textarea and its wrapper.
   const dragDepthRef = useRef(0);
 
-  // Tutorial state. `tutorialTrack` is the currently-displayed track, or null
-  // when no tour is open. The main tour fires once on the user's very first
-  // visit; each mode's mini-tour fires the first time that user enters that
-  // mode (after the main tour, or independently if they skip it).
+  // Tutorial state. The universal main tour appears once for first-time
+  // visitors; writing-type tours are opt-in from the help button.
   const [tutorialTrack, setTutorialTrack] = useState<TutorialTrack | null>(null);
-  // Snapshot of which tracks the current user has seen. Hydrated from
-  // localStorage on mount; updated when a track completes so we don't
-  // re-prompt on the same browser session.
-  const [tutorialsSeen, setTutorialsSeen] = useState<Set<TutorialTrack>>(new Set());
 
-  // Restore on mount: agent roster, draft article, mode, and whether the
-  // user has seen the tour. Tutorial auto-opens for first-time visitors.
+  // Restore on mount: agent roster, draft article, mode, saved setup, and
+  // whether the first-run main tour has already been shown.
   useEffect(() => {
     try {
       const raw = localStorage.getItem(DISABLED_KEY);
@@ -194,25 +187,10 @@ export default function Page() {
       const sc = localStorage.getItem(SUBJECT_CONTEXT_KEY);
       if (sc) setSubjectContext(sc);
     } catch {}
-    // Hydrate which tutorial tracks the user has seen, then decide whether
-    // to auto-fire one. Order of priority: if they've never seen the main
-    // tour, fire it. Otherwise, if they haven't seen the current mode's
-    // mini-tour, fire that.
     try {
-      const seen = new Set<TutorialTrack>();
-      // Legacy single-flag key counts as having seen the main tour.
-      if (localStorage.getItem(TUTORIAL_SEEN_KEY)) seen.add("main");
-      for (const t of ["main", "journalism", "essays", "research"] as TutorialTrack[]) {
-        if (localStorage.getItem(TUTORIAL_MODE_SEEN_KEY(t))) seen.add(t);
+      if (!localStorage.getItem(TUTORIAL_SEEN_KEY)) {
+        setTimeout(() => setTutorialTrack("main"), 50);
       }
-      setTutorialsSeen(seen);
-      // Defer one tick so the page's initial render lands before the
-      // tutorial overlay measures targets.
-      setTimeout(() => {
-        if (!seen.has("main")) {
-          setTutorialTrack("main");
-        }
-      }, 50);
     } catch {}
   }, []);
 
@@ -272,39 +250,11 @@ export default function Page() {
   const onCompleteTutorial = useCallback(() => {
     const finished = tutorialTrack;
     setTutorialTrack(null);
-    if (!finished) return;
+    if (finished !== "main") return;
     try {
-      localStorage.setItem(TUTORIAL_MODE_SEEN_KEY(finished), "1");
-      if (finished === "main") {
-        // Keep the legacy flag in sync so existing users aren't re-prompted.
-        localStorage.setItem(TUTORIAL_SEEN_KEY, "1");
-      }
+      localStorage.setItem(TUTORIAL_SEEN_KEY, "1");
     } catch {}
-    setTutorialsSeen((prev) => {
-      const next = new Set(prev);
-      next.add(finished);
-      // If the user just finished the main tour and they're in a mode they
-      // haven't toured yet, chain into that mode's mini-tour.
-      if (finished === "main" && !next.has(mode as TutorialTrack)) {
-        setTimeout(() => setTutorialTrack(mode as TutorialTrack), 200);
-      }
-      return next;
-    });
-  }, [tutorialTrack, mode]);
-
-  // When the user changes modes, fire that mode's mini-tour if they haven't
-  // seen it (and the main tour is done — we don't want to interrupt it).
-  useEffect(() => {
-    if (tutorialTrack) return; // a tour is already running; don't stack
-    if (!tutorialsSeen.has("main")) return; // main hasn't finished yet
-    const modeTrack = mode as TutorialTrack;
-    if (modeTrack !== "journalism" && modeTrack !== "essays" && modeTrack !== "research") return;
-    if (tutorialsSeen.has(modeTrack)) return;
-    // Defer a tick so the toolbar for the new mode has rendered before the
-    // tutorial measures its targets.
-    const t = setTimeout(() => setTutorialTrack(modeTrack), 120);
-    return () => clearTimeout(t);
-  }, [mode, tutorialsSeen, tutorialTrack]);
+  }, [tutorialTrack]);
 
   const onToggleDisabled = useCallback((agent: AgentName) => {
     setDisabledAgents((prev) => {
@@ -559,10 +509,10 @@ export default function Page() {
             {enabledCount} of {totalAgents} active
           </span>
           <button
-            onClick={() => setTutorialTrack("main")}
-            title="Replay the guided tour"
+            onClick={() => setTutorialTrack(mode as TutorialTrack)}
+            title="Show tutorial for this writing type"
             className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-500 transition hover:bg-neutral-50 hover:text-neutral-800"
-            aria-label="Show tutorial"
+            aria-label="Show tutorial for this writing type"
           >
             <HelpGlyph />
           </button>
@@ -854,10 +804,8 @@ export default function Page() {
         </div>
       </div>
 
-      {/* Tutorial overlay (portals to body). Tracks: main fires on the
-          very first visit; each mode's mini-tour fires the first time the
-          user lands on that tab afterward. The help button in the header
-          re-opens the main track. */}
+      {/* Tutorial overlay (portals to body). The main tour appears once for
+          first-time visitors; the help button opens the current writing type's tour. */}
       <Tutorial
         open={tutorialTrack !== null}
         track={tutorialTrack ?? "main"}
