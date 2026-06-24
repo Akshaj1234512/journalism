@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Critique, AGENTS, AgentName } from "@/lib/types";
+import { Critique, AGENTS, AgentName, Mode } from "@/lib/types";
 import { computeConsensus, ConsensusInfo } from "@/lib/consensus";
 import { critiqueId } from "./Editor";
 import { Avatar } from "./Avatar";
+import { SparkleGlyph } from "./SampleDrafts";
 
 interface Props {
   critiques: Critique[];
@@ -13,11 +14,15 @@ interface Props {
   status: "idle" | "running" | "done" | "error";
   errorMessage: string | null;
   runningAgents: Set<AgentName>;
+  doneAgents: Set<AgentName>;
+  totalAgents: number;
+  mode: Mode;
   resolvedIds: Set<string>;
   onToggleResolved: (id: string) => void;
   onUnresolveAll: () => void;
   onAcceptFix: (id: string) => void;
   onDownload: () => void;
+  onTrySample: () => void;
 }
 
 const SEVERITY_BADGE: Record<Critique["severity"], string> = {
@@ -37,11 +42,15 @@ export function CritiqueSidebar({
   status,
   errorMessage,
   runningAgents,
+  doneAgents,
+  totalAgents,
+  mode,
   resolvedIds,
   onToggleResolved,
   onUnresolveAll,
   onAcceptFix,
   onDownload,
+  onTrySample,
 }: Props) {
   // Cycle through whichever agents are still reading so the user gets a
   // friendly "Anne is reading… now Peter is reading…" indicator instead of
@@ -102,7 +111,7 @@ export function CritiqueSidebar({
     <aside className="flex h-full w-[440px] flex-col border-l border-neutral-200 bg-white">
       <header className="border-b border-neutral-200 px-5 py-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.14em] text-neutral-500">
+          <h2 className="text-[11px] font-bold uppercase tracking-[0.14em] text-rose-500">
             The Review
           </h2>
           <StatusPill
@@ -119,11 +128,16 @@ export function CritiqueSidebar({
         {status === "running" && liveAgent && (
           <div className="mt-2 flex items-center gap-2 rounded-xl border border-rose-100 bg-rose-50/70 px-2.5 py-1.5">
             <Avatar agent={liveAgent} size={22} active />
-            <span className="text-[11.5px] text-rose-800">
+            <span className="flex-1 text-[11.5px] text-rose-800">
               <span className="font-semibold">{AGENTS[liveAgent].firstName}</span>{" "}
               is reading the draft
               <span className="ml-0.5 inline-block animate-pulse">…</span>
             </span>
+            {totalAgents > 0 && (
+              <span className="shrink-0 text-[10.5px] text-rose-600 tabular-nums">
+                {doneAgents.size} / {totalAgents}
+              </span>
+            )}
           </div>
         )}
 
@@ -182,14 +196,32 @@ export function CritiqueSidebar({
           </div>
         )}
         {ordered.length === 0 && status === "idle" && (
-          <div className="rounded-2xl border border-dashed border-neutral-300 bg-stone-50 p-5 text-sm text-neutral-600">
-            <div className="mb-1 font-serif text-base text-neutral-900">
-              Ready when you are.
+          mode === "research" ? (
+            <div className="rounded-2xl border border-neutral-100 bg-stone-50 p-5 text-sm text-neutral-600">
+              <div className="mb-1 font-serif text-base text-neutral-900">
+                Ready when you are.
+              </div>
+              Upload a PDF using the panel above, then click{" "}
+              <span className="font-semibold text-rose-600">Run review</span>. Notes
+              will appear here as editors finish.
             </div>
-            Paste a draft in the editor and click{" "}
-            <span className="font-semibold text-rose-600">Run review</span>. The room
-            will read it together and the notes will land here as they finish.
-          </div>
+          ) : (
+            <div className="rounded-2xl border border-rose-100 bg-gradient-to-br from-rose-50/60 to-stone-50 p-5 text-sm text-neutral-600">
+              <div className="mb-1 font-serif text-base text-neutral-900">
+                Ready when you are.
+              </div>
+              Paste a draft in the editor and click{" "}
+              <span className="font-semibold text-rose-600">Run review</span>. The room
+              will read it together and the notes will land here as they finish.
+              <button
+                onClick={onTrySample}
+                className="mt-3 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-rose-600 px-3 py-2 text-[12.5px] font-semibold text-white shadow-sm transition hover:bg-rose-700"
+              >
+                <SparkleGlyph />
+                Try a sample draft
+              </button>
+            </div>
+          )
         )}
 
         {open.length === 0 && resolved.length > 0 && (

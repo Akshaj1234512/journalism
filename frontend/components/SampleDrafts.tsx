@@ -53,14 +53,6 @@ export function SampleDraftsButton({ onPick }: Props) {
 
   return (
     <div ref={wrapRef} className="relative">
-      <button
-        onClick={() => setOpen((p) => !p)}
-        className="pointer-events-auto inline-flex items-center gap-1.5 rounded-xl border border-neutral-200 bg-white/95 px-2.5 py-1.5 text-[11.5px] font-medium text-neutral-700 shadow-sm transition hover:bg-neutral-50"
-        title="Load a short sample draft to try the room"
-      >
-        <SparkleGlyph />
-        Try a sample
-      </button>
 
       {open && (
         <div
@@ -103,7 +95,7 @@ export function SampleDraftsButton({ onPick }: Props) {
   );
 }
 
-function SparkleGlyph() {
+export function SparkleGlyph() {
   return (
     <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden>
       <path d="M8 1.5 L9 5.5 L13 6.5 L9 7.5 L8 11.5 L7 7.5 L3 6.5 L7 5.5 Z" opacity="0.9" />

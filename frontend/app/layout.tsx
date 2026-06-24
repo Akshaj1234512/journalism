@@ -50,7 +50,13 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen" suppressHydrationWarning>{children}</body>
+      <body className="h-screen w-screen overflow-hidden" suppressHydrationWarning>
+        <div className="h-screen w-screen overflow-hidden bg-neutral-100 p-8 box-border">
+          <div className="h-full w-full overflow-hidden border-[2px] border-neutral-300 box-border">
+            {children}
+          </div>
+        </div>
+      </body>
     </html>
   );
 }
