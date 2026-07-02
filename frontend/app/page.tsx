@@ -1052,10 +1052,7 @@ function EssayTypePicker({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={[
-          "inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800 transition hover:bg-neutral-50",
-          nudge ? "ring-1 ring-amber-400" : "",
-        ].join(" ")}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800 transition hover:bg-neutral-50"
       >
         <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
           Essay
@@ -1216,10 +1213,7 @@ function ArticleTypePicker({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className={[
-          "inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800 transition hover:bg-neutral-50",
-          nudge ? "ring-1 ring-amber-400" : "",
-        ].join(" ")}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-white px-2.5 py-1 text-[11.5px] text-neutral-800 transition hover:bg-neutral-50"
       >
         <span className="font-semibold uppercase tracking-wider text-[10px] text-neutral-400">
           Article
