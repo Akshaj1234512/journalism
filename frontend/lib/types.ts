@@ -68,7 +68,8 @@ export type EssayType =
   | "none";
 
 // Article type picks the journalism type specialist that runs alongside the
-// core editors (6 shared craft + Anne). Toggles below control Parker / Peter / Joe.
+// core editors (6 shared craft + Anne). Parker / Peter / Joe are always in
+// the roster and are enabled/disabled from the Editors sidebar.
 export type ArticleType =
   | "news"
   | "investigative"
@@ -703,17 +704,18 @@ const SHARED_CRAFT: AgentName[] = [
   "question_master",
 ];
 
-// Journalism core = shared craft + Anne (always on). Type specialist +
-// toggle-driven Parker/Peter/Joe are appended at runtime by
-// getJournalismRoster() based on article_type and the toggle flags.
+// Journalism core = shared craft + Anne (always on). Type specialist is
+// appended at runtime by getJournalismRoster() based on article_type; Parker,
+// Peter, and Joe are always included and are enabled/disabled from the
+// Editors sidebar like every other agent.
 const JOURNALISM_CORE: AgentName[] = [
   ...SHARED_CRAFT,
   "legal_skeptic",
 ];
 
 export const MODE_AGENTS: Record<Mode, AgentName[]> = {
-  // Journalism roster shown in the rail by default. The rest is added by
-  // getJournalismRoster() when the user picks a type or toggle.
+  // Journalism roster shown in the rail by default. The type specialist is
+  // added by getJournalismRoster() when the user picks an article type.
   journalism: [...JOURNALISM_CORE],
   essays: [
     ...SHARED_CRAFT,
@@ -882,9 +884,11 @@ export const TYPE_SPECIALIST_BY_ARTICLE: Partial<Record<
   analysis: "explanatory_editor",
 };
 
-// Sensible default for the toggles given a chosen article type. The user can
-// still flip the toggles manually; this just pre-fills what most stories of
-// that type usually want. Matches the backend roster intuition.
+// Recommended enabled/disabled defaults for Parker/Peter/Joe given a chosen
+// article type, applied to disabledAgents when the type changes. The user
+// can still flip them manually afterward from the Editors sidebar; this just
+// pre-fills what most stories of that type usually want. Matches the
+// backend roster intuition.
 export interface JournalismToggles {
   partisan: boolean;
   hasDataClaims: boolean;
@@ -911,33 +915,17 @@ export function defaultTogglesFor(type: ArticleType): JournalismToggles {
   }
 }
 
-// Build the full journalism roster for the rail. Mirrors the backend's
-// default_agents() routing: when type is "none" AND no toggles are set,
-// fall back to the legacy roster (all 4 specialists). Otherwise return
-// core + type specialist + toggle-driven specialists.
-export function getJournalismRoster(
-  type: ArticleType,
-  toggles: JournalismToggles,
-): AgentName[] {
+// Build the full journalism roster for the rail. Core + type specialist (if
+// any) + Parker/Peter/Joe, who are always present and whose enabled state
+// is governed by disabledAgents in the Editors sidebar, same as every other
+// agent.
+export function getJournalismRoster(type: ArticleType): AgentName[] {
   const roster: AgentName[] = [...MODE_AGENTS.journalism];
-
-  const legacyDefault =
-    type === "none" &&
-    !toggles.partisan &&
-    !toggles.hasDataClaims &&
-    !toggles.hasAnonymousSources;
-
-  if (legacyDefault) {
-    return [...roster, "data_expert", "human_rights", "partisan"];
-  }
-
   if (type !== "none") {
     const specialist = TYPE_SPECIALIST_BY_ARTICLE[type];
     if (specialist) roster.push(specialist);
   }
-  if (toggles.hasDataClaims) roster.push("data_expert");
-  if (toggles.hasAnonymousSources) roster.push("human_rights");
-  if (toggles.partisan) roster.push("partisan");
+  roster.push("data_expert", "human_rights", "partisan");
   return roster;
 }
 

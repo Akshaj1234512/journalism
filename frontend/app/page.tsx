@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { AccountMenu } from "@/components/AccountMenu";
 import { AgentRoster } from "@/components/AgentRoster";
-import { Avatar } from "@/components/Avatar";
 import { CritiqueSidebar } from "@/components/CritiqueSidebar";
 import { Editor, critiqueId } from "@/components/Editor";
 import { PrintView } from "@/components/PrintView";
@@ -15,7 +14,6 @@ import { streamCritique } from "@/lib/stream";
 import { PLANS, countWords } from "@/lib/plans";
 import { streamResearchCritique } from "@/lib/stream";
 import {
-  AGENTS,
   AgentName,
   ARTICLE_TYPE_CHOICES,
   ArticleType,
@@ -23,8 +21,6 @@ import {
   Critique,
   ESSAY_TYPE_CHOICES,
   EssayType,
-  JournalismToggles,
-  MODE_AGENTS,
   Mode,
   RESEARCH_SECTION_CHOICES,
   RESEARCH_SUBJECT_CHOICES,
@@ -43,7 +39,6 @@ const SAMPLE_DRAFT =
   "Reyes did not respond to a request for comment.";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
-const DISABLED_KEY = "redroom:disabled-agents";
 const ARTICLE_KEY = "redroom:article";
 const TUTORIAL_SEEN_KEY = "redroom:tutorial-seen";
 const TUTORIAL_MODE_SEEN_KEY = (m: Mode | "main") => `redroom:tutorial-seen:${m}`;
@@ -55,7 +50,6 @@ const RESEARCH_SECTION_KEY = "redroom:research-section";
 const RESEARCH_SUBJECT_KEY = "redroom:research-subject";
 const RESEARCH_VENUE_KEY = "redroom:research-venue";
 const ARTICLE_TYPE_KEY = "redroom:article-type";
-const JOURNALISM_TOGGLES_KEY = "redroom:journalism-toggles";
 const SUBJECT_CONTEXT_KEY = "redroom:subject-context";
 
 export default function Page() {
@@ -67,15 +61,10 @@ export default function Page() {
   // Research-mode state. The PDF stays in memory only; section / subject /
   // venue persist in localStorage so the writer doesn't reset their setup
   // when they reload.
-  // Journalism-mode state: article type, three toggles, and an optional
-  // subject-context box. Type drives which type-specialist runs; toggles
-  // independently add Parker / Peter / Joe.
+  // Journalism-mode state: article type and an optional subject-context
+  // box. Type drives which type-specialist runs; Parker / Peter / Joe are
+  // always in the roster and are enabled/disabled from the Editors sidebar.
   const [articleType, setArticleType] = useState<ArticleType>("none");
-  const [journalismToggles, setJournalismToggles] = useState<JournalismToggles>({
-    partisan: false,
-    hasDataClaims: false,
-    hasAnonymousSources: false,
-  });
   const [subjectContext, setSubjectContext] = useState<string>("");
   const [researchPdf, setResearchPdf] = useState<File | null>(null);
   const [researchSection, setResearchSection] = useState<ResearchSection>("full_paper");
@@ -110,16 +99,12 @@ export default function Page() {
   // re-prompt on the same browser session.
   const [tutorialsSeen, setTutorialsSeen] = useState<Set<TutorialTrack>>(new Set());
 
-  // Restore on mount: agent roster, draft article, mode, and whether the
-  // user has seen the tour. Tutorial auto-opens for first-time visitors.
+  // Restore on mount: draft article, mode, and whether the user has seen
+  // the tour. Tutorial auto-opens for first-time visitors. Agent
+  // enabled/disabled state is intentionally NOT restored — every session
+  // starts with the same defaults instead of remembering last session's
+  // toggles.
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(DISABLED_KEY);
-      if (raw) {
-        const arr = JSON.parse(raw);
-        if (Array.isArray(arr)) setDisabledAgents(new Set(arr as AgentName[]));
-      }
-    } catch {}
     try {
       const saved = localStorage.getItem(ARTICLE_KEY);
       if (saved && saved.trim()) setArticle(saved);
@@ -178,19 +163,6 @@ export default function Page() {
       }
     } catch {}
     try {
-      const raw = localStorage.getItem(JOURNALISM_TOGGLES_KEY);
-      if (raw) {
-        const obj = JSON.parse(raw);
-        if (obj && typeof obj === "object") {
-          setJournalismToggles({
-            partisan: !!obj.partisan,
-            hasDataClaims: !!obj.hasDataClaims,
-            hasAnonymousSources: !!obj.hasAnonymousSources,
-          });
-        }
-      }
-    } catch {}
-    try {
       const sc = localStorage.getItem(SUBJECT_CONTEXT_KEY);
       if (sc) setSubjectContext(sc);
     } catch {}
@@ -237,10 +209,6 @@ export default function Page() {
   }, [articleType]);
 
   useEffect(() => {
-    try { localStorage.setItem(JOURNALISM_TOGGLES_KEY, JSON.stringify(journalismToggles)); } catch {}
-  }, [journalismToggles]);
-
-  useEffect(() => {
     try { localStorage.setItem(SUBJECT_CONTEXT_KEY, subjectContext); } catch {}
   }, [subjectContext]);
 
@@ -255,12 +223,6 @@ export default function Page() {
   useEffect(() => {
     try { localStorage.setItem(RESEARCH_VENUE_KEY, researchVenue); } catch {}
   }, [researchVenue]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(DISABLED_KEY, JSON.stringify(Array.from(disabledAgents)));
-    } catch {}
-  }, [disabledAgents]);
 
   // Save the article on every change (small enough that we do not bother
   // debouncing). Skip the very first identical value to avoid wiping a
@@ -377,9 +339,9 @@ export default function Page() {
         essayType,
         essayPrompt: essayPrompt.trim(),
         articleType,
-        partisan: journalismToggles.partisan,
-        hasDataClaims: journalismToggles.hasDataClaims,
-        hasAnonymousSources: journalismToggles.hasAnonymousSources,
+        partisan: !disabledAgents.has("partisan"),
+        hasDataClaims: !disabledAgents.has("data_expert"),
+        hasAnonymousSources: !disabledAgents.has("human_rights"),
         subjectContext: subjectContext.trim(),
       },
     );
@@ -395,7 +357,6 @@ export default function Page() {
     researchSubject,
     researchVenue,
     articleType,
-    journalismToggles,
     subjectContext,
   ]);
 
@@ -510,13 +471,14 @@ export default function Page() {
 
   // The essays rail grows when an essay type is picked (Sol + the matching
   // Purpose Editor appended). Journalism rail mirrors essays: core +
-  // article-type specialist + toggle-driven Parker/Peter/Joe.
+  // article-type specialist + Parker/Peter/Joe (always present; enabled
+  // state lives in disabledAgents like every other editor).
   const modeRoster =
     mode === "research"
       ? getResearchRoster(researchSubject)
       : mode === "essays"
         ? getEssaysRoster(essayType)
-        : getJournalismRoster(articleType, journalismToggles);
+        : getJournalismRoster(articleType);
   const totalAgents = modeRoster.length;
   const enabledCount = modeRoster.filter((a) => !disabledAgents.has(a)).length;
 
@@ -621,9 +583,9 @@ export default function Page() {
         </div>
       )}
 
-      {/* Journalism-mode sub-toolbar. Article type picker + toggle chips
-          for partisan / data claims / anonymous sources + an optional
-          subject-context box. */}
+      {/* Journalism-mode sub-toolbar. Article type picker + an optional
+          subject-context box. Parker/Peter/Joe are turned on or off from
+          the Editors sidebar, same as every other agent. */}
       {mode === "journalism" && (
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-neutral-200 bg-stone-50 px-7 py-2">
           <div data-tutorial="article-type">
@@ -631,38 +593,23 @@ export default function Page() {
               value={articleType}
               onChange={(v) => {
                 setArticleType(v);
-                // Pre-fill toggles with sensible defaults for this type.
-                // The user can still flip individual chips.
-                setJournalismToggles(defaultTogglesFor(v));
+                // Pre-fill Parker/Peter/Joe's enabled state with sensible
+                // defaults for this type. The user can still flip them
+                // individually from the Editors sidebar afterward.
+                const rec = defaultTogglesFor(v);
+                setDisabledAgents((prev) => {
+                  const next = new Set(prev);
+                  const apply = (agent: AgentName, enabled: boolean) => {
+                    if (enabled) next.delete(agent);
+                    else next.add(agent);
+                  };
+                  apply("partisan", rec.partisan);
+                  apply("data_expert", rec.hasDataClaims);
+                  apply("human_rights", rec.hasAnonymousSources);
+                  return next;
+                });
               }}
             />
-          </div>
-          <div data-tutorial="journalism-toggles" className="inline-flex items-center gap-1.5">
-            <JournalismToggleChip
-              agent="partisan"
-              trigger="Partisan"
-              on={journalismToggles.partisan}
-              onChange={(on) =>
-                setJournalismToggles((t) => ({ ...t, partisan: on }))
-              }
-            />
-            <JournalismToggleChip
-              agent="data_expert"
-              trigger="Data claims"
-              on={journalismToggles.hasDataClaims}
-              onChange={(on) =>
-                setJournalismToggles((t) => ({ ...t, hasDataClaims: on }))
-              }
-            />
-            <JournalismToggleChip
-              agent="human_rights"
-              trigger="Anonymous sources"
-              on={journalismToggles.hasAnonymousSources}
-              onChange={(on) =>
-                setJournalismToggles((t) => ({ ...t, hasAnonymousSources: on }))
-              }
-            />
-            <JournalismSpecialistsHelp />
           </div>
           <div data-tutorial="subject-context">
             <SubjectContextButton value={subjectContext} onChange={setSubjectContext} />
@@ -1173,136 +1120,6 @@ function ArticleTypePicker({
         </div>
       )}
     </div>
-  );
-}
-
-/**
- * A pill-shaped chip that activates a specific journalism specialist. The
- * binding (toggle <-> editor) is visible at-rest: each chip shows the
- * editor's avatar + first name + role and uses "+" / "✓" prefixes so the
- * "click to add a specialist" affordance is obvious without a tutorial.
- *
- * Off-state: dashed outline with "+" — looks clickable and unfilled.
- * On-state: solid border in the editor's brand color with "✓" — looks
- * applied. The avatar always reads the rail color so a user scanning the
- * row sees which named editor each chip refers to.
- */
-/**
- * A small "?" button next to the journalism toggle chips. Click opens a
- * brief popover explaining what the chips do (they add named specialist
- * editors to the review). The chips' own labels carry most of the
- * affordance; this is the belt-and-suspenders helper for users who skip
- * the tutorial or come back months later.
- */
-function JournalismSpecialistsHelp() {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (!open) return;
-    const onMouse = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
-    document.addEventListener("mousedown", onMouse);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onMouse);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
-  return (
-    <div ref={ref} className="relative inline-flex">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-label="About specialist editors"
-        className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-neutral-200 bg-white text-[10.5px] font-bold text-neutral-500 hover:bg-neutral-50 hover:text-neutral-800"
-        title="What do these add?"
-      >
-        ?
-      </button>
-      {open && (
-        <div
-          role="dialog"
-          className="absolute left-0 top-[calc(100%+6px)] z-50 w-[300px] rounded-2xl border border-neutral-200 bg-white p-3 text-[11.5px] leading-snug shadow-xl"
-        >
-          <div className="mb-1 font-semibold text-neutral-900">Specialist editors</div>
-          <p className="text-neutral-600">
-            Click a chip to add that editor to your review. Each one is a
-            specialist for the kind of story you said this is:
-          </p>
-          <ul className="mt-2 space-y-1.5 text-neutral-700">
-            <li><span className="font-semibold">Parker</span> reads for partisan framing and asymmetric treatment of named parties.</li>
-            <li><span className="font-semibold">Peter</span> stress-tests statistical and quantitative claims.</li>
-            <li><span className="font-semibold">Joe</span> watches for source-protection and privacy risks when anonymous sources are involved.</li>
-          </ul>
-          <p className="mt-2 text-neutral-500">
-            The chips pre-fill sensible defaults when you change article type.
-            Toggle them off if a default doesn't fit your story.
-          </p>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function JournalismToggleChip({
-  agent,
-  trigger,
-  on,
-  onChange,
-  title,
-}: {
-  agent: AgentName;
-  trigger: string; // human-readable context that turns this on, e.g. "Partisan"
-  on: boolean;
-  onChange: (on: boolean) => void;
-  title?: string;
-}) {
-  const meta = AGENTS[agent];
-  return (
-    <button
-      type="button"
-      onClick={() => onChange(!on)}
-      title={
-        title ??
-        `Click to ${on ? "remove" : "add"} ${meta.firstName} (${meta.shortLabel}). ` +
-          `Recommended for stories that are: ${trigger.toLowerCase()}.`
-      }
-      aria-pressed={on}
-      className={[
-        "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11.5px] font-medium transition",
-        "border",
-        on
-          ? "bg-white text-neutral-900 shadow-sm"
-          : "border-dashed border-neutral-300 bg-white text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900",
-      ].join(" ")}
-      style={
-        on
-          ? { borderColor: meta.brandHex, backgroundColor: meta.highlightHex + "80" }
-          : undefined
-      }
-    >
-      <span
-        aria-hidden
-        className={[
-          "inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold",
-          on ? "text-white" : "text-neutral-500 bg-neutral-100",
-        ].join(" ")}
-        style={on ? { backgroundColor: meta.brandHex } : undefined}
-      >
-        {on ? "✓" : "+"}
-      </span>
-      <span className="inline-flex h-5 w-5 overflow-hidden rounded-full">
-        <Avatar agent={agent} size={20} active={on} muted={!on} />
-      </span>
-      <span className="leading-tight">
-        <span className="font-semibold">{meta.firstName}</span>
-        <span className="ml-1 text-[10.5px] uppercase tracking-wider text-neutral-500">
-          {trigger}
-        </span>
-      </span>
-    </button>
   );
 }
 

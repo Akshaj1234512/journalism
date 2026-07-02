@@ -109,12 +109,12 @@ const JOURNALISM_STEPS: Step[] = [
       "Tell the room what kind of piece you're writing. A matching type specialist joins the lineup: Cole for news, Iris for investigations, Otto for opinion, Faye for features, Pia for profiles, Remy for reviews, Eli for explainers. The rail will update as you pick.",
   },
   {
-    target: "journalism-toggles",
-    side: "bottom",
+    target: "rail",
+    side: "right",
     requireMode: "journalism",
-    title: "Add specialists for your story",
+    title: "Three more specialists in the rail",
     body:
-      "These chips activate three more editors when your story calls for them. Partisan adds Parker (loaded framing, asymmetric treatment). Data claims adds Peter (statistics and quantitative claims). Anonymous sources adds Joe (source protection and privacy). Sensible defaults pre-fill when you change article type — toggle anything that doesn't fit.",
+      "Parker (loaded framing, asymmetric treatment), Peter (statistics and quantitative claims), and Joe (source protection and privacy) are already in the rail on the left, on by default. Sensible defaults are pre-filled when you change article type — click any of the three there to turn one off if it doesn't fit your story.",
   },
   {
     target: "subject-context",
