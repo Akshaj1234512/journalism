@@ -34,12 +34,6 @@ interface Step {
 // ────────────────────────────────────────────────────────────────────────────
 const MAIN_STEPS: Step[] = [
   {
-    title: "Welcome to The Red Room",
-    body:
-      "An independent team of AI editors reads your draft and flags what a real newsroom or writing center would catch before you publish. We will walk you through some of our key features. Enjoy!",
-    accent: "#DC2626",
-  },
-  {
     target: "mode",
     side: "bottom",
     title: "Choose your writing type",
@@ -61,33 +55,26 @@ const MAIN_STEPS: Step[] = [
     ],
   },
   {
-    target: "rail",
-    side: "right",
-    title: "Introducing yours editors",
-    body:
-      "Each editor is a specialist at one writing component. Click on their icons to see how they contribute to your draft. \n Beware, your specialist crew resets when you switch between writing modes! There's many more specialists we haven't introduced, don't forget to scroll down.",
-  },
-  {
     target: "editor",
     targetByMode: { research: "research-upload" },
     side: "left",
     title: "Your draft goes here",
     body:
-      "Type or paste your draft, or drop in a Word / .txt file. Your draft is saved in this browser, so a refresh won't lose it. (Research mode is different — you upload a PDF instead, and the tour for that tab will cover it.)",
+      "Type, paste, or drop in a Word/txt file. Your draft is saved in this browser, so a refresh won't lose it.",
   },
   {
-    target: "run",
-    side: "bottom",
-    title: "Ready to review?",
+    target: "rail",
+    side: "right",
+    title: "Introducing yours editors",
     body:
-      "Your active editors will read your in parallel; the first editor reviews start showing up within twenty seconds.",
+      "Each editor is a specialist at one writing component. \n Say hello: click on their icons now.",
   },
   {
     target: "sidebar",
     side: "left",
-    title: "Your editors are working",
+    title: "The review",
     body:
-      "Your team of editors will leave notes in top to bottom in the order of your draft. Clicking on any feedback will shift your focus to that specific line in your draft. Click an underlined phrase in the editor to jump back to its card. When two or more editors flag the same passage, a Hotspot badge appears — that's the strongest signal the room produces.",
+      "Editors will leave feedback in a linear fashion. Let's run a review session now!",
   },
 ];
 
