@@ -13,6 +13,8 @@ interface Step {
   target?: string;
   /** Optional mode-specific anchor when one step maps to different surfaces. */
   targetByMode?: Partial<Record<Mode, string>>;
+  /** Additional data-tutorial targets to spotlight alongside the primary target. */
+  extraTargets?: string[];
   /** Side of the target to place the card on. Defaults to a sensible auto pick. */
   side?: "top" | "bottom" | "left" | "right";
   title: string;
@@ -71,6 +73,7 @@ const MAIN_STEPS: Step[] = [
   },
   {
     target: "sidebar",
+    extraTargets: ["run"],
     side: "left",
     title: "The review",
     body:
@@ -218,6 +221,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
   const STEPS = TRACKS[track];
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
+  const [extraRects, setExtraRects] = useState<DOMRect[]>([]);
   const [cardPos, setCardPos] = useState<{ top: number; left: number; arrow?: "top" | "bottom" | "left" | "right"; centered?: boolean } | null>(null);
 
   // Lock the page scroll while the tour is open so spotlight positions stay
@@ -256,6 +260,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
     // Centered cards (welcome / final): no target, no spotlight.
     if (!target) {
       setRect(null);
+      setExtraRects([]);
       setCardPos({
         top: window.innerHeight / 2 - 130,
         left: window.innerWidth / 2 - CARD_WIDTH / 2,
@@ -271,6 +276,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
       // fallback for now; this effect re-runs once `mode` changes and we
       // get the real element on the next pass.
       setRect(null);
+      setExtraRects([]);
       setCardPos({
         top: window.innerHeight / 2 - 130,
         left: window.innerWidth / 2 - CARD_WIDTH / 2,
@@ -283,12 +289,24 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
     setRect(r);
     setCardPos(positionCard(r, current.side));
 
+    // Resolve extra targets for multi-spotlight steps.
+    const extras = (current.extraTargets ?? [])
+      .map((t) => document.querySelector<HTMLElement>(`[data-tutorial="${t}"]`))
+      .filter((e): e is HTMLElement => !!e)
+      .map((e) => e.getBoundingClientRect());
+    setExtraRects(extras);
+
     el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
 
     const onResize = () => {
       const rr = el.getBoundingClientRect();
       setRect(rr);
       setCardPos(positionCard(rr, current.side));
+      const er = (current.extraTargets ?? [])
+        .map((t) => document.querySelector<HTMLElement>(`[data-tutorial="${t}"]`))
+        .filter((e): e is HTMLElement => !!e)
+        .map((e) => e.getBoundingClientRect());
+      setExtraRects(er);
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
@@ -346,18 +364,44 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
       role="dialog"
     >
       {rect ? (
-        <div
-          className="pointer-events-none absolute rounded-2xl transition-all duration-300 ease-out"
-          style={{
-            top: rect.top - 6,
-            left: rect.left - 6,
-            width: rect.width + 12,
-            height: rect.height + 12,
-            boxShadow:
-              "0 0 0 9999px rgba(15, 23, 42, 0.62), 0 0 0 3px rgba(220, 38, 38, 0.55)",
-            transition: "all 280ms cubic-bezier(.4,.0,.2,1)",
-          }}
-        />
+        <>
+          {/* Dark overlay with cutouts for all spotlighted areas */}
+          <div
+            className="pointer-events-none absolute inset-0 transition-all duration-300 ease-out"
+            style={{
+              backgroundColor: "rgba(15, 23, 42, 0.62)",
+              clipPath: buildMultiCutoutClipPath(rect, extraRects),
+              transition: "clip-path 280ms cubic-bezier(.4,.0,.2,1)",
+            }}
+          />
+          {/* Red ring around primary target */}
+          <div
+            className="pointer-events-none absolute rounded-2xl transition-all duration-300 ease-out"
+            style={{
+              top: rect.top - 6,
+              left: rect.left - 6,
+              width: rect.width + 12,
+              height: rect.height + 12,
+              boxShadow: "0 0 0 3px rgba(220, 38, 38, 0.55)",
+              transition: "all 280ms cubic-bezier(.4,.0,.2,1)",
+            }}
+          />
+          {/* Red rings around extra targets */}
+          {extraRects.map((er, i) => (
+            <div
+              key={i}
+              className="pointer-events-none absolute rounded-2xl transition-all duration-300 ease-out"
+              style={{
+                top: er.top - 6,
+                left: er.left - 6,
+                width: er.width + 12,
+                height: er.height + 12,
+                boxShadow: "0 0 0 3px rgba(220, 38, 38, 0.55)",
+                transition: "all 280ms cubic-bezier(.4,.0,.2,1)",
+              }}
+            />
+          ))}
+        </>
       ) : (
         <div
           className="absolute inset-0"
@@ -519,4 +563,59 @@ function positionCard(
   left = Math.max(VIEWPORT_PADDING, Math.min(vw - cardW - VIEWPORT_PADDING, left));
 
   return { top, left, arrow: side };
+}
+
+/**
+ * Build a CSS polygon clip-path that covers the full viewport but cuts out
+ * rectangular holes for the primary rect and any extra rects. This lets us
+ * darken the page while leaving multiple spotlighted areas clear.
+ *
+ * The technique: draw the outer rectangle (full viewport) clockwise, then for
+ * each cutout draw an inner rectangle counter-clockwise. CSS `polygon()`
+ * with `evenodd` treats counter-wound sub-paths as holes.
+ */
+function buildMultiCutoutClipPath(primary: DOMRect, extras: DOMRect[]): string {
+  const PAD = 6; // matches the 6px padding around spotlights
+  const MAX_HOLES = 3; // Keep vertex count constant for smooth CSS animation
+  
+  // Create an array of exactly MAX_HOLES rects
+  const rects: Array<{ top: number; left: number; bottom: number; right: number; isDummy: boolean }> = [];
+  
+  // 1. Add primary rect
+  rects.push({ top: primary.top, left: primary.left, bottom: primary.bottom, right: primary.right, isDummy: false });
+  
+  // 2. Add extra rects
+  for (const r of extras) {
+    if (rects.length < MAX_HOLES) {
+      rects.push({ top: r.top, left: r.left, bottom: r.bottom, right: r.right, isDummy: false });
+    }
+  }
+  
+  // 3. Pad to MAX_HOLES with invisible dummy rects centered on the primary rect
+  const centerTop = primary.top + primary.height / 2;
+  const centerLeft = primary.left + primary.width / 2;
+  while (rects.length < MAX_HOLES) {
+    rects.push({ top: centerTop, left: centerLeft, bottom: centerTop, right: centerLeft, isDummy: true });
+  }
+
+  // Outer rectangle — full viewport, clockwise.
+  // We close the outer rect by returning to 0% 0% so we have a fixed starting point for the slits.
+  let path = "polygon(evenodd, 0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%";
+
+  for (const r of rects) {
+    const p = r.isDummy ? 0 : PAD;
+    const t = r.top - p;
+    const l = r.left - p;
+    const b = r.bottom + p;
+    const ri = r.right + p;
+    
+    // Draw a slit from 0,0 to the top-left of the hole.
+    // Go around the hole counter-clockwise.
+    // Draw the slit back from the top-left to 0,0.
+    // The slit in and out perfectly overlap, creating an invisible zero-width line.
+    path += `, ${l}px ${t}px, ${l}px ${b}px, ${ri}px ${b}px, ${ri}px ${t}px, ${l}px ${t}px, 0% 0%`;
+  }
+
+  path += ")";
+  return path;
 }
