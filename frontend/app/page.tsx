@@ -554,10 +554,6 @@ export default function Page() {
           <div data-tutorial="mode">
             <ModeSwitcher mode={mode} onChange={setMode} />
           </div>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-3">
-          
           <span className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             {enabledCount} of {totalAgents} active
