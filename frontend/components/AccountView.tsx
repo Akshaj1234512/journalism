@@ -5,7 +5,6 @@ import { useState } from "react";
 
 import {
   FREE_AGENTS,
-  PLAN_ORDER,
   PLANS,
   TRIAL_DAYS,
   planIncludesAgent,
@@ -37,6 +36,7 @@ export function AccountView({
 }: Props) {
   const [signingOut, setSigningOut] = useState(false);
   const [note, setNote] = useState<string | null>(null);
+  const [billing, setBilling] = useState<"annual" | "monthly">("annual");
 
   const current = PLANS[plan];
   // Quota is enforced weekly: usage and reset cadence are per-week, not
@@ -188,21 +188,67 @@ export function AccountView({
             </div>
           )}
 
+          {/* Billing toggle */}
+          <div className="mt-6 flex justify-center">
+            <div
+              role="group"
+              aria-label="Billing period"
+              className="inline-flex items-center gap-0.5 rounded-full border border-neutral-200 bg-white p-1 text-[12px] font-medium"
+            >
+              <button
+                role="radio"
+                aria-checked={billing === "annual"}
+                onClick={() => setBilling("annual")}
+                className={[
+                  "inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 transition",
+                  billing === "annual"
+                    ? "bg-neutral-900 text-white"
+                    : "text-neutral-600 hover:bg-neutral-100",
+                ].join(" ")}
+              >
+                Annual
+                <span
+                  className={[
+                    "rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
+                    billing === "annual"
+                      ? "bg-emerald-500 text-white"
+                      : "bg-emerald-100 text-emerald-700",
+                  ].join(" ")}
+                >
+                  Save ~40%
+                </span>
+              </button>
+              <button
+                role="radio"
+                aria-checked={billing === "monthly"}
+                onClick={() => setBilling("monthly")}
+                className={[
+                  "rounded-full px-4 py-1.5 transition",
+                  billing === "monthly"
+                    ? "bg-neutral-900 text-white"
+                    : "text-neutral-600 hover:bg-neutral-100",
+                ].join(" ")}
+              >
+                Monthly
+              </button>
+            </div>
+          </div>
+
           {/* Plan grid */}
-          <div className="mt-4 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {PLAN_ORDER.map((id) => (
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {(["free", "basic", "pro"] as Plan[]).map((id) => (
               <PlanCard
                 key={id}
                 planId={id}
                 isCurrent={id === plan}
+                billing={billing}
                 onChoose={comingSoon}
               />
             ))}
+            <EnterprisePlanCard onChoose={comingSoon} />
           </div>
 
-          {/* Organizations footer — for newsrooms, classes, MFA programs,
-              university departments, anyone who wants 10+ seats or a custom
-              setup. Goes through a sales conversation rather than self-serve. */}
+          {/* Organizations footer */}
           <p className="mt-5 text-center text-[12.5px] text-neutral-500">
             For newsrooms, classes, and writing programs:{" "}
             <a
@@ -283,132 +329,185 @@ export function AccountView({
   );
 }
 
+const PLAN_FEATURES: Record<Plan, { label: string; included: boolean }[]> = {
+  free: [
+    { label: "3 reviews / month", included: true },
+    { label: "Max 2 agents per review", included: true },
+    { label: "All 3 modes (essential agents only)", included: true },
+    { label: "Multi-agent synthesis", included: false },
+    { label: "Export to PDF / Word", included: false },
+    { label: "Saved agent presets", included: false },
+    { label: "Priority processing", included: false },
+  ],
+  basic: [
+    { label: "20 reviews / month", included: true },
+    { label: "Up to 6 agents per review", included: true },
+    { label: "All 3 modes, full options", included: true },
+    { label: "Multi-agent synthesis", included: true },
+    { label: "Export to PDF / Word", included: true },
+    { label: "Saved agent presets", included: false },
+    { label: "Priority processing", included: false },
+  ],
+  pro: [
+    { label: "Unlimited reviews (~60 / mo)", included: true },
+    { label: "All agents, no limit", included: true },
+    { label: "All 3 modes, full options", included: true },
+    { label: "Multi-agent synthesis", included: true },
+    { label: "Export to PDF / Word", included: true },
+    { label: "Saved agent presets", included: true },
+    { label: "Priority processing", included: true },
+  ],
+};
+
+const ENTERPRISE_FEATURES = [
+  { label: "Custom review volume", included: true },
+  { label: "Custom agent configurations", included: true },
+  { label: "All 3 modes, full options", included: true },
+  { label: "Multi-agent synthesis", included: true },
+  { label: "Export to PDF / Word", included: true },
+  { label: "Saved agent presets", included: true },
+  { label: "Dedicated support & SLA", included: true },
+];
+
+// Per-month price shown depending on billing toggle
+const PLAN_PRICES: Record<Plan, { monthly: number; annual: number; annualTotal: number }> = {
+  free:  { monthly: 0,  annual: 0,  annualTotal: 0   },
+  basic: { monthly: 19, annual: 11, annualTotal: 132  },
+  pro:   { monthly: 36, annual: 22, annualTotal: 264  },
+};
+
 function PlanCard({
   planId,
   isCurrent,
+  billing,
   onChoose,
 }: {
   planId: Plan;
   isCurrent: boolean;
+  billing: "annual" | "monthly";
   onChoose: () => void;
 }) {
   const p = PLANS[planId];
+  const prices = PLAN_PRICES[planId];
+  const isFree = prices.monthly === 0;
+  const price = billing === "annual" ? prices.annual : prices.monthly;
+  const per = billing === "annual"
+    ? `/ mo · billed $${prices.annualTotal} / yr`
+    : "/ month";
+
   return (
     <div
       className={[
-        "relative flex flex-col rounded-2xl border bg-white p-5 shadow-sm",
-        p.popular ? "border-rose-300 ring-1 ring-rose-200" : "border-neutral-200",
+        "relative flex flex-col rounded-2xl border bg-white px-5 pb-6 pt-5 shadow-sm",
+        p.popular ? "border-rose-300 ring-2 ring-rose-100" : "border-neutral-200",
       ].join(" ")}
     >
       {p.popular && (
-        <span className="absolute -top-2.5 left-5 rounded-full bg-rose-600 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-white">
-          Most popular
-        </span>
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+          <span className="rounded-full bg-rose-600 px-3 py-0.5 text-[10.5px] font-semibold text-white shadow-sm">
+            Most popular
+          </span>
+        </div>
       )}
 
-      <div className="font-serif text-lg text-neutral-900">{p.label}</div>
+      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400">
+        {p.label}
+      </div>
 
-      <div className="mt-1 flex items-baseline gap-1">
-        {p.priceMonthly === 0 ? (
-          <span className="text-2xl font-semibold text-neutral-900">Free</span>
+      <div className="mt-2 flex items-baseline gap-1">
+        {isFree ? (
+          <span className="font-serif text-[28px] italic leading-none tracking-tight text-neutral-900">
+            Free
+          </span>
         ) : (
           <>
-            <span className="text-2xl font-semibold text-neutral-900">
-              ${p.priceMonthly}
+            <span className="font-serif text-[28px] italic leading-none tracking-tight text-neutral-900">
+              ${price}
             </span>
-            <span className="text-[12px] text-neutral-400">/ month</span>
+            <span className="text-[11.5px] text-neutral-400">{per}</span>
           </>
         )}
       </div>
 
-      {/* Reviews + editors */}
-      <div className="mt-3 space-y-2 border-t border-neutral-100 pt-3 text-[12.5px] text-neutral-600">
-        <div className="flex items-center gap-1.5">
-          <CheckGlyph />
-          <span>
-            <span className="font-medium text-neutral-800">
-              {p.reviewsPerWeek}
-            </span>{" "}
-            reviews / week
-            <span className="text-neutral-400">
-              {" "}({p.reviewsPerMonth}/mo)
+      <div className="mt-5 space-y-2">
+        {PLAN_FEATURES[planId].map(({ label, included }) => (
+          <div
+            key={label}
+            className="flex items-start gap-2 text-[11.5px]"
+            style={{ color: included ? "#404040" : "#c4b5a5" }}
+          >
+            <span
+              aria-hidden
+              className={[
+                "mt-[1px] shrink-0 text-[11px] font-bold",
+                included ? "text-emerald-500" : "text-neutral-300",
+              ].join(" ")}
+            >
+              {included ? "✓" : "✕"}
             </span>
-          </span>
-        </div>
-        <div>
-          <div className="flex items-center gap-1.5">
-            <CheckGlyph />
-            <span>
-              {p.unlocksAllEditors ? (
-                <>
-                  All {Object.keys(AGENTS).length} editors
-                  <span className="text-neutral-400">
-                    {" "}({FREE_AGENTS.length} core + {Object.keys(AGENTS).length - FREE_AGENTS.length} specialists)
-                  </span>
-                </>
-              ) : (
-                `${FREE_AGENTS.length} core editors`
-              )}
-            </span>
+            {label}
           </div>
-          {/* Soft-tint chips, greyed when the plan excludes that editor */}
-          <div className="mt-1.5 flex flex-wrap gap-1 pl-5">
-            {AGENT_ORDER.map((name) => {
-              const meta = AGENTS[name];
-              const included = planIncludesAgent(planId, name);
-              return (
-                <span
-                  key={name}
-                  title={`${meta.firstName} — ${meta.shortLabel}`}
-                  className={[
-                    "rounded-md px-1.5 py-0.5 text-[10.5px] font-medium",
-                    included
-                      ? "text-neutral-700"
-                      : "bg-neutral-100 text-neutral-400",
-                  ].join(" ")}
-                  style={
-                    included
-                      ? { backgroundColor: meta.highlightHex }
-                      : undefined
-                  }
-                >
-                  {meta.firstName}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <CheckGlyph />
-          <span>
-            Up to{" "}
-            <span className="font-medium text-neutral-800">
-              {p.maxArticleWords.toLocaleString()}
-            </span>{" "}
-            words per draft
-          </span>
-        </div>
+        ))}
       </div>
 
-      <div className="mt-4 flex-1" />
+      <div className="mt-auto pt-5">
+        {isCurrent ? (
+          <div className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2.5 text-center text-[12.5px] font-medium text-neutral-500">
+            Current plan
+          </div>
+        ) : (
+          <button
+            onClick={onChoose}
+            className={[
+              "w-full rounded-xl px-4 py-2.5 text-[12.5px] font-semibold transition",
+              p.popular
+                ? "bg-rose-600 text-white shadow-sm hover:bg-rose-700"
+                : "border border-neutral-300 bg-white text-neutral-800 hover:bg-neutral-50",
+            ].join(" ")}
+          >
+            {isFree ? "Get started" : `Start with ${p.label}`}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
 
-      {isCurrent ? (
-        <div className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-2 text-center text-[13px] font-medium text-neutral-500">
-          Current plan
-        </div>
-      ) : (
+function EnterprisePlanCard({ onChoose }: { onChoose: () => void }) {
+  return (
+    <div className="relative flex flex-col rounded-2xl border border-neutral-200 bg-white px-5 pb-6 pt-5 shadow-sm">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-neutral-400">
+        Enterprise
+      </div>
+      <div className="mt-2">
+        <span className="font-serif text-[28px] italic leading-none tracking-tight text-neutral-900">
+          Custom
+        </span>
+      </div>
+
+      <div className="mt-5 space-y-2">
+        {ENTERPRISE_FEATURES.map(({ label, included }) => (
+          <div
+            key={label}
+            className="flex items-start gap-2 text-[11.5px]"
+            style={{ color: included ? "#404040" : "#c4b5a5" }}
+          >
+            <span aria-hidden className="mt-[1px] shrink-0 text-[11px] font-bold text-emerald-500">
+              ✓
+            </span>
+            {label}
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-auto pt-5">
         <button
           onClick={onChoose}
-          className={[
-            "rounded-xl px-4 py-2 text-[13px] font-semibold shadow-sm transition",
-            p.popular
-              ? "bg-rose-600 text-white hover:bg-rose-700"
-              : "border border-neutral-300 bg-white text-neutral-800 hover:bg-neutral-50",
-          ].join(" ")}
+          className="w-full rounded-xl border border-dashed border-neutral-300 bg-white px-4 py-2.5 text-[12.5px] font-semibold text-neutral-600 transition hover:border-neutral-400 hover:text-neutral-800"
         >
-          Choose {p.label}
+          Contact us
         </button>
-      )}
+      </div>
     </div>
   );
 }

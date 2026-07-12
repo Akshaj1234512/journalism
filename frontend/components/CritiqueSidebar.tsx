@@ -292,7 +292,7 @@ export function CritiqueSidebar({
 
       <footer className="border-t border-neutral-200 px-5 py-3 space-y-1">
         <p className="text-[10.5px] leading-snug text-neutral-500">
-          AI editors can be wrong. Treat every note as a question to consider,
+          AI editors can make mistakes. Treat every note as a question to consider,
           not an instruction to follow.
         </p>
         <p className="text-[9.5px] uppercase tracking-wider text-neutral-400">
