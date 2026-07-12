@@ -96,9 +96,8 @@ export function AgentRoster({
       ref={railRef}
       // overflow-y-auto for vertical scrolling. We portal the popover so this
       // doesn't clip it. scroll-friendly slims the scrollbar.
-      className="relative flex h-full w-[104px] shrink-0 flex-col items-center gap-2 overflow-y-auto scroll-friendly border-r border-neutral-200 bg-white py-5"
-    >
-      <div className="mb-2 text-[9px] font-bold uppercase tracking-[0.18em] text-neutral-400">
+      className="relative flex h-full w-[130px] shrink-0 flex-col items-center gap-2 overflow-y-auto scroll-friendly border-r border-neutral-200 bg-white py-5">
+      <div className="mb-2 text-[9px] font-bold uppercase tracking-[0.18em] text-rose-600">
         Editors
       </div>
       <p className="-mt-1 mb-1 px-1 text-center text-[9.5px] leading-snug text-neutral-400">
@@ -120,7 +119,7 @@ export function AgentRoster({
             type="button"
             onClick={() => openFor(name)}
             className={[
-              "group flex w-[80px] flex-col items-center gap-1.5 rounded-2xl px-2 py-2.5 transition",
+              "group flex w-[100px] flex-col items-center gap-1.5 rounded-2xl px-2 py-2.5 transition",
               isOpen ? "bg-neutral-100 ring-1 ring-neutral-300" : "hover:bg-neutral-50",
               off ? "opacity-90" : "",
             ].join(" ")}

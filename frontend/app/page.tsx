@@ -265,6 +265,12 @@ export default function Page() {
     });
   }, []);
 
+  const onStop = useCallback(() => {
+    abortRef.current?.abort();
+    setRunningAgents(new Set());
+    setStatus((prev) => (prev === "running" ? (critiques.length > 0 ? "done" : "idle") : prev));
+  }, [critiques.length]);
+
   const onRun = useCallback(() => {
     abortRef.current?.abort();
     setCritiques([]);
@@ -476,9 +482,26 @@ export default function Page() {
   const wordCap = PLANS.free.maxArticleWords;
   const overCap = wordCount > wordCap;
 
+  // ⌘/Ctrl+Enter runs the review when the button would otherwise be enabled.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key !== "Enter") return;
+      const canRun =
+        status !== "running" &&
+        enabledCount > 0 &&
+        (mode === "research" ? !!researchPdf : article.trim().length > 0 && !overCap);
+      if (canRun) {
+        e.preventDefault();
+        onRun();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [status, enabledCount, mode, researchPdf, article, overCap, onRun]);
+
   return (
-    <main className="flex h-screen w-screen flex-col bg-stone-50">
-      <header className="relative flex items-center justify-between gap-4 border-b border-neutral-200 bg-white px-7 py-4">
+    <main className="flex h-full w-full flex-col bg-stone-50">
+      <header className="relative flex flex-wrap items-center justify-between gap-4 border-b border-neutral-200 bg-white px-7 py-4">
         <div className="flex min-w-0 items-center gap-4">
           {/* Thin red rule. Editorial pull-quote feel, matches the wordmark
               colour and replaces the heavy gradient tile that read as SaaS. */}
@@ -500,14 +523,10 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex flex-wrap items-center justify-end gap-2 lg:gap-3">
           <div data-tutorial="mode">
             <ModeSwitcher mode={mode} onChange={setMode} />
           </div>
-          <span className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            {enabledCount} of {totalAgents} active
-          </span>
           <button
             onClick={() => setTutorialTrack(mode as TutorialTrack)}
             title="Show tutorial for this writing type"
@@ -516,6 +535,15 @@ export default function Page() {
           >
             <HelpGlyph />
           </button>
+          {status === "running" && (
+            <button
+              onClick={onStop}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:bg-neutral-50"
+              title="Cancel the current review"
+            >
+              ✕ Stop
+            </button>
+          )}
           <button
             data-tutorial="run"
             onClick={onRun}
@@ -525,6 +553,21 @@ export default function Page() {
               (mode === "research"
                 ? !researchPdf
                 : article.trim().length === 0 || overCap)
+            }
+            title={
+              status === "running"
+                ? undefined
+                : enabledCount === 0
+                  ? "All editors are off — enable at least one in the left rail."
+                  : mode === "research"
+                    ? !researchPdf
+                      ? "Upload a PDF to review in research mode."
+                      : undefined
+                    : article.trim().length === 0
+                      ? "No draft to review — paste some text first."
+                      : overCap
+                        ? `Over the ${wordCap.toLocaleString()}-word cap — trim your draft or upgrade.`
+                        : undefined
             }
             className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
           >
@@ -552,7 +595,11 @@ export default function Page() {
       {mode === "essays" && (
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-neutral-200 bg-stone-50 px-7 py-2">
           <div data-tutorial="essay-type">
-            <EssayTypePicker value={essayType} onChange={setEssayType} />
+            <EssayTypePicker
+              value={essayType}
+              onChange={setEssayType}
+              nudge={essayType === "none" && status === "idle"}
+            />
           </div>
           <div data-tutorial="essay-prompt">
             <PromptBoxButton
@@ -585,6 +632,7 @@ export default function Page() {
                 // The user can still flip individual chips.
                 setJournalismToggles(defaultTogglesFor(v));
               }}
+              nudge={articleType === "none" && status === "idle"}
             />
           </div>
           <div data-tutorial="journalism-toggles" className="inline-flex items-center gap-1.5">
@@ -795,11 +843,24 @@ export default function Page() {
             status={status}
             errorMessage={errorMessage}
             runningAgents={runningAgents}
+            doneAgents={doneAgents}
+            totalAgents={enabledCount}
+            mode={mode}
             resolvedIds={resolvedIds}
             onToggleResolved={onToggleResolved}
             onUnresolveAll={onUnresolveAll}
             onAcceptFix={onAcceptFix}
             onDownload={() => window.print()}
+            onTrySample={() => {
+    setArticle(SAMPLE_DRAFT);
+    setCritiques([]);
+    setActiveId(null);
+    setResolvedIds(new Set());
+    setStatus("idle");
+    setErrorMessage(null);
+    setUploadError(null);
+    setUploadInfo(null);
+  }}
           />
         </div>
       </div>
@@ -849,21 +910,35 @@ export default function Page() {
 
 function ModeSwitcher({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
   return (
-    <div
-      role="tablist"
-      aria-label="Reviewer mode"
-      className="hidden sm:inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white p-1 text-[11.5px] font-medium"
-    >
-      <ModeChip active={mode === "journalism"} onClick={() => onChange("journalism")}>
-        Journalism
-      </ModeChip>
-      <ModeChip active={mode === "essays"} onClick={() => onChange("essays")}>
-        Essays
-      </ModeChip>
-      <ModeChip active={mode === "research"} onClick={() => onChange("research")}>
-        Research
-      </ModeChip>
-    </div>
+    <>
+      {/* Pill switcher — visible on sm+ */}
+      <div
+        role="tablist"
+        aria-label="Reviewer mode"
+        className="hidden sm:inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white p-1 text-[11.5px] font-medium"
+      >
+        <ModeChip active={mode === "journalism"} onClick={() => onChange("journalism")}>
+          Journalism
+        </ModeChip>
+        <ModeChip active={mode === "essays"} onClick={() => onChange("essays")}>
+          Essays
+        </ModeChip>
+        <ModeChip active={mode === "research"} onClick={() => onChange("research")}>
+          Research
+        </ModeChip>
+      </div>
+      {/* Select fallback for xs screens */}
+      <select
+        aria-label="Reviewer mode"
+        value={mode}
+        onChange={(e) => onChange(e.target.value as Mode)}
+        className="sm:hidden rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-[12px] font-medium text-neutral-800 focus:outline-none"
+      >
+        <option value="journalism">Journalism</option>
+        <option value="essays">Essays</option>
+        <option value="research">Research</option>
+      </select>
+    </>
   );
 }
 
@@ -896,9 +971,11 @@ function ModeChip({
 function EssayTypePicker({
   value,
   onChange,
+  nudge = false,
 }: {
   value: EssayType;
   onChange: (v: EssayType) => void;
+  nudge?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -1054,9 +1131,11 @@ function PromptBoxButton({
 function ArticleTypePicker({
   value,
   onChange,
+  nudge = false,
 }: {
   value: ArticleType;
   onChange: (v: ArticleType) => void;
+  nudge?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -1420,6 +1499,7 @@ function ResearchUploadPane({
   subject: ResearchSubject;
 }) {
   const [dragging, setDragging] = useState(false);
+  const [dropError, setDropError] = useState<string | null>(null);
   const sectionLabel =
     RESEARCH_SECTION_CHOICES.find((c) => c.value === section)?.label ?? section;
   const subjectLabel =
@@ -1428,11 +1508,14 @@ function ResearchUploadPane({
   function onPickFile(f: File | null | undefined) {
     if (!f) return;
     if (!f.name.toLowerCase().endsWith(".pdf") && f.type !== "application/pdf") {
-      return; // ignore non-PDFs silently
+      setDropError("Only PDFs are supported. For Word docs, export as PDF first.");
+      return;
     }
     if (f.size > 25 * 1024 * 1024) {
-      return; // ignore files over 25MB (backend cap)
+      setDropError("File too large — max 25 MB.");
+      return;
     }
+    setDropError(null);
     onSelectPdf(f);
   }
 
@@ -1528,6 +1611,18 @@ function ResearchUploadPane({
             PDF only · up to 25 MB · stays in this browser session
           </p>
         </>
+      )}
+      {dropError && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-[12px] text-rose-800 shadow-sm">
+          {dropError}
+          <button
+            onClick={() => setDropError(null)}
+            className="ml-2 font-semibold text-rose-600 hover:underline"
+            aria-label="Dismiss error"
+          >
+            ✕
+          </button>
+        </div>
       )}
     </div>
   );
