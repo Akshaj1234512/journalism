@@ -11,10 +11,15 @@ interface Step {
   /** data-tutorial attribute value to anchor the spotlight to.
    *  Omit for centered "intro" cards. */
   target?: string;
+  /** Optional mode-specific anchor when one step maps to different surfaces. */
+  targetByMode?: Partial<Record<Mode, string>>;
+  /** Additional data-tutorial targets to spotlight alongside the primary target. */
+  extraTargets?: string[];
   /** Side of the target to place the card on. Defaults to a sensible auto pick. */
   side?: "top" | "bottom" | "left" | "right";
   title: string;
   body: string;
+  bullets?: { label: string; text: string }[];
   /** Optional accent colour for the card's top border. */
   accent?: string;
   /** If set, the tutorial switches the app into this mode before showing
@@ -31,66 +36,54 @@ interface Step {
 // ────────────────────────────────────────────────────────────────────────────
 const MAIN_STEPS: Step[] = [
   {
-    title: "Welcome to The Red Room",
-    body:
-      "An independent team of AI editors reads your draft and flags what a real newsroom or writing center would catch before you publish or submit. This minute walks through the universals. Each tab has its own quick tour the first time you open it.",
-    accent: "#DC2626",
-  },
-  {
     target: "mode",
     side: "bottom",
-    title: "Three modes",
+    title: "Choose your writing type",
     body:
-      "Journalism for news, opinion, features, profiles, reviews, and explainers. Essays for academic writing across five genres. Research for full-paper review of an uploaded PDF. The editor lineup on the left rail swaps when you change modes.",
+      "The editor lineup changes based on what you choose.",
+    bullets: [
+      {
+        label: "Journalism",
+        text: "for news, opinion, features, profiles, reviews, and explainers.",
+      },
+      {
+        label: "Essays",
+        text: "for academic writing, class assignments, argument papers, analysis, and personal narratives.",
+      },
+      {
+        label: "Research",
+        text: "for reviewing full papers from an uploaded PDF.",
+      },
+    ],
+  },
+  {
+    target: "editor",
+    targetByMode: { research: "research-upload" },
+    side: "left",
+    title: "Your draft goes here",
+    body:
+      "Type, paste, or drop in a Word/txt file. Your draft is saved in this browser, so a refresh won't lose it.",
   },
   {
     target: "rail",
     side: "right",
-    title: "Meet the editors",
+    title: "Introducing yours editors",
     body:
-      "Each editor specialises in one lane. Click any of them to read what they look for and to turn them off if a lane doesn't apply to your draft. The list updates whenever you switch modes; scroll if you don't see all of them.",
-  },
-  {
-    target: "editor",
-    side: "left",
-    title: "Your draft goes here",
-    body:
-      "Type or paste your draft, or drop in a Word / .txt file. Your draft is saved in this browser, so a refresh won't lose it. (Research mode is different — you upload a PDF instead, and the tour for that tab will cover it.)",
-  },
-  {
-    target: "run",
-    side: "bottom",
-    title: "Run the review",
-    body:
-      "When you're ready, click here. The editors who are turned on read in parallel; the first notes start landing in about twenty seconds. The button shows a count of how many editors will run.",
+      "Each editor is a specialist at one writing component. \n Say hello: click on their icons now.",
   },
   {
     target: "sidebar",
+    extraTargets: ["run"],
     side: "left",
-    title: "Read the notes",
+    title: "The review",
     body:
-      "Notes appear here in document order. Click any feedback card to jump to that line in the editor. Click an underlined phrase in the editor to jump back to its card. When two or more editors flag the same passage, a Hotspot badge appears — that's the strongest signal the room produces.",
-  },
-  {
-    target: "signin",
-    side: "bottom",
-    title: "Save your work and try Pro free",
-    body:
-      "Create a free account to save your drafts and track your reviews. New accounts get a 7-day free trial of the Pro plan — all 16 editors, 20 reviews per week, no credit card required.",
-    accent: "#DC2626",
-  },
-  {
-    title: "One last thing",
-    body:
-      "The agents are grounded in real press-regulator rulings, editorial standards, and writing-center research, but they're still AI. Treat every note as a suggestion to consider, not an instruction you must follow. When you open a tab for the first time, a quick tour of THAT tab's specific controls will pop up.",
-    accent: "#DC2626",
+      "Editors will leave feedback in a linear fashion. Let's run a review session now!",
   },
 ];
 
 // ────────────────────────────────────────────────────────────────────────────
-// Track 2: JOURNALISM mini-tutorial. Fires the first time the user is in
-// journalism mode (typically right after the main tour, since journalism is
-// the default mode). 3 steps + an intro.
+// Track 2: JOURNALISM mini-tutorial. Shown only when the writer opens the
+// help tour while journalism mode is active.
 // ────────────────────────────────────────────────────────────────────────────
 const JOURNALISM_STEPS: Step[] = [
   {
@@ -127,7 +120,8 @@ const JOURNALISM_STEPS: Step[] = [
 ];
 
 // ────────────────────────────────────────────────────────────────────────────
-// Track 3: ESSAYS mini-tutorial. Fires on first entry to essays mode.
+// Track 3: ESSAYS mini-tutorial. Shown only when the writer opens the help
+// tour while essays mode is active.
 // ────────────────────────────────────────────────────────────────────────────
 const ESSAYS_STEPS: Step[] = [
   {
@@ -164,7 +158,8 @@ const ESSAYS_STEPS: Step[] = [
 ];
 
 // ────────────────────────────────────────────────────────────────────────────
-// Track 4: RESEARCH mini-tutorial. Fires on first entry to research mode.
+// Track 4: RESEARCH mini-tutorial. Shown only when the writer opens the help
+// tour while research mode is active.
 // Different from journalism / essays because the input is a PDF.
 // ────────────────────────────────────────────────────────────────────────────
 const RESEARCH_STEPS: Step[] = [
@@ -226,6 +221,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
   const STEPS = TRACKS[track];
   const [step, setStep] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
+  const [extraRects, setExtraRects] = useState<DOMRect[]>([]);
   const [cardPos, setCardPos] = useState<{ top: number; left: number; arrow?: "top" | "bottom" | "left" | "right"; centered?: boolean } | null>(null);
 
   // Lock the page scroll while the tour is open so spotlight positions stay
@@ -259,9 +255,12 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
     const current = STEPS[step];
     if (!current) return;
 
+    const target = current.targetByMode?.[mode] ?? current.target;
+
     // Centered cards (welcome / final): no target, no spotlight.
-    if (!current.target) {
+    if (!target) {
       setRect(null);
+      setExtraRects([]);
       setCardPos({
         top: window.innerHeight / 2 - 130,
         left: window.innerWidth / 2 - CARD_WIDTH / 2,
@@ -270,13 +269,14 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
       return;
     }
 
-    const el = document.querySelector<HTMLElement>(`[data-tutorial="${current.target}"]`);
+    const el = document.querySelector<HTMLElement>(`[data-tutorial="${target}"]`);
     if (!el) {
       // Target missing — usually because a mode-switch in the previous
       // effect tick hasn't rendered the new toolbar yet. Show a centered
       // fallback for now; this effect re-runs once `mode` changes and we
       // get the real element on the next pass.
       setRect(null);
+      setExtraRects([]);
       setCardPos({
         top: window.innerHeight / 2 - 130,
         left: window.innerWidth / 2 - CARD_WIDTH / 2,
@@ -289,12 +289,24 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
     setRect(r);
     setCardPos(positionCard(r, current.side));
 
+    // Resolve extra targets for multi-spotlight steps.
+    const extras = (current.extraTargets ?? [])
+      .map((t) => document.querySelector<HTMLElement>(`[data-tutorial="${t}"]`))
+      .filter((e): e is HTMLElement => !!e)
+      .map((e) => e.getBoundingClientRect());
+    setExtraRects(extras);
+
     el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
 
     const onResize = () => {
       const rr = el.getBoundingClientRect();
       setRect(rr);
       setCardPos(positionCard(rr, current.side));
+      const er = (current.extraTargets ?? [])
+        .map((t) => document.querySelector<HTMLElement>(`[data-tutorial="${t}"]`))
+        .filter((e): e is HTMLElement => !!e)
+        .map((e) => e.getBoundingClientRect());
+      setExtraRects(er);
     };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
@@ -323,8 +335,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
   if (!open || typeof document === "undefined") return null;
   if (!STEPS || STEPS.length === 0) return null;
 
-  // When the track changes (e.g. main tour chains into a mode-mini tour),
-  // there is one render between the new track being applied and the
+  // When the track changes, there is one render between the new track being applied and the
   // step-reset useEffect firing. During that render `step` may be out of
   // bounds for the new STEPS array, which would crash `current.target`
   // below. Skip rendering until the reset effect catches up.
@@ -334,7 +345,7 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
   if (!current) return null;
   const isLast = step === STEPS.length - 1;
   const isFirst = step === 0;
-  const passThrough = !!current.target;
+  const passThrough = !!(current.targetByMode?.[mode] ?? current.target);
 
   const trackLabel: Record<TutorialTrack, string> = {
     main: "Quick tour",
@@ -353,18 +364,44 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
       role="dialog"
     >
       {rect ? (
-        <div
-          className="pointer-events-none absolute rounded-2xl transition-all duration-300 ease-out"
-          style={{
-            top: rect.top - 6,
-            left: rect.left - 6,
-            width: rect.width + 12,
-            height: rect.height + 12,
-            boxShadow:
-              "0 0 0 9999px rgba(15, 23, 42, 0.62), 0 0 0 3px rgba(220, 38, 38, 0.55)",
-            transition: "all 280ms cubic-bezier(.4,.0,.2,1)",
-          }}
-        />
+        <>
+          {/* Dark overlay with cutouts for all spotlighted areas */}
+          <div
+            className="pointer-events-none absolute inset-0 transition-all duration-300 ease-out"
+            style={{
+              backgroundColor: "rgba(15, 23, 42, 0.62)",
+              clipPath: buildMultiCutoutClipPath(rect, extraRects),
+              transition: "clip-path 280ms cubic-bezier(.4,.0,.2,1)",
+            }}
+          />
+          {/* Red ring around primary target */}
+          <div
+            className="pointer-events-none absolute rounded-2xl transition-all duration-300 ease-out"
+            style={{
+              top: rect.top - 6,
+              left: rect.left - 6,
+              width: rect.width + 12,
+              height: rect.height + 12,
+              boxShadow: "0 0 0 3px rgba(220, 38, 38, 0.55)",
+              transition: "all 280ms cubic-bezier(.4,.0,.2,1)",
+            }}
+          />
+          {/* Red rings around extra targets */}
+          {extraRects.map((er, i) => (
+            <div
+              key={i}
+              className="pointer-events-none absolute rounded-2xl transition-all duration-300 ease-out"
+              style={{
+                top: er.top - 6,
+                left: er.left - 6,
+                width: er.width + 12,
+                height: er.height + 12,
+                boxShadow: "0 0 0 3px rgba(220, 38, 38, 0.55)",
+                transition: "all 280ms cubic-bezier(.4,.0,.2,1)",
+              }}
+            />
+          ))}
+        </>
       ) : (
         <div
           className="absolute inset-0"
@@ -400,9 +437,22 @@ export function Tutorial({ open, track = "main", onClose, mode, onSetMode }: Pro
             <h2 className="font-serif text-[19px] italic leading-tight tracking-tight text-neutral-900">
               {current.title}
             </h2>
-            <p className="mt-2 text-[13px] leading-snug text-neutral-700">
+            <p className="mt-2 whitespace-pre-line text-[13px] leading-snug text-neutral-700">
               {current.body}
             </p>
+            {current.bullets && (
+              <ul className="mt-3 space-y-1.5 text-[13px] leading-snug text-neutral-700">
+                {current.bullets.map((item) => (
+                  <li key={item.label} className="flex gap-2">
+                    <span className="mt-[0.4em] h-1.5 w-1.5 shrink-0 rounded-full bg-rose-600" />
+                    <span>
+                      <span className="font-semibold text-neutral-900">{item.label}</span>{" "}
+                      {item.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
 
             <div className="mt-4 flex items-center justify-between">
               <div className="flex items-center gap-1.5">
@@ -513,4 +563,59 @@ function positionCard(
   left = Math.max(VIEWPORT_PADDING, Math.min(vw - cardW - VIEWPORT_PADDING, left));
 
   return { top, left, arrow: side };
+}
+
+/**
+ * Build a CSS polygon clip-path that covers the full viewport but cuts out
+ * rectangular holes for the primary rect and any extra rects. This lets us
+ * darken the page while leaving multiple spotlighted areas clear.
+ *
+ * The technique: draw the outer rectangle (full viewport) clockwise, then for
+ * each cutout draw an inner rectangle counter-clockwise. CSS `polygon()`
+ * with `evenodd` treats counter-wound sub-paths as holes.
+ */
+function buildMultiCutoutClipPath(primary: DOMRect, extras: DOMRect[]): string {
+  const PAD = 6; // matches the 6px padding around spotlights
+  const MAX_HOLES = 3; // Keep vertex count constant for smooth CSS animation
+  
+  // Create an array of exactly MAX_HOLES rects
+  const rects: Array<{ top: number; left: number; bottom: number; right: number; isDummy: boolean }> = [];
+  
+  // 1. Add primary rect
+  rects.push({ top: primary.top, left: primary.left, bottom: primary.bottom, right: primary.right, isDummy: false });
+  
+  // 2. Add extra rects
+  for (const r of extras) {
+    if (rects.length < MAX_HOLES) {
+      rects.push({ top: r.top, left: r.left, bottom: r.bottom, right: r.right, isDummy: false });
+    }
+  }
+  
+  // 3. Pad to MAX_HOLES with invisible dummy rects centered on the primary rect
+  const centerTop = primary.top + primary.height / 2;
+  const centerLeft = primary.left + primary.width / 2;
+  while (rects.length < MAX_HOLES) {
+    rects.push({ top: centerTop, left: centerLeft, bottom: centerTop, right: centerLeft, isDummy: true });
+  }
+
+  // Outer rectangle — full viewport, clockwise.
+  // We close the outer rect by returning to 0% 0% so we have a fixed starting point for the slits.
+  let path = "polygon(evenodd, 0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%";
+
+  for (const r of rects) {
+    const p = r.isDummy ? 0 : PAD;
+    const t = r.top - p;
+    const l = r.left - p;
+    const b = r.bottom + p;
+    const ri = r.right + p;
+    
+    // Draw a slit from 0,0 to the top-left of the hole.
+    // Go around the hole counter-clockwise.
+    // Draw the slit back from the top-left to 0,0.
+    // The slit in and out perfectly overlap, creating an invisible zero-width line.
+    path += `, ${l}px ${t}px, ${l}px ${b}px, ${ri}px ${b}px, ${ri}px ${t}px, ${l}px ${t}px, 0% 0%`;
+  }
+
+  path += ")";
+  return path;
 }
