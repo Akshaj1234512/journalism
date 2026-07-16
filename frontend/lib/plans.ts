@@ -69,7 +69,7 @@ export const PLANS: Record<Plan, PlanInfo> = {
   },
   basic: {
     id: "basic",
-    label: "Basic",
+    label: "Plus",
     priceMonthly: 15,
     reviewsPerWeek: 10,
     reviewsPerMonth: 40,

@@ -41,7 +41,6 @@ const SAMPLE_DRAFT =
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
 const ARTICLE_KEY = "redroom:article";
 const TUTORIAL_SEEN_KEY = "redroom:tutorial-seen";
-const TUTORIAL_MODE_SEEN_KEY = (m: Mode | "main") => `redroom:tutorial-seen:${m}`;
 const MODE_KEY = "redroom:mode";
 const CITATION_KEY = "redroom:citation-style";
 const ESSAY_TYPE_KEY = "redroom:essay-type";
@@ -89,15 +88,9 @@ export default function Page() {
   // not flicker as the cursor crosses between the textarea and its wrapper.
   const dragDepthRef = useRef(0);
 
-  // Tutorial state. `tutorialTrack` is the currently-displayed track, or null
-  // when no tour is open. The main tour fires once on the user's very first
-  // visit; each mode's mini-tour fires the first time that user enters that
-  // mode (after the main tour, or independently if they skip it).
+  // Tutorial state. The universal main tour appears once for first-time
+  // visitors; writing-type tours are opt-in from the help button.
   const [tutorialTrack, setTutorialTrack] = useState<TutorialTrack | null>(null);
-  // Snapshot of which tracks the current user has seen. Hydrated from
-  // localStorage on mount; updated when a track completes so we don't
-  // re-prompt on the same browser session.
-  const [tutorialsSeen, setTutorialsSeen] = useState<Set<TutorialTrack>>(new Set());
 
   // Restore on mount: draft article, mode, and whether the user has seen
   // the tour. Tutorial auto-opens for first-time visitors. Agent
@@ -166,25 +159,10 @@ export default function Page() {
       const sc = localStorage.getItem(SUBJECT_CONTEXT_KEY);
       if (sc) setSubjectContext(sc);
     } catch {}
-    // Hydrate which tutorial tracks the user has seen, then decide whether
-    // to auto-fire one. Order of priority: if they've never seen the main
-    // tour, fire it. Otherwise, if they haven't seen the current mode's
-    // mini-tour, fire that.
     try {
-      const seen = new Set<TutorialTrack>();
-      // Legacy single-flag key counts as having seen the main tour.
-      if (localStorage.getItem(TUTORIAL_SEEN_KEY)) seen.add("main");
-      for (const t of ["main", "journalism", "essays", "research"] as TutorialTrack[]) {
-        if (localStorage.getItem(TUTORIAL_MODE_SEEN_KEY(t))) seen.add(t);
+      if (!localStorage.getItem(TUTORIAL_SEEN_KEY)) {
+        setTimeout(() => setTutorialTrack("main"), 50);
       }
-      setTutorialsSeen(seen);
-      // Defer one tick so the page's initial render lands before the
-      // tutorial overlay measures targets.
-      setTimeout(() => {
-        if (!seen.has("main")) {
-          setTutorialTrack("main");
-        }
-      }, 50);
     } catch {}
   }, []);
 
@@ -234,39 +212,11 @@ export default function Page() {
   const onCompleteTutorial = useCallback(() => {
     const finished = tutorialTrack;
     setTutorialTrack(null);
-    if (!finished) return;
+    if (finished !== "main") return;
     try {
-      localStorage.setItem(TUTORIAL_MODE_SEEN_KEY(finished), "1");
-      if (finished === "main") {
-        // Keep the legacy flag in sync so existing users aren't re-prompted.
-        localStorage.setItem(TUTORIAL_SEEN_KEY, "1");
-      }
+      localStorage.setItem(TUTORIAL_SEEN_KEY, "1");
     } catch {}
-    setTutorialsSeen((prev) => {
-      const next = new Set(prev);
-      next.add(finished);
-      // If the user just finished the main tour and they're in a mode they
-      // haven't toured yet, chain into that mode's mini-tour.
-      if (finished === "main" && !next.has(mode as TutorialTrack)) {
-        setTimeout(() => setTutorialTrack(mode as TutorialTrack), 200);
-      }
-      return next;
-    });
-  }, [tutorialTrack, mode]);
-
-  // When the user changes modes, fire that mode's mini-tour if they haven't
-  // seen it (and the main tour is done — we don't want to interrupt it).
-  useEffect(() => {
-    if (tutorialTrack) return; // a tour is already running; don't stack
-    if (!tutorialsSeen.has("main")) return; // main hasn't finished yet
-    const modeTrack = mode as TutorialTrack;
-    if (modeTrack !== "journalism" && modeTrack !== "essays" && modeTrack !== "research") return;
-    if (tutorialsSeen.has(modeTrack)) return;
-    // Defer a tick so the toolbar for the new mode has rendered before the
-    // tutorial measures its targets.
-    const t = setTimeout(() => setTutorialTrack(modeTrack), 120);
-    return () => clearTimeout(t);
-  }, [mode, tutorialsSeen, tutorialTrack]);
+  }, [tutorialTrack]);
 
   const onToggleDisabled = useCallback((agent: AgentName) => {
     setDisabledAgents((prev) => {
@@ -276,6 +226,12 @@ export default function Page() {
       return next;
     });
   }, []);
+
+  const onStop = useCallback(() => {
+    abortRef.current?.abort();
+    setRunningAgents(new Set());
+    setStatus((prev) => (prev === "running" ? (critiques.length > 0 ? "done" : "idle") : prev));
+  }, [critiques.length]);
 
   const onRun = useCallback(() => {
     abortRef.current?.abort();
@@ -488,9 +444,26 @@ export default function Page() {
   const wordCap = PLANS.free.maxArticleWords;
   const overCap = wordCount > wordCap;
 
+  // ⌘/Ctrl+Enter runs the review when the button would otherwise be enabled.
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || e.key !== "Enter") return;
+      const canRun =
+        status !== "running" &&
+        enabledCount > 0 &&
+        (mode === "research" ? !!researchPdf : article.trim().length > 0 && !overCap);
+      if (canRun) {
+        e.preventDefault();
+        onRun();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [status, enabledCount, mode, researchPdf, article, overCap, onRun]);
+
   return (
-    <main className="flex h-screen w-screen flex-col bg-stone-50">
-      <header className="relative flex items-center justify-between gap-4 border-b border-neutral-200 bg-white px-7 py-4">
+    <main className="flex h-full w-full flex-col bg-stone-50">
+      <header className="relative flex flex-wrap items-center justify-between gap-4 border-b border-neutral-200 bg-white px-7 py-4">
         <div className="flex min-w-0 items-center gap-4">
           {/* Thin red rule. Editorial pull-quote feel, matches the wordmark
               colour and replaces the heavy gradient tile that read as SaaS. */}
@@ -512,22 +485,27 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex flex-wrap items-center justify-end gap-2 lg:gap-3">
           <div data-tutorial="mode">
             <ModeSwitcher mode={mode} onChange={setMode} />
           </div>
-          <span className="hidden lg:inline-flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-2.5 py-1 text-[11px] text-neutral-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            {enabledCount} of {totalAgents} active
-          </span>
           <button
-            onClick={() => setTutorialTrack("main")}
-            title="Replay the guided tour"
+            onClick={() => setTutorialTrack(mode as TutorialTrack)}
+            title="Show tutorial for this writing type"
             className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-neutral-200 bg-white text-neutral-500 transition hover:bg-neutral-50 hover:text-neutral-800"
-            aria-label="Show tutorial"
+            aria-label="Show tutorial for this writing type"
           >
             <HelpGlyph />
           </button>
+          {status === "running" && (
+            <button
+              onClick={onStop}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm font-medium text-neutral-700 shadow-sm transition hover:bg-neutral-50"
+              title="Cancel the current review"
+            >
+              ✕ Stop
+            </button>
+          )}
           <button
             data-tutorial="run"
             onClick={onRun}
@@ -537,6 +515,21 @@ export default function Page() {
               (mode === "research"
                 ? !researchPdf
                 : article.trim().length === 0 || overCap)
+            }
+            title={
+              status === "running"
+                ? undefined
+                : enabledCount === 0
+                  ? "All editors are off — enable at least one in the left rail."
+                  : mode === "research"
+                    ? !researchPdf
+                      ? "Upload a PDF to review in research mode."
+                      : undefined
+                    : article.trim().length === 0
+                      ? "No draft to review — paste some text first."
+                      : overCap
+                        ? `Over the ${wordCap.toLocaleString()}-word cap — trim your draft or upgrade.`
+                        : undefined
             }
             className="inline-flex items-center gap-1.5 rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:bg-neutral-300"
           >
@@ -564,7 +557,11 @@ export default function Page() {
       {mode === "essays" && (
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 border-b border-neutral-200 bg-stone-50 px-7 py-2">
           <div data-tutorial="essay-type">
-            <EssayTypePicker value={essayType} onChange={setEssayType} />
+            <EssayTypePicker
+              value={essayType}
+              onChange={setEssayType}
+              nudge={essayType === "none" && status === "idle"}
+            />
           </div>
           <div data-tutorial="essay-prompt">
             <PromptBoxButton
@@ -609,6 +606,7 @@ export default function Page() {
                   return next;
                 });
               }}
+              nudge={articleType === "none" && status === "idle"}
             />
           </div>
           <div data-tutorial="subject-context">
@@ -792,19 +790,30 @@ export default function Page() {
             status={status}
             errorMessage={errorMessage}
             runningAgents={runningAgents}
+            doneAgents={doneAgents}
+            totalAgents={enabledCount}
+            mode={mode}
             resolvedIds={resolvedIds}
             onToggleResolved={onToggleResolved}
             onUnresolveAll={onUnresolveAll}
             onAcceptFix={onAcceptFix}
             onDownload={() => window.print()}
+            onTrySample={() => {
+    setArticle(SAMPLE_DRAFT);
+    setCritiques([]);
+    setActiveId(null);
+    setResolvedIds(new Set());
+    setStatus("idle");
+    setErrorMessage(null);
+    setUploadError(null);
+    setUploadInfo(null);
+  }}
           />
         </div>
       </div>
 
-      {/* Tutorial overlay (portals to body). Tracks: main fires on the
-          very first visit; each mode's mini-tour fires the first time the
-          user lands on that tab afterward. The help button in the header
-          re-opens the main track. */}
+      {/* Tutorial overlay (portals to body). The main tour appears once for
+          first-time visitors; the help button opens the current writing type's tour. */}
       <Tutorial
         open={tutorialTrack !== null}
         track={tutorialTrack ?? "main"}
@@ -848,21 +857,35 @@ export default function Page() {
 
 function ModeSwitcher({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
   return (
-    <div
-      role="tablist"
-      aria-label="Reviewer mode"
-      className="hidden sm:inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white p-1 text-[11.5px] font-medium"
-    >
-      <ModeChip active={mode === "journalism"} onClick={() => onChange("journalism")}>
-        Journalism
-      </ModeChip>
-      <ModeChip active={mode === "essays"} onClick={() => onChange("essays")}>
-        Essays
-      </ModeChip>
-      <ModeChip active={mode === "research"} onClick={() => onChange("research")}>
-        Research
-      </ModeChip>
-    </div>
+    <>
+      {/* Pill switcher — visible on sm+ */}
+      <div
+        role="tablist"
+        aria-label="Reviewer mode"
+        className="hidden sm:inline-flex items-center gap-1 rounded-full border border-neutral-200 bg-white p-1 text-[11.5px] font-medium"
+      >
+        <ModeChip active={mode === "journalism"} onClick={() => onChange("journalism")}>
+          Journalism
+        </ModeChip>
+        <ModeChip active={mode === "essays"} onClick={() => onChange("essays")}>
+          Essays
+        </ModeChip>
+        <ModeChip active={mode === "research"} onClick={() => onChange("research")}>
+          Research
+        </ModeChip>
+      </div>
+      {/* Select fallback for xs screens */}
+      <select
+        aria-label="Reviewer mode"
+        value={mode}
+        onChange={(e) => onChange(e.target.value as Mode)}
+        className="sm:hidden rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-[12px] font-medium text-neutral-800 focus:outline-none"
+      >
+        <option value="journalism">Journalism</option>
+        <option value="essays">Essays</option>
+        <option value="research">Research</option>
+      </select>
+    </>
   );
 }
 
@@ -895,9 +918,11 @@ function ModeChip({
 function EssayTypePicker({
   value,
   onChange,
+  nudge = false,
 }: {
   value: EssayType;
   onChange: (v: EssayType) => void;
+  nudge?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -1053,9 +1078,11 @@ function PromptBoxButton({
 function ArticleTypePicker({
   value,
   onChange,
+  nudge = false,
 }: {
   value: ArticleType;
   onChange: (v: ArticleType) => void;
+  nudge?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -1289,6 +1316,7 @@ function ResearchUploadPane({
   subject: ResearchSubject;
 }) {
   const [dragging, setDragging] = useState(false);
+  const [dropError, setDropError] = useState<string | null>(null);
   const sectionLabel =
     RESEARCH_SECTION_CHOICES.find((c) => c.value === section)?.label ?? section;
   const subjectLabel =
@@ -1297,11 +1325,14 @@ function ResearchUploadPane({
   function onPickFile(f: File | null | undefined) {
     if (!f) return;
     if (!f.name.toLowerCase().endsWith(".pdf") && f.type !== "application/pdf") {
-      return; // ignore non-PDFs silently
+      setDropError("Only PDFs are supported. For Word docs, export as PDF first.");
+      return;
     }
     if (f.size > 25 * 1024 * 1024) {
-      return; // ignore files over 25MB (backend cap)
+      setDropError("File too large — max 25 MB.");
+      return;
     }
+    setDropError(null);
     onSelectPdf(f);
   }
 
@@ -1397,6 +1428,18 @@ function ResearchUploadPane({
             PDF only · up to 25 MB · stays in this browser session
           </p>
         </>
+      )}
+      {dropError && (
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-xl border border-rose-200 bg-rose-50 px-4 py-2 text-[12px] text-rose-800 shadow-sm">
+          {dropError}
+          <button
+            onClick={() => setDropError(null)}
+            className="ml-2 font-semibold text-rose-600 hover:underline"
+            aria-label="Dismiss error"
+          >
+            ✕
+          </button>
+        </div>
       )}
     </div>
   );

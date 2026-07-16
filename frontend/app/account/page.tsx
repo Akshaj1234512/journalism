@@ -10,7 +10,18 @@ export default async function AccountPage() {
   const configured =
     !!process.env.NEXT_PUBLIC_SUPABASE_URL &&
     !!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!configured) redirect("/");
+
+  // Dev stub: render with mock data when Supabase isn't configured locally.
+  if (!configured) {
+    return (
+      <AccountView
+        email="dev@example.com"
+        plan="free"
+        reviewsUsed={2}
+        memberSince={new Date().toISOString()}
+      />
+    );
+  }
 
   const supabase = await createClient();
   const {

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Critique, AGENTS } from "@/lib/types";
 
 interface Props {
@@ -24,10 +25,13 @@ export function PrintView({ article, critiques, resolvedIds, idOf }: Props) {
   // Render article with inline highlights as <span> elements.
   const rendered = renderArticleWithHighlights(article, open);
 
-  const generated = new Date().toLocaleString(undefined, {
-    dateStyle: "long",
-    timeStyle: "short",
-  });
+  const [generated, setGenerated] = useState("");
+  useEffect(() => {
+    setGenerated(new Date().toLocaleString(undefined, {
+      dateStyle: "long",
+      timeStyle: "short",
+    }));
+  }, []);
 
   const byAgent = groupByAgent(open);
 
